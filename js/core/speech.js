@@ -107,7 +107,7 @@
     _utter(st, voice, opts, tok) {
       const words = st.say.split(/\s+/).length;
       const est = (words * 380) / st.rate + 400;
-      if (!synth || !this.hasVoices() || PA.settings.get("silentTTS", false)) {
+      if (!synth || !this.hasVoices() || opts.silent || PA.settings.get("silentTTS", false)) {
         // no voice on this device: simulate timing so animations & practice still work
         return new Promise((res) => {
           const ws = [...st.say.matchAll(/\S+/g)];

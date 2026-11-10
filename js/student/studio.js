@@ -5,19 +5,24 @@
   /* ---------- Studio home ---------- */
   S.pages.studio = async () => {
     S.setTab("studio");
-    const all = await PA.Model.dialogues();
+    const everything = await PA.Model.dialogues();
+    const mineDlgs = everything.filter((d) => d.owner && d.owner === S.pupil.id);
+    const all = everything.filter((d) => !d.owner);
     const models = await PA.DB.all("models");
     const hasModel = (id) => models.some((m) => m.key.startsWith(id + ":"));
     const mine = S.pupil.guest ? [] : await PA.Model.recordingsFor(S.pupil.id);
     const filt = PA.settings.get("studioFilter", "all");
     const card = (d) => { const n = mine.filter((r) => r.dialogueId === d.id).length; return `<button class="dlg-card" data-d="${d.id}" data-l="${d.level}">
       <span class="scene">${d.scene || "🎭"}</span><h3>${esc(d.title)}</h3><div class="small muted">${esc(d.setting || "")}</div>
-      <div class="row" style="gap:6px"><span class="pill">${S.LEVELS[d.level] || d.level}</span><span class="pill">${esc(d.years || "")}</span>${hasModel(d.id) ? `<span class="pill pill-good">👩‍🏫 Teacher's voice</span>` : ""}${d.custom ? `<span class="pill pill-bip">New from teacher</span>` : ""}${n ? `<span class="pill pill-feel">🎙 ${n}</span>` : ""}</div>
+      <div class="row" style="gap:6px"><span class="pill">${S.LEVELS[d.level] || d.level}</span><span class="pill">${esc(d.years || "")}</span>${hasModel(d.id) ? `<span class="pill pill-good">👩‍🏫 Teacher's voice</span>` : ""}${d.owner ? `<span class="pill pill-stop">✏️ Made by me</span>` : d.custom ? `<span class="pill pill-bip">New from teacher</span>` : ""}${n ? `<span class="pill pill-feel">🎙 ${n}</span>` : ""}</div>
       <div class="row" style="gap:4px;font-size:1.4rem">${d.cast.map((c) => c.av).join(" ")}</div></button>`; };
     S.mount(`<div class="page-title">${PA.mascot("quizzy", { size: 66, cls: "wiggle" })}<div><h1>Reading Studio</h1><p>Choose a dialogue, pick your character, listen, then record your voice!</p>${S.bm("Pilih dialog, pilih watak, dengar, kemudian rakam suara anda.")}</div></div>
       <div class="card row" style="margin-bottom:16px;background:linear-gradient(120deg,#FFF5DA,#fff)" id="checkCard"><span style="font-size:3rem">🪁</span><div class="grow"><b style="font-size:1.2rem">Reading Check</b><div class="small muted">A short dialogue your teacher uses to see how much you grow (${PA.settings.get("checkMode", "pre") === "post" ? "after" : "before"} practising).</div></div><a class="btn btn-feel" href="#/studio/check">Start</a></div>
       <div class="row" style="margin-bottom:14px" id="dfilter"><b>Show:</b><div class="seg">${[["all", "All"], ["easy", "🌱 Easy"], ["medium", "🌿 Medium"], ["hard", "🌳 Hard"]].map(([k, v]) => `<button data-f="${k}" class="${filt === k ? "on" : ""}">${v}</button>`).join("")}</div></div>
-      <div class="grid g3" id="dlgs">${all.map(card).join("")}</div>`);
+      <div class="grid g3" id="dlgs">${all.map(card).join("")}</div>
+      <h2 class="section-title">✏️ My dialogues</h2>
+      <div class="grid g3" id="myDlgs">${mineDlgs.map(card).join("")}<a class="feature-tile" href="#/scanner" style="min-height:150px"><span class="ft-ic">🔍</span><div><h3>Make your own</h3><p>Type, paste or photograph a dialogue in the Scanner, then practise it here.</p></div></a></div>`);
+    $("#myDlgs").onclick = (e) => { const c = e.target.closest("[data-d]"); if (c) { PA.sfx("pop"); location.hash = "#/studio/" + c.dataset.d; } };
     const apply = (f) => $$("#dlgs .dlg-card").forEach((c) => (c.style.display = f === "all" || c.dataset.l === f ? "" : "none"));
     apply(filt);
     $("#dfilter").onclick = (e) => { const b = e.target.closest("[data-f]"); if (!b) return; $$("#dfilter button").forEach((x) => x.classList.toggle("on", x === b)); PA.settings.set("studioFilter", b.dataset.f); apply(b.dataset.f); };
@@ -44,7 +49,7 @@
       <div class="studio-tools" id="tools">
         <a class="btn btn-sm btn-ghost" href="#/studio">⬅ Studio</a>
         <span class="tool">Model voice: ${anyModel ? `<select id="mv"><option value="t" ${useTeacher ? "selected" : ""}>👩‍🏫 Teacher</option><option value="c" ${!useTeacher ? "selected" : ""}>💻 Computer</option></select>` : "💻 Computer"}</span>
-        <label class="tool"><input type="checkbox" id="cueT" ${cues ? "checked" : ""}> Voice signs above marks</label>
+        <label class="tool" id="cueTool"><input type="checkbox" id="cueT" ${cues ? "checked" : ""}> Voice signs above marks</label>
         <span class="tool">🎭 Disguise: <span class="disguise" id="dis">${Object.entries(PA.Disguise.presets).map(([k, v]) => `<button data-v="${k}" class="${k === disguise ? "on" : ""}" title="${v.label}">${v.emoji}</button>`).join("")}</span></span>
         <button class="btn btn-sm btn-ask" id="playAll">▶ Listen to the whole dialogue</button>
         <button class="btn btn-sm btn-stop" id="rp">🎬 Role-play mode</button>

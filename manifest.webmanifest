@@ -1,7 +1,7 @@
 {
   "name": "PunctuAction — Every mark has a voice!",
   "short_name": "PunctuAction",
-  "description": "Punctuation-powered read-aloud for primary pupils: learn, practise and perform dialogues with feeling. Works offline.",
+  "description": "Punctuation-powered read-aloud for primary pupils: learn, practise, scan and perform dialogues with feeling. Works offline.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",

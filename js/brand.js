@@ -11,6 +11,6 @@ PA.brand = {
     { mark: "!", line: "FEEL the exclamation!" }
   ],
   pitch: "Punctuation-powered read-aloud for primary pupils: see the mark, hear the voice, feel the dialogue.",
-  version: "1.0.0",
+  version: "1.1.0",
   year: 2026
 };

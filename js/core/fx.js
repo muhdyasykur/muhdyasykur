@@ -45,6 +45,42 @@
   };
   PA.markSfx = { ".": "stop", ",": "breath", "?": "rise", "!": "zing" };
 
+  /* ---------- Sonic logo: four notes for . , ? ! then a bright chord ---------- */
+  PA.jingle = function () {
+    if (PA.settings && PA.settings.get("mute", false)) return;
+    try {
+      tone(392, 0.16, { type: "triangle", vol: 0.16 });                 // .  (firm stop)
+      tone(523, 0.14, { type: "triangle", vol: 0.13, at: 0.17 });       // ,  (light)
+      tone(523, 0.3, { type: "sine", vol: 0.14, at: 0.32, glide: 784 }); // ?  (rising)
+      [1047, 1319, 1568].forEach((f, i) => tone(f, 0.5, { type: "triangle", vol: 0.09, at: 0.68 + i * 0.03 })); // ! (sparkle chord)
+    } catch (e) {}
+  };
+
+  /* ---------- Gentle background music (generated, loops, off by default) ---------- */
+  const Music = { on: false, timer: null, step: 0 };
+  const SCALE = [262, 294, 330, 392, 440, 523, 587, 659];
+  const PATTERN = [0, 2, 4, 5, 4, 2, 3, 1, 0, 2, 4, 6, 5, 4, 3, 2];
+  const BASS = [131, 131, 110, 110, 147, 147, 98, 98];
+  Music.start = function () {
+    const c = ac(); if (!c || Music.on) return;
+    Music.on = true; Music.step = 0;
+    const beat = 0.36;
+    let next = c.currentTime + 0.05;
+    Music.timer = setInterval(() => {
+      while (next < c.currentTime + 0.4) {
+        const s = Music.step++;
+        const at = next - c.currentTime;
+        tone(SCALE[PATTERN[s % 16]] * (s % 32 >= 16 ? 1 : 1), beat * 0.9, { type: "sine", vol: 0.035, at, attack: 0.02 });
+        if (s % 2 === 0) tone(BASS[(s / 2) % 8], beat * 1.8, { type: "triangle", vol: 0.03, at });
+        if (s % 8 === 4) tone(SCALE[PATTERN[s % 16]] * 2, beat * 0.5, { type: "sine", vol: 0.015, at: at + beat / 2 });
+        next += beat;
+      }
+    }, 120);
+  };
+  Music.stop = function () { Music.on = false; clearInterval(Music.timer); };
+  Music.toggle = function () { if (Music.on) Music.stop(); else Music.start(); PA.settings && PA.settings.set("music", Music.on); return Music.on; };
+  PA.Music = Music;
+
   /* ---------- Confetti ---------- */
   let cv, cx2, parts = [], raf = 0;
   PA.confetti = function (n = 140, colors = ["#FF5C5C", "#14BC9C", "#4C7DFF", "#FFB21F", "#8E7BFF"]) {

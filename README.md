@@ -22,11 +22,14 @@ Pupils help **Bip**, a robot who reads with no feeling, to win four voice chips.
 ## What's inside
 **Pupil app (`student.html`)**
 - **Learn**: four animated lessons (Meet → Trace → Hear the difference → Spot → Say it), a voice-rules poster and a chant.
-- **Practice**: six games (Mark Detective, Ears On!, Pause Patrol, Voice Elevator, Feelings Theatre, Fix the Robot), each at 🌱 Easy, 🌿 Medium and 🌳 Hard. Sentences are generated fresh every round from Malaysian-context word banks, so pupils can't memorise answers. Practice adapts to each pupil's weakest skill.
+- **Home – Voice Island**: an animated scene (sky, sea, floating marks) where every character speaks its rule when tapped, a welcome jingle and spoken greeting, optional background music, and a **Continue** button that picks each pupil's best next step.
+- **Practice**: six activities (Mark Detective, Ears On!, Pause Patrol, Voice Elevator, Feelings Theatre, Fix the Robot), each at 🌱 Easy, 🌿 Medium and 🌳 Hard. Sentences are generated fresh every round from Malaysian-context word banks, so pupils can't memorise answers. Practice adapts to each pupil's weakest skill.
 - **Reading Studio**: 12 role-play dialogues plus the teacher's own. Listen to a model (the teacher's recorded voice first, the punctuation-aware computer voice as backup), record, see your **voice melody line**, pauses and the **Robot-o-meter**, self-check, send to the teacher. **Role-play mode** reads the other parts and records the pupil on their turn.
+- **Dialogue Scanner**: type, paste, **photograph** or upload any dialogue (e.g. from the textbook). Offline OCR reads the photo, Bip finds speakers, checks every mark (missing end marks, questions ending in “.”, commas after names and *Yes/Oh/Well*, capital letters) with one-tap fixes and reasons, draws a **voice map** of what the voice does at each mark, guesses the feeling for each “!”, reads it aloud in different voices, and turns it into the pupil's own Studio role-play.
+- **Video tutorials (PunctuAction TV)**: 10 narrated, animated videos (6 for pupils, 4 for teachers) with real app screens on a tablet, a moving pointer, zoom, highlight, a character presenter and word-by-word subtitles. Each part waits for its narration to finish, so voice and animation always match. Speed, subtitles, narration on/off, chapters and full screen.
 - **Voice disguise** (🐭 🐻 👽): changes the pitch but keeps the timing and intonation, so shy pupils can share and still be assessed.
 - **Me**: skills, badges, the teacher's stickers and comments. **Feedback**: Smileyometer, Again-Again table, favourite character, tricky areas, ideas.
-- **Ask Bip** offline chatbot, **▶ Watch how** narrated tutorials on every page, Bahasa Melayu help, text size and reduced-motion options.
+- **Ask Bip** offline chatbot, **🎬 Watch how** on every page, a Help Centre and About page, a 🔊 read-aloud button on every instruction (or automatic reading for Year 1–2), Bahasa Melayu help, text size and reduced-motion options, splash screen, offline indicator.
 
 **Teacher Hub (`teacher.html`)**, PIN-locked
 - Overview dashboard, pupil profiles, rubric assessment (5 criteria × 4 bands with a suggested PBD TP), record your own **model voices**, dialogue builder with live punctuation checking, missions, pre/post-test Reading Check, evaluation analytics, CSV export, backup, class packs, and a demo class.
@@ -47,8 +50,10 @@ index.html        front page (animated story, Pupil / Teacher doors)
 student.html      pupil app        teacher.html  Teacher Hub      manual.html  user manual
 css/              design system    js/core/      speech engine, audio analysis, disguise, content, data model
 js/student/       pupil pages      js/teacher/   hub pages        sw.js        offline cache
-tools_build_sw.py regenerates sw.js after files change
+assets/video/     screens used by the video tutorials     assets/vendor/  offline OCR engine (Tesseract.js)
+tools/capture.js  re-captures the tutorial screens + js/core/shotmap.js (node tools/capture.js, app served on :8765)
+tools/build_sw.py regenerates sw.js after files change
 ```
 
 ## Credits
-All characters, artwork and sound effects are original and generated in code. Fonts: Fredoka and Andika (SIL Open Font License, see `assets/fonts/`).
+All characters, artwork, sound effects, the jingle and the music are original and generated in code. Fonts: Fredoka and Andika (SIL Open Font License, see `assets/fonts/`). Photo reading: Tesseract.js and its English model (Apache License 2.0, see `assets/vendor/tesseract/`).

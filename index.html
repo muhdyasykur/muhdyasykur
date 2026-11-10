@@ -55,7 +55,7 @@
     <a class="door teacher" href="teacher.html"><span class="ic">🔒</span><b>I'm a teacher</b><span>PIN-locked hub: progress, assessment, voices</span></a>
   </div>
   <div class="feat">
-    <span class="pill pill-good">📴 Works offline</span><span class="pill pill-ask">🌱🌿🌳 Easy · Medium · Hard</span><span class="pill pill-feel">🎙 Record & voice coach</span><span class="pill pill-bip">🎭 Voice disguise for shy pupils</span><span class="pill pill-stop">🔐 Data stays on this device</span>
+    <span class="pill pill-good">📴 Works offline</span><span class="pill pill-ask">🌱🌿🌳 Easy · Medium · Hard</span><span class="pill pill-feel">🎙 Record & voice coach</span><span class="pill pill-stop">🔍 Scan any dialogue, even from a photo</span><span class="pill pill-bip">🎬 Animated video tutorials</span><span class="pill pill-bip">🎭 Voice disguise for shy pupils</span><span class="pill pill-good">🔐 Data stays on this device</span>
   </div>
   <div class="row" style="justify-content:center;margin-top:8px"><a class="btn btn-sm btn-ghost" href="manual.html">📘 User manual</a><button class="btn btn-sm btn-ghost" id="install" hidden>📲 Install app</button></div>
   <footer id="foot"></footer>
@@ -81,8 +81,10 @@
   names.forEach((n, i) => ($("#m" + i).innerHTML = PA.mascot(n, { size: 92, cls: "bob" })));
   async function story(sound) {
     $("#intro").disabled = true;
+    if (sound) PA.jingle();
     const say = (t, o) => { $("#say").textContent = t; return sound ? PA.Voice.speak(t, o) : PA.sleep(1800); };
     setBip("flat", {}); names.forEach((n, i) => $("#m" + i).classList.remove("in"));
+    if (sound) await PA.sleep(1200);
     await say("Beep. I. Read. Like. A. Robot.", { robot: true });
     const chips = {}; const keys = ["stop", "pause", "ask", "feel"];
     for (let i = 0; i < 4; i++) {

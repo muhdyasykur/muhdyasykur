@@ -67,7 +67,12 @@
     if (!s) return null;
     const hadMark = /[.?!]$/.test(s);
     const body = s.replace(/[.?!]+$/, "");
-    const w = firstWord(body);
+    // look past greetings and names at the start ("hi siti how are you" -> the real sentence starts at "how")
+    const nameSetL = names.map((n) => n.toLowerCase());
+    const allW = body.split(" ");
+    let k0 = 0;
+    while (k0 < allW.length - 1 && (LEAD_COMMA.includes(allW[k0].toLowerCase().replace(/,$/, "")) || nameSetL.includes(allW[k0].toLowerCase().replace(/,$/, "")))) k0++;
+    const w = firstWord(allW.slice(k0).join(" ")) || firstWord(body);
     let mark = ".", why = "It tells us something, so it ends with a full stop. Stop and let your voice go down.";
     if (EXCL_START.some((r) => r.test(body)) || INTERJ.includes(w)) { mark = "!"; why = "It shows a strong feeling, so it ends with an exclamation mark. FEEL it!"; }
     else if (WH.includes(w)) { mark = "?"; why = `It starts with the WH word “${w}”, so it is a question. Start strong and let your voice go down at the end ↘.`; }
@@ -81,8 +86,10 @@
         lw[0] = lw[0] + ","; tips.push(`Put a comma after “${lw[0].replace(",", "")}”: take a tiny breath there.`);
       }
     }
-    // comma after a name at the start (Ali, come here.)
+    // "Hi Siti how are you" -> "Hi, Siti, how are you": a name right after a greeting also gets a comma
     const nameSet = names.map((n) => n.toLowerCase());
+    if (lw.length > 2 && /,$/.test(lw[0]) && nameSet.includes(lw[1].toLowerCase()) && !/,$/.test(lw[1])) { lw[1] = lw[1] + ","; tips.push(`“${lw[1].replace(",", "")}” is the person you are talking to, so put a comma after the name.`); }
+    // comma after a name at the start (Ali, come here.)
     if (nameSet.includes(lw[0].toLowerCase().replace(/,$/, "")) && lw.length > 2 && !/,$/.test(lw[0]) && (WH.includes((lw[1] || "").toLowerCase()) || AUX.includes((lw[1] || "").toLowerCase()) || /^(come|look|please|wait|stop|help|give|go|sit|listen|run|hurry|let|don't|be)$/i.test(lw[1]))) {
       lw[0] = lw[0] + ","; tips.push(`“${lw[0].replace(",", "")}” is the person you are talking to, so put a comma after the name.`);
     }
@@ -91,7 +98,7 @@
     if (lw.length > 2 && nameSet.includes(last.toLowerCase()) && !/,$/.test(lw[lw.length - 2]) && /^(you|me|please|morning|afternoon|night|later|thanks|hello|hi)$/i.test(lw[lw.length - 2])) {
       lw[lw.length - 2] += ","; tips.push(`Put a comma before the name “${last}” at the end.`);
     }
-    fixed = lw.join(" ");
+    fixed = lw.join(" ").replace(/\bi\b/g, "I").replace(/\bi'(m|ll|ve|d)\b/g, "I'$1");
     fixed = fixed.charAt(0).toUpperCase() + fixed.slice(1);
     if (!/^[A-Z]/.test(body)) tips.push("Start your sentence with a capital letter.");
     return { input: raw, fixed: fixed + mark, mark, why, tips, hadMark, cls: classify(fixed + mark) };

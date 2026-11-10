@@ -38,7 +38,7 @@
     const p = S.pupil, m = PA.Model.mastery(p), lvl = S.level();
     const weakest = PA.SKILL_LIST.slice().sort((a, b) => m[a] - m[b])[0];
     const sugg = { stop: "patrol", pause: "patrol", ask: "tone", feel: "feelings" }[weakest];
-    S.mount(`<div class="page-title">${PA.mascot("zing", { size: 66, cls: "wiggle" })}<div><h1>Practice Playground</h1><p>Pick a level, then a game. Every round has new sentences!</p>${S.bm("Pilih tahap, kemudian pilih permainan.")}</div></div>
+    S.mount(`<div class="page-title">${PA.mascot("zing", { size: 66, cls: "wiggle" })}<div><h1>Practice Activities</h1><p>Pick a level, then an activity. Every round has new sentences, so think about the rule!</p>${S.bm("Pilih tahap, kemudian pilih aktiviti.")}</div></div>
       <div class="row" style="margin-bottom:14px" id="lvlRow"><b>Level:</b> ${S.levelSeg(lvl)}<span class="small muted">🌱 Year 1–2 · 🌿 Year 3–4 · 🌳 Year 5–6 (choose what feels right)</span></div>
       <div class="suggest" id="suggest">${PA.mascot("bip", { size: 56, mood: "talk" })}<div class="grow"><b>Bip suggests:</b> your <b>${PA.SKILL_NAME[weakest]}</b> skill is ${m[weakest]}%. Try <b>${G[sugg].icon} ${G[sugg].name}</b>!</div><a class="btn btn-sm btn-feel" href="#/play/${sugg}?level=${lvl}" id="suggBtn">Play</a></div>
       <div class="grid g3" id="games">${Object.entries(G).map(([id, g]) => {
@@ -86,11 +86,11 @@
         <p><b>${attempt.correct}</b> out of <b>${attempt.total}</b> correct · +${earned} ⭐</p><div class="row" style="justify-content:center">${bySkill}</div>
         ${up ? `<div class="explain good">🚀 You're ready for <b>${S.LEVELS[up]}</b>! <a class="btn btn-sm btn-good" href="#/play/${game}?level=${up}" data-setlvl="${up}">Try it</a></div>` : ""}
         ${down ? `<div class="explain bad">💡 Try <b>${S.LEVELS[down]}</b> to warm up, then come back! <a class="btn btn-sm btn-ask" href="#/play/${game}?level=${down}" data-setlvl="${down}">Go</a></div>` : ""}
-        <div class="card-flat" style="width:100%;max-width:560px"><b>Quick feedback</b><div class="small muted">Did you enjoy this game?</div>
+        <div class="card-flat" style="width:100%;max-width:560px"><b>Quick feedback</b><div class="small muted">Did you enjoy this activity?</div>
           <div class="rate-row" id="fun">${["😀", "🙂", "😐", "🙁"].map((f, i) => `<button class="face" data-v="${4 - i}">${f}</button>`).join("")}</div>
           <div class="small muted" style="margin-top:6px">How was the level?</div>
           <div class="rate-row" id="diff"><button data-v="easy">Too easy</button><button data-v="right">Just right</button><button data-v="hard">Too hard</button></div></div>
-        <div class="gfoot"><a class="btn btn-feel btn-lg" href="#/play/${game}?level=${level}&r=${Date.now()}">🔁 Play again (new sentences)</a><a class="btn btn-ghost" href="#/practice">🎮 Other games</a></div></div>`;
+        <div class="gfoot"><a class="btn btn-feel btn-lg" href="#/play/${game}?level=${level}&r=${Date.now()}">🔁 Try again with new sentences</a><a class="btn btn-ghost" href="#/practice">🎯 Other activities</a></div></div>`;
       const fb = { id: PA.uid("f"), kind: "game", pupilId: S.pupil.id, pupilName: S.pupil.name, game, level, at: Date.now() };
       const saveFb = () => { if (!S.pupil.guest) PA.DB.put("feedback", fb); };
       $("#fun").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; $$("#fun button").forEach((x) => x.classList.toggle("on", x === b)); fb.fun = +b.dataset.v; PA.sfx("pop"); saveFb(); };

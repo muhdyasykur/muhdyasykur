@@ -117,35 +117,59 @@
   ["pointerdown", "keydown"].forEach((ev) => document.addEventListener(ev, () => (lastInput = Date.now()), { passive: true }));
   $("#meBtn").onclick = async () => { if (await PA.confirmBox("Switch reader?", "Do you want to go back to the sign-in page?", "Switch", "btn-ask")) { S.pupil = null; PA.currentPupil = null; try { sessionStorage.removeItem("pa:session"); } catch (e) {} location.hash = "#/login"; } };
 
-  /* ---------- Home ---------- */
+  /* ---------- Home: the living "Voice Island" ---------- */
+  S.nextStep = async (p) => {
+    const order = ["dot", "koma", "quizzy", "zing"], names = { dot: "Dotty", koma: "Koma", quizzy: "Quizzy", zing: "Zing" };
+    const todo = order.find((k) => !(p.lessons || {})[k]);
+    if (todo) return { href: "#/learn/" + todo, label: `Continue: meet ${names[todo]}`, icon: "📚" };
+    if (!p.guest) { const ms = (await PA.Model.assignmentsFor(p)).filter((a) => !a.done); if (ms.length) { const a = ms[0]; return { href: a.type === "game" ? `#/play/${a.ref}?level=${a.level || S.level()}` : `#/studio/${a.ref}`, label: `Mission: ${a.title}`, icon: "🎯" }; } }
+    if (!(p.recCount > 0)) return { href: "#/studio", label: "Continue: record in the Studio", icon: "🎭" };
+    const m = PA.Model.mastery(p); const weak = PA.SKILL_LIST.slice().sort((a, b) => m[a] - m[b])[0];
+    const g = { stop: "patrol", pause: "patrol", ask: "tone", feel: "feelings" }[weak];
+    return { href: `#/play/${g}?level=${S.level()}`, label: `Continue: ${PA.Model.GAMES[g].name}`, icon: PA.Model.GAMES[g].icon };
+  };
   S.pages.home = async () => {
     S.setTab("home");
     const p = S.pupil, m = PA.Model.mastery(p), chips = PA.Model.chips(p);
     const lit = PA.SKILL_LIST.filter((k) => chips[k]).length;
     const missions = p.guest ? [] : await PA.Model.assignmentsFor(p);
+    const recs = p.guest ? 0 : (await PA.Model.recordingsFor(p.id)).length;
+    const next = await S.nextStep(p);
     const bipSays = lit === 4 ? "Thank you! Now I can read with feeling! You are a Voice Hero!" : lit === 0 ? "Beep. I. Read. Like. A. Robot. Please. Help. Me." : `Beep! I have ${lit} voice chip${lit > 1 ? "s" : ""} now. Help me get the rest!`;
     const warm = PA.Content.randomSentence(S.level(), PA.Model.weights(p));
+    const lessonsDone = Object.keys(p.lessons || {}).length, tried = Object.keys(p.games || {}).length, badges = (p.badges || []).length;
+    const floats = Array.from({ length: 14 }, (_, i) => { const mk = [".", ",", "?", "!"][i % 4]; return `<span class="fl" style="left:${(i * 7.3 + 3) % 96}%;animation-delay:${(i * 1.37) % 9}s;animation-duration:${8 + (i % 5)}s;color:${PA.MARKS[mk].color}">${mk}</span>`; }).join("");
+    const isl = (n, cls = "") => `<button class="isl-m ${cls}" data-m="${n}" aria-label="${n === "bip" ? "Bip" : PA.MARKS[{ dot: ".", koma: ",", quizzy: "?", zing: "!" }[n]].hero}">${n === "bip" ? PA.mascot("bip", { size: 140, mood: lit === 4 ? "happy" : lit ? "talk" : "flat", chips }) : PA.mascot(n, { size: 84 })}<i class="isl-land"></i></button>`;
     S.mount(`
-      <section class="hero" id="hero">
-        <button class="btn-ghost" id="bipBtn" style="border:0;background:none;cursor:pointer" aria-label="Hear Bip">${PA.mascot("bip", { size: 150, mood: lit === 4 ? "happy" : lit ? "talk" : "flat", chips, cls: "bob" })}</button>
-        <div>
-          <h1>Hi ${esc(p.name)}! ${p.avatar}</h1>
-          <div class="bubble">🤖 “${esc(bipSays)}”</div>
+      <section class="island" id="hero">
+        <div class="isl-sky"><i class="sun"></i><i class="cl a"></i><i class="cl b"></i><i class="cl c"></i>${floats}</div>
+        <svg class="isl-sea" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path class="w1" d="M0 40 Q 150 0 300 40 T 600 40 T 900 40 T 1200 40 T 1500 40 T 1800 40 V120 H0Z"/><path class="w2" d="M0 60 Q 150 25 300 60 T 600 60 T 900 60 T 1200 60 T 1500 60 T 1800 60 V120 H0Z"/></svg>
+        <div class="isl-cast" id="islCast">${isl("dot", "d1")}${isl("koma", "d2")}${isl("bip", "bipm")}${isl("quizzy", "d3")}${isl("zing", "d4")}</div>
+        <div class="isl-card">
+          <div class="isl-hi"><span class="isl-av">${p.avatar}</span><div><div class="small muted">${new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening"}</div><h1>Hi ${esc(p.name)}!</h1></div></div>
+          <div class="bubble" id="islSay">🤖 “${esc(bipSays)}”</div>
           ${S.bm("Bantu Bip membaca dengan perasaan. Kumpul 4 cip suara!")}
-          <div class="chip-row" id="chipRow">${PA.SKILL_LIST.map((k) => `<span class="vchip ${k} ${chips[k] ? "on" : ""}">${PA.MARKS[PA.SKILLS[k]].cue} ${PA.SKILL_NAME[k]} · ${m[k]}%</span>`).join("")}</div>
-          <p class="small muted" style="margin-top:8px">A chip lights up when that skill reaches 80%. Tap Bip to hear him.</p>
+          <div class="chip-row" id="chipRow">${PA.SKILL_LIST.map((k) => `<span class="vchip ${k} ${chips[k] ? "on" : ""}" title="${PA.SKILL_NAME[k]} ${m[k]}%">${PA.MARKS[PA.SKILLS[k]].cue} ${PA.SKILL_NAME[k]} · ${m[k]}%</span>`).join("")}</div>
+          <div class="row" style="margin-top:12px"><a class="btn btn-good" id="continueBtn" href="${next.href}">${next.icon} ${esc(next.label)} ➡</a><button class="btn btn-ghost" data-video="welcome" id="welcomeVid">🎬 Welcome video</button></div>
         </div>
+        <div class="isl-tip">👆 Tap a friend to hear them!</div>
       </section>
       ${missions.length ? `<h2 class="section-title">🎯 Missions from your teacher</h2><div class="grid g2" id="missions">${missions.map((a) => `<a class="mission ${a.done ? "done" : ""}" href="${a.type === "game" ? `#/play/${a.ref}?level=${a.level || S.level()}` : `#/studio/${a.ref}`}" style="text-decoration:none;color:inherit">
         <span class="ic">${a.done ? "✅" : a.type === "game" ? PA.Model.GAMES[a.ref].icon : "🎭"}</span><div class="grow"><b>${esc(a.title)}</b><div class="small muted">${a.type === "game" ? PA.Model.GAMES[a.ref].name : "Reading Studio"}${a.level ? " · " + S.LEVELS[a.level] : ""}${a.due ? " · due " + PA.fmtDate(a.due, false) : ""}</div>${a.note ? `<div class="small">${esc(a.note)}</div>` : ""}</div><span class="btn btn-sm ${a.done ? "btn-ghost" : "btn-feel"}">${a.done ? "Done" : "Go"}</span></a>`).join("")}</div>` : ""}
       <h2 class="section-title">🗺️ Your reading journey</h2>
       <div class="journey" id="journey">
-        <a class="jstep" href="#/learn"><span class="n" style="background:var(--stop)">1</span><span class="ic">📚</span><h3>Learn</h3><p>Meet the Mark Crew and hear what each mark does to your voice.</p></a>
-        <a class="jstep" href="#/practice"><span class="n" style="background:var(--pause)">2</span><span class="ic">🎮</span><h3>Practice</h3><p>Six games. Easy, Medium or Hard. New sentences every time!</p></a>
-        <a class="jstep" href="#/studio"><span class="n" style="background:var(--ask)">3</span><span class="ic">🎭</span><h3>Reading Studio</h3><p>Role-play a dialogue, record your voice and see your voice melody.</p></a>
-        <a class="jstep" href="#/me"><span class="n" style="background:var(--feel)">4</span><span class="ic">🏆</span><h3>Show &amp; grow</h3><p>Collect badges and read your teacher's feedback.</p></a>
+        ${[["#/learn", "var(--stop)", "📚", "Learn", "Meet the Mark Crew and hear what each mark does to your voice.", lessonsDone, 4, "lessons"],
+           ["#/practice", "var(--pause)", "🎯", "Practice", "Six activities at Easy, Medium or Hard. New sentences every time.", tried, 6, "activities tried"],
+           ["#/studio", "var(--ask)", "🎭", "Reading Studio", "Role-play a dialogue, record your voice and see your voice melody.", Math.min(recs, 10), 10, "recordings"],
+           ["#/me", "var(--feel)", "🏆", "Show &amp; grow", "Collect badges and read your teacher's feedback.", badges, 12, "badges"]].map(([h, c, ic, t, d, v, mx, u], i) => `
+          <a class="jstep" href="${h}"><span class="n" style="background:${c}">${i + 1}</span><span class="ic">${ic}</span><h3>${t}</h3><p>${d}</p>
+          <div class="jprog"><div class="bar"><i style="width:${Math.round((v / mx) * 100)}%;background:${c}"></i></div><span class="small muted">${v}/${mx} ${u}</span></div></a>`).join("")}
       </div>
-      <h2 class="section-title">🎵 The PunctuAction chant</h2>
+      <div class="grid g2" style="margin-top:16px">
+        <a class="feature-tile" href="#/scanner" id="scanTile"><span class="ft-ic">🔍</span><div><span class="pill pill-stop">NEW</span><h3>Dialogue Scanner</h3><p>Type, paste or take a photo of any dialogue. Bip finds every mark and shows how your voice should sound.</p></div></a>
+        <a class="feature-tile" href="#/help" id="helpTile"><span class="ft-ic">🎬</span><div><span class="pill pill-ask">VIDEOS</span><h3>Video tutorials</h3><p>Short animated videos show you how to use every part of ${esc(PA.brand.name)}.</p></div></a>
+      </div>
+      <h2 class="section-title">🎵 The ${esc(PA.brand.name)} chant</h2>
       <div class="chant-card" id="chant">
         <div class="chant-lines">${PA.brand.chant.map((c, i) => `<div data-i="${i}">${PA.ReadAlong.html(c.line, { cues: false, emotion: "excited" })}</div>`).join("")}</div>
         <div class="col" style="align-items:center"><div class="crew-row">${PA.mascot("dot", { size: 46 })}${PA.mascot("koma", { size: 46 })}${PA.mascot("quizzy", { size: 46 })}${PA.mascot("zing", { size: 46 })}</div><button class="btn btn-feel btn-lg" id="chantBtn">▶ Sing it</button></div>
@@ -157,7 +181,26 @@
         <div class="row" style="justify-content:center"><button class="btn btn-ask" id="warmPlay">🔊 Listen</button><button class="btn btn-ghost" id="warmNew">🔁 New sentence</button></div>
         <p class="small muted">Listen, then read it aloud yourself. Look at the little signs above the marks!</p>
       </div>`);
-    $("#bipBtn").onclick = () => PA.Voice.speak(bipSays, lit === 4 ? { emotion: "excited" } : { robot: true });
+    // tap a friend: each one speaks its rule and does its move
+    $("#islCast").onclick = (e) => {
+      const b = e.target.closest("[data-m]"); if (!b) return;
+      const n = b.dataset.m;
+      b.classList.remove("hop"); void b.offsetWidth; b.classList.add("hop");
+      if (n === "bip") { $("#islSay").textContent = `🤖 “${bipSays}”`; return PA.Voice.speak(bipSays, lit === 4 ? { emotion: "excited" } : { robot: true }); }
+      const mk = { dot: ".", koma: ",", quizzy: "?", zing: "!" }[n], M = PA.MARKS[mk];
+      PA.sfx(PA.markSfx[mk]);
+      const line = { dot: "I'm Dotty, the full stop. When you see me, stop and rest your voice.", koma: "I'm Koma, the comma. When you see me, take a tiny breath, then keep going.", quizzy: "I'm Quizzy, the question mark. Do you know my trick? Yes or No questions go up!", zing: "I'm Zing, the exclamation mark. Hooray! Show the feeling with your voice!" }[n];
+      $("#islSay").innerHTML = `${M.cue} <span class="read">${PA.ReadAlong.html(line, { cues: true, emotion: "excited" })}</span>`;
+      PA.ReadAlong.play($("#islSay"), line, { emotion: "excited", mode: "natural", markSounds: false });
+    };
+    // welcome jingle + greeting, once per session
+    const gk = "pa:greeted:" + p.id;
+    let greeted = false; try { greeted = sessionStorage.getItem(gk); sessionStorage.setItem(gk, "1"); } catch (e) {}
+    if (!greeted) {
+      PA.jingle();
+      setTimeout(() => { if (location.hash.startsWith("#/home") && !document.querySelector(".vp-back")) PA.Voice.speak(`Welcome${p.sessions > 1 ? " back" : ""}, ${p.name}! ${lit === 4 ? "You are a Voice Hero!" : "Let's read with feeling today!"}`, { emotion: "happy", mode: "natural" }); }, 1100);
+      if (!p.guest && !p.onboarded) { p.onboarded = true; PA.Model.save(p); setTimeout(() => S.onboard(), 2600); }
+    }
     $("#chantBtn").onclick = async (e) => {
       const btn = e.currentTarget; btn.disabled = true;
       for (const [i, c] of PA.brand.chant.entries()) {
@@ -179,6 +222,14 @@
       $("#warmText").innerHTML = PA.ReadAlong.html(cur.text, { cues: true, emotion: cur.emo }); PA.sfx("pop"); };
   };
 
+  /* first-time welcome for a new pupil */
+  S.onboard = async () => {
+    if (!location.hash.startsWith("#/home")) return;
+    const v = await PA.modal({ title: `Welcome, ${esc(S.pupil.name)}! 🎉`, body: `<div class="row" style="flex-wrap:nowrap;align-items:center">${PA.mascot("bip", { size: 110, mood: "talk", cls: "bob" })}<div class="read" style="font-size:1.15rem">I'm Bip. I read like a robot, and I need your help to find my voice. Watch a short video to see how ${esc(PA.brand.name)} works!</div></div>`,
+      actions: [{ label: "Later", cls: "btn-ghost", value: false }, { label: "▶ Watch the welcome video", cls: "btn-feel", value: true }] });
+    if (v) PA.Video.play("welcome");
+  };
+
   /* ---------- Settings ---------- */
   async function openSettings() {
     const vs = PA.Voice.list();
@@ -197,11 +248,12 @@
         <div>
           <div class="field"><label>Text size</label><div class="seg" id="st-size">${["s", "m", "l"].map((k) => `<button data-v="${k}" class="${g("textSize", "m") === k ? "on" : ""}" style="font-size:${{ s: ".9rem", m: "1.05rem", l: "1.25rem" }[k]}">A</button>`).join("")}</div></div>
           <label class="row"><input type="checkbox" id="st-bm" ${g("bm", false) ? "checked" : ""}> Show Bahasa Melayu help (BM)</label>
+          <label class="row"><input type="checkbox" id="st-auto" ${g("autoRead", false) ? "checked" : ""}> Read every instruction aloud automatically (good for Year 1–2)</label>
           <label class="row"><input type="checkbox" id="st-sfx" ${!g("mute", false) ? "checked" : ""}> Sound effects</label>
           <label class="row"><input type="checkbox" id="st-nar" ${g("narrate", true) ? "checked" : ""}> Bip reads the tutorials aloud</label>
           <label class="row"><input type="checkbox" id="st-rm" ${g("reduceMotion", false) ? "checked" : ""}> Less movement on screen</label>
           <hr style="border:0;border-top:2px solid var(--line-2);margin:14px 0">
-          <div class="row"><button class="btn btn-sm btn-ghost" id="st-pack">📥 Load class pack</button><a class="btn btn-sm btn-ghost" href="manual.html#pupil" target="_blank">📘 User manual</a></div>
+          <div class="row"><button class="btn btn-sm btn-ghost" id="st-pack">📥 Load class pack</button><a class="btn btn-sm btn-ghost" href="manual.html#pupil" target="_blank">📘 User manual</a><a class="btn btn-sm btn-ghost" href="#/help">🎬 Help Centre</a><a class="btn btn-sm btn-ghost" href="#/about">ℹ️ About</a></div>
         </div>
       </div>`, actions: [{ label: "Done", cls: "btn-good" }],
       onOpen: (m) => {
@@ -212,6 +264,7 @@
         $("#st-rate", m).oninput = (e) => { PA.settings.set("rate", +e.target.value); $("#st-rv", m).textContent = e.target.value; };
         $("#st-multi", m).onchange = (e) => PA.settings.set("multiVoice", e.target.checked);
         $("#st-bm", m).onchange = (e) => PA.settings.set("bm", e.target.checked);
+        $("#st-auto", m).onchange = (e) => PA.settings.set("autoRead", e.target.checked);
         $("#st-sfx", m).onchange = (e) => PA.settings.set("mute", !e.target.checked);
         $("#st-nar", m).onchange = (e) => PA.settings.set("narrate", e.target.checked);
         $("#st-rm", m).onchange = (e) => { PA.settings.set("reduceMotion", e.target.checked); applySettings(); };
@@ -220,7 +273,6 @@
     router.run();
   }
   $("#settingsBtn").onclick = openSettings;
-  $("#watchBtn").onclick = () => { const t = S.tutorials[S.current] || S.tutorials.home; if (t) PA.Tour.play(t.steps(), { title: t.title }); };
 
   /* ---------- Router ---------- */
   const guard = (fn) => (params) => { if (!S.pupil) return renderLogin(); return fn(params); };
@@ -234,7 +286,10 @@
     studio: guard(() => S.pages.studio()),
     "studio/:id": guard((p) => S.pages.dialogue(p)),
     me: guard(() => S.pages.me()),
-    feedback: guard(() => S.pages.feedback())
+    feedback: guard(() => S.pages.feedback()),
+    scanner: guard(() => S.pages.scanner()),
+    help: guard(() => S.pages.help()),
+    about: guard(() => S.pages.about())
   }, "home");
   S.router = router;
 

@@ -35,7 +35,7 @@
   S.pages.feedback = () => {
     S.setTab("feedback");
     const FACES = [["😣", "Awful"], ["🙁", "Not very good"], ["🙂", "Good"], ["😀", "Really good"], ["🤩", "Brilliant"]];
-    const AGAIN = [["learn", "📚 Learn lessons"], ["practice", "🎮 Practice games"], ["studio", "🎭 Reading Studio"], ["chat", "🤖 Ask Bip"], ["disguise", "🎭 Voice disguise"]];
+    const AGAIN = [["learn", "📚 Learn lessons"], ["practice", "🎯 Practice activities"], ["scanner", "🔍 Dialogue Scanner"], ["videos", "🎬 Video tutorials"], ["studio", "🎭 Reading Studio"], ["chat", "🤖 Ask Bip"], ["disguise", "🎭 Voice disguise"]];
     const FAV = [["dot", "Dotty"], ["koma", "Koma"], ["quizzy", "Quizzy"], ["zing", "Zing"], ["bip", "Bip"]];
     const TRICKY = ["Full stops .", "Commas ,", "Questions ?", "Exclamations !", "Recording my voice", "Reading the words", "Nothing!"];
     const f = { again: {}, tricky: [] };

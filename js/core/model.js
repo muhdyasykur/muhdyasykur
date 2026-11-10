@@ -19,7 +19,7 @@
     { id: "pause", icon: "💨", name: "Pause Pro", desc: "Pause skill reached 80%" },
     { id: "ask", icon: "❓", name: "Question Quest", desc: "Ask skill reached 80%" },
     { id: "feel", icon: "💥", name: "Feeling Star", desc: "Feel skill reached 80%" },
-    { id: "explorer", icon: "🧭", name: "Explorer", desc: "Tried all six games" },
+    { id: "explorer", icon: "🧭", name: "Explorer", desc: "Tried all six practice activities" },
     { id: "fixer", icon: "🔧", name: "Robot Fixer", desc: "Fixed Bip 3 times with 80% or more" },
     { id: "hard", icon: "🏔️", name: "Hard Hero", desc: "Scored 80% or more on a Hard round" },
     { id: "studio", icon: "🎙️", name: "Studio Star", desc: "Made 5 recordings in the Reading Studio" },
