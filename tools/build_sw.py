@@ -6,7 +6,7 @@ for root, _, names in os.walk('.'):
     if root.startswith(('./.git', './docs', './tools', './assets/vendor')): continue
     for n in names:
         p = os.path.join(root, n)[2:]
-        if p.endswith(('.html', '.css', '.js', '.woff2', '.svg', '.png', '.jpg', '.webmanifest')) and p not in ('sw.js',):
+        if p.endswith(('.html', '.css', '.js', '.woff2', '.svg', '.png', '.jpg', '.mp3', '.webmanifest')) and p not in ('sw.js',):
             files.append(p)
 files.sort()
 h = hashlib.sha1(''.join(open(f, 'rb').read().hex()[:2000] + f for f in files).encode()).hexdigest()[:10]

@@ -89,10 +89,52 @@
       return steps;
     },
 
+    /* ---------- natural recorded voices (ElevenLabs clips bundled with the app) ---------- */
+    clipKey: (t, e) => String(t).replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim().toLowerCase() + "|" + (e || ""),
+    clipFor(text, emo) {
+      if (!PA.CLIPS || !PA.settings.get("naturalVoice", true)) return null;
+      return PA.CLIPS[this.clipKey(text, emo)] || null;
+    },
+    hasClip(text, emo) { return !!this.clipFor(text, emo); },
+    _playClip(c, text, opts, tok) {
+      return new Promise((resolve) => {
+        const toks = L().tokenize(text);
+        const words = toks.filter((t) => t.type === "word"), marks = toks.filter((t) => t.type === "mark" && PA.MARKS[L().normMark(t.mark)]);
+        const wt = c.w && c.w.length === words.length ? c.w : words.map((_, i) => (i / Math.max(1, words.length)) * (c.d || 2) * 0.9);
+        const mt = c.m && c.m.length === marks.length ? c.m : marks.map((m) => (m.start / text.length) * (c.d || 2));
+        const rate = (opts.clipRate || 1) * PA.settings.get("rate", 1);
+        let wi = 0, mi = 0, done = false, raf = 0, t0 = performance.now();
+        const silent = !!opts.silent;
+        const audio = silent ? null : new Audio((PA.CLIP_BASE || "assets/voice/") + c.f);
+        if (audio) { audio.playbackRate = rate; this._clipAudio = audio; }
+        const finish = (ok) => { if (done) return; done = true; cancelAnimationFrame(raf); if (audio && !ok) try { audio.pause(); } catch (e) {} resolve(ok); };
+        const tick = () => {
+          if (tok !== this._tok) return finish(false);
+          const t = audio ? audio.currentTime : ((performance.now() - t0) / 1000) * rate;
+          while (wi < words.length && t >= wt[wi]) { opts.onWord && opts.onWord(words[wi].start); wi++; }
+          while (mi < marks.length && t >= mt[mi]) { const mk = L().normMark(marks[mi].mark); opts.onMark && opts.onMark({ mark: mk, at: marks[mi].start, final: mi === marks.length - 1 && wi >= words.length, pause: 0 }); mi++; }
+          if (!audio && t >= (c.d || 2)) return finish(true);
+          raf = requestAnimationFrame(tick);
+        };
+        opts.onStep && opts.onStep({ say: text, start: 0, end: text.length, pitch: 1, rate, volume: 1 });
+        if (audio) {
+          audio.onended = () => { while (wi < words.length) { opts.onWord && opts.onWord(words[wi].start); wi++; } setTimeout(() => finish(true), 120); };
+          audio.onerror = () => { if (done) return; done = true; cancelAnimationFrame(raf); resolve(null); }; // fall back to the device voice
+          audio.play().then(() => { t0 = performance.now(); tick(); }).catch(() => { if (!done) { done = true; resolve(null); } });
+        } else tick();
+      });
+    },
+
     /** speak(text, {emotion, voice, pitch, rate, mode, robot, onStep, onWord, onMark, onEnd}) -> Promise */
     async speak(text, opts = {}) {
       this.stop();
       const tok = ++this._tok;
+      const clip = !opts.robot && !opts.noClip ? this.clipFor(text, opts.emotion) : null;
+      if (clip) {
+        const r = await this._playClip(clip, text, opts, tok);
+        if (r !== null) { if (r && tok === this._tok) opts.onEnd && opts.onEnd(); return r && tok === this._tok; }
+        if (tok !== this._tok) return false; // clip failed to load: use the device voice below
+      }
       const steps = this.plan(text, opts);
       const voice = opts.voice !== undefined ? opts.voice : this.narrator();
       for (const st of steps) {
@@ -128,7 +170,7 @@
         synth.speak(u);
       });
     },
-    stop() { this._tok++; if (synth) synth.cancel(); PA.stopAudio && PA.stopAudio(); },
+    stop() { this._tok++; if (synth) synth.cancel(); PA.stopAudio && PA.stopAudio(); if (this._clipAudio) { try { this._clipAudio.pause(); } catch (e) {} this._clipAudio = null; } },
     EMO
   };
   PA.Voice = Voice;

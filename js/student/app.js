@@ -242,6 +242,7 @@
             <select class="input" id="st-voice">${vs.length ? vs.map((v) => `<option value="${esc(v.voiceURI)}" ${v.voiceURI === cur ? "selected" : ""}>${esc(v.name)} (${v.lang})${v.localService ? " · offline" : ""}</option>`).join("") : `<option>No English voice found on this device</option>`}</select>
             <div class="row"><button class="btn btn-sm btn-ask" id="st-test">🔊 Test</button><label class="small"><input type="checkbox" id="st-multi" ${g("multiVoice", true) ? "checked" : ""}> Different voices for different characters</label></div>
             <span class="small muted">Tip: your teacher can record their own voice for every dialogue line. That voice is always used first.</span></div>
+          <label class="row" style="margin-bottom:12px"><input type="checkbox" id="st-nat" ${g("naturalVoice", true) ? "checked" : ""}> 🎧 Use natural recorded voices when available (works offline)</label>
           <div class="field"><label>Reading style</label><div class="seg" id="st-mode"><button data-v="teach" class="${g("voiceMode", "teach") === "teach" ? "on" : ""}">🐢 Teaching (clear pauses)</button><button data-v="natural" class="${g("voiceMode", "teach") === "natural" ? "on" : ""}">🐇 Natural</button></div></div>
           <div class="field"><label>Voice speed: <span id="st-rv">${g("rate", 1)}</span>×</label><input type="range" min="0.7" max="1.3" step="0.05" value="${g("rate", 1)}" id="st-rate"></div>
         </div>
@@ -260,6 +261,7 @@
         const seg = (id, key) => $(id, m).addEventListener("click", (e) => { const b = e.target.closest("[data-v]"); if (!b) return; $$(id + " button", m).forEach((x) => x.classList.toggle("on", x === b)); PA.settings.set(key, b.dataset.v); applySettings(); });
         seg("#st-mode", "voiceMode"); seg("#st-size", "textSize");
         $("#st-voice", m).onchange = (e) => PA.settings.set("voiceURI", e.target.value);
+        $("#st-nat", m).onchange = (e) => PA.settings.set("naturalVoice", e.target.checked);
         $("#st-test", m).onclick = () => PA.Voice.speak("Hello, Ali! Are you ready? Let's read with feeling!", { emotion: "happy" });
         $("#st-rate", m).oninput = (e) => { PA.settings.set("rate", +e.target.value); $("#st-rv", m).textContent = e.target.value; };
         $("#st-multi", m).onchange = (e) => PA.settings.set("multiVoice", e.target.checked);

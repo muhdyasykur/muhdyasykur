@@ -101,14 +101,14 @@
             act(sh, k, false);
             const hl = caption(say[k]);
             setPres(null, "talk");
-            await PA.Voice.speak(say[k], { mode: "natural", rate: 0.92 * st.speed, silent: !st.voice, onWord: hl, voice: PA.Voice.narrator() });
+            await PA.Voice.speak(say[k], { mode: "natural", rate: 0.92 * st.speed, clipRate: st.speed, silent: !st.voice, onWord: hl, voice: PA.Voice.narrator() });
             if (my !== st.run) return;
             setPres(null, "happy");
             const a = (sh.acts || {})[k];
             if (a && a.demo) {
               const el = layer.querySelector(a.demo.el || ".vp-demo");
               cap.innerHTML = `<span class="vp-captext">🔊 ${esc(a.demo.text)}</span>`;
-              if (el) await PA.ReadAlong.play(el, a.demo.text, { emotion: a.demo.emo, robot: !!a.demo.robot, silent: !st.voice, pitch: a.demo.pitch || 1, markSounds: false });
+              if (el) await PA.ReadAlong.play(el, a.demo.text, { emotion: a.demo.emo, robot: !!a.demo.robot, silent: !st.voice, pitch: a.demo.pitch || 1, clipRate: st.speed, markSounds: false });
               if (my !== st.run) return;
             }
             fill(i, (k + 1) / Math.max(1, say.length));
