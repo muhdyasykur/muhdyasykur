@@ -1,8 +1,11 @@
 """Writes js/core/clips.js (the index of natural voice clips) from a timings.json made by voice_align.py.
 usage: python3 tools/build_clips.py timings.json"""
 import json, sys
+import os
 T = json.load(open(sys.argv[1]))
-idx = {v["key"]: {"f": v["f"], "d": v["d"], "w": v["w"], "m": v["m"], "v": v["v"]} for v in T.values()}
+# clips listed in tools/voice_hold.txt (e.g. a question whose voice falls) are kept out until re-recorded
+hold = set(open("tools/voice_hold.txt").read().split()) if os.path.exists("tools/voice_hold.txt") else set()
+idx = {v["key"]: {"f": v["f"], "d": v["d"], "w": v["w"], "m": v["m"], "v": v["v"]} for k, v in T.items() if k not in hold}
 with open("js/core/clips.js", "w") as f:
     f.write("/* Natural voice clips (generated with ElevenLabs v4, bundled in assets/voice/). Built by tools/build_clips.py.\n"
             "   key = lower-case sentence + \"|\" + feeling; f = file, d = seconds, w = word start times, m = mark times, v = voice. */\n"
