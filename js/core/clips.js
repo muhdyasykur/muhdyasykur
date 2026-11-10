@@ -18,7 +18,6 @@ PA.CLIPS = {"straight, left at the bank, then the bridge? is that right?|":{"f":
 "you are hungry.|":{"f":"c101.mp3","d":1.63,"w":[0.21,0.55,0.59],"m":[1.44],"v":"boyA"},
 "you are hungry?|":{"f":"c102.mp3","d":1.32,"w":[0.195,0.435,0.495],"m":[1.135],"v":"boyA"},
 "where is my bag?|":{"f":"c103.mp3","d":1.63,"w":[0.185,0.435,0.615,0.765],"m":[1.435],"v":"boyA"},
-"do you like nasi lemak?|":{"f":"c105.mp3","d":1.66,"w":[0.195,0.305,0.465,0.685,1.005],"m":[1.465],"v":"boyA"},
 "good morning, aunty!|happy":{"f":"c001.mp3","d":1.65,"w":[0.19,0.43,0.91],"m":[0.91,1.54],"v":"boyA"},
 "yes, please!|happy":{"f":"c005.mp3","d":1.25,"w":[0.115,0.565],"m":[0.565,1.055],"v":"boyA"},
 "thank you, aunty. it smells so good!|happy":{"f":"c007.mp3","d":3.56,"w":[0.19,0.61,0.82,1.67,1.79,2.19,2.74],"m":[0.82,1.37,3.41],"v":"boyA"},
