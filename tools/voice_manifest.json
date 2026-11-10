@@ -1,0 +1,2179 @@
+{
+ "voices": {
+  "boyA": "EeQEodFZVtBkjtgK3HBc",
+  "boyB": "nuNMqNdrDex14QQRI9Jq",
+  "girlA": "e3FEEanj39p8QCSMe8iV",
+  "girlB": "Jr72SE8p9OcJmr8hyX0D",
+  "woman": "jIqiRM4Svh204ihzOZ39",
+  "man": "O8ykjWKd0RjX6e5EyDuE",
+  "elder": "NIkIuJZ8oQMuKZqwKtnm",
+  "tourist": "XoCXkGhESdrCEEK4uJOV",
+  "narr": "IR4Yywb88oVWHqzWLjAs"
+ },
+ "clips": [
+  {
+   "id": "c001",
+   "key": "good morning, aunty!|happy",
+   "text": "Good morning, Aunty!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Good morning, Aunty!",
+   "prompt": "[happy] Good morning, Aunty!"
+  },
+  {
+   "id": "c002",
+   "key": "good morning, ali. what do you want today?|",
+   "text": "Good morning, Ali. What do you want today?",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Good morning, Ali. What do you want today?",
+   "prompt": "Good morning, Ali. What do you want today?"
+  },
+  {
+   "id": "c003",
+   "key": "can i have nasi lemak, please?|",
+   "text": "Can I have nasi lemak, please?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Can I have nasi lemak, please?",
+   "prompt": "Can I have nasi lemak, please?"
+  },
+  {
+   "id": "c004",
+   "key": "sure. do you want an egg?|",
+   "text": "Sure. Do you want an egg?",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Sure. Do you want an egg?",
+   "prompt": "Sure. Do you want an egg?"
+  },
+  {
+   "id": "c005",
+   "key": "yes, please!|happy",
+   "text": "Yes, please!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Yes, please!",
+   "prompt": "[happy] Yes, please!"
+  },
+  {
+   "id": "c006",
+   "key": "here you are. that is two ringgit.|",
+   "text": "Here you are. That is two ringgit.",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Here you are. That is two /riŋɡɪt/.",
+   "prompt": "Here you are. That is two /riŋɡɪt/."
+  },
+  {
+   "id": "c007",
+   "key": "thank you, aunty. it smells so good!|happy",
+   "text": "Thank you, Aunty. It smells so good!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Thank you, Aunty. It smells so good!",
+   "prompt": "[happy] Thank you, Aunty. It smells so good!"
+  },
+  {
+   "id": "c008",
+   "key": "mum, where is comel?|worried",
+   "text": "Mum, where is Comel?",
+   "emo": "worried",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Mum, where is /tʃomel/?",
+   "prompt": "[worried] Mum, where is /tʃomel/?"
+  },
+  {
+   "id": "c009",
+   "key": "i don't know. is she in your room?|",
+   "text": "I don't know. Is she in your room?",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "I don't know. Is she in your room?",
+   "prompt": "I don't know. Is she in your room?"
+  },
+  {
+   "id": "c010",
+   "key": "no, she is not there.|sad",
+   "text": "No, she is not there.",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "No, she is not there.",
+   "prompt": "[sad] No, she is not there."
+  },
+  {
+   "id": "c011",
+   "key": "look! what is that under the table?|surprised",
+   "text": "Look! What is that under the table?",
+   "emo": "surprised",
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Look! What is that under the table?",
+   "prompt": "[surprised] Look! What is that under the table?"
+  },
+  {
+   "id": "c012",
+   "key": "it's comel! she is sleeping.|excited",
+   "text": "It's Comel! She is sleeping.",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "It's /tʃomel/! She is sleeping.",
+   "prompt": "[excited] It's /tʃomel/! She is sleeping."
+  },
+  {
+   "id": "c013",
+   "key": "shh, don't wake her up.|calm",
+   "text": "Shh, don't wake her up.",
+   "emo": "calm",
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Shh, don't wake her up.",
+   "prompt": "[calmly] Shh, don't wake her up."
+  },
+  {
+   "id": "c014",
+   "key": "surprise! happy birthday, ravi!|excited",
+   "text": "Surprise! Happy birthday, Ravi!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Surprise! Happy birthday, Ravi!",
+   "prompt": "[excited] Surprise! Happy birthday, Ravi!"
+  },
+  {
+   "id": "c015",
+   "key": "wow, is this cake for me?|surprised",
+   "text": "Wow, is this cake for me?",
+   "emo": "surprised",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Wow, is this cake for me?",
+   "prompt": "[surprised] Wow, is this cake for me?"
+  },
+  {
+   "id": "c016",
+   "key": "yes, it is. make a wish!|happy",
+   "text": "Yes, it is. Make a wish!",
+   "emo": "happy",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Yes, it is. Make a wish!",
+   "prompt": "[happy] Yes, it is. Make a wish!"
+  },
+  {
+   "id": "c017",
+   "key": "thank you, my friends. you are the best!|happy",
+   "text": "Thank you, my friends. You are the best!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Thank you, my friends. You are the best!",
+   "prompt": "[happy] Thank you, my friends. You are the best!"
+  },
+  {
+   "id": "c018",
+   "key": "can we eat the cake now?|excited",
+   "text": "Can we eat the cake now?",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Can we eat the cake now?",
+   "prompt": "[excited] Can we eat the cake now?"
+  },
+  {
+   "id": "c019",
+   "key": "of course. let's eat!|happy",
+   "text": "Of course. Let's eat!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Of course. Let's eat!",
+   "prompt": "[happy] Of course. Let's eat!"
+  },
+  {
+   "id": "c020",
+   "key": "aiman, did you see my durian? i put it on the table.|",
+   "text": "Aiman, did you see my durian? I put it on the table.",
+   "emo": null,
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Aiman, did you see my durian? I put it on the table.",
+   "prompt": "Aiman, did you see my durian? I put it on the table."
+  },
+  {
+   "id": "c021",
+   "key": "no, grandpa. i was at the field with farah.|",
+   "text": "No, Grandpa. I was at the field with Farah.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "No, Grandpa. I was at the field with Farah.",
+   "prompt": "No, Grandpa. I was at the field with Farah."
+  },
+  {
+   "id": "c022",
+   "key": "look, there are seeds on the floor!|surprised",
+   "text": "Look, there are seeds on the floor!",
+   "emo": "surprised",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Look, there are seeds on the floor!",
+   "prompt": "[surprised] Look, there are seeds on the floor!"
+  },
+  {
+   "id": "c023",
+   "key": "seeds? who ate my durian?|angry",
+   "text": "Seeds? Who ate my durian?",
+   "emo": "angry",
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Seeds? Who ate my durian?",
+   "prompt": "[angry] Seeds? Who ate my durian?"
+  },
+  {
+   "id": "c024",
+   "key": "shh, listen. what is that noise?|worried",
+   "text": "Shh, listen. What is that noise?",
+   "emo": "worried",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Shh, listen. What is that noise?",
+   "prompt": "[worried] Shh, listen. What is that noise?"
+  },
+  {
+   "id": "c025",
+   "key": "it's a monkey! it has the durian!|surprised",
+   "text": "It's a monkey! It has the durian!",
+   "emo": "surprised",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "It's a monkey! It has the durian!",
+   "prompt": "[surprised] It's a monkey! It has the durian!"
+  },
+  {
+   "id": "c026",
+   "key": "oh, you naughty monkey. come back here!|angry",
+   "text": "Oh, you naughty monkey. Come back here!",
+   "emo": "angry",
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Oh, you naughty monkey. Come back here!",
+   "prompt": "[angry] Oh, you naughty monkey. Come back here!"
+  },
+  {
+   "id": "c027",
+   "key": "runners, are you ready?|",
+   "text": "Runners, are you ready?",
+   "emo": null,
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Runners, are you ready?",
+   "prompt": "Runners, are you ready?"
+  },
+  {
+   "id": "c028",
+   "key": "yes, coach. we are ready!|excited",
+   "text": "Yes, Coach. We are ready!",
+   "emo": "excited",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Yes, Coach. We are ready!",
+   "prompt": "[excited] Yes, Coach. We are ready!"
+  },
+  {
+   "id": "c029",
+   "key": "on your marks, get set, go!|urgent",
+   "text": "On your marks, get set, go!",
+   "emo": "urgent",
+   "voice": "man",
+   "group": "dialogue",
+   "say": "On your marks, get set, go!",
+   "prompt": "[urgently] On your marks, get set, go!"
+  },
+  {
+   "id": "c030",
+   "key": "run, priya, run! you can do it!|excited",
+   "text": "Run, Priya, run! You can do it!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Run, Priya, run! You can do it!",
+   "prompt": "[excited] Run, Priya, run! You can do it!"
+  },
+  {
+   "id": "c031",
+   "key": "i did it! i won the race!|proud",
+   "text": "I did it! I won the race!",
+   "emo": "proud",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "I did it! I won the race!",
+   "prompt": "[proudly] I did it! I won the race!"
+  },
+  {
+   "id": "c032",
+   "key": "well done, priya. how do you feel?|happy",
+   "text": "Well done, Priya. How do you feel?",
+   "emo": "happy",
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Well done, Priya. How do you feel?",
+   "prompt": "[happy] Well done, Priya. How do you feel?"
+  },
+  {
+   "id": "c033",
+   "key": "i feel tired, but i am very happy.|happy",
+   "text": "I feel tired, but I am very happy.",
+   "emo": "happy",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "I feel tired, but I am very happy.",
+   "prompt": "[happy] I feel tired, but I am very happy."
+  },
+  {
+   "id": "c034",
+   "key": "the sky is so blue today. let's have a picnic!|happy",
+   "text": "The sky is so blue today. Let's have a picnic!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "The sky is so blue today. Let's have a picnic!",
+   "prompt": "[happy] The sky is so blue today. Let's have a picnic!"
+  },
+  {
+   "id": "c035",
+   "key": "good idea! i will bring sandwiches, bananas and juice.|excited",
+   "text": "Good idea! I will bring sandwiches, bananas and juice.",
+   "emo": "excited",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Good idea! I will bring sandwiches, bananas and juice.",
+   "prompt": "[excited] Good idea! I will bring sandwiches, bananas and juice."
+  },
+  {
+   "id": "c036",
+   "key": "wait, did you check the weather?|",
+   "text": "Wait, did you check the weather?",
+   "emo": null,
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Wait, did you check the weather?",
+   "prompt": "Wait, did you check the weather?"
+  },
+  {
+   "id": "c037",
+   "key": "oh no, it's raining!|sad",
+   "text": "Oh no, it's raining!",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Oh no, it's raining!",
+   "prompt": "[sad] Oh no, it's raining!"
+  },
+  {
+   "id": "c038",
+   "key": "what should we do now?|worried",
+   "text": "What should we do now?",
+   "emo": "worried",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "What should we do now?",
+   "prompt": "[worried] What should we do now?"
+  },
+  {
+   "id": "c039",
+   "key": "why don't we have the picnic in the living room?|",
+   "text": "Why don't we have the picnic in the living room?",
+   "emo": null,
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Why don't we have the picnic in the living room?",
+   "prompt": "Why don't we have the picnic in the living room?"
+  },
+  {
+   "id": "c040",
+   "key": "what a great idea, dad!|happy",
+   "text": "What a great idea, Dad!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "What a great idea, Dad!",
+   "prompt": "[happy] What a great idea, Dad!"
+  },
+  {
+   "id": "c041",
+   "key": "jia hui, look at all the food here!|excited",
+   "text": "Jia Hui, look at all the food here!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Jia Hui, look at all the food here!",
+   "prompt": "[excited] Jia Hui, look at all the food here!"
+  },
+  {
+   "id": "c042",
+   "key": "wow, i want satay, apam balik and cendol.|excited",
+   "text": "Wow, I want satay, apam balik and cendol.",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Wow, I want satay, /apam baliʔ/ and /tʃendol/.",
+   "prompt": "[excited] Wow, I want satay, /apam baliʔ/ and /tʃendol/."
+  },
+  {
+   "id": "c043",
+   "key": "hello, kids. how many sticks of satay do you want?|",
+   "text": "Hello, kids. How many sticks of satay do you want?",
+   "emo": null,
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Hello, kids. How many sticks of satay do you want?",
+   "prompt": "Hello, kids. How many sticks of satay do you want?"
+  },
+  {
+   "id": "c044",
+   "key": "ten sticks, please. how much are they?|",
+   "text": "Ten sticks, please. How much are they?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Ten sticks, please. How much are they?",
+   "prompt": "Ten sticks, please. How much are they?"
+  },
+  {
+   "id": "c045",
+   "key": "they are six ringgit.|",
+   "text": "They are six ringgit.",
+   "emo": null,
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "They are six /riŋɡɪt/.",
+   "prompt": "They are six /riŋɡɪt/."
+  },
+  {
+   "id": "c046",
+   "key": "oh no, i forgot my purse!|worried",
+   "text": "Oh no, I forgot my purse!",
+   "emo": "worried",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Oh no, I forgot my purse!",
+   "prompt": "[worried] Oh no, I forgot my purse!"
+  },
+  {
+   "id": "c047",
+   "key": "don't worry, i can pay today.|calm",
+   "text": "Don't worry, I can pay today.",
+   "emo": "calm",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Don't worry, I can pay today.",
+   "prompt": "[calmly] Don't worry, I can pay today."
+  },
+  {
+   "id": "c048",
+   "key": "thank you, amir. you are a true friend!|happy",
+   "text": "Thank you, Amir. You are a true friend!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Thank you, Amir. You are a true friend!",
+   "prompt": "[happy] Thank you, Amir. You are a true friend!"
+  },
+  {
+   "id": "c049",
+   "key": "aisyah, did you hear that? something is moving in the storeroom.|scared",
+   "text": "Aisyah, did you hear that? Something is moving in the storeroom.",
+   "emo": "scared",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Aisyah, did you hear that? Something is moving in the storeroom.",
+   "prompt": "[scared] Aisyah, did you hear that? Something is moving in the storeroom."
+  },
+  {
+   "id": "c050",
+   "key": "don't be silly, daniel. it's only the wind.|calm",
+   "text": "Don't be silly, Daniel. It's only the wind.",
+   "emo": "calm",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Don't be silly, Daniel. It's only the wind.",
+   "prompt": "[calmly] Don't be silly, Daniel. It's only the wind."
+  },
+  {
+   "id": "c051",
+   "key": "listen! it's scratching the door!|scared",
+   "text": "Listen! It's scratching the door!",
+   "emo": "scared",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Listen! It's scratching the door!",
+   "prompt": "[scared] Listen! It's scratching the door!"
+  },
+  {
+   "id": "c052",
+   "key": "okay, okay. let's open it slowly. one, two, three!|scared",
+   "text": "Okay, okay. Let's open it slowly. One, two, three!",
+   "emo": "scared",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Okay, okay. Let's open it slowly. One, two, three!",
+   "prompt": "[scared] Okay, okay. Let's open it slowly. One, two, three!"
+  },
+  {
+   "id": "c053",
+   "key": "hello, children! why are you so scared?|happy",
+   "text": "Hello, children! Why are you so scared?",
+   "emo": "happy",
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Hello, children! Why are you so scared?",
+   "prompt": "[happy] Hello, children! Why are you so scared?"
+  },
+  {
+   "id": "c054",
+   "key": "pak mat? was that you?|surprised",
+   "text": "Pak Mat? Was that you?",
+   "emo": "surprised",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Pak Mat? Was that you?",
+   "prompt": "[surprised] Pak Mat? Was that you?"
+  },
+  {
+   "id": "c055",
+   "key": "yes, i was looking for my rake, my gloves and my hat.|",
+   "text": "Yes, I was looking for my rake, my gloves and my hat.",
+   "emo": null,
+   "voice": "elder",
+   "group": "dialogue",
+   "say": "Yes, I was looking for my rake, my gloves and my hat.",
+   "prompt": "Yes, I was looking for my rake, my gloves and my hat."
+  },
+  {
+   "id": "c056",
+   "key": "phew, what a relief! we thought you were a ghost!|happy",
+   "text": "Phew, what a relief! We thought you were a ghost!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Phew, what a relief! We thought you were a ghost!",
+   "prompt": "[happy] Phew, what a relief! We thought you were a ghost!"
+  },
+  {
+   "id": "c057",
+   "key": "wei jie, is our volcano ready for the science fair?|",
+   "text": "Wei Jie, is our volcano ready for the science fair?",
+   "emo": null,
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Wei Jie, is our volcano ready for the science fair?",
+   "prompt": "Wei Jie, is our volcano ready for the science fair?"
+  },
+  {
+   "id": "c058",
+   "key": "almost. i just need to add vinegar, baking soda and red colouring.|",
+   "text": "Almost. I just need to add vinegar, baking soda and red colouring.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Almost. I just need to add vinegar, baking soda and red colouring.",
+   "prompt": "Almost. I just need to add vinegar, baking soda and red colouring."
+  },
+  {
+   "id": "c059",
+   "key": "group four, you are next. are you ready?|",
+   "text": "Group Four, you are next. Are you ready?",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Group Four, you are next. Are you ready?",
+   "prompt": "Group Four, you are next. Are you ready?"
+  },
+  {
+   "id": "c060",
+   "key": "yes, teacher. here it goes!|excited",
+   "text": "Yes, teacher. Here it goes!",
+   "emo": "excited",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Yes, teacher. Here it goes!",
+   "prompt": "[excited] Yes, teacher. Here it goes!"
+  },
+  {
+   "id": "c061",
+   "key": "oh no, it's too much! it's everywhere!|surprised",
+   "text": "Oh no, it's too much! It's everywhere!",
+   "emo": "surprised",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Oh no, it's too much! It's everywhere!",
+   "prompt": "[surprised] Oh no, it's too much! It's everywhere!"
+  },
+  {
+   "id": "c062",
+   "key": "goodness me, my shoes are red now!|surprised",
+   "text": "Goodness me, my shoes are red now!",
+   "emo": "surprised",
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Goodness me, my shoes are red now!",
+   "prompt": "[surprised] Goodness me, my shoes are red now!"
+  },
+  {
+   "id": "c063",
+   "key": "we're so sorry, teacher. are you angry with us?|worried",
+   "text": "We're so sorry, teacher. Are you angry with us?",
+   "emo": "worried",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "We're so sorry, teacher. Are you angry with us?",
+   "prompt": "[worried] We're so sorry, teacher. Are you angry with us?"
+  },
+  {
+   "id": "c064",
+   "key": "angry? no, that was the best volcano ever!|happy",
+   "text": "Angry? No, that was the best volcano ever!",
+   "emo": "happy",
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Angry? No, that was the best volcano ever!",
+   "prompt": "[happy] Angry? No, that was the best volcano ever!"
+  },
+  {
+   "id": "c065",
+   "key": "hafiz, there is only one minute left. what should we do?|worried",
+   "text": "Hafiz, there is only one minute left. What should we do?",
+   "emo": "worried",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Hafiz, there is only one minute left. What should we do?",
+   "prompt": "[worried] Hafiz, there is only one minute left. What should we do?"
+  },
+  {
+   "id": "c066",
+   "key": "stay calm, everyone. pass the ball, look for space and shoot!|urgent",
+   "text": "Stay calm, everyone. Pass the ball, look for space and shoot!",
+   "emo": "urgent",
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Stay calm, everyone. Pass the ball, look for space and shoot!",
+   "prompt": "[urgently] Stay calm, everyone. Pass the ball, look for space and shoot!"
+  },
+  {
+   "id": "c067",
+   "key": "nurul, pass it to me! i'm free!|urgent",
+   "text": "Nurul, pass it to me! I'm free!",
+   "emo": "urgent",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Nurul, pass it to me! I'm free!",
+   "prompt": "[urgently] Nurul, pass it to me! I'm free!"
+  },
+  {
+   "id": "c068",
+   "key": "here you go, hafiz. shoot now!|excited",
+   "text": "Here you go, Hafiz. Shoot now!",
+   "emo": "excited",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Here you go, Hafiz. Shoot now!",
+   "prompt": "[excited] Here you go, Hafiz. Shoot now!"
+  },
+  {
+   "id": "c069",
+   "key": "goal! did you see that?|excited",
+   "text": "Goal! Did you see that?",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Goal! Did you see that?",
+   "prompt": "[excited] Goal! Did you see that?"
+  },
+  {
+   "id": "c070",
+   "key": "yes, we saw it! we are the champions!|excited",
+   "text": "Yes, we saw it! We are the champions!",
+   "emo": "excited",
+   "voice": "man",
+   "group": "dialogue",
+   "say": "Yes, we saw it! We are the champions!",
+   "prompt": "[excited] Yes, we saw it! We are the champions!"
+  },
+  {
+   "id": "c071",
+   "key": "i can't believe it. this is the best day of my life!|happy",
+   "text": "I can't believe it. This is the best day of my life!",
+   "emo": "happy",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "I can't believe it. This is the best day of my life!",
+   "prompt": "[happy] I can't believe it. This is the best day of my life!"
+  },
+  {
+   "id": "c072",
+   "key": "aiman, can you help me hang the pelita outside?|",
+   "text": "Aiman, can you help me hang the pelita outside?",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Aiman, can you help me hang the /pəlita/ outside?",
+   "prompt": "Aiman, can you help me hang the /pəlita/ outside?"
+  },
+  {
+   "id": "c073",
+   "key": "of course, mak. where should i put them?|",
+   "text": "Of course, Mak. Where should I put them?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Of course, Mak. Where should I put them?",
+   "prompt": "Of course, Mak. Where should I put them?"
+  },
+  {
+   "id": "c074",
+   "key": "put them along the fence, near the door and by the window.|",
+   "text": "Put them along the fence, near the door and by the window.",
+   "emo": null,
+   "voice": "woman",
+   "group": "dialogue",
+   "say": "Put them along the fence, near the door and by the window.",
+   "prompt": "Put them along the fence, near the door and by the window."
+  },
+  {
+   "id": "c075",
+   "key": "selamat hari raya, aiman! i brought you some kuih.|happy",
+   "text": "Selamat Hari Raya, Aiman! I brought you some kuih.",
+   "emo": "happy",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "/səlamat hari raja/, Aiman! I brought you some /kuɪh/.",
+   "prompt": "[happy] /səlamat hari raja/, Aiman! I brought you some /kuɪh/."
+  },
+  {
+   "id": "c076",
+   "key": "arjun, you came! come in, come in!|excited",
+   "text": "Arjun, you came! Come in, come in!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Arjun, you came! Come in, come in!",
+   "prompt": "[excited] Arjun, you came! Come in, come in!"
+  },
+  {
+   "id": "c077",
+   "key": "wow, your house looks beautiful. did you do all this?|surprised",
+   "text": "Wow, your house looks beautiful. Did you do all this?",
+   "emo": "surprised",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Wow, your house looks beautiful. Did you do all this?",
+   "prompt": "[surprised] Wow, your house looks beautiful. Did you do all this?"
+  },
+  {
+   "id": "c078",
+   "key": "mak and i did it together. do you want some rendang?|proud",
+   "text": "Mak and I did it together. Do you want some rendang?",
+   "emo": "proud",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Mak and I did it together. Do you want some /rəndaŋ/?",
+   "prompt": "[proudly] Mak and I did it together. Do you want some /rəndaŋ/?"
+  },
+  {
+   "id": "c079",
+   "key": "yes, please! i love your mother's rendang!|happy",
+   "text": "Yes, please! I love your mother's rendang!",
+   "emo": "happy",
+   "voice": "boyB",
+   "group": "dialogue",
+   "say": "Yes, please! I love your mother's /rəndaŋ/!",
+   "prompt": "[happy] Yes, please! I love your mother's /rəndaŋ/!"
+  },
+  {
+   "id": "c080",
+   "key": "excuse me, can you help me? i think i'm lost.|worried",
+   "text": "Excuse me, can you help me? I think I'm lost.",
+   "emo": "worried",
+   "voice": "tourist",
+   "group": "dialogue",
+   "say": "Excuse me, can you help me? I think I'm lost.",
+   "prompt": "[worried] Excuse me, can you help me? I think I'm lost."
+  },
+  {
+   "id": "c081",
+   "key": "of course. where do you want to go?|",
+   "text": "Of course. Where do you want to go?",
+   "emo": null,
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Of course. Where do you want to go?",
+   "prompt": "Of course. Where do you want to go?"
+  },
+  {
+   "id": "c082",
+   "key": "i'm looking for the museum, but my map is wet.|sad",
+   "text": "I'm looking for the museum, but my map is wet.",
+   "emo": "sad",
+   "voice": "tourist",
+   "group": "dialogue",
+   "say": "I'm looking for the museum, but my map is wet.",
+   "prompt": "[sad] I'm looking for the museum, but my map is wet."
+  },
+  {
+   "id": "c083",
+   "key": "oh, the museum is near here. walk straight, turn left at the bank and cross the bridge.|",
+   "text": "Oh, the museum is near here. Walk straight, turn left at the bank and cross the bridge.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Oh, the museum is near here. Walk straight, turn left at the bank and cross the bridge.",
+   "prompt": "Oh, the museum is near here. Walk straight, turn left at the bank and cross the bridge."
+  },
+  {
+   "id": "c084",
+   "key": "straight, left at the bank, then the bridge? is that right?|",
+   "text": "Straight, left at the bank, then the bridge? Is that right?",
+   "emo": null,
+   "voice": "tourist",
+   "group": "dialogue",
+   "say": "Straight, left at the bank, then the bridge? Is that right?",
+   "prompt": "Straight, left at the bank, then the bridge? Is that right?"
+  },
+  {
+   "id": "c085",
+   "key": "yes, that's right. be careful, the bridge is slippery!|urgent",
+   "text": "Yes, that's right. Be careful, the bridge is slippery!",
+   "emo": "urgent",
+   "voice": "girlB",
+   "group": "dialogue",
+   "say": "Yes, that's right. Be careful, the bridge is slippery!",
+   "prompt": "[urgently] Yes, that's right. Be careful, the bridge is slippery!"
+  },
+  {
+   "id": "c086",
+   "key": "thank you so much, both of you. you are very kind!|happy",
+   "text": "Thank you so much, both of you. You are very kind!",
+   "emo": "happy",
+   "voice": "tourist",
+   "group": "dialogue",
+   "say": "Thank you so much, both of you. You are very kind!",
+   "prompt": "[happy] Thank you so much, both of you. You are very kind!"
+  },
+  {
+   "id": "c087",
+   "key": "siti, look at my new kite!|excited",
+   "text": "Siti, look at my new kite!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Siti, look at my new kite!",
+   "prompt": "[excited] Siti, look at my new kite!"
+  },
+  {
+   "id": "c088",
+   "key": "wow, it is so big. can i fly it?|happy",
+   "text": "Wow, it is so big. Can I fly it?",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Wow, it is so big. Can I fly it?",
+   "prompt": "[happy] Wow, it is so big. Can I fly it?"
+  },
+  {
+   "id": "c089",
+   "key": "yes, you can. hold the string, run fast and let it go.|",
+   "text": "Yes, you can. Hold the string, run fast and let it go.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "dialogue",
+   "say": "Yes, you can. Hold the string, run fast and let it go.",
+   "prompt": "Yes, you can. Hold the string, run fast and let it go."
+  },
+  {
+   "id": "c090",
+   "key": "where is it going? oh no, it's stuck in the tree!|surprised",
+   "text": "Where is it going? Oh no, it's stuck in the tree!",
+   "emo": "surprised",
+   "voice": "girlA",
+   "group": "dialogue",
+   "say": "Where is it going? Oh no, it's stuck in the tree!",
+   "prompt": "[surprised] Where is it going? Oh no, it's stuck in the tree!"
+  },
+  {
+   "id": "c091",
+   "key": "hi, i'm dotty, the full stop! when you see me, stop. let your voice go down and rest, then start the next sentence.|",
+   "text": "Hi, I'm Dotty, the full stop! When you see me, STOP. Let your voice go down and rest, then start the next sentence.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Hi, I'm Dotty, the full stop! When you see me, STOP. Let your voice go down and rest, then start the next sentence.",
+   "prompt": "Hi, I'm Dotty, the full stop! When you see me, STOP. Let your voice go down and rest, then start the next sentence."
+  },
+  {
+   "id": "c092",
+   "key": "i like rice. i like fish. i like cake.|",
+   "text": "I like rice. I like fish. I like cake.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "I like rice. I like fish. I like cake.",
+   "prompt": "I like rice. I like fish. I like cake."
+  },
+  {
+   "id": "c093",
+   "key": "ali has a cat. it is black, white and brown. where is it now? it is asleep on the sofa. shh! do not wake it up.|",
+   "text": "Ali has a cat. It is black, white and brown. Where is it now? It is asleep on the sofa. Shh! Do not wake it up.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Ali has a cat. It is black, white and brown. Where is it now? It is asleep on the sofa. Shh! Do not wake it up.",
+   "prompt": "Ali has a cat. It is black, white and brown. Where is it now? It is asleep on the sofa. Shh! Do not wake it up."
+  },
+  {
+   "id": "c094",
+   "key": "my name is ali. i am nine years old.|",
+   "text": "My name is Ali. I am nine years old.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "My name is Ali. I am nine years old.",
+   "prompt": "My name is Ali. I am nine years old."
+  },
+  {
+   "id": "c095",
+   "key": "hi, i'm koma, the comma! when you see me, take a tiny breath, then keep reading. i'm shorter than a full stop.|",
+   "text": "Hi, I'm Koma, the comma! When you see me, take a tiny breath, then keep reading. I'm shorter than a full stop.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Hi, I'm Koma, the comma! When you see me, take a tiny breath, then keep reading. I'm shorter than a full stop.",
+   "prompt": "Hi, I'm Koma, the comma! When you see me, take a tiny breath, then keep reading. I'm shorter than a full stop."
+  },
+  {
+   "id": "c096",
+   "key": "let's eat grandma!|excited",
+   "text": "Let's eat Grandma!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "lesson",
+   "say": "Let's eat Grandma!",
+   "prompt": "[excited] Let's eat Grandma!"
+  },
+  {
+   "id": "c097",
+   "key": "let's eat, grandma!|happy",
+   "text": "Let's eat, Grandma!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "lesson",
+   "say": "Let's eat, Grandma!",
+   "prompt": "[happy] Let's eat, Grandma!"
+  },
+  {
+   "id": "c098",
+   "key": "yes, i bought apples, oranges and grapes. siti, do you want one? well, take two! they are sweet, juicy and fresh.|",
+   "text": "Yes, I bought apples, oranges and grapes. Siti, do you want one? Well, take two! They are sweet, juicy and fresh.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Yes, I bought apples, oranges and grapes. Siti, do you want one? Well, take two! They are sweet, juicy and fresh.",
+   "prompt": "Yes, I bought apples, oranges and grapes. Siti, do you want one? Well, take two! They are sweet, juicy and fresh."
+  },
+  {
+   "id": "c099",
+   "key": "i like apples, bananas and mangoes.|",
+   "text": "I like apples, bananas and mangoes.",
+   "emo": null,
+   "voice": "girlB",
+   "group": "lesson",
+   "say": "I like apples, bananas and mangoes.",
+   "prompt": "I like apples, bananas and mangoes."
+  },
+  {
+   "id": "c100",
+   "key": "hi, i'm quizzy, the question mark! when you see me, ask. for yes/no questions, your voice goes up at the end. for wh questions, start strong and let your voice go down.|",
+   "text": "Hi, I'm Quizzy, the question mark! When you see me, ASK. For Yes/No questions, your voice goes UP at the end. For WH questions, start strong and let your voice go down.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Hi, I'm Quizzy, the question mark! When you see me, ASK. For Yes/No questions, your voice goes UP at the end. For WH questions, start strong and let your voice go down.",
+   "prompt": "Hi, I'm Quizzy, the question mark! When you see me, ASK. For Yes/No questions, your voice goes UP at the end. For WH questions, start strong and let your voice go down."
+  },
+  {
+   "id": "c101",
+   "key": "you are hungry.|",
+   "text": "You are hungry.",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "You are hungry.",
+   "prompt": "You are hungry."
+  },
+  {
+   "id": "c102",
+   "key": "you are hungry?|",
+   "text": "You are hungry?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "You are hungry?",
+   "prompt": "You are hungry?"
+  },
+  {
+   "id": "c103",
+   "key": "where is my bag?|",
+   "text": "Where is my bag?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "Where is my bag?",
+   "prompt": "Where is my bag?"
+  },
+  {
+   "id": "c104",
+   "key": "do you like durian? i love it! where is ali? he is at the canteen. can we go now? yes, let's go.|",
+   "text": "Do you like durian? I love it! Where is Ali? He is at the canteen. Can we go now? Yes, let's go.",
+   "emo": null,
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Do you like durian? I love it! Where is Ali? He is at the canteen. Can we go now? Yes, let's go.",
+   "prompt": "Do you like durian? I love it! Where is Ali? He is at the canteen. Can we go now? Yes, let's go."
+  },
+  {
+   "id": "c105",
+   "key": "do you like nasi lemak?|",
+   "text": "Do you like nasi lemak?",
+   "emo": null,
+   "voice": "boyA",
+   "group": "lesson",
+   "say": "Do you like nasi lemak?",
+   "prompt": "Do you like nasi lemak?"
+  },
+  {
+   "id": "c106",
+   "key": "hi, i'm zing, the exclamation mark! when you see me, feel it! think: how does the character feel? happy, angry, surprised or scared? show it with your voice!|excited",
+   "text": "Hi, I'm Zing, the exclamation mark! When you see me, FEEL it! Think: how does the character feel? Happy, angry, surprised or scared? Show it with your voice!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Hi, I'm Zing, the exclamation mark! When you see me, FEEL it! Think: how does the character feel? Happy, angry, surprised or scared? Show it with your voice!",
+   "prompt": "[excited] Hi, I'm Zing, the exclamation mark! When you see me, FEEL it! Think: how does the character feel? Happy, angry, surprised or scared? Show it with your voice!"
+  },
+  {
+   "id": "c107",
+   "key": "it's raining!|sad",
+   "text": "It's raining!",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "lesson",
+   "say": "It's raining!",
+   "prompt": "[sad] It's raining!"
+  },
+  {
+   "id": "c108",
+   "key": "it's raining!|excited",
+   "text": "It's raining!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "lesson",
+   "say": "It's raining!",
+   "prompt": "[excited] It's raining!"
+  },
+  {
+   "id": "c109",
+   "key": "wow! look at that cake. is it for me? hooray, thank you! i love it. you are the best!|excited",
+   "text": "Wow! Look at that cake. Is it for me? Hooray, thank you! I love it. You are the best!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "lesson",
+   "say": "Wow! Look at that cake. Is it for me? Hooray, thank you! I love it. You are the best!",
+   "prompt": "[excited] Wow! Look at that cake. Is it for me? Hooray, thank you! I love it. You are the best!"
+  },
+  {
+   "id": "c110",
+   "key": "hooray, we won the game!|excited",
+   "text": "Hooray, we won the game!",
+   "emo": "excited",
+   "voice": "girlB",
+   "group": "lesson",
+   "say": "Hooray, we won the game!",
+   "prompt": "[excited] Hooray, we won the game!"
+  },
+  {
+   "id": "c111",
+   "key": "wow, what a big cake!|excited",
+   "text": "Wow, what a big cake!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Wow, what a big cake!",
+   "prompt": "[excited] Wow, what a big cake!"
+  },
+  {
+   "id": "c112",
+   "key": "hooray, we won!|excited",
+   "text": "Hooray, we won!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Hooray, we won!",
+   "prompt": "[excited] Hooray, we won!"
+  },
+  {
+   "id": "c113",
+   "key": "help, a snake!|scared",
+   "text": "Help, a snake!",
+   "emo": "scared",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Help, a snake!",
+   "prompt": "[scared] Help, a snake!"
+  },
+  {
+   "id": "c114",
+   "key": "you broke my toy!|angry",
+   "text": "You broke my toy!",
+   "emo": "angry",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "You broke my toy!",
+   "prompt": "[angry] You broke my toy!"
+  },
+  {
+   "id": "c115",
+   "key": "thank you, teacher!|happy",
+   "text": "Thank you, teacher!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Thank you, teacher!",
+   "prompt": "[happy] Thank you, teacher!"
+  },
+  {
+   "id": "c116",
+   "key": "watch out!|urgent",
+   "text": "Watch out!",
+   "emo": "urgent",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Watch out!",
+   "prompt": "[urgently] Watch out!"
+  },
+  {
+   "id": "c117",
+   "key": "oh no, my ball!|sad",
+   "text": "Oh no, my ball!",
+   "emo": "sad",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Oh no, my ball!",
+   "prompt": "[sad] Oh no, my ball!"
+  },
+  {
+   "id": "c118",
+   "key": "a new bicycle!|excited",
+   "text": "A new bicycle!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "A new bicycle!",
+   "prompt": "[excited] A new bicycle!"
+  },
+  {
+   "id": "c119",
+   "key": "oh no, comel is stuck on the roof!|worried",
+   "text": "Oh no, Comel is stuck on the roof!",
+   "emo": "worried",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Oh no, /tʃomel/ is stuck on the roof!",
+   "prompt": "[worried] Oh no, /tʃomel/ is stuck on the roof!"
+  },
+  {
+   "id": "c120",
+   "key": "ahh, it's so dark in here!|scared",
+   "text": "Ahh, it's so dark in here!",
+   "emo": "scared",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Ahh, it's so dark in here!",
+   "prompt": "[scared] Ahh, it's so dark in here!"
+  },
+  {
+   "id": "c121",
+   "key": "i got full marks!|proud",
+   "text": "I got full marks!",
+   "emo": "proud",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "I got full marks!",
+   "prompt": "[proudly] I got full marks!"
+  },
+  {
+   "id": "c122",
+   "key": "hey, that is my seat!|angry",
+   "text": "Hey, that is my seat!",
+   "emo": "angry",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Hey, that is my seat!",
+   "prompt": "[angry] Hey, that is my seat!"
+  },
+  {
+   "id": "c123",
+   "key": "grandma, you're here!|surprised",
+   "text": "Grandma, you're here!",
+   "emo": "surprised",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Grandma, you're here!",
+   "prompt": "[surprised] Grandma, you're here!"
+  },
+  {
+   "id": "c124",
+   "key": "oh no, the food is all wet!|sad",
+   "text": "Oh no, the food is all wet!",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Oh no, the food is all wet!",
+   "prompt": "[sad] Oh no, the food is all wet!"
+  },
+  {
+   "id": "c125",
+   "key": "come on, we can do it!|excited",
+   "text": "Come on, we can do it!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Come on, we can do it!",
+   "prompt": "[excited] Come on, we can do it!"
+  },
+  {
+   "id": "c126",
+   "key": "there you are, little one!|happy",
+   "text": "There you are, little one!",
+   "emo": "happy",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "There you are, little one!",
+   "prompt": "[happy] There you are, little one!"
+  },
+  {
+   "id": "c127",
+   "key": "run to the hill, everyone!|urgent",
+   "text": "Run to the hill, everyone!",
+   "emo": "urgent",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Run to the hill, everyone!",
+   "prompt": "[urgently] Run to the hill, everyone!"
+  },
+  {
+   "id": "c128",
+   "key": "no, you can't leave!|sad",
+   "text": "No, you can't leave!",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "No, you can't leave!",
+   "prompt": "[sad] No, you can't leave!"
+  },
+  {
+   "id": "c129",
+   "key": "goal! we are the champions!|excited",
+   "text": "Goal! We are the champions!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Goal! We are the champions!",
+   "prompt": "[excited] Goal! We are the champions!"
+  },
+  {
+   "id": "c130",
+   "key": "my flowers, you naughty goat!|angry",
+   "text": "My flowers, you naughty goat!",
+   "emo": "angry",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "My flowers, you naughty goat!",
+   "prompt": "[angry] My flowers, you naughty goat!"
+  },
+  {
+   "id": "c131",
+   "key": "ahh, what was that!|scared",
+   "text": "Ahh, what was that!",
+   "emo": "scared",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Ahh, what was that!",
+   "prompt": "[scared] Ahh, what was that!"
+  },
+  {
+   "id": "c132",
+   "key": "oh dear, it's everywhere!|surprised",
+   "text": "Oh dear, it's everywhere!",
+   "emo": "surprised",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Oh dear, it's everywhere!",
+   "prompt": "[surprised] Oh dear, it's everywhere!"
+  },
+  {
+   "id": "c133",
+   "key": "it's raining!|happy",
+   "text": "It's raining!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "It's raining!",
+   "prompt": "[happy] It's raining!"
+  },
+  {
+   "id": "c134",
+   "key": "it's a cat!|happy",
+   "text": "It's a cat!",
+   "emo": "happy",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "It's a cat!",
+   "prompt": "[happy] It's a cat!"
+  },
+  {
+   "id": "c135",
+   "key": "it's a cat!|scared",
+   "text": "It's a cat!",
+   "emo": "scared",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "It's a cat!",
+   "prompt": "[scared] It's a cat!"
+  },
+  {
+   "id": "c136",
+   "key": "look at the sky!|excited",
+   "text": "Look at the sky!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Look at the sky!",
+   "prompt": "[excited] Look at the sky!"
+  },
+  {
+   "id": "c137",
+   "key": "look at the sky!|worried",
+   "text": "Look at the sky!",
+   "emo": "worried",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Look at the sky!",
+   "prompt": "[worried] Look at the sky!"
+  },
+  {
+   "id": "c138",
+   "key": "he's here!|excited",
+   "text": "He's here!",
+   "emo": "excited",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "He's here!",
+   "prompt": "[excited] He's here!"
+  },
+  {
+   "id": "c139",
+   "key": "he's here!|scared",
+   "text": "He's here!",
+   "emo": "scared",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "He's here!",
+   "prompt": "[scared] He's here!"
+  },
+  {
+   "id": "c140",
+   "key": "not again!|angry",
+   "text": "Not again!",
+   "emo": "angry",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "Not again!",
+   "prompt": "[angry] Not again!"
+  },
+  {
+   "id": "c141",
+   "key": "not again!|sad",
+   "text": "Not again!",
+   "emo": "sad",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "Not again!",
+   "prompt": "[sad] Not again!"
+  },
+  {
+   "id": "c142",
+   "key": "the teacher is coming!|worried",
+   "text": "The teacher is coming!",
+   "emo": "worried",
+   "voice": "boyA",
+   "group": "feel",
+   "say": "The teacher is coming!",
+   "prompt": "[worried] The teacher is coming!"
+  },
+  {
+   "id": "c143",
+   "key": "the teacher is coming!|excited",
+   "text": "The teacher is coming!",
+   "emo": "excited",
+   "voice": "girlA",
+   "group": "feel",
+   "say": "The teacher is coming!",
+   "prompt": "[excited] The teacher is coming!"
+  },
+  {
+   "id": "c144",
+   "key": "stop at the dot.|excited",
+   "text": "Stop at the dot.",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "chant",
+   "say": "Stop at the dot.",
+   "prompt": "[excited] Stop at the dot."
+  },
+  {
+   "id": "c145",
+   "key": "breathe at the comma,|excited",
+   "text": "Breathe at the comma,",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "chant",
+   "say": "Breathe at the comma,",
+   "prompt": "[excited] Breathe at the comma,"
+  },
+  {
+   "id": "c146",
+   "key": "ask with a question?|excited",
+   "text": "Ask with a question?",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "chant",
+   "say": "Ask with a question?",
+   "prompt": "[excited] Ask with a question?"
+  },
+  {
+   "id": "c147",
+   "key": "feel the exclamation!|excited",
+   "text": "FEEL the exclamation!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "chant",
+   "say": "FEEL the exclamation!",
+   "prompt": "[excited] FEEL the exclamation!"
+  },
+  {
+   "id": "c148",
+   "key": "i'm dotty, the full stop. when you see me, stop and rest your voice.|excited",
+   "text": "I'm Dotty, the full stop. When you see me, stop and rest your voice.",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "I'm Dotty, the full stop. When you see me, stop and rest your voice.",
+   "prompt": "[excited] I'm Dotty, the full stop. When you see me, stop and rest your voice."
+  },
+  {
+   "id": "c149",
+   "key": "i'm koma, the comma. when you see me, take a tiny breath, then keep going.|excited",
+   "text": "I'm Koma, the comma. When you see me, take a tiny breath, then keep going.",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "I'm Koma, the comma. When you see me, take a tiny breath, then keep going.",
+   "prompt": "[excited] I'm Koma, the comma. When you see me, take a tiny breath, then keep going."
+  },
+  {
+   "id": "c150",
+   "key": "i'm quizzy, the question mark. do you know my trick? yes or no questions go up!|excited",
+   "text": "I'm Quizzy, the question mark. Do you know my trick? Yes or No questions go up!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "I'm Quizzy, the question mark. Do you know my trick? Yes or No questions go up!",
+   "prompt": "[excited] I'm Quizzy, the question mark. Do you know my trick? Yes or No questions go up!"
+  },
+  {
+   "id": "c151",
+   "key": "i'm zing, the exclamation mark. hooray! show the feeling with your voice!|excited",
+   "text": "I'm Zing, the exclamation mark. Hooray! Show the feeling with your voice!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "I'm Zing, the exclamation mark. Hooray! Show the feeling with your voice!",
+   "prompt": "[excited] I'm Zing, the exclamation mark. Hooray! Show the feeling with your voice!"
+  },
+  {
+   "id": "c152",
+   "key": "hello! my name is bip. are you ready to read with feeling?|excited",
+   "text": "Hello! My name is Bip. Are you ready to read with feeling?",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "Hello! My name is Bip. Are you ready to read with feeling?",
+   "prompt": "[excited] Hello! My name is Bip. Are you ready to read with feeling?"
+  },
+  {
+   "id": "c153",
+   "key": "thank you! now i can read with feeling! you are a voice hero!|excited",
+   "text": "Thank you! Now I can read with feeling! You are a Voice Hero!",
+   "emo": "excited",
+   "voice": "narr",
+   "group": "mascot",
+   "say": "Thank you! Now I can read with feeling! You are a Voice Hero!",
+   "prompt": "[excited] Thank you! Now I can read with feeling! You are a Voice Hero!"
+  },
+  {
+   "id": "c154",
+   "key": "hello! i'm bip, a reading robot.|",
+   "text": "Hello! I'm Bip, a reading robot.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Hello! I'm Bip, a reading robot.",
+   "prompt": "Hello! I'm Bip, a reading robot."
+  },
+  {
+   "id": "c155",
+   "key": "but i have a problem. listen to how i read.|",
+   "text": "But I have a problem. Listen to how I read.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "But I have a problem. Listen to how I read.",
+   "prompt": "But I have a problem. Listen to how I read."
+  },
+  {
+   "id": "c156",
+   "key": "i read like a robot. every word sounds the same, and i never stop or ask or feel.|",
+   "text": "I read like a robot. Every word sounds the same, and I never stop or ask or feel.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "I read like a robot. Every word sounds the same, and I never stop or ask or feel.",
+   "prompt": "I read like a robot. Every word sounds the same, and I never stop or ask or feel."
+  },
+  {
+   "id": "c157",
+   "key": "four friends are going to help me.|",
+   "text": "Four friends are going to help me.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Four friends are going to help me.",
+   "prompt": "Four friends are going to help me."
+  },
+  {
+   "id": "c158",
+   "key": "dotty is the full stop. dotty says: stop!|",
+   "text": "Dotty is the full stop. Dotty says: stop!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Dotty is the full stop. Dotty says: stop!",
+   "prompt": "Dotty is the full stop. Dotty says: stop!"
+  },
+  {
+   "id": "c159",
+   "key": "koma is the comma. koma says: take a tiny breath.|",
+   "text": "Koma is the comma. Koma says: take a tiny breath.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Koma is the comma. Koma says: take a tiny breath.",
+   "prompt": "Koma is the comma. Koma says: take a tiny breath."
+  },
+  {
+   "id": "c160",
+   "key": "quizzy is the question mark. quizzy says: ask!|",
+   "text": "Quizzy is the question mark. Quizzy says: ask!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Quizzy is the question mark. Quizzy says: ask!",
+   "prompt": "Quizzy is the question mark. Quizzy says: ask!"
+  },
+  {
+   "id": "c161",
+   "key": "zing is the exclamation mark. zing says: feel it!|",
+   "text": "Zing is the exclamation mark. Zing says: feel it!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Zing is the exclamation mark. Zing says: feel it!",
+   "prompt": "Zing is the exclamation mark. Zing says: feel it!"
+  },
+  {
+   "id": "c162",
+   "key": "with all four friends, i can read with feeling. listen!|",
+   "text": "With all four friends, I can read with feeling. Listen!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "With all four friends, I can read with feeling. Listen!",
+   "prompt": "With all four friends, I can read with feeling. Listen!"
+  },
+  {
+   "id": "c163",
+   "key": "first, find your name and tap it.|",
+   "text": "First, find your name and tap it.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "First, find your name and tap it.",
+   "prompt": "First, find your name and tap it."
+  },
+  {
+   "id": "c164",
+   "key": "if your teacher gave you secret pictures, tap your three pictures.|",
+   "text": "If your teacher gave you secret pictures, tap your three pictures.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "If your teacher gave you secret pictures, tap your three pictures.",
+   "prompt": "If your teacher gave you secret pictures, tap your three pictures."
+  },
+  {
+   "id": "c165",
+   "key": "this is your home page, on voice island. tap any friend to hear them.|",
+   "text": "This is your home page, on Voice Island. Tap any friend to hear them.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "This is your home page, on Voice Island. Tap any friend to hear them.",
+   "prompt": "This is your home page, on Voice Island. Tap any friend to hear them."
+  },
+  {
+   "id": "c166",
+   "key": "these four chips are your reading skills. a chip lights up when you reach eighty percent.|",
+   "text": "These four chips are your reading skills. A chip lights up when you reach eighty percent.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "These four chips are your reading skills. A chip lights up when you reach eighty percent.",
+   "prompt": "These four chips are your reading skills. A chip lights up when you reach eighty percent."
+  },
+  {
+   "id": "c167",
+   "key": "tap continue, and i will take you to the best next step for you.|",
+   "text": "Tap Continue, and I will take you to the best next step for you.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Tap Continue, and I will take you to the best next step for you.",
+   "prompt": "Tap Continue, and I will take you to the best next step for you."
+  },
+  {
+   "id": "c168",
+   "key": "follow your journey: learn, then practice, then the reading studio. the bars show how far you have gone.|",
+   "text": "Follow your journey: Learn, then Practice, then the Reading Studio. The bars show how far you have gone.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Follow your journey: Learn, then Practice, then the Reading Studio. The bars show how far you have gone.",
+   "prompt": "Follow your journey: Learn, then Practice, then the Reading Studio. The bars show how far you have gone."
+  },
+  {
+   "id": "c169",
+   "key": "sing the chant here. it helps you remember the four voice rules.|",
+   "text": "Sing the chant here. It helps you remember the four voice rules.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Sing the chant here. It helps you remember the four voice rules.",
+   "prompt": "Sing the chant here. It helps you remember the four voice rules."
+  },
+  {
+   "id": "c170",
+   "key": "need help? press watch how on any page, or tap me in the corner to ask a question.|",
+   "text": "Need help? Press Watch how on any page, or tap me in the corner to ask a question.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Need help? Press Watch how on any page, or tap me in the corner to ask a question.",
+   "prompt": "Need help? Press Watch how on any page, or tap me in the corner to ask a question."
+  },
+  {
+   "id": "c171",
+   "key": "a full stop ends a telling sentence.|",
+   "text": "A full stop ends a telling sentence.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "A full stop ends a telling sentence.",
+   "prompt": "A full stop ends a telling sentence."
+  },
+  {
+   "id": "c172",
+   "key": "when you see dotty, let your voice go down, and stop. listen.|",
+   "text": "When you see Dotty, let your voice go down, and stop. Listen.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "When you see Dotty, let your voice go down, and stop. Listen.",
+   "prompt": "When you see Dotty, let your voice go down, and stop. Listen."
+  },
+  {
+   "id": "c173",
+   "key": "a comma is a short pause.|",
+   "text": "A comma is a short pause.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "A comma is a short pause.",
+   "prompt": "A comma is a short pause."
+  },
+  {
+   "id": "c174",
+   "key": "when you see koma, take a tiny breath, then keep reading. listen.|",
+   "text": "When you see Koma, take a tiny breath, then keep reading. Listen.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "When you see Koma, take a tiny breath, then keep reading. Listen.",
+   "prompt": "When you see Koma, take a tiny breath, then keep reading. Listen."
+  },
+  {
+   "id": "c175",
+   "key": "there are two kinds of questions.|",
+   "text": "There are two kinds of questions.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "There are two kinds of questions.",
+   "prompt": "There are two kinds of questions."
+  },
+  {
+   "id": "c176",
+   "key": "a yes or no question starts with words like do, is, can or are. your voice goes up at the end.|",
+   "text": "A Yes or No question starts with words like do, is, can or are. Your voice goes up at the end.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "A Yes or No question starts with words like do, is, can or are. Your voice goes up at the end.",
+   "prompt": "A Yes or No question starts with words like do, is, can or are. Your voice goes up at the end."
+  },
+  {
+   "id": "c177",
+   "key": "a wh question starts with what, where, who, why, when or how. start strong, and let your voice go down.|",
+   "text": "A WH question starts with what, where, who, why, when or how. Start strong, and let your voice go down.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "A WH question starts with what, where, who, why, when or how. Start strong, and let your voice go down.",
+   "prompt": "A WH question starts with what, where, who, why, when or how. Start strong, and let your voice go down."
+  },
+  {
+   "id": "c178",
+   "key": "an exclamation mark shows a big feeling.|",
+   "text": "An exclamation mark shows a big feeling.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "An exclamation mark shows a big feeling.",
+   "prompt": "An exclamation mark shows a big feeling."
+  },
+  {
+   "id": "c179",
+   "key": "read the story first. how does the person feel? here, they are sad.|",
+   "text": "Read the story first. How does the person feel? Here, they are sad.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Read the story first. How does the person feel? Here, they are sad.",
+   "prompt": "Read the story first. How does the person feel? Here, they are sad."
+  },
+  {
+   "id": "c180",
+   "key": "but here, the farmer is excited. same words, different feeling!|",
+   "text": "But here, the farmer is excited. Same words, different feeling!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "But here, the farmer is excited. Same words, different feeling!",
+   "prompt": "But here, the farmer is excited. Same words, different feeling!"
+  },
+  {
+   "id": "c181",
+   "key": "now open learn. tap a friend to start a lesson.|",
+   "text": "Now open Learn. Tap a friend to start a lesson.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Now open Learn. Tap a friend to start a lesson.",
+   "prompt": "Now open Learn. Tap a friend to start a lesson."
+  },
+  {
+   "id": "c182",
+   "key": "the poster reminds you what each mark tells your voice to do.|",
+   "text": "The poster reminds you what each mark tells your voice to do.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "The poster reminds you what each mark tells your voice to do.",
+   "prompt": "The poster reminds you what each mark tells your voice to do."
+  },
+  {
+   "id": "c183",
+   "key": "each lesson has five small steps. first, meet your friend and listen.|",
+   "text": "Each lesson has five small steps. First, meet your friend and listen.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Each lesson has five small steps. First, meet your friend and listen.",
+   "prompt": "Each lesson has five small steps. First, meet your friend and listen."
+  },
+  {
+   "id": "c184",
+   "key": "next, trace the mark with your finger. stay on the light shape.|",
+   "text": "Next, trace the mark with your finger. Stay on the light shape.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Next, trace the mark with your finger. Stay on the light shape.",
+   "prompt": "Next, trace the mark with your finger. Stay on the light shape."
+  },
+  {
+   "id": "c185",
+   "key": "then press listen on each card, and hear how one mark changes the voice.|",
+   "text": "Then press Listen on each card, and hear how one mark changes the voice.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Then press Listen on each card, and hear how one mark changes the voice.",
+   "prompt": "Then press Listen on each card, and hear how one mark changes the voice."
+  },
+  {
+   "id": "c186",
+   "key": "find and tap every mark of that kind in the story.|",
+   "text": "Find and tap every mark of that kind in the story.",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Find and tap every mark of that kind in the story.",
+   "prompt": "Find and tap every mark of that kind in the story."
+  },
+  {
+   "id": "c187",
+   "key": "last, press record and read the sentence yourself. i will give you tips. then press finish to earn three stars!|",
+   "text": "Last, press Record and read the sentence yourself. I will give you tips. Then press Finish to earn three stars!",
+   "emo": null,
+   "voice": "narr",
+   "group": "video",
+   "say": "Last, press Record and read the sentence yourself. I will give you tips. Then press Finish to earn three stars!",
+   "prompt": "Last, press Record and read the sentence yourself. I will give you tips. Then press Finish to earn three stars!"
+  }
+ ],
+ "batches": [
+  {
+   "voice": "boyA",
+   "voice_id": "EeQEodFZVtBkjtgK3HBc",
+   "clips": [
+    "c003",
+    "c021",
+    "c044",
+    "c058",
+    "c073",
+    "c083",
+    "c089",
+    "c092",
+    "c094",
+    "c101",
+    "c102",
+    "c103",
+    "c105",
+    "c001",
+    "c005",
+    "c007",
+    "c015",
+    "c017",
+    "c019",
+    "c024",
+    "c030",
+    "c041",
+    "c047"
+   ],
+   "prompt": "Can I have nasi lemak, please?\n\nNo, Grandpa. I was at the field with Farah.\n\nTen sticks, please. How much are they?\n\nAlmost. I just need to add vinegar, baking soda and red colouring.\n\nOf course, Mak. Where should I put them?\n\nOh, the museum is near here. Walk straight, turn left at the bank and cross the bridge.\n\nYes, you can. Hold the string, run fast and let it go.\n\nI like rice. I like fish. I like cake.\n\nMy name is Ali. I am nine years old.\n\nYou are hungry.\n\nYou are hungry?\n\nWhere is my bag?\n\nDo you like nasi lemak?\n\n[happy] Good morning, Aunty!\n\n[happy] Yes, please!\n\n[happy] Thank you, Aunty. It smells so good!\n\n[surprised] Wow, is this cake for me?\n\n[happy] Thank you, my friends. You are the best!\n\n[happy] Of course. Let's eat!\n\n[worried] Shh, listen. What is that noise?\n\n[excited] Run, Priya, run! You can do it!\n\n[excited] Jia Hui, look at all the food here!\n\n[calmly] Don't worry, I can pay today."
+  },
+  {
+   "voice": "boyA",
+   "voice_id": "EeQEodFZVtBkjtgK3HBc",
+   "clips": [
+    "c061",
+    "c067",
+    "c069",
+    "c076",
+    "c078",
+    "c087",
+    "c111",
+    "c113",
+    "c115",
+    "c117",
+    "c119",
+    "c121",
+    "c123",
+    "c125",
+    "c127",
+    "c129",
+    "c131",
+    "c133",
+    "c134",
+    "c136",
+    "c138",
+    "c140",
+    "c142"
+   ],
+   "prompt": "[surprised] Oh no, it's too much! It's everywhere!\n\n[urgently] Nurul, pass it to me! I'm free!\n\n[excited] Goal! Did you see that?\n\n[excited] Arjun, you came! Come in, come in!\n\n[proudly] Mak and I did it together. Do you want some /rəndaŋ/?\n\n[excited] Siti, look at my new kite!\n\n[excited] Wow, what a big cake!\n\n[scared] Help, a snake!\n\n[happy] Thank you, teacher!\n\n[sad] Oh no, my ball!\n\n[worried] Oh no, /tʃomel/ is stuck on the roof!\n\n[proudly] I got full marks!\n\n[surprised] Grandma, you're here!\n\n[excited] Come on, we can do it!\n\n[urgently] Run to the hill, everyone!\n\n[excited] Goal! We are the champions!\n\n[scared] Ahh, what was that!\n\n[happy] It's raining!\n\n[happy] It's a cat!\n\n[excited] Look at the sky!\n\n[excited] He's here!\n\n[angry] Not again!\n\n[worried] The teacher is coming!"
+  },
+  {
+   "voice": "boyB",
+   "voice_id": "nuNMqNdrDex14QQRI9Jq",
+   "clips": [
+    "c016",
+    "c035",
+    "c038",
+    "c049",
+    "c051",
+    "c054",
+    "c075",
+    "c077",
+    "c079"
+   ],
+   "prompt": "[happy] Yes, it is. Make a wish!\n\n[excited] Good idea! I will bring sandwiches, bananas and juice.\n\n[worried] What should we do now?\n\n[scared] Aisyah, did you hear that? Something is moving in the storeroom.\n\n[scared] Listen! It's scratching the door!\n\n[surprised] Pak Mat? Was that you?\n\n[happy] /səlamat hari raja/, Aiman! I brought you some /kuɪh/.\n\n[surprised] Wow, your house looks beautiful. Did you do all this?\n\n[happy] Yes, please! I love your mother's /rəndaŋ/!"
+  },
+  {
+   "voice": "girlA",
+   "voice_id": "e3FEEanj39p8QCSMe8iV",
+   "clips": [
+    "c008",
+    "c010",
+    "c012",
+    "c014",
+    "c018",
+    "c022",
+    "c025",
+    "c034",
+    "c037",
+    "c040",
+    "c042",
+    "c046",
+    "c048",
+    "c050",
+    "c052",
+    "c056",
+    "c088",
+    "c090",
+    "c096",
+    "c097",
+    "c107",
+    "c108",
+    "c112"
+   ],
+   "prompt": "[worried] Mum, where is /tʃomel/?\n\n[sad] No, she is not there.\n\n[excited] It's /tʃomel/! She is sleeping.\n\n[excited] Surprise! Happy birthday, Ravi!\n\n[excited] Can we eat the cake now?\n\n[surprised] Look, there are seeds on the floor!\n\n[surprised] It's a monkey! It has the durian!\n\n[happy] The sky is so blue today. Let's have a picnic!\n\n[sad] Oh no, it's raining!\n\n[happy] What a great idea, Dad!\n\n[excited] Wow, I want satay, /apam baliʔ/ and /tʃendol/.\n\n[worried] Oh no, I forgot my purse!\n\n[happy] Thank you, Amir. You are a true friend!\n\n[calmly] Don't be silly, Daniel. It's only the wind.\n\n[scared] Okay, okay. Let's open it slowly. One, two, three!\n\n[happy] Phew, what a relief! We thought you were a ghost!\n\n[happy] Wow, it is so big. Can I fly it?\n\n[surprised] Where is it going? Oh no, it's stuck in the tree!\n\n[excited] Let's eat Grandma!\n\n[happy] Let's eat, Grandma!\n\n[sad] It's raining!\n\n[excited] It's raining!\n\n[excited] Hooray, we won!"
+  },
+  {
+   "voice": "girlA",
+   "voice_id": "e3FEEanj39p8QCSMe8iV",
+   "clips": [
+    "c114",
+    "c116",
+    "c118",
+    "c120",
+    "c122",
+    "c124",
+    "c126",
+    "c128",
+    "c130",
+    "c132",
+    "c135",
+    "c137",
+    "c139",
+    "c141",
+    "c143"
+   ],
+   "prompt": "[angry] You broke my toy!\n\n[urgently] Watch out!\n\n[excited] A new bicycle!\n\n[scared] Ahh, it's so dark in here!\n\n[angry] Hey, that is my seat!\n\n[sad] Oh no, the food is all wet!\n\n[happy] There you are, little one!\n\n[sad] No, you can't leave!\n\n[angry] My flowers, you naughty goat!\n\n[surprised] Oh dear, it's everywhere!\n\n[scared] It's a cat!\n\n[worried] Look at the sky!\n\n[scared] He's here!\n\n[sad] Not again!\n\n[excited] The teacher is coming!"
+  },
+  {
+   "voice": "girlB",
+   "voice_id": "Jr72SE8p9OcJmr8hyX0D",
+   "clips": [
+    "c057",
+    "c081",
+    "c099",
+    "c028",
+    "c031",
+    "c033",
+    "c060",
+    "c063",
+    "c065",
+    "c068",
+    "c071",
+    "c085",
+    "c110"
+   ],
+   "prompt": "Wei Jie, is our volcano ready for the science fair?\n\nOf course. Where do you want to go?\n\nI like apples, bananas and mangoes.\n\n[excited] Yes, Coach. We are ready!\n\n[proudly] I did it! I won the race!\n\n[happy] I feel tired, but I am very happy.\n\n[excited] Yes, teacher. Here it goes!\n\n[worried] We're so sorry, teacher. Are you angry with us?\n\n[worried] Hafiz, there is only one minute left. What should we do?\n\n[excited] Here you go, Hafiz. Shoot now!\n\n[happy] I can't believe it. This is the best day of my life!\n\n[urgently] Yes, that's right. Be careful, the bridge is slippery!\n\n[excited] Hooray, we won the game!"
+  },
+  {
+   "voice": "woman",
+   "voice_id": "jIqiRM4Svh204ihzOZ39",
+   "clips": [
+    "c002",
+    "c004",
+    "c006",
+    "c009",
+    "c059",
+    "c072",
+    "c074",
+    "c011",
+    "c013",
+    "c062",
+    "c064"
+   ],
+   "prompt": "Good morning, Ali. What do you want today?\n\nSure. Do you want an egg?\n\nHere you are. That is two /riŋɡɪt/.\n\nI don't know. Is she in your room?\n\nGroup Four, you are next. Are you ready?\n\nAiman, can you help me hang the /pəlita/ outside?\n\nPut them along the fence, near the door and by the window.\n\n[surprised] Look! What is that under the table?\n\n[calmly] Shh, don't wake her up.\n\n[surprised] Goodness me, my shoes are red now!\n\n[happy] Angry? No, that was the best volcano ever!"
+  },
+  {
+   "voice": "man",
+   "voice_id": "O8ykjWKd0RjX6e5EyDuE",
+   "clips": [
+    "c027",
+    "c036",
+    "c039",
+    "c029",
+    "c032",
+    "c066",
+    "c070"
+   ],
+   "prompt": "Runners, are you ready?\n\nWait, did you check the weather?\n\nWhy don't we have the picnic in the living room?\n\n[urgently] On your marks, get set, go!\n\n[happy] Well done, Priya. How do you feel?\n\n[urgently] Stay calm, everyone. Pass the ball, look for space and shoot!\n\n[excited] Yes, we saw it! We are the champions!"
+  },
+  {
+   "voice": "elder",
+   "voice_id": "NIkIuJZ8oQMuKZqwKtnm",
+   "clips": [
+    "c020",
+    "c043",
+    "c045",
+    "c055",
+    "c023",
+    "c026",
+    "c053"
+   ],
+   "prompt": "Aiman, did you see my durian? I put it on the table.\n\nHello, kids. How many sticks of satay do you want?\n\nThey are six /riŋɡɪt/.\n\nYes, I was looking for my rake, my gloves and my hat.\n\n[angry] Seeds? Who ate my durian?\n\n[angry] Oh, you naughty monkey. Come back here!\n\n[happy] Hello, children! Why are you so scared?"
+  },
+  {
+   "voice": "tourist",
+   "voice_id": "XoCXkGhESdrCEEK4uJOV",
+   "clips": [
+    "c084",
+    "c080",
+    "c082",
+    "c086"
+   ],
+   "prompt": "Straight, left at the bank, then the bridge? Is that right?\n\n[worried] Excuse me, can you help me? I think I'm lost.\n\n[sad] I'm looking for the museum, but my map is wet.\n\n[happy] Thank you so much, both of you. You are very kind!"
+  },
+  {
+   "voice": "narr",
+   "voice_id": "IR4Yywb88oVWHqzWLjAs",
+   "clips": [
+    "c091",
+    "c093",
+    "c095",
+    "c098",
+    "c100",
+    "c104",
+    "c154",
+    "c155",
+    "c156",
+    "c157"
+   ],
+   "prompt": "Hi, I'm Dotty, the full stop! When you see me, STOP. Let your voice go down and rest, then start the next sentence.\n\nAli has a cat. It is black, white and brown. Where is it now? It is asleep on the sofa. Shh! Do not wake it up.\n\nHi, I'm Koma, the comma! When you see me, take a tiny breath, then keep reading. I'm shorter than a full stop.\n\nYes, I bought apples, oranges and grapes. Siti, do you want one? Well, take two! They are sweet, juicy and fresh.\n\nHi, I'm Quizzy, the question mark! When you see me, ASK. For Yes/No questions, your voice goes UP at the end. For WH questions, start strong and let your voice go down.\n\nDo you like durian? I love it! Where is Ali? He is at the canteen. Can we go now? Yes, let's go.\n\nHello! I'm Bip, a reading robot.\n\nBut I have a problem. Listen to how I read.\n\nI read like a robot. Every word sounds the same, and I never stop or ask or feel.\n\nFour friends are going to help me."
+  },
+  {
+   "voice": "narr",
+   "voice_id": "IR4Yywb88oVWHqzWLjAs",
+   "clips": [
+    "c158",
+    "c159",
+    "c160",
+    "c161",
+    "c162",
+    "c163",
+    "c164",
+    "c165",
+    "c166",
+    "c167",
+    "c168",
+    "c169",
+    "c170",
+    "c171",
+    "c172"
+   ],
+   "prompt": "Dotty is the full stop. Dotty says: stop!\n\nKoma is the comma. Koma says: take a tiny breath.\n\nQuizzy is the question mark. Quizzy says: ask!\n\nZing is the exclamation mark. Zing says: feel it!\n\nWith all four friends, I can read with feeling. Listen!\n\nFirst, find your name and tap it.\n\nIf your teacher gave you secret pictures, tap your three pictures.\n\nThis is your home page, on Voice Island. Tap any friend to hear them.\n\nThese four chips are your reading skills. A chip lights up when you reach eighty percent.\n\nTap Continue, and I will take you to the best next step for you.\n\nFollow your journey: Learn, then Practice, then the Reading Studio. The bars show how far you have gone.\n\nSing the chant here. It helps you remember the four voice rules.\n\nNeed help? Press Watch how on any page, or tap me in the corner to ask a question.\n\nA full stop ends a telling sentence.\n\nWhen you see Dotty, let your voice go down, and stop. Listen."
+  },
+  {
+   "voice": "narr",
+   "voice_id": "IR4Yywb88oVWHqzWLjAs",
+   "clips": [
+    "c173",
+    "c174",
+    "c175",
+    "c176",
+    "c177",
+    "c178",
+    "c179",
+    "c180",
+    "c181",
+    "c182",
+    "c183",
+    "c184",
+    "c185",
+    "c186"
+   ],
+   "prompt": "A comma is a short pause.\n\nWhen you see Koma, take a tiny breath, then keep reading. Listen.\n\nThere are two kinds of questions.\n\nA Yes or No question starts with words like do, is, can or are. Your voice goes up at the end.\n\nA WH question starts with what, where, who, why, when or how. Start strong, and let your voice go down.\n\nAn exclamation mark shows a big feeling.\n\nRead the story first. How does the person feel? Here, they are sad.\n\nBut here, the farmer is excited. Same words, different feeling!\n\nNow open Learn. Tap a friend to start a lesson.\n\nThe poster reminds you what each mark tells your voice to do.\n\nEach lesson has five small steps. First, meet your friend and listen.\n\nNext, trace the mark with your finger. Stay on the light shape.\n\nThen press Listen on each card, and hear how one mark changes the voice.\n\nFind and tap every mark of that kind in the story."
+  },
+  {
+   "voice": "narr",
+   "voice_id": "IR4Yywb88oVWHqzWLjAs",
+   "clips": [
+    "c187",
+    "c106",
+    "c109",
+    "c144",
+    "c145",
+    "c146",
+    "c147",
+    "c148",
+    "c149",
+    "c150",
+    "c151",
+    "c152"
+   ],
+   "prompt": "Last, press Record and read the sentence yourself. I will give you tips. Then press Finish to earn three stars!\n\n[excited] Hi, I'm Zing, the exclamation mark! When you see me, FEEL it! Think: how does the character feel? Happy, angry, surprised or scared? Show it with your voice!\n\n[excited] Wow! Look at that cake. Is it for me? Hooray, thank you! I love it. You are the best!\n\n[excited] Stop at the dot.\n\n[excited] Breathe at the comma,\n\n[excited] Ask with a question?\n\n[excited] FEEL the exclamation!\n\n[excited] I'm Dotty, the full stop. When you see me, stop and rest your voice.\n\n[excited] I'm Koma, the comma. When you see me, take a tiny breath, then keep going.\n\n[excited] I'm Quizzy, the question mark. Do you know my trick? Yes or No questions go up!\n\n[excited] I'm Zing, the exclamation mark. Hooray! Show the feeling with your voice!\n\n[excited] Hello! My name is Bip. Are you ready to read with feeling?"
+  },
+  {
+   "voice": "narr",
+   "voice_id": "IR4Yywb88oVWHqzWLjAs",
+   "clips": [
+    "c153"
+   ],
+   "prompt": "[excited] Thank you! Now I can read with feeling! You are a Voice Hero!"
+  }
+ ]
+}
