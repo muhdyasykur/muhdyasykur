@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PunctuAction · Pupil</title>
+<meta name="description" content="PunctuAction pupil app: learn, practise and perform punctuation-powered read-aloud.">
+<meta name="theme-color" content="#4C7DFF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/student.css">
+</head>
+<body class="student">
+<div class="sky" aria-hidden="true"><i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i></div>
+<header class="topbar no-print" id="topbar" hidden>
+  <a class="brand" href="#/home" aria-label="Home"><span class="logo-mark"></span><span class="brand-name"></span></a>
+  <nav class="tabs" id="tabs" aria-label="Main">
+    <a href="#/home" data-tab="home"><span>🏝️</span><b>Home</b></a>
+    <a href="#/learn" data-tab="learn"><span>📚</span><b>Learn</b></a>
+    <a href="#/practice" data-tab="practice"><span>🎮</span><b>Practice</b></a>
+    <a href="#/studio" data-tab="studio"><span>🎭</span><b>Studio</b></a>
+    <a href="#/me" data-tab="me"><span>🏆</span><b>Me</b></a>
+    <a href="#/feedback" data-tab="feedback"><span>💌</span><b>Feedback</b></a>
+  </nav>
+  <div class="top-actions">
+    <button class="btn btn-sm btn-feel" id="watchBtn" title="Watch a tutorial for this page">▶ <span class="hide-sm">Watch how</span></button>
+    <span class="star-count" id="starCount" title="Your stars">⭐ 0</span>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+    <button class="me-btn" id="meBtn" aria-label="Switch pupil"></button>
+  </div>
+</header>
+<main id="app" class="page"></main>
+<noscript><p style="padding:20px">Please turn on JavaScript to use PunctuAction.</p></noscript>
+
+<script src="js/brand.js"></script>
+<script src="js/core/ui.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/mascots.js"></script>
+<script src="js/core/fx.js"></script>
+<script src="js/core/lang.js"></script>
+<script src="js/core/speech.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/content.js"></script>
+<script src="js/core/model.js"></script>
+<script src="js/core/tour.js"></script>
+<script src="js/core/chatbot.js"></script>
+<script src="js/student/app.js"></script>
+<script src="js/student/learn.js"></script>
+<script src="js/student/games.js"></script>
+<script src="js/student/studio.js"></script>
+<script src="js/student/me.js"></script>
+<script src="js/student/tutorials.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

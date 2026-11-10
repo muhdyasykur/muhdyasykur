@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PunctuAction · Teacher Hub</title>
+<meta name="description" content="PunctuAction Teacher Hub: PIN-locked class dashboard, assessment, model voices and evaluation data.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F2547">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/teacher.css">
+</head>
+<body class="teacher">
+<div id="lock"></div>
+<div id="shell" hidden>
+  <aside class="side no-print" id="side">
+    <div class="side-brand"><span class="logo-mark"></span><div><b class="brand-name"></b><div class="small">Teacher Hub 🔒</div></div></div>
+    <nav id="tnav">
+      <a href="#/overview" data-t="overview">📊 <span>Overview</span></a>
+      <a href="#/pupils" data-t="pupils">👧 <span>Pupils</span></a>
+      <a href="#/assess" data-t="assess">🎧 <span>Assess recordings</span><em id="newCount"></em></a>
+      <a href="#/voices" data-t="voices">🎙️ <span>My model voices</span></a>
+      <a href="#/dialogues" data-t="dialogues">✍️ <span>Dialogues</span></a>
+      <a href="#/missions" data-t="missions">🎯 <span>Missions</span></a>
+      <a href="#/evaluation" data-t="evaluation">📈 <span>Evaluation &amp; feedback</span></a>
+      <a href="#/data" data-t="data">🗂️ <span>Data &amp; settings</span></a>
+      <a href="#/guide" data-t="guide">📘 <span>Teacher guide</span></a>
+    </nav>
+    <div class="side-foot"><button class="btn btn-sm btn-stop" id="lockBtn">🔒 Lock now</button><a class="btn btn-sm btn-ghost" href="student.html" target="_blank">👀 Pupil view</a></div>
+  </aside>
+  <main class="tmain" id="tmain"></main>
+</div>
+<script src="js/brand.js"></script>
+<script src="js/core/ui.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/mascots.js"></script>
+<script src="js/core/fx.js"></script>
+<script src="js/core/lang.js"></script>
+<script src="js/core/speech.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/content.js"></script>
+<script src="js/core/model.js"></script>
+<script src="js/core/tour.js"></script>
+<script src="js/teacher/hub.js"></script>
+<script src="js/teacher/assess.js"></script>
+<script src="js/teacher/manage.js"></script>
+<script src="js/teacher/demo.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

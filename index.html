@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PunctuAction</title>
+<meta name="description" content="PunctuAction — Every mark has a voice! An offline app that helps primary pupils read dialogues with feeling by following punctuation.">
+<meta name="theme-color" content="#4C7DFF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="css/base.css">
+<style>
+  body{background:radial-gradient(1200px 600px at 50% -10%,#CFEBFF 0%,#EAF6FF 45%,var(--bg) 80%);min-height:100vh;overflow-x:hidden}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 40px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+  .hero-title{font-size:clamp(2.6rem,9vw,5rem);font-weight:700;letter-spacing:-.03em;margin:4px 0 0;line-height:1}
+  .hero-title .a{color:var(--stop)}
+  .tagline{font-size:clamp(1.25rem,3.5vw,1.8rem);color:var(--ink-2);font-weight:500;margin:6px 0 2px}
+  .pitch{font-family:var(--f-read);font-size:1.1rem;color:var(--ink-2);max-width:640px}
+  .stage{position:relative;width:min(100%,820px);height:300px;margin:8px 0}
+  .stage .bip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%)}
+  .stage .m{position:absolute;bottom:20px;opacity:0;transition:all 1s cubic-bezier(.3,1.4,.5,1)}
+  .stage .m.in{opacity:1}
+  .say{position:absolute;left:50%;top:0;transform:translateX(-50%);background:#fff;border-radius:20px;padding:10px 18px;box-shadow:var(--shadow-sm);font-family:var(--f-read);font-size:clamp(1.05rem,3vw,1.35rem);white-space:nowrap;min-height:46px}
+  .doors{display:grid;grid-template-columns:repeat(2,minmax(0,330px));gap:18px;margin-top:10px;width:100%;justify-content:center}
+  .door{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 18px;border-radius:28px;text-decoration:none;color:var(--ink);background:#fff;box-shadow:var(--shadow);transition:transform .15s}
+  .door:hover{transform:translateY(-6px) rotate(-1deg)}
+  .door .ic{font-size:3rem}
+  .door b{font-size:1.5rem}
+  .door span{color:var(--ink-2);font-size:.95rem}
+  .door.pupil{background:linear-gradient(160deg,#fff 40%,var(--feel-l))}
+  .door.teacher{background:linear-gradient(160deg,#fff 40%,var(--bip-l))}
+  .feat{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .chant{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:4px 0}
+  .chant span{background:#fff;border-radius:99px;padding:6px 14px;font-weight:600;box-shadow:var(--shadow-sm);font-size:1rem}
+  footer{font-size:.85rem;color:var(--ink-3);margin-top:22px}
+  @media (max-width:600px){.doors{grid-template-columns:1fr}.stage{height:260px}.stage .m .mascot{width:58px!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="logo"></div>
+  <h1 class="hero-title" id="name"></h1>
+  <div class="tagline" id="tag"></div>
+  <div class="chant" id="chant"></div>
+  <div class="stage" id="stage">
+    <div class="say" id="say">Beep… I read like a robot…</div>
+    <div class="m" id="m0" style="left:4%"></div><div class="m" id="m1" style="left:18%"></div>
+    <div class="bip" id="bip"></div>
+    <div class="m" id="m2" style="right:18%"></div><div class="m" id="m3" style="right:4%"></div>
+  </div>
+  <button class="btn btn-feel" id="intro">▶ Play the story (with sound)</button>
+  <div class="doors">
+    <a class="door pupil" href="student.html"><span class="ic">🎒</span><b>I'm a pupil</b><span>Learn, play, record and role-play</span></a>
+    <a class="door teacher" href="teacher.html"><span class="ic">🔒</span><b>I'm a teacher</b><span>PIN-locked hub: progress, assessment, voices</span></a>
+  </div>
+  <div class="feat">
+    <span class="pill pill-good">📴 Works offline</span><span class="pill pill-ask">🌱🌿🌳 Easy · Medium · Hard</span><span class="pill pill-feel">🎙 Record & voice coach</span><span class="pill pill-bip">🎭 Voice disguise for shy pupils</span><span class="pill pill-stop">🔐 Data stays on this device</span>
+  </div>
+  <div class="row" style="justify-content:center;margin-top:8px"><a class="btn btn-sm btn-ghost" href="manual.html">📘 User manual</a><button class="btn btn-sm btn-ghost" id="install" hidden>📲 Install app</button></div>
+  <footer id="foot"></footer>
+</div>
+<script src="js/brand.js"></script>
+<script src="js/core/ui.js"></script>
+<script src="js/core/store.js"></script>
+<script src="js/core/mascots.js"></script>
+<script src="js/core/fx.js"></script>
+<script src="js/core/lang.js"></script>
+<script src="js/core/speech.js"></script>
+<script>
+(function () {
+  const { $ } = PA;
+  $("#logo").innerHTML = PA.logo(92);
+  $("#name").innerHTML = PA.wordmark();
+  $("#tag").textContent = PA.brand.tagline;
+  $("#chant").innerHTML = PA.brand.chant.map((c) => `<span style="color:${PA.MARKS[c.mark].dark}">${c.line}</span>`).join("");
+  $("#foot").textContent = `${PA.brand.name} v${PA.brand.version} · Digital innovation for English Language Teaching (TSLB3402) · ${PA.brand.year}`;
+  const names = ["dot", "koma", "quizzy", "zing"];
+  const setBip = (mood, chips) => ($("#bip").innerHTML = PA.mascot("bip", { size: 170, mood, chips, cls: "bob" }));
+  setBip("flat", {});
+  names.forEach((n, i) => ($("#m" + i).innerHTML = PA.mascot(n, { size: 92, cls: "bob" })));
+  async function story(sound) {
+    $("#intro").disabled = true;
+    const say = (t, o) => { $("#say").textContent = t; return sound ? PA.Voice.speak(t, o) : PA.sleep(1800); };
+    setBip("flat", {}); names.forEach((n, i) => $("#m" + i).classList.remove("in"));
+    await say("Beep. I. Read. Like. A. Robot.", { robot: true });
+    const chips = {}; const keys = ["stop", "pause", "ask", "feel"];
+    for (let i = 0; i < 4; i++) {
+      $("#m" + i).classList.add("in"); chips[keys[i]] = true; setBip("talk", Object.assign({}, chips)); if (sound) PA.sfx(PA.markSfx[PA.SKILLS[keys[i]]]);
+      await PA.sleep(sound ? 350 : 500);
+      await say(PA.brand.chant[i].line, { emotion: "excited", mode: "natural" });
+    }
+    setBip("happy", chips); PA.confetti(100);
+    await say("Now I read with feeling! Every mark has a voice!", { emotion: "excited", mode: "natural" });
+    $("#intro").disabled = false;
+  }
+  $("#intro").onclick = () => story(true);
+  setTimeout(() => story(false), 900);
+  let deferred = null;
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferred = e; $("#install").hidden = false; });
+  $("#install").onclick = () => { if (deferred) { deferred.prompt(); deferred = null; $("#install").hidden = true; } };
+})();
+</script>
+<script src="js/pwa.js"></script>
+</body>
+</html>
