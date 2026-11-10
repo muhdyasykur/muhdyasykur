@@ -56,4 +56,4 @@ tools/build_sw.py regenerates sw.js after files change
 ```
 
 ## Credits
-All characters, artwork, sound effects, the jingle and the music are original and generated in code. Fonts: Fredoka and Andika (SIL Open Font License, see `assets/fonts/`). Photo reading: Tesseract.js and its English model (Apache License 2.0, see `assets/vendor/tesseract/`).
+All characters, artwork, sound effects, the jingle and the music are original and generated in code. Fonts: Fredoka and Andika (SIL Open Font License, see `assets/fonts/`). Photo reading: Tesseract.js and its English model (Apache License 2.0, see `assets/vendor/tesseract/`). Natural character voices in `assets/voice/`: generated with ElevenLabs (v4).
