@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Bina fail HTML tunggal (luar talian) daripada game.src.html.
 
-Membenamkan fon Fredoka (OFL) dan ilustrasi Misi 2 sebagai base64,
+Membenamkan fon Fredoka (OFL), ilustrasi Misi 2 (base64) dan penjana kod QR
+(qrcode-generator 1.4.4, MIT, Kazuhiko Arase),
 supaya fail boleh dibuka terus tanpa internet.
 """
 import base64
@@ -19,6 +20,7 @@ def b64(path: pathlib.Path) -> str:
 src = (HERE / "game.src.html").read_text(encoding="utf-8")
 src = src.replace("__FONT500__", b64(FONTS / "fredoka-latin-500-normal.woff2"))
 src = src.replace("__FONT700__", b64(FONTS / "fredoka-latin-700-normal.woff2"))
+src = src.replace("__QRJS__", (HERE / "vendor" / "qrcode-generator-1.4.4.js").read_text(encoding="utf-8"))
 src = src.replace("__ART__", b64(HERE / "assets" / "misi2-art.webp"))
 out = ROOT / "Misi2_Saya_Yakin_Saya_Boleh.html"
 out.write_text(src, encoding="utf-8")

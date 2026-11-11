@@ -154,6 +154,13 @@ def repeat_header(row):
     trPr.append(el)
 
 
+def no_split(row):
+    trPr = row._tr.get_or_add_trPr()
+    el = OxmlElement("w:cantSplit")
+    el.set(qn("w:val"), "true")
+    trPr.append(el)
+
+
 def table(header, rows, widths, size=11, head_fill="DCE3F7", first_col_fill=None, header_repeat=True):
     ncol = len(header) if header else len(rows[0])
     t = doc.add_table(rows=1, cols=ncol)
@@ -238,7 +245,7 @@ page_break()
 heading("RANCANGAN PENGAJARAN HARIAN (RPH)", 0)
 para("Pendidikan Kesihatan Tahun 3 · Misi 2: **Saya Yakin, Saya Boleh!**", align="c", size=11.5, after=2)
 para("Disediakan oleh: **Muhammad Yasykur bin Muhamad Yasim**  ·  Pendekatan: **Berpusatkan Bahan (Material-Centred)**", align="c", after=2)
-para("BBM: **Kit Misi Wira Yakin** = BBM digital __Misi2_Saya_Yakin_Saya_Boleh.html__ + bahan fizikal (Beg Misi, Sampul 1 & 2, Kad Respons, Kotak Cabaran, Pasport, Peti Wira Yakin)", align="c", after=8)
+para("BBM: **Kit Misi Wira Yakin (digital sepenuhnya)** = __Misi2_Saya_Yakin_Saya_Boleh.html__: 🖥️ Mod Guru (projektor) + 📱 Mod Kumpulan (4 tablet) + 🅰️ Kad Respons Digital", align="c", after=8)
 
 heading("BAHAGIAN A: MAKLUMAT ASAS")
 kv([
@@ -256,10 +263,10 @@ kv([
                                "**3.1.2** Mengaplikasikan cara meningkatkan keyakinan diri dalam kehidupan harian."]],
     ["Pengetahuan sedia ada", "Murid pernah diminta menjawab soalan guru, membaca di hadapan kelas dan mencuba aktiviti baharu. Ada murid yang berasa malu atau takut jawapan mereka salah. Murid biasa menjawab secara lisan dan memilih jawapan menggunakan kad."],
     ["Susunan kelas", ["• 4 kumpulan (7–8 murid) dinamakan sempena 4 Kunci Keyakinan: **Berani, Jelas, Positif, Cuba Lagi**.",
-                       "• Setiap meja kumpulan: **Beg Misi** (Sampul 1, Sampul 2, Tikar Lampu Isyarat).",
-                       "• Ruang lapang di hadapan = **Pentas Wira Yakin** (demonstrasi). Dinding belakang = **Dinding Saya Boleh**.",
-                       "• Meja guru: **Peti Wira Yakin** berkunci (mangga 4 digit), **Kotak Cabaran**, boneka Mei, projektor/TV."]],
-    ["Nota isu sensitif", "Topik melibatkan emosi. Guru peka terhadap murid pemalu: tiada murid dipaksa bercakap seorang diri; perkongsian secara sukarela; demonstrasi dibuat bersama kumpulan; kesilapan tidak ditertawakan; murid tidak dibandingkan. Kamera Cermin Ajaib hanya memaparkan imej secara langsung (tiada rakaman disimpan) dan boleh diganti dengan cermin biasa."],
+                       "• Setiap meja kumpulan: **1 tablet / Chromebook** dengan BBM dibuka dalam **📱 Mod Kumpulan** (bahan yang dipegang murid).",
+                       "• Hadapan: **projektor/TV** dengan **🖥️ Mod Guru** (Kad Tugasan, pemasa, semakan bersama, Roda Cabaran, Peti Wira Yakin digital) dan ruang lapang **Pentas Wira Yakin**.",
+                       "• Murid yang ada peranti sendiri boleh menggunakan **🅰️ Kad Respons Digital**; jika tiada, kumpulan mengangkat tablet."]],
+    ["Nota isu sensitif", "Topik melibatkan emosi. Guru peka terhadap murid pemalu: tiada murid dipaksa bercakap seorang diri; perkongsian secara sukarela; demonstrasi dibuat bersama kumpulan; kesilapan tidak ditertawakan; murid tidak dibandingkan. Kamera Cermin Ajaib hanya memaparkan imej secara langsung; tiada gambar atau rakaman disimpan. Data murid (nama panggilan) hanya disimpan pada peranti dan boleh dipadam."],
 ])
 
 # ================================================================== OBJEKTIF
@@ -267,179 +274,176 @@ heading("OBJEKTIF PEMBELAJARAN DAN KRITERIA KEJAYAAN")
 para("Pada akhir PdP selama 30 minit, murid dapat:", after=4)
 table(["Domain & aras", "Objektif pembelajaran", "Kriteria kejayaan (Saya boleh…)"], [
     ["**KOGNITIF**\n(Anderson & Krathwohl, 2001)\n(i) Memahami\n(ii) Mengaplikasi\n\nSP 3.1.1, 3.1.2\nTP1–TP4",
-     ["**(i)** Menjelaskan maksud keyakinan diri dengan **melengkapkan ayat definisi** dalam bahagian 1 **Pasport Wira Yakin** secara bertulis dengan betul. __(Langkah 2)__",
-      "**(ii)** **Memilih** tindakan yang menunjukkan keyakinan diri dengan betul bagi **sekurang-kurangnya 3 daripada 4** situasi **Kad Cabaran** menggunakan **Kad Respons A, B, C**. __(Langkah 4)__"],
-     ["**(i)** Saya boleh menulis perkataan yang betul untuk melengkapkan maksud keyakinan diri.",
+     ["**(i)** Menjelaskan maksud keyakinan diri dengan **melengkapkan ayat definisi** dalam **Pasport Digital** (tablet kumpulan) dengan betul. __(Langkah 2)__",
+      "**(ii)** **Memilih** tindakan yang menunjukkan keyakinan diri dengan betul bagi **sekurang-kurangnya 3 daripada 4** situasi **Kad Cabaran** menggunakan **Kad Respons Digital A, B, C**. __(Langkah 4)__"],
+     ["**(i)** Saya boleh memilih perkataan yang betul untuk melengkapkan maksud keyakinan diri.",
       "**(ii)** Saya boleh memilih jawapan yang menunjukkan keyakinan diri bagi sekurang-kurangnya 3 daripada 4 cabaran."]],
     ["**PSIKOMOTOR**\n(Simpson, 1972)\nRespons Berpandu (Guided Response)\n\nSP 3.1.2\nTP4",
-     "**Mendemonstrasikan Gaya Wira Yakin** bersama kumpulan di **Pentas Wira Yakin** dengan menggunakan **prop Kad Cabaran** (mikrofon mainan / Kad Bacaan / cawan kertas / hasil kerja), dengan memenuhi **sekurang-kurangnya 3 daripada 4 elemen**: (a) berdiri tegak, (b) memandang ke hadapan, (c) bercakap dengan suara yang jelas (Meter Suara zon hijau), (d) melakukan tindakan yakin dengan prop. __(Langkah 4)__",
-     "Saya boleh berdiri tegak, memandang ke hadapan, bercakap dengan suara yang jelas dan menggunakan prop untuk menunjukkan tindakan yakin semasa cabaran kumpulan saya."],
+     "**Mendemonstrasikan Gaya Wira Yakin** bersama kumpulan di **Pentas Wira Yakin** dengan menggunakan **prop digital Kad Cabaran** pada tablet (tablet sebagai mikrofon / Kad Bacaan Digital / Puzzle Lencana / Papan Hasil), dengan memenuhi **sekurang-kurangnya 3 daripada 4 elemen**: (a) berdiri tegak, (b) memandang ke hadapan, (c) bercakap dengan suara yang jelas (Meter Suara zon hijau), (d) melakukan tindakan yakin dengan prop. __(Langkah 4)__",
+     "Saya boleh berdiri tegak, memandang ke hadapan, bercakap dengan suara yang jelas dan menggunakan tablet untuk menunjukkan tindakan yakin semasa cabaran kumpulan saya."],
     ["**AFEKTIF**\n(Krathwohl, Bloom & Masia, 1964)\nBertindak balas → Menghargai\n\nNilai: berani, yakin diri",
      ["Menunjukkan **sikap berani mencuba** melalui tingkah laku sukarela, iaitu:",
-      "(a) **menawarkan diri secara sukarela** untuk sekurang-kurangnya **satu peranan** dalam aktiviti kumpulan atau cabaran (pembaca, penyusun, pemegang prop, pembentang atau berdiri di hadapan Cermin Ajaib) tanpa dipaksa; dan",
-      "(b) **menulis satu azam “Saya boleh…”** pada **Bintang Saya Boleh** dan menampalnya di **Dinding Saya Boleh**. __(Langkah 2–5)__"],
-     "Saya berani menawarkan diri untuk satu tugas dan saya boleh menulis satu azam “Saya boleh…” tentang diri saya."],
+      "(a) **menawarkan diri secara sukarela** untuk sekurang-kurangnya **satu peranan** dalam misi kumpulan (pembaca, penyusun, penyemak, pembentang) atau berdiri di hadapan Cermin Ajaib, tanpa dipaksa; dan",
+      "(b) **menaip satu azam “Saya boleh…”** di **Dinding Kumpulan** (tablet). __(Langkah 2–5)__"],
+     "Saya berani menawarkan diri untuk satu tugas dan saya boleh menaip satu azam “Saya boleh…” tentang diri saya."],
 ], (3.4, 8.4, 5.2), size=11)
 
 heading("Analisis Penulisan Objektif (Format ABCD: Mager, 1997)", 2)
 table(["", "A (Audience)", "B (Behaviour: kata kerja boleh diperhati)", "C (Condition: bahan / situasi)", "D (Degree: kriteria)"], [
-    ["K(i)", "Murid Tahun 3", "melengkapkan (menjelaskan) ayat definisi", "Pasport Wira Yakin, selepas sebutan bersama", "betul (1 perkataan kunci “yakin”)"],
-    ["K(ii)", "Murid Tahun 3", "memilih tindakan yakin", "4 situasi Kad Cabaran, Kad Respons A/B/C", "≥ 3 daripada 4 betul"],
-    ["P", "Murid Tahun 3 (dalam kumpulan)", "mendemonstrasikan Gaya Wira Yakin", "Pentas Wira Yakin, prop Kad Cabaran, Meter Suara", "≥ 3 daripada 4 elemen dalam senarai semak"],
-    ["A", "Murid Tahun 3", "menawarkan diri secara sukarela; menulis azam", "aktiviti kumpulan & Bintang Saya Boleh", "≥ 1 peranan sukarela + 1 azam ditampal"],
+    ["K(i)", "Murid Tahun 3", "melengkapkan (menjelaskan) ayat definisi", "Pasport Digital pada tablet, selepas sebutan bersama", "betul (perkataan kunci “yakin”)"],
+    ["K(ii)", "Murid Tahun 3", "memilih tindakan yakin", "4 situasi Kad Cabaran, Kad Respons Digital A/B/C", "≥ 3 daripada 4 betul"],
+    ["P", "Murid Tahun 3 (dalam kumpulan)", "mendemonstrasikan Gaya Wira Yakin", "Pentas Wira Yakin, prop digital di tablet, Meter Suara", "≥ 3 daripada 4 elemen dalam senarai semak"],
+    ["A", "Murid Tahun 3", "menawarkan diri secara sukarela; menaip azam", "misi kumpulan & Dinding Kumpulan", "≥ 1 peranan sukarela + 1 azam"],
 ], (1.5, 2.6, 4.3, 4.8, 3.8), size=11)
-para("__Rasional pemilihan kata kerja:__ **Kognitif** menggunakan kata kerja proses berfikir yang dapat dinilai betul/salah (melengkapkan, memilih). **Psikomotor** menggunakan kata kerja pergerakan fizikal yang boleh diperhati dan dinilai melalui senarai semak (mendemonstrasikan postur, pandangan mata, suara dan tindakan dengan prop); ia ialah **kemahiran kesihatan yang diaplikasikan (SP 3.1.2)**, bukan sekadar memegang bahan. **Afektif** tidak dinilai betul/salah; sikap dibuktikan melalui **tingkah laku sukarela** (menawarkan diri, menyatakan komitmen) mengikut aras Krathwohl __Bertindak balas__ (mengambil bahagian dengan rela) dan __Menghargai__ (menyatakan komitmen peribadi).", size=11, align="j")
+para("__Rasional pemilihan kata kerja:__ **Kognitif** menggunakan kata kerja proses berfikir yang dapat dinilai betul/salah (melengkapkan, memilih). **Psikomotor** menggunakan kata kerja pergerakan fizikal yang boleh diperhati dan dinilai melalui senarai semak (mendemonstrasikan postur, pandangan mata, suara dan tindakan dengan prop digital); ia ialah **kemahiran kesihatan yang diaplikasikan (SP 3.1.2)**, bukan sekadar menyentuh skrin. **Afektif** tidak dinilai betul/salah; sikap dibuktikan melalui **tingkah laku sukarela** (menawarkan diri, menyatakan komitmen) mengikut aras Krathwohl __Bertindak balas__ (mengambil bahagian dengan rela) dan __Menghargai__ (menyatakan komitmen peribadi).", size=11, align="j")
 
 heading("Jadual Penjajaran Konstruktif (Objektif ↔ Aktiviti ↔ Bahan ↔ Pentaksiran)", 2)
-table(["Objektif", "Aktiviti (Langkah)", "Bahan yang memandu", "Instrumen pentaksiran", "TP"], [
-    ["K(i)", "L2 Kenal: sebut definisi bersama, lengkapkan Pasport; L5 rumusan", "Skrin Kenal (karaoke + TTS), Pasport bhg 1", "Pasport (bertulis), soal jawab", "TP1, TP3"],
-    ["K(ii)", "L3 Tikar Lampu Isyarat & Kuiz Kilat (latihan); L4 Fikir & Pilih bagi 4 cabaran (pentaksiran)", "Sampul 2, Tikar, Kad Respons A/B/C, Roda Cabaran", "Kad Respons (semua murid), senarai semak K", "TP2, TP4"],
-    ["P", "L4 Gaya Wira Yakin (demonstrasi guru → tiru) dan Tunjukkan (kumpulan beraksi)", "Poster Gaya, prop Kotak Cabaran, Meter Suara", "Senarai semak Gaya Wira Yakin (4 elemen)", "TP4"],
-    ["A", "L2–L4 peranan sukarela; L5 Cermin Ajaib & Dinding Saya Boleh", "Kad Tugasan (peranan), Cermin Ajaib, Bintang, Dinding", "Senarai semak A1/A2, Bintang, Meter Keyakinan (persepsi kendiri)", "–"],
+table(["Objektif", "Aktiviti (Langkah)", "Bahan digital yang memandu", "Instrumen pentaksiran", "TP"], [
+    ["K(i)", "L2 Kenal: sebut definisi bersama; setiap ejen melengkapkan Pasport Digital; L5 rumusan", "Mod Guru (karaoke + TTS); Mod Kumpulan: Pasport Digital", "Rekod Kumpulan (Pasport setiap ejen), soal jawab", "TP1, TP3"],
+    ["K(ii)", "L3 Lampu Isyarat & Kuiz Kilat (latihan); L4 Fikir & Pilih bagi 4 cabaran (pentaksiran)", "Misi 2 (Lampu Isyarat), Kad Respons Digital, Roda Cabaran, Misi 3", "Kad Respons Digital (semua murid), Rekod Kumpulan, senarai semak K", "TP2, TP4"],
+    ["P", "L4 Gaya Wira Yakin (demonstrasi guru → tiru) dan Tunjukkan (kumpulan beraksi)", "Skrin Gaya Wira Yakin, prop digital Misi 3, Meter Suara", "Senarai semak Gaya Wira Yakin (4 elemen) di Mod Guru & tablet", "TP4"],
+    ["A", "L2 peranan sukarela; L4 menawarkan diri; L5 Cermin Ajaib & Dinding Kumpulan", "Misi 1 (pilih peranan), Cermin Ajaib, Misi 4 (Dinding, Meter)", "Senarai semak A1/A2, Rekod Kumpulan, Meter Keyakinan (persepsi kendiri)", "–"],
 ], (2.2, 4.8, 3.9, 4.0, 2.1), size=11)
 
 # ================================================================== ELEMEN MERENTAS
 heading("ELEMEN MERENTAS KURIKULUM DAN BAHAN")
 table(["Elemen", "Pilihan", "Bukti dalam aktiviti (Langkah)"], [
     ["KBAT", [f"{O} Mengingat", f"{X} Memahami", f"{X} Mengaplikasi", f"{O} Menganalisis", f"{X} Menilai", f"{O} Mencipta"],
-     ["**Memahami:** L2 (menjelaskan maksud), L3 (mengelaskan tingkah laku).", "**Mengaplikasi:** L4 (memilih & mendemonstrasikan tindakan yakin).", "**Menilai:** L1 (menilai tindakan Mei), L3 Gallery Walk (menilai tikar kumpulan lain)."]],
+     ["**Memahami:** L2 (menjelaskan maksud), L3 (mengelaskan tingkah laku).", "**Mengaplikasi:** L4 (memilih & mendemonstrasikan tindakan yakin).", "**Menilai:** L1 (menilai tindakan Mei), L3 Gallery Walk (menilai Papan Hasil kumpulan lain)."]],
     ["EMK", [f"{X} Bahasa", f"{X} Nilai Murni", f"{X} Kreativiti & Inovasi", f"{X} TMK", f"{O} Patriotisme", f"{O} Keusahawanan"],
-     ["**Bahasa:** L2, L4, L5 (menyebut, membaca, menulis azam).", "**Nilai Murni:** L1–L5.", "**Kreativiti:** L4 (cara beraksi dengan prop).", "**TMK:** L1–L5 (BBM digital)."]],
+     ["**Bahasa:** L2, L4, L5 (menyebut, membaca, menaip azam).", "**Nilai Murni:** L1–L5.", "**Kreativiti:** L4 (cara beraksi dengan prop).", "**TMK:** L1–L5 (BBM digital sepenuhnya: projektor + tablet)."]],
     ["Nilai murni", "Berani, yakin diri, kerjasama, hormat-menghormati (tidak mentertawakan kesilapan rakan)", "L2–L4 (kerja kumpulan), L4 (menghargai aksi rakan dengan isyarat 👍), L5"],
     ["Kemahiran hidup (PK)", [f"{X} Membuat keputusan", f"{X} Komunikasi berkesan", f"{X} Mengurus emosi", f"{X} Menetapkan matlamat", f"{O} Asertif", f"{O} Menyelesaikan masalah"],
      ["**Membuat keputusan:** L3, L4.", "**Komunikasi berkesan:** L4 (suara jelas).", "**Mengurus emosi:** L1, L4 (takut salah → cuba lagi).", "**Menetapkan matlamat:** L5 (azam “Saya boleh…”)."]],
     ["PAK21", [f"{X} Komunikasi", f"{X} Kolaborasi", f"{X} Pemikiran kritis", f"{X} Kreativiti", f"{X} Nilai & etika"],
-     ["**Kolaborasi:** L2, L3 (Sampul berkumpulan).", "**Pemikiran kritis:** L3, L4.", "**Komunikasi:** L4, L5.", "**Nilai & etika:** L3–L5."]],
+     ["**Kolaborasi:** L2–L4 (misi berkumpulan di tablet).", "**Pemikiran kritis:** L3, L4.", "**Komunikasi:** L4, L5.", "**Nilai & etika:** L3–L5."]],
     ["Kecerdasan pelbagai", "Kinestetik, interpersonal, intrapersonal, linguistik, visual-ruang", "L4 (kinestetik), L2–L3 (interpersonal), L5 (intrapersonal)"],
-    ["Kaedah / teknik", [f"{X} Permainan (misi bilik rahsia, roda, peti)", f"{X} Demonstrasi", f"{X} Gallery Walk", f"{X} Padlet Wall (Dinding Saya Boleh)", f"{O} Main peranan", f"{O} Think-Pair-Share"],
+    ["Kaedah / teknik", [f"{X} Permainan (misi bilik rahsia, roda, peti)", f"{X} Demonstrasi", f"{X} Gallery Walk", f"{X} Padlet Wall (Dinding Kumpulan digital)", f"{O} Main peranan", f"{O} Think-Pair-Share"],
      ["**Permainan:** L1–L5 (4 kod → buka peti).", "**Demonstrasi:** L4.", "**Gallery Walk:** L3.", "**Padlet Wall:** L5."]],
 ], (3.0, 6.0, 8.0), size=11)
 
-heading("Senarai Bahan (BBM)", 2)
-table(["Bil", "Bahan", "Kuantiti", "Fungsi dalam pendekatan berpusatkan bahan", "Langkah"], [
-    ["1", "**BBM digital Misi 2** (HTML luar talian, projektor/TV)", "1", "Memandu urutan PdP, memaparkan Kad Tugasan, pemasa, maklum balas serta-merta, Meter Suara, Roda Cabaran, kunci peti", "1–5"],
-    ["2", "**Beg Misi** kumpulan", "4", "Pek bahan kendiri setiap kumpulan", "2–3"],
-    ["3", "**Sampul 1:** 4 kad gambar + 4 kad Kunci (simbol ★ ● ▲ ■)", "4 set", "Padanan; simbol membolehkan murid **menyemak sendiri** (kawalan kesilapan)", "2"],
-    ["4", "**Sampul 2:** Tikar Lampu Isyarat + 8 kad tingkah laku", "4 set", "Manipulasi & pengelasan; bahan menjadi bahan semakan Gallery Walk", "3"],
-    ["5", "**Kad Respons A, B, C**", "30 set", "Respons serentak semua murid (pentaksiran K)", "1, 3, 4"],
-    ["6", "**Pasport Wira Yakin**", "30", "Instrumen individu (K, P kendiri, A); dicop selepas setiap misi", "2–5"],
-    ["7", "**Kotak Cabaran:** 4 Kad Cabaran + prop (mikrofon mainan, Kad Bacaan, 3 cawan kertas, lukisan)", "1", "Bahan konkrit untuk demonstrasi psikomotor", "4"],
-    ["8", "**Poster Gaya Wira Yakin** (4 elemen)", "1", "Model visual psikomotor", "4"],
-    ["9", "**Boneka Mei**", "1", "Watak rangsangan (set induksi)", "1"],
-    ["10", "**Cermin Ajaib** (kamera komputer riba / cermin prop)", "1", "Peneguhan kendiri afektif", "5"],
-    ["11", "**Bintang “Saya boleh…”** + **Dinding Saya Boleh** (kertas mahjung)", "30 + 1", "Padlet Wall fizikal (bukti A)", "5"],
-    ["12", "**Peti Wira Yakin** + mangga 4 digit + **4 Kad Digit** + **Lencana Wira Yakin Diri**", "1 + 4 + 30", "Matlamat permainan; ganjaran; penutup sosial", "1, 5"],
-    ["13", "**Pas Ejen**, pelekat ⭐, senarai semak pemerhatian", "30, 1", "Penglibatan & rekod pentaksiran", "1–5"],
+heading("Senarai Bahan (BBM Digital)", 2)
+table(["Bil", "Bahan digital", "Kuantiti", "Fungsi dalam pendekatan berpusatkan bahan", "Langkah"], [
+    ["1", "**🖥️ Mod Guru** pada projektor/TV", "1", "Memandu aliran kelas: Kad Tugasan Digital + pemasa, Mesej Mei, semakan bersama, Kuiz Kilat, Gaya Wira Yakin, Roda Cabaran, Cermin Ajaib, Dinding Kelas, Peti Wira Yakin, senarai semak guru", "1–5"],
+    ["2", "**📱 Mod Kumpulan** pada tablet/Chromebook kumpulan", "4", "Bahan yang dipegang murid: Daftar Ejen, Markas & kod, Misi 1–4, Rekod Kumpulan", "2–5"],
+    ["3", "**Misi 1:** Padanan 4 Kunci + **Pasport Digital**", "4", "Padanan menyemak sendiri (kad bertukar warna jika betul); setiap ejen melengkapkan definisi (bukti K individu)", "2"],
+    ["4", "**Misi 2:** **Lampu Isyarat Keyakinan** (8 kad) + Ubah Merah ➜ Hijau + **Papan Hasil**", "4", "Pengelasan; kad yang salah melantun balik; Papan Hasil menjadi bahan Gallery Walk (⭐ & emoji pujian)", "3"],
+    ["5", "**🅰️ Kad Respons Digital** A, B, C", "murid / kumpulan", "Skrin bertukar menjadi kad berwarna besar untuk diangkat (respons serentak)", "1, 3, 4"],
+    ["6", "**Misi 3:** Kad Cabaran + **prop digital** (tablet sebagai mikrofon, Kad Bacaan Digital, Puzzle Lencana, Papan Hasil) + Meter Suara + senarai semak Gaya", "4", "Bahan untuk demonstrasi psikomotor; penyemak kumpulan menanda Gaya Wira Yakin", "4"],
+    ["7", "**Misi 4:** **Dinding Kumpulan** “Saya boleh…” + **Meter Keyakinan**", "4", "Padlet Wall digital (bukti A) & persepsi kendiri", "5"],
+    ["8", "**Meter Suara** (mikrofon) & **Cermin Ajaib** (kamera)", "–", "Maklum balas langsung tentang kejelasan suara; peneguhan kendiri", "4, 5"],
+    ["9", "**Peti Wira Yakin digital** + 4 kod + **Lencana Digital**", "–", "Matlamat permainan; peti terbuka hanya dengan kod betul; ganjaran & ikrar", "1, 5"],
+    ["10", "**📊 Rekod Kumpulan** & **📋 Senarai Semak** (eksport CSV)", "–", "Instrumen pentaksiran K, P, A tanpa kertas", "2–5"],
+    ["11", "**📲 Sambung Peranti** (kod QR pautan BBM; pautan Padlet pilihan)", "–", "Murid membuka BBM pada tablet dalam beberapa saat", "Pra"],
 ], (1.2, 5.0, 2.1, 6.6, 2.4), size=11)
-para("Semua bahan fizikal tersedia dalam __Bahan_Cetak_Misi2.pdf__ (14 halaman A4) dan boleh dicetak terus daripada menu **Bahan Cetak** dalam BBM digital.", size=11, italic=True)
+para("Semua bahan di atas berada dalam **satu fail HTML** yang berfungsi tanpa internet. Fail yang sama dibuka pada projektor (Mod Guru) dan pada setiap tablet (Mod Kumpulan). Tiada bahan bercetak diperlukan.", size=11, italic=True)
 
 # ================================================================== KESEPADANAN PENDEKATAN
 heading("KESEPADANAN PENDEKATAN DENGAN JADUAL INDUK PENGAJARAN")
 table(["Aspek", "Pilihan dalam RPH", "Justifikasi"], [
-    ["Pendekatan", "**Berpusatkan Bahan (Material-Centred)**", "Bahan, bukan syarahan guru, menjadi sumber isi, arahan dan maklum balas. Murid belajar dengan memegang, menyusun, menulis dan mendemonstrasikan menggunakan bahan. Guru merancang dan menyediakan bahan, kemudian menjadi fasilitator."],
-    ["Gaya Mosston & Ashworth", "**B. Practice Style (Gaya Latihan)**", "Guru membuat semua keputusan pra-impak (isi, bahan, Kad Tugasan). Semasa impak, murid membuat keputusan sendiri: susunan tugasan, kadar, peranan dan masa mula/berhenti dalam Sampul 1 & 2. Guru bergerak memberi maklum balas individu secara peribadi."],
-    ["Strategi", "**Pembelajaran Berasaskan Teknologi** + bahan konkrit", "BBM digital memandu aliran, memaparkan Kad Tugasan, memberi maklum balas serta-merta dan merekod senarai semak. Bahan fizikal memastikan pembelajaran konkrit (Bruner: enaktif → ikonik → simbolik)."],
-    ["Kaedah", "**Permainan** dan **Demonstrasi**", "Misi bilik rahsia: 4 kod membuka Peti Wira Yakin. Demonstrasi Gaya Wira Yakin oleh guru dan kumpulan (L4)."],
-    ["Teknik", "**Gallery Walk** dan **Padlet Wall**", "Gallery Walk menyemak tikar kumpulan lain (L3). Dinding Saya Boleh sebagai Padlet Wall fizikal + digital (L5)."],
+    ["Pendekatan", "**Berpusatkan Bahan (Material-Centred)**", "Bahan digital, bukan syarahan guru, menjadi sumber isi, arahan dan maklum balas. Murid belajar dengan menyentuh, menyusun, memilih, menaip dan beraksi menggunakan tablet kumpulan. Guru merancang dan menyediakan bahan, kemudian menjadi fasilitator."],
+    ["Gaya Mosston & Ashworth", "**B. Practice Style (Gaya Latihan)**", "Guru membuat semua keputusan pra-impak (isi, bahan, Kad Tugasan). Semasa impak, murid membuat keputusan sendiri: peranan, susunan, kadar dan masa mula/berhenti dalam Misi 1–4 pada tablet kumpulan. Guru bergerak memberi maklum balas individu secara peribadi."],
+    ["Strategi", "**Pembelajaran Berasaskan Teknologi**", "BBM digital sepenuhnya: projektor memandu aliran kelas; tablet kumpulan menjadi bahan manipulatif digital dengan maklum balas serta-merta dan rekod automatik. Aksi Gaya Wira Yakin memastikan pembelajaran enaktif (Bruner: enaktif → ikonik → simbolik)."],
+    ["Kaedah", "**Permainan** dan **Demonstrasi**", "Misi bilik rahsia: 4 kod daripada tablet membuka Peti Wira Yakin digital. Demonstrasi Gaya Wira Yakin oleh guru dan kumpulan (L4)."],
+    ["Teknik", "**Gallery Walk** dan **Padlet Wall**", "Gallery Walk: kumpulan melawat Papan Hasil di tablet kumpulan lain dan memberi ⭐ (L3). Dinding Kumpulan + Dinding Kelas sebagai Padlet Wall digital (L5)."],
 ], (3.2, 4.4, 9.4), size=11)
 
 heading("Ciri Pendekatan Berpusatkan Bahan dan Buktinya dalam RPH", 2)
 table(["Ciri pendekatan berpusatkan bahan", "Bukti dalam RPH ini"], [
-    ["Bahan menjadi **sumber utama isi pelajaran**", "Maksud, 4 Kunci Keyakinan dan situasi disampaikan melalui skrin, Sampul dan Kad Cabaran (L2–L4)."],
-    ["Bahan **memberi arahan** (murid boleh bekerja tanpa syarahan)", "Kad Tugasan bergambar pada setiap sampul + skrin Kad Tugasan dengan pemasa (L2, L3)."],
-    ["Murid **memanipulasi bahan** secara aktif (hands-on)", "Memadankan kad, mengasingkan kad pada tikar, beraksi dengan prop, menulis Pasport, menampal bintang (L2–L5)."],
-    ["Bahan **menyemak sendiri** (self-correcting / kawalan kesilapan)", "Simbol padanan (L2); maklum balas serta-merta skrin (L3, L4); peti hanya terbuka dengan kod betul (L5)."],
-    ["Pembelajaran **mengikut kadar dan keputusan murid**", "Gaya B: kumpulan menentukan peranan, susunan dan kadar dalam Sampul 1 & 2."],
-    ["Guru sebagai **perancang dan fasilitator**", "Guru menyediakan Kit Misi (pra-impak), bergerak memberi maklum balas, merekod senarai semak (impak & pasca-impak)."],
-    ["Bahan **pelbagai deria** (Dale, 1969)", "Visual (skrin, poster), auditori (TTS, Meter Suara), kinestetik (kad, prop, pergerakan), sentuhan (sampul, peti)."],
+    ["Bahan menjadi **sumber utama isi pelajaran**", "Maksud, 4 Kunci Keyakinan dan situasi disampaikan melalui Mod Guru dan Misi 1–3 di tablet (L2–L4)."],
+    ["Bahan **memberi arahan** (murid boleh bekerja tanpa syarahan)", "Kad Tugasan Digital di projektor dan pada permulaan setiap misi di tablet, dengan pemasa (L2, L3)."],
+    ["Murid **memanipulasi bahan** secara aktif (hands-on)", "Mengetik & memadankan kad, mengasingkan kad ke lampu isyarat, memusingkan puzzle, menaip azam, mengangkat tablet sebagai prop (L2–L5)."],
+    ["Bahan **menyemak sendiri** (self-correcting / kawalan kesilapan)", "Padanan bertukar warna jika betul; kad salah melantun balik; Pasport meminta “cuba lagi”; kod hanya muncul selepas misi berjaya; peti hanya terbuka dengan kod betul."],
+    ["Pembelajaran **mengikut kadar dan keputusan murid**", "Gaya B: kumpulan memilih peranan, susunan dan kadar dalam Misi 1–4."],
+    ["Guru sebagai **perancang dan fasilitator**", "Guru menyediakan BBM (pra-impak), bergerak ke tablet kumpulan memberi maklum balas, membaca Rekod Kumpulan (impak & pasca-impak)."],
+    ["Bahan **pelbagai deria** (Dale, 1969)", "Visual (animasi, warna), auditori (TTS, bunyi, Meter Suara), kinestetik (mengetik, menyusun, beraksi), sosial (Gallery Walk)."],
 ], (6.0, 11.0), size=11)
 
 # ================================================================== BAHAGIAN B (LANDSCAPE)
 new_section(True)
 heading("BAHAGIAN B: LANGKAH PdP DAN PENTAKSIRAN")
-para("**Peta aliran BBM:** Mula → Kenal → Pilih → Bertindak → Refleksi → Buka Peti  ·  **Masa:** 3 + 5 + 7 + 10 + 5 = 30 minit  ·  Setiap misi selesai = 1 Kad Digit Kod (🔑) untuk membuka Peti Wira Yakin.", size=11)
-para("**Pra-impak (sebelum 9:00):** susun 4 meja kumpulan; letak Beg Misi di setiap meja; edar Kad Respons, Pasport dan Pas Ejen; kunci Peti dengan kod yang sama dengan tetapan BBM (Persediaan Guru); tampal Poster Gaya dan Dinding Saya Boleh; buka BBM dalam skrin penuh; uji mikrofon/kamera.", size=11, after=5)
+para("**Peta aliran BBM:** Mula → Kenal → Pilih → Bertindak → Refleksi → Buka Peti  ·  **Masa:** 3 + 5 + 7 + 10 + 5 = 30 minit  ·  Setiap misi di tablet yang berjaya = 1 kod (🔑) untuk membuka Peti Wira Yakin digital.", size=11)
+para("**Pra-impak (sebelum 9:00):** susun 4 meja kumpulan; buka BBM pada projektor (🖥️ Mod Guru, skrin penuh) dan pada 4 tablet (📱 Mod Kumpulan, melalui kod QR di 📲 Sambung Peranti); setiap kumpulan memilih nama kumpulan dan mendaftar ejen; tekan “Set semula data kelas”; uji bunyi, mikrofon dan kamera.", size=11, after=5)
 
-H = ["Langkah / Masa", "Isi pelajaran", "Aktiviti pengajaran dan pembelajaran (Guru ↔ Murid)", "Bahan yang memandu", "Catatan (Domain / KBAT / EMK / Nilai / PAK21 / Pentaksiran)"]
+H = ["Langkah / Masa", "Isi pelajaran", "Aktiviti pengajaran dan pembelajaran (Guru ↔ Murid)", "Bahan digital yang memandu", "Catatan (Domain / KBAT / EMK / Nilai / PAK21 / Pentaksiran)"]
 W = (2.6, 4.1, 10.4, 3.6, 5.8)
 table(H, [
     ["**Langkah 1:\nSet Induksi\n(MULA)**\n\n3 minit\n9:00–9:03",
      ["**Rangsangan:** situasi Mei.", "Mei tahu jawapan soalan guru tetapi takut jawapannya salah.", "", "**Soalan:** “Patutkah Mei mencuba menjawab? Mengapa?”", "", "**Jangkaan jawapan:** “Patut, kerana mencuba ialah cara terbaik untuk belajar.”"],
-     ["1. Guru masuk dalam watak **Ketua Ejen**, meletakkan **Peti Wira Yakin** berkunci di hadapan. Murid memakai Pas Ejen.",
-      "2. Guru klik **Mesej Rahsia**. Skrin memaparkan Mei dan Meter Keyakinan Mei yang rendah; guru menggerakkan **boneka Mei** semasa TTS membaca situasi.",
-      "3. Murid berfikir 5 saat. Guru menekan **Kira 3-2-1**; semua murid mengangkat **Kad A (Ya)** atau **B (Tidak)** serentak.",
+     ["1. Guru masuk dalam watak **Ketua Ejen**. Skrin memaparkan **Peti Wira Yakin** berkunci.",
+      "2. Guru klik **Mesej Rahsia**. Skrin memaparkan Mei (animasi) dan Meter Keyakinan Mei yang rendah; Mei bercakap melalui TTS.",
+      "3. Murid berfikir 5 saat. Guru menekan **Kira 3-2-1**; semua murid mengangkat **Kad Respons Digital A (Ya)** atau **B (Tidak)** serentak (telefon/tablet).",
       "4. Guru menekan **Semak Jawapan**: bahan memaparkan jawapan A dan maklum balas, dan Mei berubah menjadi yakin. Guru meminta 2 murid memberi sebab.",
-      "5. Skrin **Misi Hari Ini**: guru menerangkan misi (4 kod → buka peti) dan membaca kriteria kejayaan “Hari ini saya boleh…”.",
+      "5. Skrin **Misi Hari Ini**: guru menerangkan misi (4 kod daripada tablet → buka peti) dan membaca kriteria kejayaan “Hari ini saya boleh…”.",
       "6. Guru memperkenalkan panggilan kelas: Guru “**Wira Yakin?**” → Murid “**Saya boleh!**”."],
-     ["• BBM digital: skrin Mula (Mesej, Soalan, Misi)", "• Boneka Mei", "• Peti Wira Yakin", "• Kad Respons A/B", "• Pas Ejen"],
-     ["**Afektif (menerima):** menarik minat dan perhatian.", "**KBAT:** Menilai (tindakan Mei).", "**PAK21:** Komunikasi.", "**Nilai:** Berani.", "**Pentaksiran:** pemerhatian Kad Respons (diagnostik), soal jawab lisan."]],
+     ["• Mod Guru: Mula (Mesej, Soalan, Misi)", "• Kad Respons Digital", "• Markas di tablet kumpulan"],
+     ["**Afektif (menerima):** menarik minat dan perhatian.", "**KBAT:** Menilai (tindakan Mei).", "**PAK21:** Komunikasi.", "**Nilai:** Berani.", "**Pentaksiran:** pemerhatian Kad Respons Digital (diagnostik), soal jawab lisan."]],
     ["**Langkah 2:\nPerkembangan 1\n(KENAL)**\n\n5 minit\n9:03–9:08\n\nObjektif: K(i), A(a)",
      ["**Maksud keyakinan diri:** berasa yakin dengan kemampuan diri untuk melakukan sesuatu.", "", "**4 Kunci (cara meningkatkan keyakinan diri):**", "1. Berani mencuba", "2. Bercakap dengan jelas", "3. Kata-kata positif", "4. Terima kesilapan, cuba lagi", "", "**Kepentingan:** berani mencuba, tidak takut membuat kesilapan, lebih mudah belajar."],
      ["1. Skrin memaparkan definisi. Guru menekan **Sebut bersama**: murid menyebut maksud 2 kali mengikut sorotan perkataan (karaoke + TTS).",
-      "2. Murid menulis perkataan yang hilang pada **bahagian 1 Pasport** (individu, 30 saat).",
-      "3. Guru membalikkan kad **contoh yakin / kurang yakin** di skrin dan bersoal jawab.",
-      "4. **Misi 1 (Sampul 1), 2 minit, Gaya B:** murid memilih peranan secara sukarela (pembaca, penyusun, penyemak, pembentang), membaca **Kad Tugasan**, memadankan 4 kad gambar dengan 4 kad Kunci dan **menyemak sendiri** menggunakan simbol di sudut kad. Guru bergerak memberi maklum balas individu.",
-      "5. Wakil satu kumpulan memadankan kad di skrin; bahan memaparkan 4 Kunci bersama penerangan.",
-      "6. Soal jawab: “Mengapa keyakinan diri penting?” Guru memaparkan jangkaan jawapan.",
-      "7. **Kod ke-1** dipaparkan; guru memberi **Kad Digit 1**; Pasport dicop."],
-     ["• BBM digital: skrin Kenal (definisi, flip card, Kad Tugasan 1 + pemasa, padanan)", "• Sampul 1", "• Pasport bhg 1", "• Kad Digit 1"],
-     ["**Kognitif K(i):** melengkapkan definisi (TP1); contoh cara (TP2); kepentingan (TP3).", "**Afektif A(a):** peranan sukarela.", "**KBAT:** Memahami.", "**EMK:** Bahasa.", "**PAK21:** Kolaborasi.", "**Pentaksiran:** Pasport bhg 1 (bertulis), pemerhatian, soal jawab."]],
+      "2. Guru membalikkan kad **contoh yakin / kurang yakin** di skrin dan bersoal jawab.",
+      "3. **Misi 1 di tablet (2½ minit, Gaya B):** kumpulan membaca Kad Tugasan Digital, **memilih peranan secara sukarela** (pembaca, penyusun, penyemak, pembentang), memadankan 4 gambar dengan 4 Kunci (kad bertukar warna jika betul) dan **setiap ejen melengkapkan Pasport Digital**. Guru bergerak ke setiap tablet memberi maklum balas individu.",
+      "4. **Semakan bersama:** wakil satu kumpulan memadankan kad di projektor; bahan memaparkan 4 Kunci bersama penerangan.",
+      "5. Soal jawab: “Mengapa keyakinan diri penting?” Guru memaparkan jangkaan jawapan.",
+      "6. **Kod ke-1** muncul di tablet kumpulan yang berjaya dan di projektor."],
+     ["• Mod Guru: Kenal (definisi, flip card, Kad Tugasan Digital 1 + pemasa, semakan)", "• Tablet: Misi 1 (peranan, padanan, Pasport Digital)"],
+     ["**Kognitif K(i):** melengkapkan definisi (TP1); contoh cara (TP2); kepentingan (TP3).", "**Afektif A(a):** peranan sukarela.", "**KBAT:** Memahami.", "**EMK:** Bahasa, TMK.", "**PAK21:** Kolaborasi.", "**Pentaksiran:** Pasport Digital (Rekod Kumpulan), pemerhatian, soal jawab."]],
     ["**Langkah 3:\nPerkembangan 2\n(PILIH)**\n\n7 minit\n9:08–9:15\n\nObjektif: K(ii) – latihan",
      ["**Mengenal pasti tingkah laku yakin dan belum yakin.**", "", "**Yakin:** angkat tangan; suara jelas; “Saya boleh cuba!”; betulkan kesilapan & cuba lagi.", "", "**Belum yakin:** menyorok; terlalu perlahan; “Saya tidak pandai”; enggan mencuba.", "", "**Mengubah** tingkah laku belum yakin menjadi yakin."],
-     ["1. **Misi 2 (Sampul 2), 2½ minit, Gaya B:** kumpulan membentangkan **Tikar Lampu Isyarat**, membaca 8 kad tingkah laku dan mengasingkannya ke 🟢 YAKIN / 🔴 BELUM YAKIN. Kumpulan memilih satu kad merah dan berbincang cara mengubahnya menjadi hijau.",
-      "2. **Gallery Walk (1 minit):** kumpulan bergerak ikut arah jam ke meja sebelah, menyemak tikar kumpulan lain, dan menampal ⭐ (betul) atau 🔄 (perlu dialih).",
-      "3. **Semak bersama (1½ minit):** wakil memindahkan kad ke lampu di skrin. Bahan memberi maklum balas dan cadangan perubahan (cth. “Tukar kepada ‘Saya boleh belajar!’”). Kumpulan membetulkan tikar sendiri.",
-      "4. **Kuiz Kilat (1½ minit):** 2 situasi; selepas Kira 3-2-1, semua murid mengangkat Kad Respons A/B/C; guru mengira bilangan jawapan betul.",
-      "5. Murid menanda ✓ pada **bahagian 2 Pasport**. **Kod ke-2** + Kad Digit 2."],
-     ["• BBM digital: skrin Pilih (Kad Tugasan 2, Gallery Walk + pemasa, pengasingan, Kuiz Kilat)", "• Sampul 2 + Tikar", "• Pelekat ⭐ / 🔄", "• Kad Respons A/B/C", "• Pasport bhg 2"],
-     ["**Kognitif K(ii):** latihan memilih (TP2, TP4).", "**KBAT:** Memahami (mengelas), Menilai (Gallery Walk).", "**PK:** Membuat keputusan.", "**Teknik:** Gallery Walk.", "**Nilai:** Kerjasama, hormat.", "**Pentaksiran:** senarai semak K (skor tikar /8), Kad Respons."]],
+     ["1. **Misi 2 di tablet (2½ minit, Gaya B):** kumpulan mengasingkan 8 kad tingkah laku ke 🟢 YAKIN / 🔴 BELUM YAKIN dan menekan **Semak**; kad yang salah **melantun balik** untuk dibincang semula. Kumpulan memilih satu kad merah dan memilih cara **mengubahnya menjadi hijau**.",
+      "2. **Gallery Walk (1 minit):** kumpulan bergerak ikut arah jam ke tablet kumpulan sebelah, melihat **Papan Hasil** mereka dan menekan **⭐ Beri Bintang** serta satu emoji pujian.",
+      "3. **Semakan bersama (1½ minit):** wakil memindahkan kad ke lampu di projektor. Bahan memberi maklum balas dan cadangan perubahan (cth. “Tukar kepada ‘Saya boleh belajar!’”).",
+      "4. **Kuiz Kilat (1½ minit):** 2 situasi; selepas Kira 3-2-1, semua mengangkat **Kad Respons Digital** A/B/C; guru mengira bilangan jawapan betul.",
+      "5. **Kod ke-2** muncul di tablet dan di projektor."],
+     ["• Mod Guru: Pilih (Kad Tugasan Digital 2, Gallery Walk + pemasa, semakan, Kuiz Kilat)", "• Tablet: Misi 2 (Lampu Isyarat, Ubah Merah ➜ Hijau, Papan Hasil)", "• Kad Respons Digital"],
+     ["**Kognitif K(ii):** latihan memilih (TP2, TP4).", "**KBAT:** Memahami (mengelas), Menilai (Gallery Walk).", "**PK:** Membuat keputusan.", "**Teknik:** Gallery Walk.", "**Nilai:** Kerjasama, menghargai hasil rakan.", "**Pentaksiran:** skor semakan pertama /8 (Rekod Kumpulan), Kad Respons Digital."]],
     ["**Langkah 4:\nAplikasi\n(BERTINDAK)**\n\n10 minit\n9:15–9:25\n\nObjektif: K(ii), P, A(a)\n\n(Pentaksiran utama)",
      ["**Mengaplikasikan cara meningkatkan keyakinan diri dalam situasi harian:**", "", "C1 Berkongsi idea dengan kelas", "C2 Tersilap ketika membaca", "C3 Aktiviti baharu yang sukar", "C4 Menunjukkan hasil kerja", "", "**Gaya Wira Yakin:**", "🧍 berdiri tegak", "👀 pandang ke hadapan", "🗣️ suara jelas", "✋ tindakan yakin"],
-     ["**A. Demonstrasi Gaya Wira Yakin (1½ minit):** guru menunjukkan 4 elemen menggunakan **Poster Gaya** dan skrin; semua murid **bangun dan meniru**. Kelas menyebut “Saya yakin, saya boleh!”; **Meter Suara** (mikrofon) menunjukkan zon jelas.",
-      "**B. Roda Cabaran (8 minit, ±2 minit setiap kumpulan):** guru/murid memutar roda. Kumpulan yang dipilih mengambil Kad Cabaran dan prop daripada **Kotak Cabaran**.",
-      "  a. **Fikir & Pilih (semua murid):** situasi dibaca; selepas Kira 3-2-1, murid mengangkat Kad A/B/C; bahan memaparkan jawapan dan maklum balas.",
-      "  b. **Tunjukkan (kumpulan beraksi, 45 saat):** kumpulan mendemonstrasikan tindakan yakin dengan prop di Pentas Wira Yakin. Guru menanda **senarai semak Gaya Wira Yakin** bagi ±8 murid; murid lain memberi isyarat 👍.",
+     ["**A. Demonstrasi Gaya Wira Yakin (1½ minit):** guru menunjukkan 4 elemen berpandukan skrin; semua murid **bangun dan meniru**. Kelas menyebut “Saya yakin, saya boleh!”; **Meter Suara** (mikrofon) menunjukkan zon jelas.",
+      "**B. Roda Cabaran (8 minit, ±2 minit setiap kumpulan):** guru/murid memutar roda di projektor. Kumpulan yang dipilih membuka **Misi 3** di tablet dan memilih nombor cabaran yang sama.",
+      "  a. **Fikir & Pilih (semua murid):** situasi dibaca; selepas Kira 3-2-1, murid mengangkat **Kad Respons Digital** A/B/C; bahan memaparkan jawapan dan maklum balas. Kumpulan beraksi turut menjawab di tablet.",
+      "  b. **Tunjukkan (kumpulan beraksi, 45 saat):** kumpulan mendemonstrasikan tindakan yakin di Pentas Wira Yakin dengan **prop digital** (C1 tablet sebagai mikrofon; C2 Kad Bacaan Digital; C3 Puzzle Lencana; C4 Papan Hasil). Guru menanda **senarai semak Gaya Wira Yakin** bagi ±8 murid; **penyemak** kumpulan menanda gaya di tablet; murid lain memberi isyarat 👍.",
       "  c. **Sebut (Kesediaan):** seluruh kelas melafazkan ayat positif kad; Meter Suara mengisi bintang. Guru menanda A(a) bagi murid yang menawarkan diri.",
-      "**C.** Selepas 4 cabaran: **Kod ke-3** + Kad Digit 3; murid mewarnakan **bahagian 3 Pasport**."],
-     ["• BBM digital: Gaya Wira Yakin, Meter Suara, Roda Cabaran, skrin cabaran 3 bahagian", "• Poster Gaya", "• Kotak Cabaran: 4 Kad Cabaran + prop", "• Kad Respons", "• Senarai semak", "• Pasport bhg 3"],
-     ["**Psikomotor P:** ≥ 3/4 elemen Gaya Wira Yakin (TP4).", "**Kognitif K(ii):** ≥ 3/4 situasi betul.", "**Afektif A(a):** peranan sukarela.", "**KBAT:** Mengaplikasi.", "**Kaedah:** Permainan, Demonstrasi.", "**PK:** Komunikasi berkesan, mengurus emosi.", "**Nilai:** Berani, menghormati rakan (tidak mentertawakan).", "**Pentaksiran:** senarai semak P, Kad Respons, pemerhatian."]],
+      "**C.** Selepas 4 cabaran: **Kod ke-3**."],
+     ["• Mod Guru: Gaya Wira Yakin, Meter Suara, Roda Cabaran, skrin cabaran 3 bahagian, senarai semak", "• Tablet: Misi 3 (Fikir & Pilih, prop digital, Gaya, Sebut)", "• Kad Respons Digital"],
+     ["**Psikomotor P:** ≥ 3/4 elemen Gaya Wira Yakin (TP4).", "**Kognitif K(ii):** ≥ 3/4 situasi betul.", "**Afektif A(a):** peranan sukarela.", "**KBAT:** Mengaplikasi.", "**Kaedah:** Permainan, Demonstrasi.", "**PK:** Komunikasi berkesan, mengurus emosi.", "**Nilai:** Berani, menghormati rakan (tidak mentertawakan).", "**Pentaksiran:** senarai semak P, Kad Respons Digital, Rekod Kumpulan."]],
     ["**Langkah 5:\nRefleksi & Penutup\n(REFLEKSI → BUKA PETI)**\n\n5 minit\n9:25–9:30\n\nObjektif: A(b), K(i)",
      ["**Rumusan:** keyakinan diri ialah berasa **yakin** dengan kemampuan diri untuk melakukan sesuatu.", "", "Cara meningkatkannya: berani mencuba, bercakap dengan jelas, kata-kata positif, terima kesilapan dan cuba lagi.", "", "**Azam:** “Saya boleh…”"],
-     ["1. **Cermin Ajaib (1 minit):** 2 murid sukarela berdiri di hadapan Cermin Ajaib (kamera/cermin prop) dan menyebut “Saya yakin, saya boleh! Saya boleh …”.",
-      "2. **Dinding Saya Boleh (1½ minit):** setiap murid menulis satu azam pada **Bintang** dan menampalnya di Dinding (Padlet Wall). Guru menaip 2–3 azam ke dinding digital.",
-      "3. **Meter Keyakinan Saya (30 saat):** murid mewarnakan **bahagian 4 Pasport** dan mengangkat tangan; guru mengira (persepsi kendiri).",
-      "4. **Penutup kognitif (1 minit):** murid melengkapkan definisi bersama (perkataan tersembunyi didedahkan) dan menyatakan kunci yang digunakan hari ini. **Kod ke-4**.",
-      "5. **Penutup sosial (1 minit):** wakil memasukkan 4 Kad Digit pada papan kekunci skrin; Peti digital terbuka, guru membuka mangga Peti sebenar. Ketua kumpulan mengedarkan **Lencana Wira Yakin Diri**; kelas melafazkan **Ikrar Wira Yakin**. Guru memberi **Cabaran Minggu Ini**: cuba satu perkara baharu dengan yakin."],
-     ["• BBM digital: Cermin Ajaib, Dinding, Meter Keyakinan, Rumusan, Buka Peti, Tahniah", "• Bintang + Dinding Saya Boleh", "• Pasport bhg 4", "• Peti + mangga + Kad Digit", "• Lencana"],
-     ["**Afektif A(b):** azam ditampal (Menghargai).", "**Kognitif K(i):** pengukuhan.", "**Teknik:** Padlet Wall.", "**PK:** Menetapkan matlamat.", "**EMK:** Bahasa.", "**Pentaksiran:** Bintang, Pasport, Meter Keyakinan.", "**Penutup:** peneguhan positif, ganjaran, ikrar."]],
+     ["1. **Cermin Ajaib (1 minit):** 2 murid sukarela berdiri di hadapan Cermin Ajaib (kamera komputer riba) dan menyebut “Saya yakin, saya boleh! Saya boleh …”.",
+      "2. **Misi 4 di tablet (1½ minit):** setiap ejen menaip satu azam di **Dinding Kumpulan** dan menekan wajah pada **Meter Keyakinan**. Wakil setiap kumpulan membaca satu azam; guru menampalnya di **Dinding Kelas** di projektor (Padlet Wall).",
+      "3. **Meter Keyakinan kelas (30 saat):** murid mengangkat tangan; guru mengira (persepsi kendiri).",
+      "4. **Penutup kognitif (1 minit):** murid melengkapkan definisi bersama (perkataan tersembunyi didedahkan) dan menyatakan kunci yang digunakan hari ini. **Kod ke-4** muncul di tablet.",
+      "5. **Penutup sosial (1 minit):** wakil membaca 4 kod daripada Markas tablet dan memasukkannya pada papan kekunci projektor; **Peti Wira Yakin** terbuka. **Lencana Digital** terbuka di setiap tablet; kelas melafazkan **Ikrar Wira Yakin**. Guru memberi **Cabaran Minggu Ini**: cuba satu perkara baharu dengan yakin."],
+     ["• Mod Guru: Cermin Ajaib, Dinding Kelas, Meter Keyakinan, Rumusan, Buka Peti, Tahniah", "• Tablet: Misi 4 (Dinding Kumpulan, Meter Keyakinan), Lencana Digital"],
+     ["**Afektif A(b):** azam di Dinding Kumpulan (Menghargai).", "**Kognitif K(i):** pengukuhan.", "**Teknik:** Padlet Wall.", "**PK:** Menetapkan matlamat.", "**EMK:** Bahasa.", "**Pentaksiran:** Dinding & Meter (Rekod Kumpulan).", "**Penutup:** peneguhan positif, ganjaran, ikrar."]],
 ], W, size=11)
 
 # ================================================================== KEMBALI KE POTRET
 new_section(False)
 heading("PENTAKSIRAN")
 kv([
-    ["Kaedah", f"{X} Pemerhatian   {X} Lisan / soal jawab   {X} Lembaran kerja (Pasport)   {X} Hasil kerja (Tikar, Bintang)   {X} Kuiz (Kad Respons)   {O} Main peranan"],
-    ["Instrumen", f"{X} Senarai semak pemerhatian (K, P, A)   {X} Pasport Wira Yakin   {X} Rubrik / Standard Prestasi DSKP   {X} Rekod digital (Senarai Semak dalam BBM, eksport CSV)"],
+    ["Kaedah", f"{X} Pemerhatian   {X} Lisan / soal jawab   {X} Lembaran kerja digital (Pasport Digital)   {X} Hasil kerja (Papan Hasil, Dinding Kumpulan)   {X} Kuiz (Kad Respons Digital)   {O} Main peranan"],
+    ["Instrumen", f"{X} Senarai semak pemerhatian (K, P, A)   {X} Rekod Kumpulan (tablet)   {X} Rubrik / Standard Prestasi DSKP   {X} Senarai Semak Mod Guru (eksport CSV)"],
     ["TP disasarkan", f"{X} TP1  {X} TP2  {X} TP3  {X} TP4  {O} TP5  {O} TP6   (TP5–TP6 melalui pengayaan)"],
     ["Pencapaian murid", "TP1: ___  TP2: ___  TP3: ___  TP4: ___  TP5: ___  TP6: ___"],
 ])
 table(["Domain", "Bukti", "Instrumen", "Kriteria “mencapai”"], [
-    ["K(i)", "Pasport bhg 1", "Pasport + senarai semak K1", "Perkataan “yakin” ditulis dengan betul"],
-    ["K(ii)", "Kad Respons dalam 4 cabaran", "Senarai semak K2 / kiraan dalam BBM", "≥ 3 daripada 4 betul"],
-    ["P", "Aksi di Pentas Wira Yakin", "Senarai semak Gaya Wira Yakin (🧍 👀 🗣️ ✋)", "≥ 3 daripada 4 elemen"],
-    ["A", "Peranan sukarela, Bintang di dinding", "Senarai semak A1, A2; Meter Keyakinan (tidak dinilai)", "≥ 1 peranan sukarela + 1 azam"],
+    ["K(i)", "Pasport Digital setiap ejen", "Rekod Kumpulan + senarai semak K1", "Perkataan “yakin” dipilih dengan betul"],
+    ["K(ii)", "Kad Respons Digital dalam 4 cabaran", "Senarai semak K2 / kiraan dalam BBM", "≥ 3 daripada 4 betul"],
+    ["P", "Aksi di Pentas Wira Yakin", "Senarai semak Gaya Wira Yakin (Mod Guru + penyemak di tablet)", "≥ 3 daripada 4 elemen"],
+    ["A", "Peranan sukarela, azam di Dinding Kumpulan", "Senarai semak A1, A2; Meter Keyakinan (tidak dinilai)", "≥ 1 peranan sukarela + 1 azam"],
 ], (2.0, 4.5, 6.0, 4.5), size=11)
 kv([
     ["Pengayaan\n(murid yang menguasai)", ["**TP5:** murid mengesyorkan satu cara meningkatkan keyakinan diri melalui amalan positif kepada rakan yang takut menjawab (menjadi “Mentor Wira” dalam kumpulan).", "**TP6:** murid berdiri di hadapan Cermin Ajaib dan berkomunikasi dengan yakin tentang keistimewaan diri: “Saya istimewa kerana…”."]],
-    ["Pemulihan\n(murid yang belum menguasai)", ["Guru mengulang maksud keyakinan diri dengan Kad Gambar Sampul 1 dan boneka Mei.", "Murid berpasangan dengan rakan sebaya (buddy) untuk mengulang Tikar Lampu Isyarat (4 kad sahaja).", "Murid menyebut “Saya boleh cuba!” bersama guru dan berdemonstrasi dalam kumpulan kecil (tidak seorang diri)."]],
-    ["Pembezaan", ["Arahan bergambar dan TTS untuk murid lemah membaca; peranan dalam kumpulan dipilih mengikut keselesaan.", "Murid pemalu boleh menunjukkan keyakinan melalui peranan pemegang prop dahulu, kemudian pembaca."]],
-    ["Pengurusan bilik darjah", ["Panggilan “Wira Yakin? – Saya boleh!” untuk mendapatkan perhatian; Kira 3-2-1 untuk respons serentak.", "Pemasa pada skrin bagi setiap tugasan; Gallery Walk ikut arah jam; prop selamat (tiada objek tajam)."]],
-    ["Pelan kontingensi", ["Jika projektor/komputer gagal: semua bahan fizikal tetap berfungsi (Kad Tugasan bercetak, Tikar, Kad Cabaran, Peti); guru membaca situasi daripada kad.", "Jika mikrofon/kamera tidak dibenarkan: gunakan butang “Isi manual” dan cermin prop. BBM berfungsi tanpa internet."]],
+    ["Pemulihan\n(murid yang belum menguasai)", ["Guru mengulang maksud keyakinan diri dengan skrin Kenal (karaoke + TTS) dan watak Mei.", "Murid berpasangan dengan rakan sebaya (buddy) untuk mengulang Misi 2 Lampu Isyarat di tablet.", "Murid menyebut “Saya boleh cuba!” bersama guru dan berdemonstrasi dalam kumpulan kecil (tidak seorang diri)."]],
+    ["Pembezaan", ["Arahan bergambar dan TTS untuk murid lemah membaca; peranan dalam kumpulan dipilih mengikut keselesaan.", "Murid pemalu boleh memilih peranan penyusun/penyemak dahulu, kemudian pembaca atau pembentang."]],
+    ["Pengurusan bilik darjah", ["Panggilan “Wira Yakin? – Saya boleh!” untuk mendapatkan perhatian; Kira 3-2-1 untuk respons serentak.", "Pemasa pada skrin bagi setiap tugasan; Gallery Walk ikut arah jam; peraturan tablet: “skrin menghadap atas apabila guru bercakap”."]],
+    ["Pelan kontingensi", ["Jika tablet tidak mencukupi: jalankan misi kumpulan di projektor (Mod Guru) dengan wakil bergilir, atau kongsi 2 kumpulan bagi 1 tablet.", "Jika projektor gagal: guru memandu kelas daripada tablet guru; kumpulan meneruskan Misi 1–4 di tablet masing-masing.", "Jika mikrofon/kamera tidak dibenarkan: gunakan butang “Isi manual”. BBM berfungsi tanpa internet."]],
 ])
 heading("Standard Prestasi (DSKP, SK 3.1) yang Dirujuk", 2)
 table(["TP", "Pernyataan", "Bukti dalam PdP"], [
-    ["TP1", "Menyatakan maksud keyakinan diri.", "L2 sebut bersama; Pasport bhg 1"],
-    ["TP2", "Memberi contoh cara meningkatkan keyakinan diri.", "L2 padanan 4 Kunci; L3 Tikar"],
+    ["TP1", "Menyatakan maksud keyakinan diri.", "L2 sebut bersama; Pasport Digital"],
+    ["TP2", "Memberi contoh cara meningkatkan keyakinan diri.", "L2 padanan 4 Kunci; L3 Lampu Isyarat"],
     ["TP3", "Menjelaskan dengan contoh kepentingan keyakinan diri dalam kehidupan harian.", "L2 soal jawab kepentingan"],
     ["TP4", "Memilih cara meningkatkan keyakinan diri melalui amalan positif.", "L3 Kuiz Kilat; L4 Fikir & Pilih + Tunjukkan"],
     ["TP5", "Mengesyorkan cara meningkatkan keyakinan diri melalui amalan positif.", "Pengayaan: Mentor Wira"],
@@ -469,7 +473,7 @@ table(["Aspek dinilai", "Sangat baik", "Baik", "Sederhana", "Perlu dibaiki"], [
     ["Objektif kognitif, psikomotor & afektif jelas, boleh diukur dan selari dengan SP", O, O, O, O],
     ["Pelaksanaan pendekatan berpusatkan bahan (bahan memandu PdP, murid memanipulasi bahan)", O, O, O, O],
     ["Kesesuaian Gaya B (Latihan), kaedah Permainan/Demonstrasi, teknik Gallery Walk/Padlet Wall", O, O, O, O],
-    ["Kualiti & keberkesanan BBM (digital + fizikal)", O, O, O, O],
+    ["Kualiti & keberkesanan BBM digital (Mod Guru + Mod Kumpulan)", O, O, O, O],
     ["Set induksi, perkembangan dan penutup (kognitif & sosial)", O, O, O, O],
     ["Penyoalan, maklum balas dan pengurusan bilik darjah", O, O, O, O],
     ["Pentaksiran (instrumen K, P, A) dan pembezaan", O, O, O, O],
@@ -502,32 +506,33 @@ heading("LAMPIRAN 2: KESEPADANAN RPH DENGAN BORANG PR1 (KOMPONEN A: PERANCANGAN)
 table(["Aspek PR1", "Bukti dalam RPH ini"], [
     ["A1a. Hasil pembelajaran", "Objektif K, P, A ditulis dalam format ABCD dengan kata kerja boleh diukur dan kriteria “Saya boleh…”; selari dengan SP 3.1.1 dan 3.1.2 (Jadual Penjajaran Konstruktif)."],
     ["A1a. Isi pelajaran", "Disusun mengikut urutan: situasi (Mula) → maksud & 4 Kunci (Kenal) → pengelasan tingkah laku (Pilih) → aplikasi dalam situasi harian (Bertindak) → rumusan & azam (Refleksi)."],
-    ["A1b. Set induksi", "Mesej rahsia Mei + boneka + Peti berkunci; berkait dengan pengalaman murid dan mencetuskan rasa ingin tahu."],
-    ["A1c. Strategi", "Pembelajaran Berasaskan Teknologi + bahan konkrit (Jadual Induk, Pendekatan Berpusatkan Bahan)."],
-    ["A1c. Kesesuaian aktiviti dengan strategi", "Setiap langkah dipandu Kad Tugasan & BBM digital; murid memanipulasi bahan; maklum balas daripada bahan."],
-    ["A1c. Sumber PdP", "Kit Misi Wira Yakin: BBM digital, Beg Misi, Sampul 1 & 2, Kad Respons, Kotak Cabaran, Pasport, Bintang, Peti, lencana."],
+    ["A1b. Set induksi", "Mesej rahsia Mei (animasi + TTS) + Peti Wira Yakin digital berkunci; berkait dengan pengalaman murid dan mencetuskan rasa ingin tahu."],
+    ["A1c. Strategi", "Pembelajaran Berasaskan Teknologi (Jadual Induk, Pendekatan Berpusatkan Bahan): projektor + tablet kumpulan."],
+    ["A1c. Kesesuaian aktiviti dengan strategi", "Setiap langkah dipandu Kad Tugasan Digital; murid memanipulasi bahan digital di tablet; maklum balas serta-merta daripada bahan."],
+    ["A1c. Sumber PdP", "Satu fail BBM digital: Mod Guru, Mod Kumpulan (Misi 1–4, Pasport Digital, Papan Hasil, prop digital, Dinding, Lencana Digital), Kad Respons Digital, Rekod Kumpulan."],
     ["A1c. KBAT", "Memahami (L2, L3), Mengaplikasi (L4), Menilai (L1, L3)."],
     ["A1c. EMK", "Bahasa, Nilai Murni, Kreativiti & Inovasi, TMK."],
-    ["A1d. Penutup", "Penutup kognitif (rumusan definisi & 4 Kunci) dan sosial (buka peti, lencana, ikrar, cabaran minggu ini)."],
+    ["A1d. Penutup", "Penutup kognitif (rumusan definisi & 4 Kunci) dan sosial (buka Peti digital, Lencana Digital, ikrar, cabaran minggu ini)."],
     ["A2a. Kaedah / teknik pedagogi", "Permainan dan Demonstrasi; Gallery Walk dan Padlet Wall; selari dengan Gaya B (Latihan)."],
-    ["A3a. Kemahiran insaniah", "Kemahiran Digital (BBM, Meter Suara), Komunikasi (suara jelas, membentang), Kognitif (membuat keputusan), Kepimpinan & kerja berpasukan (peranan sukarela)."],
+    ["A3a. Kemahiran insaniah", "Kemahiran Digital (mengendalikan tablet, Meter Suara), Komunikasi (suara jelas, membentang), Kognitif (membuat keputusan), Kepimpinan & kerja berpasukan (peranan sukarela)."],
 ], (4.5, 12.5), size=11)
 
 heading("LAMPIRAN 3: GAMBAR KANDUNGAN BBM DIGITAL – MISI 2: SAYA YAKIN, SAYA BOLEH!")
 para("Fail: __Misi2_Saya_Yakin_Saya_Boleh.html__ (luar talian; buka dengan Chrome/Edge, tekan F untuk skrin penuh).", size=11)
 SHOT_CAPS = [
-    ("00-laman-utama", "Laman utama"), ("01-mula-mesej", "L1 Mula: Mesej Rahsia Mei"), ("02-mula-soalan", "L1 Mula: Kad Respons A/B"), ("03-mula-misi", "L1 Mula: Misi Hari Ini (Peti berkunci)"),
-    ("04-kenal-maksud", "L2 Kenal: maksud keyakinan diri"), ("05-kenal-sampul1", "L2 Kenal: Kad Tugasan Sampul 1 + pemasa"), ("06-kenal-padan", "L2 Kenal: semakan padanan 4 Kunci"), ("07-kod", "Kod ke-1 diperoleh"),
-    ("08-pilih-sampul2", "L3 Pilih: Kad Tugasan Sampul 2"), ("09-pilih-gallery", "L3 Pilih: Gallery Walk"), ("10-pilih-sisih", "L3 Pilih: Yakin / Belum Yakin"), ("11-pilih-kuiz", "L3 Pilih: Kuiz Kilat Kad Respons"),
-    ("12-bertindak-gaya", "L4 Bertindak: Gaya Wira Yakin + Meter Suara"), ("13-bertindak-roda", "L4 Bertindak: Roda Cabaran"), ("14-cabaran-pilih", "L4 Cabaran: Fikir & Pilih"), ("15-cabaran-tunjuk", "L4 Cabaran: Tunjukkan (senarai semak P)"),
-    ("16-cabaran-sebut", "L4 Cabaran: Sebut (afektif)"), ("17-refleksi-cermin", "L5 Refleksi: Cermin Ajaib"), ("18-refleksi-dinding", "L5 Refleksi: Dinding Saya Boleh"), ("19-refleksi-meter", "L5 Refleksi: Meter Keyakinan Saya"),
+    ("00-laman-utama", "Laman utama (Mod Guru / Mod Kumpulan)"), ("26-sambung", "Sambung Peranti (kod QR)"), ("01-mula-mesej", "L1 Mula: Mesej Rahsia Mei"), ("02-mula-soalan", "L1 Mula: Kad Respons A/B"),
+    ("03-mula-misi", "L1 Mula: Misi Hari Ini (Peti berkunci)"), ("04-kenal-maksud", "L2 Kenal: maksud keyakinan diri"), ("05-kenal-sampul1", "L2 Kad Tugasan Digital 1 + pemasa"), ("06-kenal-padan", "L2 Semakan bersama 4 Kunci"),
+    ("08-pilih-sampul2", "L3 Kad Tugasan Digital 2"), ("09-pilih-gallery", "L3 Gallery Walk"), ("11-pilih-kuiz", "L3 Kuiz Kilat Kad Respons"), ("12-bertindak-gaya", "L4 Gaya Wira Yakin + Meter Suara"),
+    ("13-bertindak-roda", "L4 Roda Cabaran"), ("15-cabaran-tunjuk", "L4 Cabaran: Tunjukkan (senarai semak P)"), ("17-refleksi-cermin", "L5 Cermin Ajaib"), ("18-refleksi-dinding", "L5 Dinding Kelas"),
     ("20-refleksi-rumusan", "L5 Rumusan"), ("21-peti-buka", "Penutup: Peti Wira Yakin dibuka"), ("22-tahniah", "Penutup: Ikrar & Tahniah"), ("23-senarai-semak", "Senarai Semak Pemerhatian guru"),
 ]
 t = doc.add_table(rows=0, cols=2)
 t.alignment = WD_TABLE_ALIGNMENT.CENTER
 IMG2 = t
 for i in range(0, len(SHOT_CAPS), 2):
-    cells = t.add_row().cells
+    row = t.add_row()
+    no_split(row)
+    cells = row.cells
     for j in range(2):
         if i + j >= len(SHOT_CAPS):
             continue
@@ -542,19 +547,34 @@ for i in range(0, len(SHOT_CAPS), 2):
         r.italic = True
 
 set_widths(IMG2, (8.5, 8.5))
-heading("LAMPIRAN 4: BAHAN FIZIKAL (BAHAN CETAK)")
-para("Fail: __Bahan_Cetak_Misi2.pdf__. Kad Tugasan, Kad Padanan, Tikar Lampu Isyarat, 8 Kad Tingkah Laku, Kad Respons, Kad Cabaran, Kad Bacaan, Pasport, Bintang, Lencana, Kad Digit, Poster Gaya, Pas Ejen dan Senarai Semak.", size=11)
-t = doc.add_table(rows=0, cols=4)
+heading("LAMPIRAN 4: MOD KUMPULAN (TABLET) – BAHAN YANG DIPEGANG MURID")
+para("Paparan pada tablet setiap kumpulan. Setiap misi menyemak sendiri jawapan murid dan memberi satu digit kod.", size=11)
+GCAPS = [
+    ("g01-pilih", "Pilih kumpulan"), ("g02-daftar", "Daftar Ejen"), ("g03-markas", "Markas: 4 misi & kod"), ("g04-m1-tugas", "Misi 1: peranan sukarela"),
+    ("g05-m1-padan", "Misi 1: padanan 4 Kunci"), ("g06-m1-pasport", "Misi 1: Pasport Digital"), ("g07-kod", "Kod ke-1"), ("g09-m2-semak", "Misi 2: kad salah melantun"),
+    ("g11-m2-ubah", "Misi 2: Ubah Merah ➜ Hijau"), ("g12-m2-papan", "Misi 2: Papan Hasil + Gallery Walk"), ("g13-m3-pilih", "Misi 3: Fikir & Pilih"), ("g14-m3-tunjuk", "Misi 3: prop digital + Gaya"),
+    ("g15-m3-sebut", "Misi 3: Sebut + Meter Suara"), ("g16-m4-dinding", "Misi 4: Dinding Kumpulan"), ("g17-m4-meter", "Misi 4: Meter Keyakinan"), ("g19-lencana", "Lencana Digital"),
+    ("g20-rekod", "Rekod Kumpulan (pentaksiran)"), ("g21-respons", "Kad Respons Digital"),
+]
+t = doc.add_table(rows=0, cols=3)
 t.alignment = WD_TABLE_ALIGNMENT.CENTER
-bcs = sorted(SHOTS.glob("bc-*.jpg"))
-for i in range(0, len(bcs), 4):
-    cells = t.add_row().cells
-    for j in range(4):
-        if i + j < len(bcs):
-            p = cells[j].paragraphs[0]
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p.add_run().add_picture(str(bcs[i + j]), width=Cm(3.6))
-set_widths(t, (4.25, 4.25, 4.25, 4.25))
+for i in range(0, len(GCAPS), 3):
+    row = t.add_row()
+    no_split(row)
+    cells = row.cells
+    for j in range(3):
+        if i + j >= len(GCAPS):
+            continue
+        fn, cap = GCAPS[i + j]
+        p = cells[j].paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.add_run().add_picture(str(SHOTS / f"{fn}.jpg"), width=Cm(5.3))
+        c = cells[j].add_paragraph()
+        c.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = c.add_run(f"Rajah {len(SHOT_CAPS) + i + j + 1}: {cap}")
+        r.font.size = Pt(10)
+        r.italic = True
+set_widths(t, (5.65, 5.65, 5.65))
 
 heading("RUJUKAN")
 refs = [

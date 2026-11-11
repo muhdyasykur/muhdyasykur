@@ -93,6 +93,8 @@ p{margin:.4em 0}
 .task{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
 .env{position:relative;width:clamp(120px,13vw,200px);aspect-ratio:1.45;background:linear-gradient(160deg,#ffe9a8,#ffd25c);border:4px solid #fff;border-radius:14px;box-shadow:0 8px 0 var(--shadow);display:grid;place-items:center;font-size:clamp(34px,4vw,64px);color:var(--ink);font-weight:700}
 .env::before{content:"";position:absolute;inset:0;background:linear-gradient(155deg,transparent 49%,#e8b73f 50%) top/100% 55% no-repeat,linear-gradient(-155deg,transparent 49%,#e8b73f 50%) top/100% 55% no-repeat;border-radius:10px}
+.env.tab{background:linear-gradient(160deg,#2b3b7a,#11194a);border-radius:22px;border:6px solid #e8ecff}
+.env.tab::before{display:none}
 .env span{position:relative;z-index:1;background:#fff;border-radius:50%;width:1.5em;height:1.5em;display:grid;place-items:center;font-size:.7em;border:3px solid var(--ink)}
 .env em{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);background:var(--pk);color:#fff;font-style:normal;font-size:clamp(12px,1vw,16px);padding:2px 10px;border-radius:12px;border:2px solid #fff;white-space:nowrap}
 .steps{margin:.3em 0 0;padding:0;list-style:none;counter-reset:s}
@@ -261,6 +263,13 @@ input[type=text],input[type=number],textarea,select{font:inherit;font-size:.9em;
 .flipc .fa{background:#ffffff22}
 .flipc .fb2{transform:rotateY(180deg);background:var(--yl);color:var(--ink)}
 
+/* ---------- Mod Kumpulan ---------- */
+.gm #path,.gm #timer,.gm #bChk{display:none}
+.gm main{padding-bottom:30px}
+.gscr .bx{min-height:60px}
+button.keyc{width:100%}
+button.keyc small{display:block}
+.chip.done{background:var(--gr)}
 /* ---------- Animasi ---------- */
 @keyframes pop{from{transform:scale(.88);opacity:0}to{transform:none;opacity:1}}
 @keyframes bnc{50%{transform:scale(1.18)}}
@@ -278,12 +287,10 @@ input[type=text],input[type=number],textarea,select{font:inherit;font-size:.9em;
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ---------- Mod cetak ---------- */
-#print{display:none}
 @media print{
   @page{size:A4;margin:9mm}
   body{background:#fff!important;color:#000}
   body::after,#top,#nav,main,#ov,.ambient{display:none!important}
-  #print{display:block!important}
 }
 .pg{page-break-after:always;break-after:page;color:#172b78;font-family:Fredoka,Arial,sans-serif;width:100%}
 .pg:last-child{page-break-after:auto;break-after:auto}
@@ -330,23 +337,25 @@ input[type=text],input[type=number],textarea,select{font:inherit;font-size:.9em;
   <button class="btn sm pk" id="bNext">Teruskan ▶</button>
 </footer>
 <div id="ov" role="dialog" aria-modal="true"></div>
-<div id="print"></div>
 
 <script>
 "use strict";
 /* =====================================================================
    MISI 2: SAYA YAKIN, SAYA BOLEH!  (Pendidikan Kesihatan Tahun 3)
-   BBM digital berpusatkan bahan: skrin ini memandu murid menggunakan
-   bahan fizikal (Sampul, Tikar, Kad Respons, Kad Cabaran, Pasport,
-   Bintang, Peti). Guru menjadi fasilitator.
+   BBM digital sepenuhnya, berpusatkan bahan.
+   Mod Guru (projektor) memandu aliran kelas; Mod Kumpulan (tablet)
+   ialah bahan yang dipegang murid: padanan, Pasport Digital, Lampu
+   Isyarat, prop digital, Dinding, Lencana. Guru menjadi fasilitator.
    ===================================================================== */
+const qrcode=(function(){__QRJS__
+return qrcode})();
 const ART="data:image/webp;base64,__ART__";
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
 /* ---------------- Data & simpanan ---------------- */
-const DEF={code:'3142',groups:['Berani','Jelas','Positif','Cuba Lagi'],cls:'3 Indigo',snd:true,tts:true,mic:true,cam:true,sens:5,mats:{}};
+const DEF={code:'3142',groups:['Berani','Jelas','Positif','Cuba Lagi'],cls:'3 Indigo',snd:true,tts:true,mic:true,cam:true,sens:5,mats:{},url:'',padlet:''};
 let ST={cfg:{...DEF},keys:[0,0,0,0],p:-1,s:0,chk:{},stars:[],tally:[0,0,0,0],wheel:[],grpTurn:0};
 try{const d=JSON.parse(localStorage.getItem('misi2-yakin')||'null');if(d){ST={...ST,...d,cfg:{...DEF,...(d.cfg||{})}}}}catch(e){}
 const save=()=>{try{localStorage.setItem('misi2-yakin',JSON.stringify(ST))}catch(e){}};
@@ -377,13 +386,13 @@ const QZ=[
 /* 4 Kad Cabaran (Bertindak) */
 const CH=[
  {em:'💡',n:'Kongsi Idea',c:'#ff70b7',s:'Guru meminta kamu berkongsi satu idea dengan kelas.',q:'Apakah tindakan kamu?',o:['Menyembunyikan diri','Cuba berkongsi idea dengan jelas','Menyuruh kawan bercakap untuk kamu'],a:1,f:'Berani berkongsi idea dengan suara yang jelas!',
-  prop:'🎤 Mikrofon mainan',show:'Pegang mikrofon. Berdiri tegak, pandang kawan-kawan dan sebut: “Idea saya ialah …”',say:'Saya yakin idea saya berharga untuk dikongsi!'},
+  prop:'📱 Tablet sebagai mikrofon (Meter Suara)',show:'Pegang tablet seperti mikrofon. Berdiri tegak, pandang kawan-kawan dan sebut: “Idea saya ialah …” sehingga Meter Suara di tablet mencapai zon hijau.',say:'Saya yakin idea saya berharga untuk dikongsi!'},
  {em:'📖',n:'Silap Membaca',c:'#ffe34d',s:'Kamu tersilap sebut satu perkataan ketika membaca di hadapan kelas.',q:'Apakah tindakan terbaik?',o:['Membetulkan kesilapan dan membaca semula','Terus berhenti membaca','Tidak mahu membaca lagi'],a:0,f:'Betulkan, kemudian cuba lagi. Itulah Wira Yakin!',
-  prop:'📖 Kad Bacaan',show:'Baca ayat pada Kad Bacaan. Sengaja tersilap satu perkataan, sebut “Oops, saya betulkan!” lalu baca semula dengan jelas.',say:'Saya tidak takut membuat kesilapan!'},
+  prop:'📱 Kad Bacaan Digital',show:'Baca ayat pada Kad Bacaan Digital di tablet. Sengaja tersilap satu perkataan, sebut “Oops, saya betulkan!” lalu baca semula dengan jelas.',say:'Saya tidak takut membuat kesilapan!'},
  {em:'🧩',n:'Aktiviti Baharu',c:'#5ee8a8',s:'Kamu mendapat aktiviti baharu yang kelihatan sukar.',q:'Apakah kata-kata yang akan kamu ucapkan?',o:['“Saya pasti tidak boleh.”','“Saya tidak mahu cuba.”','“Saya akan cuba dahulu.”'],a:2,f:'Cuba dahulu! Sikap mencuba membuka peluang untuk berjaya.',
-  prop:'🥤 3 cawan kertas',show:'Sebut “Saya akan cuba dahulu!” kemudian bina menara 3 cawan dalam 15 saat. Jika jatuh, sebut “Cuba lagi!”',say:'Saya bersedia menerima cabaran baharu!'},
+  prop:'📱 Puzzle Lencana Digital',show:'Sebut “Saya akan cuba dahulu!” kemudian selesaikan Puzzle Lencana di tablet dengan memusingkan 4 kepingan. Jika sukar, sebut “Cuba lagi!”',say:'Saya bersedia menerima cabaran baharu!'},
  {em:'🎨',n:'Tunjuk Hasil Kerja',c:'#63e3ff',s:'Kamu perlu menunjukkan hasil kerja kepada kelas.',q:'Apakah tindakan paling sesuai?',o:['Enggan menunjukkan hasil kerja','Menunjukkan hasil kerja dan menerangkannya dengan yakin','Meminta kawan berpura-pura itu kerja mereka'],a:1,f:'Bangga dengan usaha sendiri dan terangkan dengan yakin.',
-  prop:'🖼️ Lukisan / hasil kerja',show:'Angkat hasil kerja paras dada. Berdiri tegak dan sebut: “Ini hasil kerja saya. Saya melukis …”',say:'Saya bangga dengan usaha saya!'}
+  prop:'📱 Papan Hasil Kumpulan (Misi 2)',show:'Angkat tablet yang memaparkan Papan Lampu Isyarat kumpulan. Berdiri tegak dan sebut: “Ini hasil kerja kami. Kami mengasingkan …”',say:'Saya bangga dengan usaha saya!'}
 ];
 const GEM=['🙋','🗣️','💭','🔁','⭐','🌈'];
 const GAYA=[{em:'🧍',n:'Berdiri tegak'},{em:'👀',n:'Pandang ke hadapan'},{em:'🗣️',n:'Suara jelas'},{em:'✋',n:'Tindakan yakin'}];
@@ -481,7 +490,7 @@ function giveKey(i,next){
  if(!ST.keys[i]){ST.keys[i]=1;save()}
  const d=ST.cfg.code[i]||'?';SFX.key();confetti(40);
  overlay(`<div class="dg"><span class="tag y">🔑 KOD KE-${i+1} DIJUMPAI!</span><div class="dgcard">${esc(d)}</div>
- <h2>Kod ke-${i+1} ialah ${esc(d)}</h2><p class="small">Guru: berikan <b>Kad Digit ${i+1}</b> kepada kumpulan. Murid catat di Pasport.</p>
+ <h2>Kod ke-${i+1} ialah ${esc(d)}</h2><p class="small">Kod yang sama muncul pada tablet kumpulan yang telah berjaya menyelesaikan misi. Semak bersama!</p>
  <button class="btn gr big" data-close>Simpan Kunci ✔</button></div>`);
  ov.onclick=e=>{if(e.target.closest('[data-close]')){hideOv();drawTop();next&&next()}}
 }
@@ -508,6 +517,7 @@ function cleanup(){CLEAN.forEach(f=>{try{f()}catch(e){}});CLEAN=[];clearInterval
 
 function go(p,s=0){
  cleanup();ST.p=p;ST.s=s;save();
+ if(document.body.classList.contains('gm')){document.body.classList.remove('gm');$('#brand').innerHTML='<b>Misi 2</b><span>Saya Yakin, Saya Boleh!</span>'}
  const app=$('#app');
  if(p<0){$('#nav').classList.add('hide');app.innerHTML=SCR[ST.view||'home']();(SCR_ON[ST.view||'home']||(()=>{}))();drawTop();bindSay(app);window.scrollTo(0,0);return}
  setPhaseTimer(p);
@@ -540,7 +550,7 @@ function bindAbc(onOk){
  $$('.opts .opt').forEach(o=>o.onclick=()=>{const box=o.parentElement,b=document.querySelector(`[data-chk="${box.id}"]`);if(!b)return;
   if(+o.dataset.i===+b.dataset.a)b.click();else{o.classList.add('dim');SFX.no();o.animate([{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'none'}],{duration:300})}});
 }
-const tasks=(n,arr,sec,extra='')=>`<div class="paper task"><div class="env"><span>${n}</span><em>SAMPUL ${n}</em></div><div><h3 style="margin-top:0">📜 Kad Tugasan ${n}</h3><ol class="steps">${arr.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>${extra}</div></div>
+const tasks=(n,arr,sec,extra='')=>`<div class="paper task"><div class="env tab"><span>${n}</span><em>MISI ${n} · TABLET</em></div><div><h3 style="margin-top:0">📜 Kad Tugasan Digital ${n}</h3><ol class="steps">${arr.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>${extra}</div></div>
  <div class="row cen" style="margin-top:14px">${ring(sec)}<div><button class="btn gr big pulse" id="goRing">▶ Mula!</button><p class="small" style="max-width:360px">Gaya Latihan (Mosston B): kumpulan menentukan susunan & kadar sendiri. Guru bergerak memberi maklum balas.</p></div></div>`;
 const bindRing=()=>{const b=$('#goRing');if(b)b.onclick=()=>{startRing();b.classList.remove('pulse');b.textContent='↻ Ulang'}};
 
@@ -554,17 +564,17 @@ function stMesej(){return{h:`<div class="c"><h2>📩 Mesej Rahsia Untuk Kelas ${
   <div class="scene" style="min-height:320px"><div class="board">Siapa tahu?<br>3 + 4 × 2 = ?</div><div style="position:absolute;right:6%;bottom:6px;width:46%">${mei(0)}</div></div>
   <div><div class="bubble">Hai, saya <b>Mei</b>! 👋 Cikgu bertanya soalan. Saya <u>tahu</u> jawapannya… tetapi saya <b>takut</b> jawapan saya salah. 😟</div>
    <p style="margin-top:16px"><b>Meter Keyakinan Mei</b></p><div class="meter"><u id="mm" style="width:12%"></u><span>RENDAH 😟</span></div>
-   <div class="row" style="margin-top:12px">${spk('Hai, saya Mei! Cikgu bertanya soalan. Saya tahu jawapannya, tetapi saya takut jawapan saya salah.')}<span class="small">Gunakan boneka Mei semasa membaca.</span></div></div></div></div></div>`,
+   <div class="row" style="margin-top:12px">${spk('Hai, saya Mei! Cikgu bertanya soalan. Saya tahu jawapannya, tetapi saya takut jawapan saya salah.')}<span class="small">Mei bercakap melalui suara digital (TTS).</span></div></div></div></div></div>`,
  on(){$('#env').onclick=()=>{SFX.whoosh();$('#env').classList.add('hide');$('#msg').classList.remove('hide');setTimeout(()=>say('Hai, saya Mei! Cikgu bertanya soalan. Saya tahu jawapannya, tetapi saya takut jawapan saya salah.'),300)}}}}
 function stSoalanMei(){return{h:`<div class="g2" style="align-items:center"><div class="scene c" id="sc" style="min-height:340px"><div class="board">Siapa tahu?<br>3 + 4 × 2 = ?</div><div style="position:absolute;right:8%;bottom:6px;width:46%" id="mw">${mei(0)}</div></div>
- <div><h2>Patutkah Mei mencuba menjawab? 🤔</h2><p class="small">Murid fikir 5 saat, kemudian angkat <b>Kad Respons A</b> (Ya) atau <b>B</b> (Tidak).</p>
+ <div><h2>Patutkah Mei mencuba menjawab? 🤔</h2><p class="small">Murid fikir 5 saat, kemudian angkat <b>Kad Respons Digital A</b> (Ya) atau <b>B</b> (Tidak).</p>
  <div class="opts" id="qm"><div class="opt A" data-i="0"><b>A</b><span>👍 YA, cuba menjawab</span></div><div class="opt B" data-i="1"><b>B</b><span>👎 TIDAK, diam sahaja</span></div></div>
  <div class="row cen" style="margin-top:14px"><button class="btn wh" data-cd="qm">✋ Kira 3-2-1</button><button class="btn cy" data-chk="qm" data-a="0" data-f="Mencuba itu berani. Kesilapan boleh dibetulkan.">🔍 Semak Jawapan</button></div><div id="qmfb"></div>
  <div class="tip" style="margin-top:12px">🗨️ Soal 2 murid: “Mengapa?” Jangkaan: “Patut, kerana mencuba ialah cara terbaik untuk belajar.”</div></div></div>`,
  on(){bindAbc(()=>{$('#mw').innerHTML=mei(2);confetti(25)})}}}
 function stMisi(){return{h:`<div class="g2" style="align-items:center"><div class="c">${chest(false)}<div class="slots">${[0,1,2,3].map(i=>`<div>?</div>`).join('')}</div></div>
  <div><span class="tag">🕵️ MISI HARI INI</span><h2>Bantu Mei buka <span style="color:var(--yl)">Peti Wira Yakin!</span></h2>
- <p>Peti ini berkunci 🔒. Selesaikan <b>4 misi</b> menggunakan bahan dalam <b>Beg Misi</b> kumpulan untuk mengumpul <b>4 digit kod</b>.</p>
+ <p>Peti ini berkunci 🔒. Selesaikan <b>4 misi</b> pada <b>tablet kumpulan</b> (📱 Mod Kumpulan) untuk mengumpul <b>4 digit kod</b>.</p>
  <h3>Hari ini saya boleh…</h3><div class="obj">
   <div class="K"><span class="em">🧠</span><span>menjelaskan maksud keyakinan diri & memilih tingkah laku yang yakin.</span></div>
   <div class="P"><span class="em">✋</span><span>menunjukkan <b>Gaya Wira Yakin</b>: berdiri tegak, pandang ke hadapan, suara jelas.</span></div>
@@ -580,17 +590,16 @@ function stMaksud(){const w=DEFN.split(' ');return{h:`<div class="c"><span class
  <div class="g3" style="margin-top:6px">
   <div class="flipc" data-f><div class="in"><div class="fa">🤔 Contoh <b>yakin</b>?</div><div class="fb2">🙋 Mengangkat tangan dan bercakap dengan jelas.</div></div></div>
   <div class="flipc" data-f><div class="in"><div class="fa">😟 Contoh <b>kurang yakin</b>?</div><div class="fb2">🙈 Menyembunyikan diri dan enggan mencuba.</div></div></div>
-  <div class="flipc" data-f><div class="in"><div class="fa">✏️ Pasport Wira Yakin</div><div class="fb2">Tulis perkataan yang hilang: berasa <u>&nbsp;yakin&nbsp;</u> …</div></div></div></div>
- <p class="small" style="margin-top:12px">Klik kad untuk terbalikkan. Murid melengkapkan bahagian 1 Pasport (bukti kognitif individu).</p></div>`,
+  <div class="flipc" data-f><div class="in"><div class="fa">📱 Pasport Digital</div><div class="fb2">Setiap ejen pilih perkataan yang hilang di tablet kumpulan.</div></div></div></div>
+ <p class="small" style="margin-top:12px">Klik kad untuk terbalikkan. Setiap ejen melengkapkan Pasport Digital di tablet (bukti kognitif individu).</p></div>`,
  on(){$$('[data-f]').forEach(c=>c.onclick=()=>{c.classList.toggle('f');SFX.pop()});
   $('#bKar').onclick=()=>{const sp=$$('#kar span');let r=0,i=0;say(DEFN);const t=setInterval(()=>{sp.forEach(s=>s.classList.remove('on'));if(i>=sp.length){r++;i=0;if(r>=2){clearInterval(t);SFX.ok();return}}sp[i]&&sp[i].classList.add('on');i++},430);CLEAN.push(()=>clearInterval(t))}}}}
 function stSampul1(){return{h:`<h2>🔑 Misi 1: Cari 4 Kunci Keyakinan</h2>${tasks(1,[
- 'Pilih peranan secara sukarela: pembaca, penyusun, penyemak, pembentang.',
- 'Buka <b>Sampul 1</b>. Keluarkan 4 kad gambar 🖼️ dan 4 kad perkataan 🔤.',
- 'Padankan setiap gambar dengan <b>cara meningkatkan keyakinan diri</b> yang betul.',
- 'Semak sendiri: simbol di sudut kad (★ ● ▲ ■) mesti <b>sama</b>. Jika tidak sama, cuba lagi!',
- 'Setiap ahli pegang satu pasangan dan baca kuat. Angkat tangan apabila siap! ✋'],120,'<div class="tip">🎯 Kawalan kesilapan pada bahan (self-correcting): murid tahu betul/salah tanpa bergantung kepada guru.</div>')}`,on:bindRing}}
-function stPadan(){const L=shuf([0,1,2,3]),R=shuf([0,1,2,3]);return{h:`<div class="row" style="justify-content:space-between"><h2>🔍 Semak Padanan Kumpulan</h2><span class="small">Wakil kumpulan: klik gambar ➜ klik perkataan</span></div>
+ 'Pada tablet kumpulan, buka <b>Misi 1 🔑</b>. Pilih peranan secara sukarela.',
+ 'Padankan setiap gambar dengan <b>cara meningkatkan keyakinan diri</b>. Tablet memberitahu betul atau salah.',
+ 'Setiap ejen melengkapkan <b>Pasport Digital</b> (pilih perkataan yang hilang).',
+ '<b>Kod ke-1</b> muncul di tablet. Angkat tangan apabila siap! ✋'],150,'<div class="tip">🎯 Kawalan kesilapan pada bahan digital (self-correcting): murid tahu betul/salah tanpa bergantung kepada guru.</div>')}`,on:bindRing}}
+function stPadan(){const L=shuf([0,1,2,3]),R=shuf([0,1,2,3]);return{h:`<div class="row" style="justify-content:space-between"><h2>🔍 Semakan Bersama: 4 Kunci</h2><span class="small">Wakil kumpulan: klik gambar ➜ klik perkataan</span></div>
  <div class="match" id="mt"><div style="display:grid;gap:14px">${L.map(i=>`<div class="mt" data-l="${i}"><span class="em">${KEYS[i].em}</span><span>${KEYS[i].pic}</span></div>`).join('')}</div>
  <div style="display:grid;gap:14px">${R.map(i=>`<div class="mt" data-r="${i}"><span>${KEYS[i].n}</span></div>`).join('')}</div></div>
  <div id="keyrow" class="g4 hide" style="margin-top:16px">${KEYS.map((k,i)=>`<div class="keyc" style="background:${k.col};animation-delay:${i*.15}s"><span class="em">${k.em}</span><b>${k.n}</b><small>${k.d}</small></div>`).join('')}</div>
@@ -608,12 +617,12 @@ function stPadan(){const L=shuf([0,1,2,3]),R=shuf([0,1,2,3]);return{h:`<div clas
    LANGKAH 3: PILIH
    ===================================================================== */
 function stSampul2(){return{h:`<h2>🚦 Misi 2: Lampu Isyarat Keyakinan</h2>${tasks(2,[
- 'Buka <b>Sampul 2</b>. Bentangkan <b>Tikar Lampu Isyarat</b> di atas meja.',
- 'Baca 8 kad tingkah laku bersama-sama.',
- 'Letakkan kad pada <b style="color:#17905a">🟢 YAKIN</b> atau <b style="color:#c23a4f">🔴 BELUM YAKIN</b>.',
- 'Pilih <b>1 kad merah</b>: bincang bagaimana mengubahnya menjadi hijau.'],150,'<div class="tip">✏️ Selepas itu, setiap murid tanda ✓ tingkah laku yakin pada bahagian 2 Pasport.</div>')}`,on:bindRing}}
-function stGallery(){const g=ST.cfg.groups;return{h:`<div class="c"><h2>🖼️ Gallery Walk: Semak Tikar Kumpulan Lain</h2>
- <p>Bergerak <b>ikut arah jam</b> ke meja kumpulan sebelah. Semak tikar mereka. Tampal ⭐ jika betul, letak 🔄 pada kad yang perlu dialihkan.</p>
+ 'Buka <b>Misi 2 🚦</b> pada tablet kumpulan. Baca 8 kad tingkah laku bersama-sama.',
+ 'Ketik kad ➜ ketik <b style="color:#17905a">🟢 YAKIN</b> atau <b style="color:#c23a4f">🔴 BELUM YAKIN</b>, kemudian tekan <b>Semak</b>.',
+ 'Kad yang salah melantun balik. Bincang dan betulkan!',
+ 'Pilih <b>1 kad merah</b> dan ubah menjadi hijau. Biarkan Papan Hasil terpapar.'],150,'<div class="tip">📊 Tablet merekod skor semakan pertama kumpulan untuk senarai semak guru.</div>')}`,on:bindRing}}
+function stGallery(){const g=ST.cfg.groups;return{h:`<div class="c"><h2>🖼️ Gallery Walk: Lawati Papan Hasil Kumpulan Lain</h2>
+ <p>Bergerak <b>ikut arah jam</b> ke tablet kumpulan sebelah. Lihat Papan Hasil mereka, kemudian tekan <b>⭐ Beri Bintang</b> dan satu emoji pujian.</p>
  <div class="row cen" style="gap:10px;margin:14px 0">${g.map((n,i)=>`<span class="chip on">${GEM[i%6]} ${esc(n)}</span> <span>➜</span>`).join('')}<span class="chip on">${GEM[0]} ${esc(g[0])}</span></div>
  <div class="row cen">${ring(60)}<button class="btn gr big pulse" id="goRing">▶ Mula 1 minit</button></div>
  <p class="small">Teknik <b>Gallery Walk</b> (Jadual Induk: Pendekatan Berpusatkan Bahan). Bahan kumpulan menjadi bahan pembelajaran kumpulan lain.</p></div>`,on:bindRing}}
@@ -621,11 +630,11 @@ function stSisih(){const cards=shuf(BEH.map((b,i)=>({...b,i})));return{h:`<div c
  <div class="tray" id="tray">${cards.map(c=>`<div class="bc" draggable="true" data-i="${c.i}"><span class="em">${c.em}</span><span>${esc(c.t)}</span></div>`).join('')}</div>
  <div class="bins"><div class="bin gn" data-y="1"><h3><span class="lamp"></span>YAKIN</h3></div><div class="bin rd" data-y="0"><h3><span class="lamp"></span>BELUM YAKIN</h3></div></div><div id="sfb"></div>`,
  on(){let sel=null,n=0;const place=(c,bin)=>{const b=BEH[+c.dataset.i];if(+bin.dataset.y===b.y){bin.appendChild(c);c.classList.remove('sel');c.draggable=false;c.onclick=null;c.title=b.w;c.insertAdjacentHTML('beforeend',`<span class="small" style="margin-left:auto">${b.y?'✅':'➜ '+esc(b.w)}</span>`);SFX.ok();n++;sel=null;
-   if(n===8){$('#sfb').innerHTML='<div class="fb">🎉 Hebat! Semua 8 kad betul. Kumpulan semak tikar sendiri dan betulkan jika perlu.</div>';confetti(50);SFX.fan()}}
+   if(n===8){$('#sfb').innerHTML='<div class="fb">🎉 Hebat! Semua 8 kad betul. Bandingkan dengan Papan Hasil di tablet kumpulan.</div>';confetti(50);SFX.fan()}}
   else{c.classList.add('bad');SFX.no();say(b.w);setTimeout(()=>c.classList.remove('bad'),450)}};
   $$('#tray .bc').forEach(c=>{c.onclick=()=>{$$('#tray .bc').forEach(x=>x.classList.remove('sel'));sel=c;c.classList.add('sel');SFX.pop()};c.ondragstart=e=>{sel=c;e.dataTransfer.setData('text','x')}});
   $$('.bin').forEach(b=>{b.onclick=()=>sel&&place(sel,b);b.ondragover=e=>{e.preventDefault();b.classList.add('hot')};b.ondragleave=()=>b.classList.remove('hot');b.ondrop=e=>{e.preventDefault();b.classList.remove('hot');sel&&place(sel,b)}})}}}
-function stKuiz(){const i=(ST.qz||0)%QZ.length,q=QZ[i];return{h:`<div class="row" style="justify-content:space-between"><h2>⚡ Kuiz Kilat Kad Respons (${i+1}/${QZ.length})</h2><span class="small">Semua murid angkat Kad A, B atau C serentak</span></div>
+function stKuiz(){const i=(ST.qz||0)%QZ.length,q=QZ[i];return{h:`<div class="row" style="justify-content:space-between"><h2>⚡ Kuiz Kilat Kad Respons (${i+1}/${QZ.length})</h2><span class="small">Semua angkat Kad Respons Digital A, B atau C serentak</span></div>
  <div class="card"><div style="font-size:clamp(40px,4vw,70px)">${q.s}</div><h3>${esc(q.q)} ${spk(q.q+' A, '+q.o[0]+'. B, '+q.o[1]+'. C, '+q.o[2])}</h3>${abc(q.o,q.a,q.f,'qk')}</div>
  <div class="row cen"><button class="btn sm wh" id="nq">Soalan ${i+2>QZ.length?1:i+2} ▶</button><span class="small">Guru: kira bilangan kad betul untuk senarai semak (K).</span></div>`,
  on(){bindAbc();$('#nq').onclick=()=>{ST.qz=(i+1)%QZ.length;go(ST.p,ST.s)}}}}
@@ -650,7 +659,7 @@ function stRoda(){const ci=ST.chal;if(ci!==undefined&&ci!==null)return chalScree
  <p>Setiap cabaran ada 3 bahagian: <b>🧠 Fikir & Pilih</b> (Kad A/B/C) ➜ <b>✋ Tunjukkan</b> (gunakan prop) ➜ <b>💖 Sebut</b> (Meter Suara).</p>
  <div class="chips" style="justify-content:flex-start;margin:10px 0">${CH.map((c,i)=>`<span class="chip ${ST.wheel.includes(i)?'done':''}" data-ch="${i}">${c.em} ${i+1}. ${c.n}</span>`).join('')}</div>
  ${left.length?`<button class="btn big pk pulse" id="spin2">🎡 PUTAR!</button>`:`<button class="btn big gr pulse" id="fin">🔑 Ambil Kod Ke-3</button>`}
- <p class="small">Guru juga boleh klik terus pada cip cabaran. Kumpulan yang beraksi mengambil Kad Cabaran & prop dari <b>Kotak Cabaran</b>.</p></div></div>`,
+ <p class="small">Guru juga boleh klik terus pada cip cabaran. Kumpulan yang beraksi membuka <b>Misi 3</b> di tablet dan memilih nombor cabaran yang sama (prop digital).</p></div></div>`,
  on(){const spin=()=>{if(!left.length||$('#wh').dataset.busy)return;$('#wh').dataset.busy=1;const pick=left[Math.random()*left.length|0];
    const target=360*5+(360-(pick*90+45));ROT=ROT-(ROT%360)+target;$('#wh').style.transform=`rotate(${ROT}deg)`;
    let k=0;const tk=setInterval(()=>{SFX.tick();if(++k>26)clearInterval(tk)},150);CLEAN.push(()=>clearInterval(tk));
@@ -691,9 +700,9 @@ function vmeter(id){return `<div class="vm" id="${id}"><div class="vbar"><u></u>
  <span class="lb" style="left:6px">🤫 perlahan</span><span class="lb" style="left:37%">✅ JELAS</span><span class="lb" style="left:77%">📢 terlalu kuat</span></div>
  <div class="vstar"><u></u><span>⭐</span><small>0%</small></div></div>
  <div class="row" style="margin-top:8px"><button class="btn sm cy" data-mic>🎙️ Hidupkan mikrofon</button><button class="btn sm wh" data-man>➕ Isi manual</button><span class="small" data-st></span></div>`}
-function bindVm(id){const box=$('#'+id);if(!box)return;const bar=box.querySelector('.vbar u'),st=box.querySelector('.vstar'),stu=st.querySelector('u'),sts=st.querySelector('small'),lab=box.parentElement.querySelector('[data-st]');
+function bindVm(id,onFull){const box=$('#'+id);if(!box)return;const bar=box.querySelector('.vbar u'),st=box.querySelector('.vstar'),stu=st.querySelector('u'),sts=st.querySelector('small'),lab=box.parentElement.querySelector('[data-st]');
  let fill=0,raf=null,stream=null,an=null;
- const add=v=>{if(fill>=100)return;fill=Math.min(100,fill+v);stu.style.height=fill+'%';sts.textContent=Math.round(fill)+'%';if(fill>=100){st.classList.add('full');st.querySelector('span').textContent='🌟';SFX.fan();confetti(40)}};
+ const add=v=>{if(fill>=100)return;fill=Math.min(100,fill+v);stu.style.height=fill+'%';sts.textContent=Math.round(fill)+'%';if(fill>=100){st.classList.add('full');st.querySelector('span').textContent='🌟';SFX.fan();confetti(40);onFull&&onFull()}};
  box.parentElement.querySelector('[data-man]').onclick=()=>{add(34);SFX.pop()};
  const micB=box.parentElement.querySelector('[data-mic]');
  const start=async()=>{if(!ST.cfg.mic){lab.textContent='Mikrofon dimatikan dalam Persediaan.';return}
@@ -714,14 +723,14 @@ function stCermin(){return{h:`<div class="g2" style="align-items:center"><div><d
  <div><span class="tag">🪞 CERMIN AJAIB</span><h2>Siapa berani berdiri di hadapan Cermin Ajaib?</h2>
  <p>Murid sukarela berdiri tegak, pandang cermin dan sebut:</p><div class="paper" style="font-size:1.25em;font-weight:700">“Saya yakin, saya boleh! Saya boleh <u>&nbsp;&nbsp;…&nbsp;&nbsp;</u>.”</div>
  <div class="row" style="margin-top:14px"><button class="btn cy" id="cam">📷 Hidupkan Cermin (kamera)</button>${spk('Saya yakin, saya boleh!')}</div>
- <p class="small">Tiada rakaman disimpan: kamera hanya dipaparkan secara langsung. Jika tiada kamera, gunakan cermin sebenar (prop).</p></div></div>`,
+ <p class="small">Tiada rakaman disimpan: kamera hanya dipaparkan secara langsung. Jika tiada kamera, murid sebut di hadapan kelas sambil Meter Suara aktif.</p></div></div>`,
  on(){let stream=null;$('#cam').onclick=async()=>{if(!ST.cfg.cam){$('#cam').textContent='Kamera dimatikan dalam Persediaan';return}
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});const v=document.createElement('video');v.autoplay=true;v.muted=true;v.playsInline=true;v.srcObject=stream;$('#glass').innerHTML='';$('#glass').appendChild(v);SFX.fan();confetti(30);$('#cam').disabled=true}
-  catch(e){$('#cam').textContent='Kamera tidak tersedia: guna cermin prop'}};
+  catch(e){$('#cam').textContent='Kamera tidak tersedia'}};
   CLEAN.push(()=>stream&&stream.getTracks().forEach(t=>t.stop()))}}}
 const NC=['#ffe34d','#ff9fd0','#9ff5c8','#a8ecff','#ffc58a','#d6c2ff'];
-function stDinding(){return{h:`<div class="row" style="justify-content:space-between"><h2 style="margin:0">⭐ Dinding “Saya Boleh!” (Padlet Wall)</h2><span class="small">Teknik Padlet Wall · bahan: Bintang Saya Boleh</span></div>
- <div class="tip" style="margin:8px 0">Setiap murid tulis <b>satu azam “Saya boleh …”</b> pada Bintang, kemudian tampal di Dinding Refleksi. Guru taip beberapa contoh sukarela di bawah.</div>
+function stDinding(){return{h:`<div class="row" style="justify-content:space-between"><h2 style="margin:0">⭐ Dinding “Saya Boleh!” (Padlet Wall)</h2><span class="small">Teknik Padlet Wall · Dinding Kumpulan (tablet) + Dinding Kelas</span></div>
+ <div class="tip" style="margin:8px 0">Setiap ejen menaip <b>satu azam “Saya boleh …”</b> di Dinding Kumpulan (tablet, Misi 4). Wakil setiap kumpulan membaca satu azam; guru menampalnya di Dinding Kelas di bawah.</div>
  <div class="row"><input type="text" id="ni" placeholder="Saya boleh …" style="flex:1;min-width:220px" maxlength="60"><button class="btn gr" id="na">📌 Tampal</button></div>
  <div class="chips" style="justify-content:flex-start;margin:8px 0">${['Saya boleh mengangkat tangan','Saya boleh bercakap dengan jelas','Saya boleh cuba lagi','Saya boleh membaca di hadapan kelas'].map(x=>`<span class="chip" data-n="${x}">${x}</span>`).join('')}</div>
  <div class="wall" id="wall"></div>`,
@@ -730,7 +739,7 @@ function stDinding(){return{h:`<div class="row" style="justify-content:space-bet
   $('#na').onclick=()=>add($('#ni').value);$('#ni').onkeydown=e=>{if(e.key==='Enter'){e.stopPropagation();add($('#ni').value)}};
   $$('[data-n]').forEach(c=>c.onclick=()=>add(c.dataset.n))}}}
 function stMeterSaya(){const F=[['😟','Belum yakin'],['🙂','Sedikit yakin'],['😄','Yakin'],['🤩','Sangat yakin!']];return{h:`<div class="c"><span class="tag">💖 AFEKTIF</span><h2>Meter Keyakinan Saya Sekarang</h2>
- <p>Murid warnakan meter pada Pasport, kemudian angkat tangan. Guru klik wajah untuk mengira.</p>
+ <p>Setiap ejen menekan wajah pada tablet (Misi 4), kemudian angkat tangan. Guru klik wajah untuk mengira.</p>
  <div class="tally" id="tl">${F.map((f,i)=>`<div class="tc"><span class="em" data-t="${i}">${f[0]}</span><div class="bar"><u style="height:0"></u></div><b>${f[1]}</b><div class="stp" style="margin-top:6px"><button data-m="${i}">−</button><span data-c="${i}">0</span><button data-t2="${i}">+</button></div></div>`).join('')}</div>
  <p class="small" style="margin-top:12px">Tiada jawapan salah. Ini bukti afektif (persepsi kendiri) untuk refleksi guru.</p></div>`,
  on(){const draw=()=>{const m=Math.max(1,...ST.tally);ST.tally.forEach((v,i)=>{$(`[data-c="${i}"]`).textContent=v;$$('#tl .bar u')[i].style.height=(v/m*100)+'%'})};draw();
@@ -747,8 +756,8 @@ function stRumusan(){const w=DEFN.split(' ');return{h:`<div class="c"><span clas
    PENUTUP: BUKA PETI
    ===================================================================== */
 function stPeti(){let ent='';return{h:`<div class="g2" style="align-items:center"><div class="c"><div id="cw">${chest(false)}</div><div class="slots" id="sl">${[0,1,2,3].map(()=>'<div></div>').join('')}</div></div>
- <div class="c"><span class="tag y">🧰 SAAT YANG DINANTI</span><h2>Masukkan 4 Kad Digit mengikut susunan!</h2>
- <p class="small">Wakil kumpulan susun Kad Digit 1 ➜ 4, kemudian tekan nombor.</p>
+ <div class="c"><span class="tag y">🧰 SAAT YANG DINANTI</span><h2>Masukkan 4 kod daripada tablet kumpulan!</h2>
+ <p class="small">Wakil kumpulan membaca kod 1 ➜ 4 pada Markas tablet, kemudian tekan nombor.</p>
  <div class="pad" id="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-k="${n}">${n}</button>`).join('')}<button class="x" data-k="x">⌫</button><button data-k="0">0</button><button class="ok" data-k="ok">✔</button></div>
  <button class="btn sm wh" id="hint" style="margin-top:12px">💡 Bantuan guru</button></div></div>`,
  on(){const sl=$$('#sl div'),code=ST.cfg.code;
@@ -762,7 +771,7 @@ function stPeti(){let ent='';return{h:`<div class="g2" style="align-items:center
   $('#hint').onclick=()=>{$('#hint').textContent='Kod: '+code.split('').join(' - ')}}}}
 function stTahniah(){const ik='Saya Wira Yakin! Saya berani mencuba. Saya bercakap dengan jelas. Saya berkata positif. Saya cuba lagi. Saya yakin, saya boleh!';
  return{h:`<div class="c"><div style="font-size:clamp(90px,10vw,170px);animation:flt 2.5s infinite" aria-hidden="true">🏅</div>
- <h1>TAHNIAH, WIRA YAKIN DIRI!</h1><p style="font-size:1.2em">Peti telah dibuka. Guru menyematkan <b>Lencana Wira Yakin Diri</b> kepada setiap murid. 🎖️</p>
+ <h1>TAHNIAH, WIRA YAKIN DIRI!</h1><p style="font-size:1.2em">Peti telah dibuka. <b>Lencana Digital Wira Yakin Diri</b> kini terbuka di tablet setiap kumpulan. 🎖️</p>
  <div class="card"><h3>🙌 Ikrar Wira Yakin (tangan di dada)</h3><p class="karaoke" id="ik" style="font-size:clamp(22px,2.3vw,38px);font-weight:700;line-height:1.6">${ik.split(' ').map(x=>`<span>${esc(x)}</span>`).join(' ')}</p>
  <button class="btn pk" id="bik">🎤 Lafaz bersama</button></div>
  <div class="paper" style="text-align:left"><b>🏠 Cabaran Minggu Ini:</b> Cuba <u>satu perkara baharu</u> dengan yakin di rumah atau di sekolah. Ceritakan kepada guru minggu depan!</div>
@@ -783,10 +792,10 @@ function openChk(){const g=ST.cfg.groups;const rows=g.map((n,gi)=>{const k=chk(g
  <td><button class="tg ${k.v?'on':''}" data-t="v" data-g="${gi}">${k.v?'✔':'—'}</button></td><td><button class="tg ${k.a2?'on':''}" data-t="a2" data-g="${gi}">${k.a2?'✔':'—'}</button></td>
  <td><b>TP${tpOf(k)}</b></td></tr>`}).join('');
  overlay(`<div class="modal"><div class="row" style="justify-content:space-between"><h2 style="margin:0">📋 Senarai Semak Pemerhatian · ${esc(ST.cfg.cls)}</h2><button class="btn sm wh" data-close>✖ Tutup</button></div>
- <p class="small">K1 = Pasport: maksud betul (majoriti ahli) · K2 = kad Tikar Lampu Isyarat betul · K3 = bilangan murid betul (Kad Respons) · P = Gaya Wira Yakin (≥3/4 = capai) · A1 = sukarela beraksi · A2 = tulis & tampal “Saya boleh…”</p>
+ <p class="small">K1 = Pasport Digital: maksud betul (majoriti ahli) · K2 = skor semakan pertama Lampu Isyarat (Rekod tablet) · K3 = bilangan murid betul (Kad Respons) · P = Gaya Wira Yakin (≥3/4 = capai) · A1 = sukarela beraksi · A2 = azam “Saya boleh…” di Dinding Kumpulan. Salin data daripada 📊 Rekod Kumpulan setiap tablet.</p>
  <table class="ck"><tr><th>Kumpulan</th><th>K1<br>Maksud</th><th>K2<br>Sisih kad</th><th>K3<br>Kad respons</th><th>P · Gaya Wira Yakin</th><th>A1<br>Sukarela</th><th>A2<br>Azam</th><th>Cadangan TP</th></tr>${rows}</table>
  <p class="small">Cadangan TP hanya panduan (TP1–TP4 disasarkan). TP5–TP6 melalui aktiviti pengayaan.</p>
- <div class="row" style="margin-top:10px"><button class="btn sm cy" id="csv">⬇️ Muat turun CSV</button><button class="btn sm wh" id="pr">🖨️ Cetak</button><button class="btn sm pk" id="clr">🗑️ Kosongkan</button></div></div>`);
+ <div class="row" style="margin-top:10px"><button class="btn sm cy" id="csv">⬇️ Muat turun CSV</button><button class="btn sm pk" id="clr">🗑️ Kosongkan</button></div></div>`);
  const re=()=>openChk();
  ov.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{const k=chk(+b.dataset.g);k[b.dataset.t]=k[b.dataset.t]?0:1;save();re()});
  ov.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{const k=chk(+b.dataset.g);k.k2=Math.max(0,Math.min(8,(k.k2||0)+ +b.dataset.d));save();re()});
@@ -794,84 +803,272 @@ function openChk(){const g=ST.cfg.groups;const rows=g.map((n,gi)=>{const k=chk(g
  ov.querySelectorAll('[data-gy]').forEach(b=>b.onclick=()=>{const k=chk(+b.dataset.g);k.g=k.g||[0,0,0,0];k.g[+b.dataset.gy]=k.g[+b.dataset.gy]?0:1;save();re()});
  $('#csv').onclick=()=>{const L=[['Kumpulan','K1 Maksud','K2 Sisih (/8)','K3 Kad respons','P Gaya (/4)','A1 Sukarela','A2 Azam','Cadangan TP']];g.forEach((n,gi)=>{const k=chk(gi);L.push([n,k.k1?1:0,k.k2||0,k.k3||0,(k.g||[]).reduce((a,b)=>a+b,0),k.v?1:0,k.a2?1:0,'TP'+tpOf(k)])});
   const b=new Blob(['﻿'+L.map(r=>r.join(',')).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='senarai-semak-misi2.csv';a.click()};
- $('#pr').onclick=()=>{printKinds(['semak'])};
  $('#clr').onclick=()=>{if(confirm('Kosongkan semua rekod senarai semak?')){ST.chk={};save();re()}}}
 
 /* =====================================================================
    LAMAN UTAMA, PERSEDIAAN, PANDUAN, BAHAN CETAK
    ===================================================================== */
 const SCR={},SCR_ON={};
-SCR.home=()=>`<div class="screen hero"><div><span class="tag y">PENDIDIKAN KESIHATAN · TAHUN 3</span><h1>Misi 2:<br>Saya Yakin, Saya Boleh! 💪</h1>
- <p style="font-size:1.1em">Bilik Rahsia Wira Yakin: kumpulkan 4 kod menggunakan <b>Beg Misi</b>, buka <b>Peti Wira Yakin</b>!</p>
- <div class="menu"><button class="btn big pk pulse" id="hStart">🚀 Mulakan Misi</button><button class="btn big gr" id="hSet">🧰 Persediaan Guru</button><button class="btn cy" id="hPrint">🖨️ Bahan Cetak</button><button class="btn wh" id="hGuide">📖 Panduan</button></div>
+SCR.home=()=>`<div class="screen hero"><div><span class="tag y">PENDIDIKAN KESIHATAN · TAHUN 3 · BBM DIGITAL</span><h1>Misi 2:<br>Saya Yakin, Saya Boleh! 💪</h1>
+ <p style="font-size:1.1em">Bilik Rahsia Wira Yakin: kumpulkan 4 kod menggunakan <b>tablet kumpulan</b>, buka <b>Peti Wira Yakin</b>!</p>
+ <div class="menu"><button class="btn big pk pulse" id="hStart"><span>🖥️ Mod Guru<small style="display:block;font-size:.55em">(projektor)</small></span></button><button class="btn big gr" id="hGrp"><span>📱 Mod Kumpulan<small style="display:block;font-size:.55em">(tablet / telefon)</small></span></button>
+ <button class="btn cy" id="hResp">🅰️ Kad Respons Digital</button><button class="btn cy" id="hCon">📲 Sambung Peranti</button><button class="btn wh" id="hSet">🧰 Persediaan Guru</button><button class="btn wh" id="hGuide">📖 Panduan</button></div>
  <p class="small" style="margin-top:14px">SK 3.1 · SP 3.1.1 & 3.1.2 · Pendekatan Berpusatkan Bahan · Gaya B (Latihan) · Kaedah Permainan & Demonstrasi · Teknik Gallery Walk & Padlet Wall</p></div>
  <img src="${ART}" alt="Murid-murid Sekolah Wira Yakin"></div>`;
-SCR_ON.home=()=>{$('#hStart').onclick=()=>{ST.keys=[0,0,0,0];ST.wheel=[];ST.chal=null;ST.view='home';save();TM.ph=-1;go(0,0)};$('#hSet').onclick=()=>home('setup');$('#hPrint').onclick=()=>home('print');$('#hGuide').onclick=()=>home('guide')};
+SCR_ON.home=()=>{$('#hStart').onclick=()=>{ST.keys=[0,0,0,0];ST.wheel=[];ST.chal=null;ST.view='home';save();TM.ph=-1;go(0,0)};
+ $('#hGrp').onclick=()=>startGroup();$('#hResp').onclick=()=>gGo('resp');$('#hCon').onclick=()=>home('connect');$('#hSet').onclick=()=>home('setup');$('#hGuide').onclick=()=>home('guide')};
 const MATS=[
- ['Per kumpulan','Beg Misi (beg kertas/plastik) berlabel nama kumpulan'],['Per kumpulan','Sampul 1: 4 kad gambar + 4 kad “Kunci Keyakinan” (bersimbol ★●▲■)'],['Per kumpulan','Sampul 2: Tikar Lampu Isyarat (A3/A4) + 8 kad tingkah laku'],
- ['Per murid','Kad Respons A, B, C'],['Per murid','Pasport Wira Yakin + pensel'],['Per murid','Bintang “Saya boleh…” (kertas/nota melekit)'],['Per murid','Lencana Wira Yakin Diri'],
- ['Guru','Boneka Mei (boneka stokin / kertas pada batang aiskrim)'],['Guru','Peti Wira Yakin (kotak kasut) + mangga 4 digit (atau sampul bermeterai kod)'],['Guru','4 Kad Digit Kod'],
- ['Guru','Kotak Cabaran: 4 Kad Cabaran + prop (mikrofon mainan, Kad Bacaan, 3 cawan kertas, lukisan)'],['Guru','Cermin (prop) / kamera komputer riba'],['Guru','Dinding Refleksi (kertas mahjung / papan putih) + pita pelekat'],['Guru','Pelekat bintang ⭐ untuk Gallery Walk & cop Pasport'],['Guru','Senarai semak pemerhatian, projektor/TV, pembesar suara']];
+ ['Guru','Komputer riba + projektor/TV (Mod Guru), pembesar suara'],['Guru','Mikrofon & kamera komputer riba dibenarkan (Meter Suara, Cermin Ajaib)'],['Guru','Pengklik pembentangan (pilihan)'],
+ ['Per kumpulan','1 tablet / Chromebook / telefon dengan BBM dibuka dalam 📱 Mod Kumpulan'],['Per kumpulan','Peranti dicas penuh; bunyi & mikrofon dibenarkan'],['Per kumpulan','Kumpulan dipilih & ejen didaftar pada peranti'],
+ ['Per murid (pilihan)','Telefon/tablet dibuka pada 🅰️ Kad Respons Digital'],
+ ['Perkongsian','Fail HTML dimuat naik (itch.io / Google Drive / Classroom) atau disalin ke setiap peranti; pautan & QR di 📲 Sambung Peranti'],
+ ['Persediaan','Kod peti dan nama kumpulan ditetapkan (sama pada semua peranti jika diubah)'],['Persediaan','“Set semula data kelas” (Mod Guru) & “Set semula tablet” (Rekod Kumpulan) sebelum mula']];
 SCR.setup=()=>`<div class="screen"><h2>🧰 Persediaan Guru</h2><div class="g2"><div class="paper set">
  <h3>⚙️ Tetapan</h3>
  <label>Kelas: <input type="text" id="sCls" value="${esc(ST.cfg.cls)}" style="width:160px"></label>
- <label>Kod Peti (4 digit, sama dengan mangga): <input type="text" id="sCode" value="${esc(ST.cfg.code)}" maxlength="4" style="width:110px;letter-spacing:.3em;font-weight:700"></label>
+ <label>Kod Peti (4 digit): <input type="text" id="sCode" value="${esc(ST.cfg.code)}" maxlength="4" style="width:110px;letter-spacing:.3em;font-weight:700"></label>
  <label>Nama kumpulan (pisah dengan koma):<input type="text" id="sGrp" value="${esc(ST.cfg.groups.join(', '))}" style="width:100%"></label>
+ <label>Pautan BBM untuk peranti murid (cth. itch.io):<input type="text" id="sUrl" value="${esc(ST.cfg.url||'')}" placeholder="https://…" style="width:100%"></label>
+ <label>Pautan Padlet (pilihan):<input type="text" id="sPad" value="${esc(ST.cfg.padlet||'')}" placeholder="https://padlet.com/…" style="width:100%"></label>
  <label><input type="checkbox" id="sTts" ${ST.cfg.tts?'checked':''}> Suara baca (TTS)</label>
  <label><input type="checkbox" id="sMic" ${ST.cfg.mic?'checked':''}> Meter Suara (mikrofon)</label>
  <label><input type="checkbox" id="sCam" ${ST.cfg.cam?'checked':''}> Cermin Ajaib (kamera)</label>
  <label>Kepekaan mikrofon: <input type="range" id="sSens" min="1" max="10" value="${ST.cfg.sens}"> <span id="sv">${ST.cfg.sens}</span></label>
  <div class="row"><button class="btn sm gr" id="sSave">💾 Simpan</button><button class="btn sm cy" id="tTts">🔊 Uji suara</button><button class="btn sm pk" id="sReset">♻️ Set semula data kelas</button></div>
  <p class="small" id="sMsg"></p>
+ <p class="small">⚠️ Tetapan disimpan pada peranti ini sahaja. Jika anda menukar kod atau nama kumpulan, tukar juga pada setiap tablet kumpulan (atau kekalkan nilai asal).</p>
  <h3>⌨️ Pintasan</h3><p class="small">→ / Space / PageDown: seterusnya · ← / PageUp: kembali · F: skrin penuh · M: bunyi · C: senarai semak · T: pemasa · H: laman utama. <b>Pengklik pembentangan (clicker) boleh digunakan.</b></p></div>
- <div class="paper"><h3>📦 Senarai Semak Bahan (tanda apabila siap)</h3><ul class="mat" style="padding:0">${MATS.map((m,i)=>`<li><input type="checkbox" data-m="${i}" ${ST.cfg.mats[i]?'checked':''}><span><b>${m[0]}:</b> ${m[1]}</span></li>`).join('')}</ul>
- <button class="btn sm cy" id="toPrint">🖨️ Pergi ke Bahan Cetak</button></div></div></div>`;
+ <div class="paper"><h3>📦 Senarai Semak Persediaan Digital</h3><ul class="mat" style="padding:0">${MATS.map((m,i)=>`<li><input type="checkbox" data-m="${i}" ${ST.cfg.mats[i]?'checked':''}><span><b>${m[0]}:</b> ${m[1]}</span></li>`).join('')}</ul>
+ <button class="btn sm cy" id="toCon">📲 Sambung Peranti</button></div></div></div>`;
 SCR_ON.setup=()=>{$('#sSens').oninput=e=>$('#sv').textContent=e.target.value;
  $('#sSave').onclick=()=>{const c=$('#sCode').value.replace(/\D/g,'').slice(0,4);if(c.length!==4){$('#sMsg').textContent='⚠️ Kod mesti 4 digit.';return}
-  const g=$('#sGrp').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,8);Object.assign(ST.cfg,{cls:$('#sCls').value.trim()||'3 Indigo',code:c,groups:g.length?g:DEF.groups,tts:$('#sTts').checked,mic:$('#sMic').checked,cam:$('#sCam').checked,sens:+$('#sSens').value});save();SFX.ok();$('#sMsg').textContent='✅ Disimpan.'};
+  const g=$('#sGrp').value.split(',').map(x=>x.trim()).filter(Boolean).slice(0,8);Object.assign(ST.cfg,{cls:$('#sCls').value.trim()||'3 Indigo',code:c,groups:g.length?g:DEF.groups,url:$('#sUrl').value.trim(),padlet:$('#sPad').value.trim(),tts:$('#sTts').checked,mic:$('#sMic').checked,cam:$('#sCam').checked,sens:+$('#sSens').value});save();SFX.ok();$('#sMsg').textContent='✅ Disimpan.'};
  $('#tTts').onclick=()=>say('Selamat datang Wira Yakin! Saya yakin, saya boleh!');
  $('#sReset').onclick=()=>{if(confirm('Set semula kunci, roda, dinding, kiraan dan senarai semak?')){Object.assign(ST,{keys:[0,0,0,0],chk:{},stars:[],tally:[0,0,0,0],wheel:[],chal:null,grpTurn:0});save();$('#sMsg').textContent='♻️ Data kelas telah dikosongkan.'}};
- $$('[data-m]').forEach(c=>c.onchange=()=>{ST.cfg.mats[c.dataset.m]=c.checked;save()});$('#toPrint').onclick=()=>home('print')};
+ $$('[data-m]').forEach(c=>c.onchange=()=>{ST.cfg.mats[c.dataset.m]=c.checked;save()});$('#toCon').onclick=()=>home('connect')};
+function qrSVG(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){return ''}}
+SCR.connect=()=>`<div class="screen"><h2>📲 Sambung Peranti Kumpulan</h2><div class="g2"><div class="paper c">
+ ${ST.cfg.url?`<div style="width:min(300px,70vw);margin:0 auto;background:#fff;border-radius:16px;padding:8px">${qrSVG(ST.cfg.url)}</div><p style="word-break:break-all;font-weight:700">${esc(ST.cfg.url)}</p>`:`<div style="font-size:80px">📲</div><p><b>Belum ada pautan.</b> Muat naik fail HTML ini ke itch.io / Google Drive / Google Classroom, kemudian tampal pautannya di <b>Persediaan Guru</b> untuk memaparkan kod QR.</p><p class="small">Atau salin fail ini terus ke setiap tablet (WhatsApp / pemacu USB). BBM berfungsi tanpa internet.</p>`}
+ ${ST.cfg.padlet?`<hr><h3>🧱 Padlet kelas</h3><div style="width:min(200px,50vw);margin:0 auto;background:#fff;border-radius:12px;padding:6px">${qrSVG(ST.cfg.padlet)}</div>`:''}</div>
+ <div class="paper"><h3>Langkah untuk setiap kumpulan</h3><ol class="steps"><li><span>Imbas QR / buka fail BBM pada tablet kumpulan.</span></li><li><span>Tekan <b>📱 Mod Kumpulan</b> ➜ pilih nama kumpulan.</span></li><li><span>Setiap ejen menaip nama sendiri (<b>Daftar Ejen</b>).</span></li><li><span>Tunggu di <b>Markas</b> sehingga guru berkata “Buka Misi 1!”.</span></li></ol>
+ <h3>Kad Respons Digital (pilihan)</h3><p>Murid yang ada peranti sendiri boleh tekan <b>🅰️ Kad Respons Digital</b>. Ketik A/B/C, skrin bertukar menjadi kad berwarna besar untuk diangkat.</p>
+ <div class="tip">Tiada peranti kumpulan? Semua aktiviti juga boleh dijalankan di skrin hadapan (Mod Guru): wakil kumpulan datang ke skrin secara bergilir.</div></div></div></div>`;
 SCR.guide=()=>`<div class="screen"><h2>📖 Panduan Ringkas</h2><div class="g2"><div class="paper"><h3>Aliran 30 minit</h3><ol class="steps">
- <li><span><b>Mula (3 min):</b> Mesej rahsia Mei ➜ Kad A/B ➜ misi buka Peti.</span></li><li><span><b>Kenal (5 min):</b> maksud keyakinan diri ➜ Sampul 1 padanan 4 Kunci ➜ semak di skrin ➜ 🔑 Kod 1.</span></li>
- <li><span><b>Pilih (7 min):</b> Sampul 2 Tikar Lampu Isyarat ➜ Gallery Walk ➜ semak di skrin ➜ Kuiz Kilat ➜ 🔑 Kod 2.</span></li><li><span><b>Bertindak (10 min):</b> Gaya Wira Yakin ➜ Roda Cabaran (Fikir & Pilih · Tunjukkan · Sebut) ➜ 🔑 Kod 3.</span></li>
- <li><span><b>Refleksi (5 min):</b> Cermin Ajaib ➜ Dinding Saya Boleh ➜ Meter Keyakinan ➜ rumusan ➜ 🔑 Kod 4 ➜ buka Peti ➜ ikrar & lencana.</span></li></ol></div>
- <div class="paper"><h3>Mengapa berpusatkan bahan?</h3><p>Skrin <b>bukan</b> tempat guru berceramah. Skrin memberi arahan (Kad Tugasan), masa, dan maklum balas. Murid belajar dengan <b>memegang, menyusun, menunjukkan dan menulis</b> menggunakan bahan. Guru bergerak sebagai fasilitator dan pemerhati.</p>
- <p><b>Bahan menyemak sendiri:</b> simbol pada kad padanan, warna lampu isyarat, dan peti yang hanya terbuka dengan kod yang betul.</p>
- <p><b>Domain:</b> 🧠 K = Pasport, Tikar, Kad Respons · ✋ P = Gaya Wira Yakin dengan prop + Meter Suara · 💖 A = sukarela, ikrar, Bintang Saya Boleh, Meter Keyakinan.</p></div></div></div>`;
-SCR.print=()=>`<div class="screen"><h2>🖨️ Bahan Cetak (A4)</h2><p>Pilih bahan dan klik <b>Cetak</b>. Gunakan kertas tebal (kad manila) untuk kad. Tetapkan kod peti di <b>Persediaan Guru</b> dahulu supaya Kad Digit betul.</p>
- <div class="g3">${PRN.map(p=>`<label class="paper" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-pk="${p.id}" checked style="width:24px;height:24px;margin-top:4px"><span><b>${p.ic} ${p.n}</b><br><span class="small">${p.d}</span></span></label>`).join('')}</div>
- <div class="row cen" style="margin-top:16px"><button class="btn big gr" id="pGo">🖨️ Cetak pilihan</button></div></div>`;
-SCR_ON.print=()=>{$('#pGo').onclick=()=>printKinds($$('[data-pk]').filter(c=>c.checked).map(c=>c.dataset.pk))};
+ <li><span><b>Mula (3 min):</b> Mesej rahsia Mei ➜ Kad Respons Digital A/B ➜ misi buka Peti.</span></li><li><span><b>Kenal (5 min):</b> maksud keyakinan diri ➜ tablet Misi 1 (padanan 4 Kunci + Pasport Digital) ➜ semakan bersama ➜ 🔑 Kod 1.</span></li>
+ <li><span><b>Pilih (7 min):</b> tablet Misi 2 (Lampu Isyarat + ubah merah ➜ hijau) ➜ Gallery Walk ⭐ ➜ semakan bersama ➜ Kuiz Kilat ➜ 🔑 Kod 2.</span></li><li><span><b>Bertindak (10 min):</b> Gaya Wira Yakin ➜ Roda Cabaran ➜ tablet Misi 3 (Fikir & Pilih · Tunjukkan dengan prop digital · Sebut) ➜ 🔑 Kod 3.</span></li>
+ <li><span><b>Refleksi (5 min):</b> Cermin Ajaib ➜ tablet Misi 4 (Dinding Kumpulan + Meter Keyakinan) ➜ Dinding Kelas ➜ rumusan ➜ 🔑 Kod 4 ➜ buka Peti ➜ Lencana Digital & ikrar.</span></li></ol></div>
+ <div class="paper"><h3>Mengapa berpusatkan bahan?</h3><p>Skrin hadapan <b>bukan</b> tempat guru berceramah: ia memberi Kad Tugasan, masa dan semakan bersama. Murid belajar dengan <b>menyentuh, menyusun, memilih, menaip dan beraksi</b> menggunakan bahan digital di tablet kumpulan. Guru bergerak sebagai fasilitator dan pemerhati.</p>
+ <p><b>Bahan menyemak sendiri:</b> padanan berwarna apabila betul, kad salah melantun balik, Pasport meminta “cuba lagi”, dan peti hanya terbuka dengan kod yang betul.</p>
+ <p><b>Domain:</b> 🧠 K = Pasport Digital, Lampu Isyarat, Kad Respons · ✋ P = Gaya Wira Yakin dengan prop digital + Meter Suara · 💖 A = peranan sukarela, azam di Dinding, Meter Keyakinan.</p>
+ <p><b>Bukti:</b> 📊 Rekod Kumpulan pada setiap tablet + 📋 Senarai Semak (C) pada Mod Guru.</p></div></div></div>`;
 
-/* ---------------- Penjana bahan cetak ---------------- */
-const pg=(t,sub,body,land)=>`<section class="pg"${land?' data-land':''}><h1>${t}</h1><div class="sub">${sub}</div>${body}</section>`;
-const STARP='<svg viewBox="0 0 100 95"><path d="M50 2 L62 36 L98 36 L69 57 L80 92 L50 71 L20 92 L31 57 L2 36 L38 36Z" fill="none" stroke="#172b78" stroke-width="2.4" stroke-dasharray="5 3"/></svg>';
-const PRN=[
- {id:'tugas',ic:'📜',n:'Kad Tugasan Sampul 1 & 2',d:'Arahan bergambar untuk ditampal pada sampul (Gaya B: Latihan).',f:()=>pg('Kad Tugasan','Tampal pada hadapan sampul. Murid membaca arahan dan bekerja mengikut kadar sendiri.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${[[1,'🔑 Cari 4 Kunci Keyakinan',['Pilih peranan secara sukarela: pembaca, penyusun, penyemak, pembentang.','Keluarkan 4 kad gambar dan 4 kad perkataan.','Padankan gambar dengan cara meningkatkan keyakinan diri.','Semak simbol di sudut kad. Simbol SAMA = betul!','Setiap ahli baca satu pasangan dengan kuat.']],[2,'🚦 Lampu Isyarat Keyakinan',['Bentangkan Tikar Lampu Isyarat.','Baca 8 kad tingkah laku bersama-sama.','Letak kad di 🟢 YAKIN atau 🔴 BELUM YAKIN.','Pilih 1 kad merah: bagaimana mengubahnya menjadi hijau?']]].map(([n,t,a])=>`<div class="pc" style="text-align:left;min-height:120mm"><div style="font-size:34px;font-weight:700">SAMPUL ${n}</div><h2>${t}</h2><ol style="font-size:20px;line-height:1.6">${a.map(x=>`<li>${x}</li>`).join('')}</ol><p style="font-size:14px">⏱ ${n===1?'2 minit':'2½ minit'} · Angkat tangan ✋ apabila siap!</p></div>`).join('')}</div>`)},
- {id:'kunci',ic:'🔑',n:'Sampul 1: Kad Padanan Kunci',d:'4 kad gambar + 4 kad perkataan dengan simbol semak-sendiri.',f:()=>pg('Sampul 1 · Kad Padanan 4 Kunci Keyakinan','Gunting di garisan putus-putus. Satu set untuk setiap kumpulan. Simbol di sudut membolehkan murid menyemak sendiri.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${KEYS.map(k=>`<div class="pc cut pcolor" style="background:${k.col};height:58mm;display:grid;place-items:center"><div><div class="em">${k.em}</div><div style="font-size:15px">${k.pic}</div></div><span class="sym">${k.sym}</span></div><div class="pc cut" style="height:58mm;display:grid;place-items:center"><div class="tx" style="font-size:26px">${k.n}</div><span class="sym">${k.sym}</span></div>`).join('')}</div>`)},
- {id:'tikar',ic:'🚦',n:'Sampul 2: Tikar Lampu Isyarat',d:'Tikar pengasingan dua lajur (cetak A4, besarkan ke A3 jika boleh).',f:()=>pg('Tikar Lampu Isyarat Keyakinan','Letakkan kad tingkah laku pada lajur yang betul.',`<div class="pmat pcolor"><div style="border-color:#17905a;background:#e6fff2"><div style="font-size:70px">🟢</div><div style="font-size:34px;font-weight:700;color:#17905a">YAKIN</div><div style="font-size:16px">Tingkah laku yang menunjukkan keyakinan diri</div></div><div style="border-color:#c23a4f;background:#fff0f2"><div style="font-size:70px">🔴</div><div style="font-size:34px;font-weight:700;color:#c23a4f">BELUM YAKIN</div><div style="font-size:16px">Tingkah laku yang perlu diubah</div></div></div>`)},
- {id:'tingkah',ic:'🃏',n:'Sampul 2: 8 Kad Tingkah Laku',d:'Kad untuk diasingkan pada tikar.',f:()=>pg('Sampul 2 · 8 Kad Tingkah Laku','Gunting. Satu set untuk setiap kumpulan. (Jawapan guru: 4 kad pertama = YAKIN.)',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${BEH.map(b=>`<div class="pc cut" style="height:52mm;display:grid;place-items:center"><div><div class="em">${b.em}</div><div class="tx">${b.t}</div></div></div>`).join('')}</div>`)},
- {id:'abc',ic:'🅰️',n:'Kad Respons A, B, C',d:'Satu set untuk setiap murid (3 kad).',f:()=>pg('Kad Respons A · B · C','Satu set setiap murid. Lipat atau lekat pada batang aiskrim.',`<div class="pgrid" style="grid-template-columns:1fr 1fr 1fr">${[['A','#ff70b7'],['B','#f2c500'],['C','#2fc485']].map(([l,c])=>`<div class="pc cut pcolor" style="background:${c};height:120mm;display:grid;place-items:center"><div class="letter">${l}</div></div>`).join('').repeat(2)}</div>`)},
- {id:'cabaran',ic:'🎡',n:'Kad Cabaran 1–4',d:'Untuk Kotak Cabaran: situasi, tunjukkan, sebut.',f:()=>pg('Kad Cabaran (Kotak Cabaran)','Gunting. Setiap kad: Fikir & Pilih ➜ Tunjukkan ➜ Sebut.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${CH.map((c,i)=>`<div class="pc cut pcolor" style="text-align:left;border-color:#172b78;background:${c.c}33;height:122mm"><div style="font-size:24px;font-weight:700">${c.em} CABARAN ${i+1}: ${c.n}</div><p style="font-size:15px"><b>📖 Situasi:</b> ${c.s}</p><p style="font-size:14px"><b>🧠 Fikir & Pilih:</b> ${c.q}<br>A. ${c.o[0]}<br>B. ${c.o[1]}<br>C. ${c.o[2]}</p><p style="font-size:14px"><b>✋ Tunjukkan (${c.prop}):</b> ${c.show}</p><p style="font-size:15px"><b>💖 Sebut:</b> “${c.say}”</p></div>`).join('')}</div>`)},
- {id:'bacaan',ic:'📖',n:'Kad Bacaan (prop Cabaran 2)',d:'Ayat pendek untuk dibaca dengan yakin.',f:()=>pg('Kad Bacaan · Cabaran 2','Murid membaca dengan suara jelas, sengaja tersilap satu perkataan, kemudian membetulkannya.',`<div class="pc" style="height:110mm;display:grid;place-items:center"><div style="font-size:38px;font-weight:700;line-height:1.5">Saya suka belajar.<br>Saya berani mencuba.<br>Saya boleh!</div></div>`)},
- {id:'pasport',ic:'🛂',n:'Pasport Wira Yakin',d:'Instrumen individu: K (maksud, pilih), P (gaya), A (meter, azam). 2 setiap halaman.',f:()=>{const one=`<div class="pass"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:20px">🛂 PASPORT WIRA YAKIN</b><span>Nama: ____________________</span></div>
-  <div class="bx"><span class="cop">cop</span><b>1 🔑 KENAL</b><br>Keyakinan diri ialah berasa ____________ dengan kemampuan diri untuk melakukan sesuatu.</div>
-  <div class="bx"><span class="cop">cop</span><b>2 🚦 PILIH</b> · Tandakan ✓ pada tingkah laku YAKIN:<br>☐ ✋ Mengangkat tangan &nbsp; ☐ 🙈 Menyorok &nbsp; ☐ 💬 “Saya boleh cuba!” &nbsp; ☐ 🤫 Bercakap terlalu perlahan</div>
-  <div class="bx"><span class="cop">cop</span><b>3 🎡 BERTINDAK</b> · Warnakan gaya yang saya tunjukkan hari ini:<br><span style="font-size:24px">🧍 👀 🗣️ ✋</span> &nbsp; (tegak · pandang · suara jelas · tindakan yakin)</div>
-  <div class="bx"><span class="cop">cop</span><b>4 🪞 REFLEKSI</b> · Warnakan meter keyakinan saya: <span style="font-size:22px">😟 🙂 😄 🤩</span><br>Kod Peti: ☐ ☐ ☐ ☐</div></div>`;return pg('Pasport Wira Yakin','Satu untuk setiap murid. Guru/ketua kumpulan beri cop atau pelekat selepas setiap misi.',one+'<div style="height:5mm;border-bottom:2px dashed #999;margin-bottom:5mm"></div>'+one)}},
- {id:'bintang',ic:'⭐',n:'Bintang “Saya boleh…”',d:'Untuk Dinding Saya Boleh (Padlet Wall).',f:()=>pg('Bintang “Saya boleh…”','Gunting. Murid menulis satu azam dan menampalnya di Dinding Refleksi.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${Array(6).fill(`<div class="pstar">${STARP}<div>Saya boleh<br><br>________________<br>________________</div></div>`).join('')}</div>`)},
- {id:'lencana',ic:'🎖️',n:'Lencana Wira Yakin Diri',d:'Ganjaran dalam Peti Wira Yakin.',f:()=>pg('Lencana Wira Yakin Diri','Gunting dan lekat dengan pita/pin keselamatan.',`<div class="pgrid" style="grid-template-columns:1fr 1fr 1fr">${Array(9).fill(`<div class="badge-p"><div class="pcolor" style="width:56mm;height:56mm;border-radius:50%;background:radial-gradient(#fff6c4,#ffd84d);border:4px solid #172b78;display:grid;place-items:center"><div><div style="font-size:40px">🏅</div><div style="font-weight:700;font-size:15px">WIRA YAKIN<br>DIRI</div><div style="font-size:12px">Saya yakin, saya boleh!</div></div></div></div>`).join('')}</div>`)},
- {id:'digit',ic:'🔢',n:'Kad Digit Kod Peti',d:'4 kad digit, ikut kod dalam Persediaan.',f:()=>pg('Kad Digit Kod Peti Wira Yakin',`Kod semasa: ${ST.cfg.code}. Berikan satu kad selepas setiap misi selesai.`,`<div class="pgrid" style="grid-template-columns:1fr 1fr">${ST.cfg.code.split('').map((d,i)=>`<div class="pc cut pcolor" style="height:120mm;background:#fff6c4;display:grid;place-items:center"><div><div style="font-size:22px;font-weight:700">🔑 KOD KE-${i+1}</div><div style="font-size:150px;font-weight:700;line-height:1">${d}</div><div style="font-size:16px">${PH[i+1].ic} Misi ${PH[i+1].nm}</div></div></div>`).join('')}</div>`)},
- {id:'gaya',ic:'🦸',n:'Poster Gaya Wira Yakin',d:'Poster 4 elemen psikomotor untuk dipamer.',f:()=>pg('Gaya Wira Yakin 🦸','Pamerkan di hadapan kelas semasa Langkah 4.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${GAYA.map((g,i)=>`<div class="pc pcolor" style="height:110mm;display:grid;place-items:center;background:${KEYS[i].col}"><div><div style="font-size:110px">${g.em}</div><div style="font-size:34px;font-weight:700">${i+1}. ${g.n}</div></div></div>`).join('')}</div>`)},
- {id:'ejen',ic:'🪪',n:'Pas Ejen Wira Yakin',d:'Tanda nama untuk murid/rakan micro teaching.',f:()=>pg('Pas Ejen Wira Yakin','Gunting dan pakai. Tulis nama pada pas.',`<div class="pgrid" style="grid-template-columns:1fr 1fr">${Array(8).fill(`<div class="pc cut pcolor" style="height:58mm;text-align:left;background:linear-gradient(135deg,#dfe7ff,#fff)"><div style="display:flex;gap:10px;align-items:center"><div style="font-size:46px">🕵️</div><div><div style="font-size:12px;font-weight:700;letter-spacing:.1em">AGENSI WIRA YAKIN · MISI 2</div><div style="font-size:22px;font-weight:700">PAS EJEN</div></div></div><div style="font-size:16px;margin-top:8px">Nama: ______________________</div><div style="font-size:16px;margin-top:6px">Kumpulan: __________________</div><div style="font-size:13px;margin-top:6px">Kod rahsia: <b>Saya yakin, saya boleh!</b></div></div>`).join('')}</div>`)},
- {id:'semak',ic:'📋',n:'Senarai Semak Pemerhatian',d:'Instrumen guru (K, P, A) mengikut kumpulan & murid.',f:()=>pg('Senarai Semak Pemerhatian · Misi 2: Saya Yakin, Saya Boleh!',`Kelas: ${esc(ST.cfg.cls)} · Tarikh: __________ · ✓ = dicapai`,`<table class="pp-table"><tr><th rowspan="2">Bil</th><th rowspan="2" style="width:30%">Nama murid</th><th colspan="2">KOGNITIF</th><th colspan="4">PSIKOMOTOR (Gaya Wira Yakin)</th><th colspan="2">AFEKTIF</th><th rowspan="2">TP</th></tr>
- <tr><th>K1 Maksud (Pasport)</th><th>K2 Pilih ≥3/4</th><th>🧍</th><th>👀</th><th>🗣️</th><th>✋</th><th>A1 Sukarela</th><th>A2 Azam</th></tr>
- ${Array.from({length:30},(_,i)=>`<tr><td>${i+1}</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`).join('')}</table>
- <p style="font-size:11px">K1: melengkapkan maksud dengan betul · K2: memilih tindakan yakin dengan betul sekurang-kurangnya 3 daripada 4 (Kad Respons/Pasport) · P: capai jika ≥3/4 elemen · A1: menawarkan diri secara sukarela · A2: menulis & menampal azam “Saya boleh…”.</p>`)}
+/* =====================================================================
+   MOD KUMPULAN (tablet / telefon / Chromebook setiap kumpulan)
+   Bahan digital yang dipegang dan dimanipulasi oleh murid:
+   Misi 1 Kenal · Misi 2 Pilih · Misi 3 Bertindak · Misi 4 Refleksi.
+   Setiap misi menyemak sendiri jawapan dan memberi kod peti.
+   ===================================================================== */
+const GKEY='misi2-kumpulan';
+const AV=['🦁','🐯','🐼','🐨','🦊','🐸','🐵','🐰','🐧','🦄'];
+const ROLES=[['📖','Pembaca'],['🧩','Penyusun'],['🔍','Penyemak'],['🎤','Pembentang']];
+const UBAH=[
+ null,null,null,null,
+ {q:'🙈 Menyorok di belakang kawan',o:['Keluar dan angkat tangan ✋','Menyorok lebih jauh','Menangis seorang diri']},
+ {q:'🤫 Bercakap terlalu perlahan',o:['Bercakap dengan suara yang jelas 🗣️','Berbisik sahaja','Terus diam']},
+ {q:'😞 Berkata “Saya tidak pandai.”',o:['Berkata “Saya boleh belajar!” 💬','Berkata “Saya memang tidak boleh.”','Menyuruh orang lain buat']},
+ {q:'🙅 Tidak mahu mencuba aktiviti baharu',o:['Berkata “Saya akan cuba dahulu!” 🧩','Lari daripada aktiviti','Tunggu kawan buatkan']}
 ];
-function printKinds(ids){const box=$('#print');box.innerHTML=PRN.filter(p=>ids.includes(p.id)).map(p=>p.f()).join('');if(!box.innerHTML)return;hideOv();setTimeout(()=>window.print(),300)}
-window.__printAll=()=>{$('#print').innerHTML=PRN.map(p=>p.f()).join('')};/* digunakan untuk menjana PDF */
+const MEMO=[['😟','Belum yakin'],['🙂','Sedikit yakin'],['😄','Yakin'],['🤩','Sangat yakin!']];
+const BACA='Saya suka belajar. Saya berani mencuba. Saya boleh!';
+const MIS=[{ic:'🔑',n:'Kenal',d:'Padanan 4 Kunci + Pasport Digital'},{ic:'🚦',n:'Pilih',d:'Lampu Isyarat Keyakinan + Gallery Walk'},{ic:'🎡',n:'Bertindak',d:'Kad Cabaran + Gaya Wira Yakin'},{ic:'🪞',n:'Refleksi',d:'Dinding Kumpulan + Meter Keyakinan'}];
+const gNew=()=>({g:null,ej:[],role:{},keys:[0,0,0,0],v:'pick',ms:0,m1:{err:0,pas:{},pi:0},m2:{first:null,checks:0,place:{},ubah:null,uc:null},m3:{c:null,k:null,g:[0,0,0,0],vm:0,pz:0},m4:{az:{},mt:{}},gw:{st:0,em:{'👏':0,'😍':0,'💪':0}}});
+let GS=gNew();
+try{const d=JSON.parse(localStorage.getItem(GKEY)||'null');if(d)GS={...gNew(),...d}}catch(e){}
+const gSave=()=>{try{localStorage.setItem(GKEY,JSON.stringify(GS))}catch(e){}};
+const gName=()=>ST.cfg.groups[GS.g]||'Kumpulan';
+const gCol=()=>KEYS[GS.g%4].col;
+
+function gTop(){/* bar atas untuk Mod Kumpulan */
+ $('#brand').innerHTML=GS.g===null?'<b>📱 Mod Kumpulan</b>':`<b>${GEM[GS.g%6]} ${esc(gName())}</b><span>Ejen Wira Yakin</span>`;
+ $('#keys').innerHTML='🔑'+GS.keys.map((k,i)=>`<span class="k ${k?'on':''}">${k?esc(ST.cfg.code[i]):''}</span>`).join('');
+}
+function gGo(v,ms=0){cleanup();GS.v=v;GS.ms=ms;gSave();ST.view='grp';ST.p=-1;save();
+ document.body.classList.add('gm');$('#nav').classList.add('hide');
+ const r=(GV[v]||GV.pick)();$('#app').innerHTML=`<div class="screen gscr">${r.h}</div>`;gTop();bindSay($('#app'));r.on&&r.on();window.scrollTo(0,0)}
+const gBack=(t='🏠 Markas')=>`<button class="btn sm wh" data-gb>${t}</button>`;
+const bindBack=()=>$$('[data-gb]').forEach(b=>b.onclick=()=>gGo('lobi'));
+const gHead=(m,title,sub='')=>`<div class="row" style="justify-content:space-between;margin-bottom:6px"><span class="tag" style="background:${gCol()};color:var(--ink)">${MIS[m].ic} MISI ${m+1} · ${MIS[m].n.toUpperCase()}</span>${gBack()}</div><h2 style="margin:.1em 0">${title}</h2>${sub?`<p class="small">${sub}</p>`:''}`;
+function kodScreen(i){return{h:`<div class="c">${gHead(i,'🎉 Misi selesai!')}<div class="dg" style="margin-top:10px"><span class="tag y">🔑 KOD KE-${i+1}</span><div class="dgcard">${esc(ST.cfg.code[i])}</div>
+ <h2>Kod ke-${i+1} ialah ${esc(ST.cfg.code[i])}</h2><p class="small">Ingat kod ini! Ia akan membuka Peti Wira Yakin di skrin hadapan.</p><button class="btn big gr" id="kk">🏠 Kembali ke Markas</button></div></div>`,
+ on(){if(!GS.keys[i]){GS.keys[i]=1;gSave();gTop()}SFX.key();confetti(50);$('#kk').onclick=()=>gGo('lobi');bindBack()}}}
+
+const GV={};
+/* ---- Pilih kumpulan ---- */
+GV.pick=()=>({h:`<div class="c"><span class="tag y">📱 MOD KUMPULAN</span><h1 style="font-size:clamp(30px,6vw,60px)">Pilih kumpulan kamu</h1>
+ <div class="g2" style="max-width:760px;margin:16px auto">${ST.cfg.groups.map((n,i)=>`<button class="keyc" data-g="${i}" style="background:${KEYS[i%4].col};cursor:pointer;font:inherit"><span class="em">${GEM[i%6]}</span><b>${esc(n)}</b></button>`).join('')}</div>
+ <button class="btn sm wh" id="gh">⬅ Laman utama</button></div>`,
+ on(){$$('[data-g]').forEach(b=>b.onclick=()=>{GS.g=+b.dataset.g;SFX.ok();gGo(GS.ej.length?'lobi':'daftar')});$('#gh').onclick=()=>home()}});
+/* ---- Daftar ejen ---- */
+GV.daftar=()=>({h:`<div class="row" style="justify-content:space-between"><span class="tag">🪪 DAFTAR EJEN</span>${GS.ej.length?gBack():''}</div>
+ <h2>Setiap ejen taip nama sendiri</h2><p class="small">Berani mencuba ialah kunci pertama! (3–8 ejen)</p>
+ <div class="row"><input type="text" id="en" placeholder="Nama ejen…" maxlength="18" style="flex:1;min-width:180px"><button class="btn gr" id="ea">➕ Daftar</button></div>
+ <div class="chips" id="el" style="justify-content:flex-start;margin:14px 0">${GS.ej.map((e,i)=>`<span class="chip on">${e.av} ${esc(e.n)} <b data-x="${i}" style="cursor:pointer">✖</b></span>`).join('')||'<span class="small">Belum ada ejen.</span>'}</div>
+ <button class="btn big pk" id="ed" ${GS.ej.length?'':'disabled'}>🚀 Masuk Markas</button>`,
+ on(){const add=()=>{const v=$('#en').value.trim();if(!v||GS.ej.length>=10)return;if(GS.ej.some(e=>e.n.toLowerCase()===v.toLowerCase())){$('#en').value='';return}GS.ej.push({n:v,av:AV[GS.ej.length%AV.length]});SFX.pop();gGo('daftar');setTimeout(()=>$('#en')&&$('#en').focus(),50)};
+  $('#ea').onclick=add;$('#en').onkeydown=e=>{if(e.key==='Enter')add()};
+  $$('[data-x]').forEach(x=>x.onclick=()=>{GS.ej.splice(+x.dataset.x,1);gGo('daftar')});
+  $('#ed').onclick=()=>gGo('lobi');bindBack()}});
+/* ---- Markas (lobi) ---- */
+const mDone=i=>!!GS.keys[i];
+GV.lobi=()=>({h:`<div class="c"><span class="tag" style="background:${gCol()};color:var(--ink)">${GEM[GS.g%6]} MARKAS KUMPULAN ${esc(gName().toUpperCase())}</span>
+ <h2>Kumpul 4 kod untuk membuka Peti Wira Yakin!</h2>
+ <div class="slots">${[0,1,2,3].map(i=>`<div class="${GS.keys[i]?'on':''}">${GS.keys[i]?esc(ST.cfg.code[i]):'?'}</div>`).join('')}</div></div>
+ <div class="g2">${MIS.map((m,i)=>{const lock=i>0&&!mDone(i-1),done=mDone(i);return `<button class="keyc" data-m="${i}" style="background:${done?'#c9f8e1':lock?'#cfd5ec':KEYS[i].col};cursor:${lock?'not-allowed':'pointer'};font:inherit;text-align:left;display:flex;gap:14px;align-items:center;${lock?'opacity:.6':''}"><span class="em">${done?'✅':lock?'🔒':m.ic}</span><span><b>Misi ${i+1}: ${m.n}</b><small>${m.d}</small></span></button>`}).join('')}</div>
+ <div class="row cen" style="margin-top:16px"><button class="btn cy" id="gr">🅰️ Kad Respons</button><button class="btn wh" id="gx">📊 Rekod (guru)</button><button class="btn wh" id="ge">👥 Ejen (${GS.ej.length})</button>${GS.keys.every(Boolean)?'<button class="btn pk pulse" id="gl">🏅 Lencana Digital</button>':''}</div>
+ <p class="small c" style="margin-top:10px">Tunggu arahan guru sebelum membuka misi seterusnya.</p>`,
+ on(){$$('[data-m]').forEach(b=>b.onclick=()=>{const i=+b.dataset.m;if(i>0&&!mDone(i-1)){SFX.no();return}SFX.pop();gGo('m'+(i+1),0)});
+  $('#gr').onclick=()=>gGo('resp');$('#gx').onclick=()=>gGo('rekod');$('#ge').onclick=()=>gGo('daftar');const l=$('#gl');if(l)l.onclick=()=>gGo('lencana')}});
+
+/* ---- MISI 1: KENAL ---- */
+GV.m1=()=>{const s=GS.ms;
+ if(s===0)return{h:`${gHead(0,'📜 Kad Tugasan 1')}<div class="paper"><ol class="steps"><li><span>Pilih <b>peranan</b> secara sukarela (boleh lebih daripada satu).</span></li><li><span>Padankan gambar dengan <b>Kunci Keyakinan</b>. Tablet memberitahu betul atau salah.</span></li><li><span>Setiap ejen lengkapkan <b>Pasport Digital</b>.</span></li></ol></div>
+  <h3>🙋 Siapa mahu menjadi…?</h3><div style="display:grid;gap:8px">${GS.ej.map(e=>`<div class="row" style="background:#ffffff18;border-radius:16px;padding:6px 10px"><b style="min-width:120px">${e.av} ${esc(e.n)}</b>${ROLES.map(([ic,r])=>`<button class="tg ${(GS.role[e.n]||[]).includes(r)?'on':''}" data-r="${esc(e.n)}|${r}">${ic} ${r}</button>`).join('')}</div>`).join('')}</div>
+  <div class="row cen" style="margin-top:14px"><button class="btn big pk" id="n">Mula padanan ▶</button></div>`,
+  on(){$$('[data-r]').forEach(b=>b.onclick=()=>{const[n,r]=b.dataset.r.split('|');const a=GS.role[n]=GS.role[n]||[];const k=a.indexOf(r);k<0?a.push(r):a.splice(k,1);gSave();b.classList.toggle('on');SFX.pop()});$('#n').onclick=()=>gGo('m1',1);bindBack()}};
+ if(s===1){const L=shuf([0,1,2,3]),R=shuf([0,1,2,3]);return{h:`${gHead(0,'🔑 Padankan 4 Kunci Keyakinan','Ketik gambar ➜ ketik kunci yang sepadan.')}
+  <div class="match" id="mt" style="gap:10px 14px"><div style="display:grid;gap:10px">${L.map(i=>`<div class="mt" data-l="${i}"><span class="em">${KEYS[i].em}</span><span>${KEYS[i].pic}</span></div>`).join('')}</div><div style="display:grid;gap:10px">${R.map(i=>`<div class="mt" data-r="${i}"><span>${KEYS[i].n}</span></div>`).join('')}</div></div>
+  <div id="fb"></div>`,
+  on(){let sel=null,done=0;bindBack();
+   $$('#mt [data-l]').forEach(e=>e.onclick=()=>{if(e.classList.contains('done'))return;$$('#mt [data-l]').forEach(x=>x.classList.remove('sel'));sel=e;e.classList.add('sel');SFX.pop()});
+   $$('#mt [data-r]').forEach(e=>e.onclick=()=>{if(!sel||e.classList.contains('done'))return;const a=sel.dataset.l;
+    if(a===e.dataset.r){[sel,e].forEach(x=>{x.classList.remove('sel');x.classList.add('done','k'+a)});SFX.ok();say(KEYS[a].n);sel=null;
+     if(++done===4){confetti(40);$('#fb').innerHTML=`<div class="fb">🎉 Hebat! 4 Kunci dijumpai.</div><div class="row cen" style="margin-top:12px"><button class="btn big pk" id="n">Seterusnya: Pasport Digital ▶</button></div>`;$('#n').onclick=()=>{GS.m1.pi=0;gGo('m1',2)}}}
+    else{GS.m1.err++;gSave();[e,sel].forEach(x=>x.classList.add('bad'));SFX.no();setTimeout(()=>{e.classList.remove('bad');sel&&sel.classList.remove('bad')},450)}})}}}
+ if(s===2){const i=GS.m1.pi||0,e=GS.ej[i];if(!e)return kodScreen(0);const w=shuf(['yakin','takut','malu']);let miss=false;
+  return{h:`${gHead(0,'🛂 Pasport Digital',`Ejen ${i+1} daripada ${GS.ej.length}`)}<div class="card c"><div style="font-size:54px">${e.av}</div><h3>Giliran: ${esc(e.n)}</h3>
+  <p style="font-size:1.3em;font-weight:700;line-height:1.6">Keyakinan diri ialah berasa <span id="bl" style="display:inline-block;min-width:4.5em;border-bottom:5px dashed var(--yl)">&nbsp;</span> dengan kemampuan diri untuk melakukan sesuatu.</p>
+  <div class="row cen">${w.map(x=>`<button class="btn wh" data-w="${x}">${x}</button>`).join('')}</div><div id="fb"></div></div>`,
+  on(){bindBack();$$('[data-w]').forEach(b=>b.onclick=()=>{if(b.dataset.w==='yakin'){$('#bl').textContent='yakin';$('#bl').style.color='var(--gr)';GS.m1.pas[e.n]=miss?1:2;gSave();SFX.ok();say(DEFN);
+    $('#fb').innerHTML=`<div class="fb">✅ Cop Pasport untuk ${esc(e.n)}!</div><div class="row cen" style="margin-top:10px"><button class="btn big pk" id="n">${i+1<GS.ej.length?'Ejen seterusnya ▶':'Ambil Kod ke-1 🔑'}</button></div>`;$$('[data-w]').forEach(x=>x.disabled=true);
+    $('#n').onclick=()=>{GS.m1.pi=i+1;gSave();gGo('m1',i+1<GS.ej.length?2:3)}}
+   else{miss=true;b.disabled=true;SFX.no();$('#fb').innerHTML='<div class="fb y">🔁 Cuba lagi! Silap itu biasa.</div>'}})}}}
+ return kodScreen(0)};
+
+/* ---- MISI 2: PILIH ---- */
+function boardHTML(){const p=GS.m2.place;const col=y=>BEH.map((b,i)=>p[i]===y?`<div class="bc"><span class="em">${b.em}</span><span>${esc(b.t)}</span></div>`:'').join('');
+ return `<div class="bins"><div class="bin gn"><h3><span class="lamp"></span>YAKIN</h3>${col(1)}</div><div class="bin rd"><h3><span class="lamp"></span>BELUM YAKIN</h3>${col(0)}</div></div>`}
+GV.m2=()=>{const s=GS.ms;
+ if(s===0)return{h:`${gHead(1,'📜 Kad Tugasan 2')}<div class="paper"><ol class="steps"><li><span>Baca 8 kad tingkah laku bersama-sama (Pembaca).</span></li><li><span>Ketik kad ➜ ketik <b style="color:#17905a">🟢 YAKIN</b> atau <b style="color:#c23a4f">🔴 BELUM YAKIN</b> (Penyusun).</span></li><li><span>Tekan <b>Semak</b>. Kad yang salah melantun balik: bincang dan betulkan (Penyemak).</span></li><li><span>Ubah satu kad merah menjadi hijau.</span></li></ol></div><div class="row cen" style="margin-top:14px"><button class="btn big pk" id="n">Mula ▶</button></div>`,on(){$('#n').onclick=()=>gGo('m2',1);bindBack()}};
+ if(s===1){return{h:`${gHead(1,'🚦 Lampu Isyarat Keyakinan','Letakkan semua kad, kemudian tekan Semak.')}
+  <div class="tray" id="tray"></div><div class="bins"><div class="bin gn" data-y="1"><h3><span class="lamp"></span>YAKIN</h3><div class="bx"></div></div><div class="bin rd" data-y="0"><h3><span class="lamp"></span>BELUM YAKIN</h3><div class="bx"></div></div></div>
+  <div class="row cen" style="margin-top:12px"><button class="btn big cy" id="ck" disabled>🔍 Semak</button></div><div id="fb"></div>`,
+  on(){bindBack();const P=GS.m2.place;let sel=null;
+   const draw=()=>{const tray=$('#tray');tray.innerHTML='';$$('.bin .bx').forEach(b=>b.innerHTML='');
+    shuf(BEH.map((b,i)=>i)).forEach(i=>{const b=BEH[i],d=document.createElement('div');d.className='bc';d.dataset.i=i;d.innerHTML=`<span class="em">${b.em}</span><span>${esc(b.t)}</span>`;
+     (P[i]===undefined?tray:document.querySelector(`.bin[data-y="${P[i]}"] .bx`)).appendChild(d);
+     d.onclick=e=>{e.stopPropagation();const bin=d.closest('.bin');if(sel&&sel!==d&&bin){P[+sel.dataset.i]=+bin.dataset.y;gSave();sel=null;SFX.pop();draw();return}$$('.bc').forEach(x=>x.classList.remove('sel'));sel=d;d.classList.add('sel');SFX.pop()}});
+    if(!tray.children.length)tray.innerHTML='<span class="small">Semua kad sudah diletakkan. Tekan Semak!</span>';
+    $('#ck').disabled=Object.keys(P).length<8};
+   $$('.bin').forEach(b=>b.onclick=()=>{if(!sel)return;P[+sel.dataset.i]=+b.dataset.y;gSave();sel=null;SFX.pop();draw()});
+   $('#ck').onclick=()=>{let ok=0,wrong=[];BEH.forEach((b,i)=>{if(P[i]===b.y)ok++;else wrong.push(i)});GS.m2.checks++;if(GS.m2.first===null)GS.m2.first=ok;
+    if(!wrong.length){gSave();SFX.fan();confetti(50);$('#fb').innerHTML=`<div class="fb">🎉 8/8 betul! Lampu kamu bersinar.</div><div class="row cen" style="margin-top:10px"><button class="btn big pk" id="n">Seterusnya ▶</button></div>`;$('#n').onclick=()=>gGo('m2',2);$('#ck').disabled=true;return}
+    wrong.forEach(i=>delete P[i]);gSave();SFX.no();draw();$('#fb').innerHTML=`<div class="fb y">✅ ${ok}/8 betul. ${wrong.length} kad melantun balik: ${wrong.map(i=>BEH[i].em).join(' ')}. Bincang dan cuba lagi!</div>`;say('Bincang dan cuba lagi!')};
+   draw()}}}
+ if(s===2){const red=GS.m2.uc;if(red===null||red===undefined)return{h:`${gHead(1,'🔄 Ubah Merah ➜ Hijau','Pilih satu kad merah yang kumpulan mahu ubah.')}<div class="g2">${[4,5,6,7].map(i=>`<button class="mt" data-u="${i}" style="font:inherit"><span class="em">${BEH[i].em}</span><span>${esc(BEH[i].t)}</span></button>`).join('')}</div>`,on(){bindBack();$$('[data-u]').forEach(b=>b.onclick=()=>{GS.m2.uc=+b.dataset.u;gSave();gGo('m2',2)})}};
+  const u=UBAH[red],o=shuf(u.o.map((t,i)=>({t,i})));let miss=false;
+  return{h:`${gHead(1,'🔄 Ubah Merah ➜ Hijau')}<div class="card"><p><b>Kad merah:</b> ${u.q}</p><h3>Apakah tingkah laku YAKIN untuk menggantikannya?</h3><div class="opts">${o.map((x,k)=>`<div class="opt ${'ABC'[k]}" data-o="${x.i}"><b>${'ABC'[k]}</b><span>${esc(x.t)}</span></div>`).join('')}</div><div id="fb"></div></div>`,
+  on(){bindBack();$$('[data-o]').forEach(d=>d.onclick=()=>{if(+d.dataset.o===0){d.classList.add('win');if(GS.m2.ubah===null)GS.m2.ubah=miss?0:1;gSave();SFX.ok();$('#fb').innerHTML=`<div class="fb">🟢 Hebat! Kad merah sudah menjadi hijau.</div><div class="row cen" style="margin-top:10px"><button class="btn big pk" id="n">Papan Hasil Kumpulan ▶</button></div>`;$('#n').onclick=()=>gGo('m2',3)}else{miss=true;d.classList.add('dim');SFX.no()}})}}}
+ if(s===3)return{h:`${gHead(1,'🖼️ Papan Hasil Kumpulan',`Gallery Walk: pelawat dari kumpulan lain, beri bintang dan pujian!`)}${boardHTML()}
+  ${GS.m2.uc!=null?`<div class="tip" style="margin-top:10px">🔄 Kad merah diubah: ${UBAH[GS.m2.uc].q} ➜ <b>${esc(UBAH[GS.m2.uc].o[0])}</b></div>`:''}
+  <div class="card c"><h3>Untuk pelawat 👀</h3><div class="row cen"><button class="btn big" id="st">⭐ Beri Bintang (<span id="sn">${GS.gw.st}</span>)</button>${Object.keys(GS.gw.em).map(k=>`<button class="btn wh" data-e="${k}">${k} <span>${GS.gw.em[k]}</span></button>`).join('')}</div></div>
+  <div class="row cen"><button class="btn gr big" id="n">🔑 Ambil Kod ke-2</button></div>`,
+  on(){bindBack();$('#st').onclick=()=>{GS.gw.st++;gSave();$('#sn').textContent=GS.gw.st;SFX.ok();confetti(15)};$$('[data-e]').forEach(b=>b.onclick=()=>{GS.gw.em[b.dataset.e]++;gSave();b.querySelector('span').textContent=GS.gw.em[b.dataset.e];SFX.pop()});$('#n').onclick=()=>gGo('m2',4)}};
+ return kodScreen(1)};
+
+/* ---- MISI 3: BERTINDAK ---- */
+function puzzle(){if(!GS.m3.pzr){GS.m3.pzr=[0,1,2,3].map(()=>1+(Math.random()*3|0));gSave()}const rot=GS.m3.pzr;
+ return `<div id="pz" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:min(320px,80vw);margin:0 auto">${[0,1,2,3].map(i=>`<div data-p="${i}" style="aspect-ratio:1;background:url(${ART}) ${i%2?'100%':'0'} ${i>1?'100%':'0'}/200% 200%;border:3px solid #fff;border-radius:10px;cursor:pointer;transition:transform .3s;transform:rotate(${rot[i]*90}deg)"></div>`).join('')}</div>`}
+GV.m3=()=>{const s=GS.ms,c=CH[GS.m3.c];
+ if(s===0)return{h:`${gHead(2,'🎡 Cabaran kumpulan kamu','Lihat Roda Cabaran di skrin hadapan. Ketik nombor cabaran yang sama.')}<div class="g2">${CH.map((x,i)=>`<button class="keyc" data-c="${i}" style="background:${x.c};font:inherit;cursor:pointer"><span class="em">${x.em}</span><b>Cabaran ${i+1}</b><small>${x.n}</small></button>`).join('')}</div>`,
+  on(){bindBack();$$('[data-c]').forEach(b=>b.onclick=()=>{GS.m3.c=+b.dataset.c;GS.m3.k=null;GS.m3.pzr=null;GS.m3.pz=0;gSave();gGo('m3',1)})}};
+ if(!c)return GV.m3(GS.ms=0);
+ if(s===1){let miss=false;return{h:`${gHead(2,`${c.em} Cabaran ${GS.m3.c+1}: ${c.n}`)}<div class="tip">📖 <b>Situasi:</b> ${esc(c.s)}</div><div class="card"><h3>🧠 ${esc(c.q)} ${spk(c.s+' '+c.q)}</h3><div class="opts">${c.o.map((t,k)=>`<div class="opt ${'ABC'[k]}" data-o="${k}"><b>${'ABC'[k]}</b><span>${esc(t)}</span></div>`).join('')}</div><div id="fb"></div></div>`,
+  on(){bindBack();$$('[data-o]').forEach(d=>d.onclick=()=>{if(+d.dataset.o===c.a){d.classList.add('win');if(GS.m3.k===null)GS.m3.k=miss?0:1;gSave();SFX.ok();say(c.f);$('#fb').innerHTML=`<div class="fb">✅ ${esc(c.f)}</div><div class="row cen" style="margin-top:10px"><button class="btn big pk" id="n">✋ Sekarang Tunjukkan ▶</button></div>`;$('#n').onclick=()=>gGo('m3',2)}else{miss=true;d.classList.add('dim');SFX.no()}})}}}
+ if(s===2){const prop=[`<p class="c" style="font-weight:700">Pegang tablet seperti mikrofon 🎤 dan sebut: “Idea saya ialah …”</p>${vmeter('gv')}`,
+   `<div class="paper c" style="font-size:clamp(24px,3.4vw,44px);font-weight:700;line-height:1.5">${BACA}</div><p class="small c">Sengaja tersilap satu perkataan ➜ “Oops, saya betulkan!” ➜ baca semula dengan jelas.</p>${vmeter('gv')}`,
+   `<p class="c" style="font-weight:700">Sebut “Saya akan cuba dahulu!” kemudian ketik kepingan untuk memusingkannya.</p>${puzzle()}<div id="pzf"></div>`,
+   `<p class="c" style="font-weight:700">Angkat tablet. “Ini hasil kerja kami…”</p>${boardHTML()}`][GS.m3.c];
+  return{h:`${gHead(2,'✋ Tunjukkan dengan Gaya Wira Yakin',`Prop digital: ${c.prop}`)}<div class="card">${prop}</div>
+  <div class="card"><h3>🔍 Penyemak: ketik gaya yang kamu nampak</h3><div class="gaya" id="gy">${GAYA.map((x,i)=>`<div class="gy ${GS.m3.g[i]?'on':''}" data-i="${i}"><span class="em">${x.em}</span>${x.n}</div>`).join('')}</div>
+  <div class="row cen" style="margin-top:10px">${ring(45)}<button class="btn gr" id="goRing">▶ 45 saat</button></div></div>
+  <div class="row cen"><button class="btn big pk" id="n">💖 Seterusnya: Sebut ▶</button></div>`,
+  on(){bindBack();bindRing();if(GS.m3.c<2)bindVm('gv');
+   $$('#gy .gy').forEach(x=>x.onclick=()=>{GS.m3.g[+x.dataset.i]=GS.m3.g[+x.dataset.i]?0:1;gSave();x.classList.toggle('on');SFX.pop()});
+   if(GS.m3.c===2)$$('#pz [data-p]').forEach(p=>p.onclick=()=>{const i=+p.dataset.p;GS.m3.pzr[i]=(GS.m3.pzr[i]+1)%4;p.style.transform=`rotate(${GS.m3.pzr[i]*90}deg)`;SFX.pop();gSave();
+    if(GS.m3.pzr.every(r=>r===0)){GS.m3.pz=1;gSave();SFX.fan();confetti(40);$('#pzf').innerHTML='<div class="fb">🧩 Berjaya! Kamu cuba dahulu dan berjaya!</div>'}});
+   $('#n').onclick=()=>gGo('m3',3)}}}
+ if(s===3)return{h:`${gHead(2,'💖 Sebut bersama dengan suara jelas!')}<div class="paper c" style="font-size:clamp(24px,3.4vw,46px);font-weight:700">“${esc(c.say)}”</div><div class="card">${vmeter('gv2')}</div>
+  <div class="row cen"><button class="btn gr big" id="n">🔑 Ambil Kod ke-3</button></div>`,
+  on(){bindBack();bindVm('gv2',()=>{GS.m3.vm=1;gSave()});$('#n').onclick=()=>gGo('m3',4)}};
+ return kodScreen(2)};
+
+/* ---- MISI 4: REFLEKSI ---- */
+GV.m4=()=>{const s=GS.ms;
+ if(s===0)return{h:`${gHead(3,'⭐ Dinding Kumpulan “Saya Boleh!”','Setiap ejen ketik nama sendiri dan tulis satu azam.')}
+  <div class="chips" style="justify-content:flex-start">${GS.ej.map((e,i)=>`<span class="chip ${GS.m4.az[e.n]?'done':''}" data-a="${i}">${e.av} ${esc(e.n)} ${GS.m4.az[e.n]?'✅':'✏️'}</span>`).join('')}</div>
+  <div id="ed" class="card hide"><h3 id="who"></h3><div class="row"><input type="text" id="az" placeholder="Saya boleh …" maxlength="60" style="flex:1;min-width:200px"><button class="btn gr" id="sv">📌 Tampal</button></div>
+  <div class="chips" style="justify-content:flex-start;margin-top:8px">${['mengangkat tangan','bercakap dengan jelas','cuba lagi','membaca di hadapan kelas','berkata positif'].map(x=>`<span class="chip" data-s="Saya boleh ${x}">Saya boleh ${x}</span>`).join('')}</div></div>
+  <div class="wall" id="wall" style="margin-top:10px">${GS.ej.filter(e=>GS.m4.az[e.n]).map((e,i)=>`<div class="note" style="background:${NC[i%NC.length]};transform:rotate(${(i*37%15)-7}deg)"><span>${esc(GS.m4.az[e.n])}<br><small>– ${esc(e.n)}</small></span></div>`).join('')||'<div class="empty">📌 Dinding masih kosong.</div>'}</div>
+  <div class="row cen" style="margin-top:12px"><button class="btn big pk" id="n">Seterusnya: Meter Keyakinan ▶</button></div>`,
+  on(){bindBack();let who=null;$$('[data-a]').forEach(c=>c.onclick=()=>{who=GS.ej[+c.dataset.a];$('#ed').classList.remove('hide');$('#who').textContent=`${who.av} ${who.n}, apakah azam kamu?`;$('#az').value=GS.m4.az[who.n]||'';$('#az').focus()});
+   const put=t=>{t=t.trim();if(!who||!t)return;if(!/^saya boleh/i.test(t))t='Saya boleh '+t;GS.m4.az[who.n]=t;gSave();SFX.pop();gGo('m4',0)};
+   $('#sv').onclick=()=>put($('#az').value);$('#az').onkeydown=e=>{if(e.key==='Enter')put($('#az').value)};$$('[data-s]').forEach(c=>c.onclick=()=>put(c.dataset.s));
+   $('#n').onclick=()=>gGo('m4',1)}};
+ if(s===1)return{h:`${gHead(3,'💖 Meter Keyakinan Saya Sekarang','Setiap ejen ketik wajah yang sesuai. Tiada jawapan salah.')}
+  <div style="display:grid;gap:8px">${GS.ej.map(e=>`<div class="row" style="background:#ffffff18;border-radius:16px;padding:6px 10px;justify-content:space-between"><b>${e.av} ${esc(e.n)}</b><span class="row" style="gap:6px">${MEMO.map((m,i)=>`<button class="tg ${GS.m4.mt[e.n]===i?'on':''}" data-t="${esc(e.n)}|${i}" title="${m[1]}" style="font-size:26px">${m[0]}</button>`).join('')}</span></div>`).join('')}</div>
+  <div class="row cen" style="margin-top:14px"><button class="btn gr big" id="n">🔑 Ambil Kod ke-4</button></div>`,
+  on(){bindBack();$$('[data-t]').forEach(b=>b.onclick=()=>{const[n,i]=b.dataset.t.split('|');GS.m4.mt[n]=+i;gSave();b.parentElement.querySelectorAll('.tg').forEach(x=>x.classList.remove('on'));b.classList.add('on');SFX.pop()});$('#n').onclick=()=>gGo('m4',2)}};
+ return kodScreen(3)};
+
+/* ---- Lencana Digital ---- */
+GV.lencana=()=>{const ik='Saya Wira Yakin! Saya berani mencuba. Saya bercakap dengan jelas. Saya berkata positif. Saya cuba lagi. Saya yakin, saya boleh!';
+ return{h:`<div class="row" style="justify-content:space-between">${gBack()}</div><div class="c"><div style="font-size:clamp(80px,12vw,150px);animation:flt 2.5s infinite">🏅</div>
+ <div class="paper" style="max-width:780px;margin:0 auto;border:8px double #e6b800"><span class="tag y">LENCANA DIGITAL</span><h1 style="color:var(--ink);text-shadow:none;font-size:clamp(28px,4vw,52px)">WIRA YAKIN DIRI</h1>
+ <p>Dianugerahkan kepada ejen Kumpulan <b>${esc(gName())}</b> · ${esc(ST.cfg.cls)}</p>
+ <div class="chips">${GS.ej.map(e=>`<span class="chip on">${e.av} ${esc(e.n)}</span>`).join('')}</div>
+ <p style="margin-top:10px"><b>Kod Peti:</b> ${esc(ST.cfg.code.split('').join(' · '))}</p></div>
+ <div class="card" style="max-width:780px;margin:14px auto"><h3>🙌 Ikrar Wira Yakin</h3><p class="karaoke" id="ik" style="font-weight:700;font-size:1.2em;line-height:1.6">${ik.split(' ').map(x=>`<span>${esc(x)}</span>`).join(' ')}</p><button class="btn pk" id="bik">🎤 Lafaz bersama</button></div></div>`,
+ on(){bindBack();confetti(80);SFX.fan();$('#bik').onclick=()=>{const sp=$$('#ik span');let i=0;say(ik);const t=setInterval(()=>{sp.forEach(s=>s.classList.remove('on'));if(i>=sp.length){clearInterval(t);return}sp[i++].classList.add('on')},420);CLEAN.push(()=>clearInterval(t))}}}};
+
+/* ---- Rekod Kumpulan (bukti pentaksiran untuk guru) ---- */
+function gTP(){const p=GS.ej.length?GS.ej.filter(e=>GS.m1.pas[e.n]).length/GS.ej.length:0,g=GS.m3.g.reduce((a,b)=>a+b,0);
+ if(p>=.5&&GS.m2.first>=6&&GS.m3.k&&g>=3)return 4;if(p>=.5&&GS.m2.first>=6)return 3;if(p>=.5||GS.m2.first>=4)return 2;return p||GS.m2.first?1:'–'}
+GV.rekod=()=>({h:`<div class="row" style="justify-content:space-between"><h2 style="margin:0">📊 Rekod Kumpulan ${esc(gName())}</h2>${gBack()}</div>
+ <div class="paper" style="margin-top:10px"><table class="ck"><tr><th>Ejen</th><th>Peranan sukarela (A1)</th><th>Pasport K(i)</th><th>Meter keyakinan</th><th>Azam (A2)</th></tr>
+ ${GS.ej.map(e=>`<tr><td>${e.av} ${esc(e.n)}</td><td>${(GS.role[e.n]||[]).join(', ')||'—'}</td><td>${GS.m1.pas[e.n]===2?'✅ kali pertama':GS.m1.pas[e.n]===1?'✅ selepas cuba lagi':'—'}</td><td>${GS.m4.mt[e.n]!==undefined?MEMO[GS.m4.mt[e.n]][0]+' '+MEMO[GS.m4.mt[e.n]][1]:'—'}</td><td style="text-align:left">${esc(GS.m4.az[e.n]||'—')}</td></tr>`).join('')}</table>
+ <table class="ck" style="margin-top:12px"><tr><th>Bukti kumpulan</th><th>Hasil</th></tr>
+ <tr><td>Padanan 4 Kunci (percubaan salah)</td><td>${GS.keys[0]?GS.m1.err:'—'}</td></tr>
+ <tr><td>Lampu Isyarat: skor semakan pertama (K)</td><td>${GS.m2.first===null?'—':GS.m2.first+'/8'} (semakan: ${GS.m2.checks})</td></tr>
+ <tr><td>Ubah merah ➜ hijau</td><td>${GS.m2.ubah===null?'—':GS.m2.ubah?'✅ kali pertama':'✅ selepas cuba lagi'}</td></tr>
+ <tr><td>Cabaran dipilih · Fikir & Pilih (K)</td><td>${GS.m3.c===null?'—':'Cabaran '+(GS.m3.c+1)+' · '+(GS.m3.k===null?'—':GS.m3.k?'✅ kali pertama':'✅ selepas cuba lagi')}</td></tr>
+ <tr><td>Gaya Wira Yakin (P)</td><td>${GAYA.map((x,i)=>GS.m3.g[i]?x.em:'·').join(' ')} ${GS.m3.g.reduce((a,b)=>a+b,0)}/4</td></tr>
+ <tr><td>Meter Suara penuh (P)</td><td>${GS.m3.vm?'✅':'—'}</td></tr>
+ <tr><td>Gallery Walk: bintang & pujian</td><td>⭐ ${GS.gw.st} · ${Object.entries(GS.gw.em).map(([k,v])=>k+' '+v).join(' ')}</td></tr>
+ <tr><td><b>Cadangan TP kumpulan</b></td><td><b>TP${gTP()}</b></td></tr></table>
+ <div class="row" style="margin-top:12px"><button class="btn sm cy" id="csv">⬇️ Muat turun CSV</button><button class="btn sm pk" id="rs">♻️ Set semula tablet ini</button></div></div>`,
+ on(){bindBack();$('#csv').onclick=()=>{const L=[['Kumpulan','Ejen','Peranan','Pasport','Meter','Azam']];GS.ej.forEach(e=>L.push([gName(),e.n,(GS.role[e.n]||[]).join(' / '),GS.m1.pas[e.n]||0,GS.m4.mt[e.n]??'',(GS.m4.az[e.n]||'').replace(/,/g,' ')]));
+   L.push([]);L.push(['Sisih pertama',GS.m2.first??'','Cabaran',GS.m3.c===null?'':GS.m3.c+1,'Gaya',GS.m3.g.reduce((a,b)=>a+b,0)]);L.push(['Cadangan TP','TP'+gTP()]);
+   const b=new Blob(['﻿'+L.map(r=>r.join(',')).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`rekod-${gName()}.csv`;a.click()};
+  $('#rs').onclick=()=>{if(confirm('Set semula semua data kumpulan pada tablet ini?')){GS=gNew();gSave();gGo('pick')}}}});
+
+/* ---- Kad Respons Digital (A/B/C) ---- */
+GV.resp=()=>({h:`<div class="row" style="justify-content:space-between"><span class="tag">🅰️ KAD RESPONS DIGITAL</span>${GS.g===null?'<button class="btn sm wh" id="rh">⬅ Laman utama</button>':gBack()}</div>
+ <p class="c">Selepas guru berkata <b>“Kira 3-2-1”</b>, ketik jawapan dan <b>angkat skrin</b>.</p>
+ <div style="display:grid;gap:14px;grid-template-columns:repeat(3,1fr)">${[['A','var(--pk)'],['B','var(--yl)'],['C','var(--gr)']].map(([l,c])=>`<button data-l="${l}" style="background:${c};border:6px solid #fff;border-radius:28px;font:inherit;font-weight:700;font-size:clamp(70px,16vw,180px);color:#fff;text-shadow:0 6px 0 #0004;aspect-ratio:.8;cursor:pointer;box-shadow:0 8px 0 var(--shadow)">${l}</button>`).join('')}</div>`,
+ on(){const rh=$('#rh');if(rh)rh.onclick=()=>home();bindBack();
+  $$('[data-l]').forEach(b=>b.onclick=()=>{SFX.pop();ov.innerHTML=`<div style="position:fixed;inset:0;display:grid;place-items:center;background:${b.style.background};font-family:Fredoka;font-weight:700;font-size:min(70vw,80vh);color:#fff;text-shadow:0 12px 0 #0004" data-close>${b.dataset.l}</div>`;ov.classList.add('on');ov.onclick=()=>hideOv()})}});
+
+function startGroup(){ST.view='grp';save();gGo(GS.g===null?'pick':(GS.v&&GV[GS.v]?GS.v:'lobi'),GS.ms||0)}
 
 /* ---------------- Papan kekunci ---------------- */
 document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;
@@ -888,7 +1085,7 @@ $('#bFs').onclick=toggleFs;$('#bSnd').onclick=()=>{ST.cfg.snd=!ST.cfg.snd;save()
 
 /* ---------------- Mula ---------------- */
 ambient();
-if(ST.p>=0&&ST.p<PH.length)go(ST.p,Math.min(ST.s,PH[ST.p].steps.length-1));else home();
+if(ST.view==='grp')startGroup();else if(ST.p>=0&&ST.p<PH.length)go(ST.p,Math.min(ST.s,PH[ST.p].steps.length-1));else home();
 </script>
 </body>
 </html>
