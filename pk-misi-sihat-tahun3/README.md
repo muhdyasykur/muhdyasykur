@@ -7,6 +7,7 @@ SK 3.1 · SP 3.1.1 & 3.1.2 · Gaya Mosston B (Latihan) · Kaedah Permainan & Dem
 |---|---|
 | `Misi2_Saya_Yakin_Saya_Boleh.html` | BBM digital (satu fail, luar talian). Buka dengan Chrome/Edge. |
 | `RPH_Misi2_Saya_Yakin_Saya_Boleh_Tahun3.docx` / `.pdf` | RPH penuh (Arial 11) dengan Bahagian D: Ulasan & Refleksi Pensyarah. |
+| `Skrip_Micro_Teaching_20_Minit.pdf` | Skrip langkah demi langkah untuk micro teaching 20 minit (pilih Tempoh PdP: 20 minit di Persediaan Guru). |
 | `Panduan_Micro_Teaching_Misi2.pdf` | Rujukan peribadi: kajian, objektif K/P/A, konsep “WOW”, skrip, persediaan digital, kontingensi, soalan pensyarah. |
 
 ## Tiga mod dalam satu fail
