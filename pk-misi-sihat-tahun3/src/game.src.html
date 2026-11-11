@@ -832,7 +832,7 @@ SCR.setup=()=>`<div class="screen"><h2>🧰 Persediaan Guru</h2><div class="g2">
  <label>Kelas: <input type="text" id="sCls" value="${esc(ST.cfg.cls)}" style="width:160px"></label>
  <label>Kod Peti (4 digit): <input type="text" id="sCode" value="${esc(ST.cfg.code)}" maxlength="4" style="width:110px;letter-spacing:.3em;font-weight:700"></label>
  <label>Nama kumpulan (pisah dengan koma):<input type="text" id="sGrp" value="${esc(ST.cfg.groups.join(', '))}" style="width:100%"></label>
- <label>Pautan BBM untuk peranti murid (cth. itch.io):<input type="text" id="sUrl" value="${esc(ST.cfg.url||'')}" placeholder="https://…" style="width:100%"></label>
+ <label>Pautan BBM untuk peranti murid (cth. itch.io):<input type="text" id="sUrl" value="${esc(ST.cfg.url||'')}" placeholder="${esc(selfURL()||'https://…')} (automatik)" style="width:100%"></label>
  <label>Pautan Padlet (pilihan):<input type="text" id="sPad" value="${esc(ST.cfg.padlet||'')}" placeholder="https://padlet.com/…" style="width:100%"></label>
  <label><input type="checkbox" id="sTts" ${ST.cfg.tts?'checked':''}> Suara baca (TTS)</label>
  <label><input type="checkbox" id="sMic" ${ST.cfg.mic?'checked':''}> Meter Suara (mikrofon)</label>
@@ -851,9 +851,11 @@ SCR_ON.setup=()=>{$('#sSens').oninput=e=>$('#sv').textContent=e.target.value;
  $('#tTts').onclick=()=>say('Selamat datang Wira Yakin! Saya yakin, saya boleh!');
  $('#sReset').onclick=()=>{if(confirm('Set semula kunci, roda, dinding, kiraan dan senarai semak?')){Object.assign(ST,{keys:[0,0,0,0],chk:{},stars:[],tally:[0,0,0,0],wheel:[],chal:null,grpTurn:0});save();$('#sMsg').textContent='♻️ Data kelas telah dikosongkan.'}};
  $$('[data-m]').forEach(c=>c.onchange=()=>{ST.cfg.mats[c.dataset.m]=c.checked;save()});$('#toCon').onclick=()=>home('connect')};
+const selfURL=()=>/^https?:$/.test(location.protocol)?location.origin+location.pathname:'';
+const bbmURL=()=>ST.cfg.url||selfURL();
 function qrSVG(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:6,margin:2,scalable:true})}catch(e){return ''}}
 SCR.connect=()=>`<div class="screen"><h2>📲 Sambung Peranti Kumpulan</h2><div class="g2"><div class="paper c">
- ${ST.cfg.url?`<div style="width:min(300px,70vw);margin:0 auto;background:#fff;border-radius:16px;padding:8px">${qrSVG(ST.cfg.url)}</div><p style="word-break:break-all;font-weight:700">${esc(ST.cfg.url)}</p>`:`<div style="font-size:80px">📲</div><p><b>Belum ada pautan.</b> Muat naik fail HTML ini ke itch.io / Google Drive / Google Classroom, kemudian tampal pautannya di <b>Persediaan Guru</b> untuk memaparkan kod QR.</p><p class="small">Atau salin fail ini terus ke setiap tablet (WhatsApp / pemacu USB). BBM berfungsi tanpa internet.</p>`}
+ ${bbmURL()?`<h3 style="margin-top:0">Imbas untuk buka BBM 📱</h3><div style="width:min(340px,70vw);margin:0 auto;background:#fff;border-radius:16px;padding:8px">${qrSVG(bbmURL())}</div><p style="word-break:break-all;font-weight:700;font-size:1.2em">${esc(bbmURL())}</p>${ST.cfg.url?'':'<p class="small">Pautan dikesan secara automatik. Pastikan laman ini <b>awam (public)</b> supaya tablet boleh membukanya.</p>'}`:`<div style="font-size:80px">📲</div><p><b>Belum ada pautan.</b> Muat naik fail HTML ini ke itch.io / Google Drive / Google Classroom, kemudian tampal pautannya di <b>Persediaan Guru</b> untuk memaparkan kod QR.</p><p class="small">Atau salin fail ini terus ke setiap tablet (WhatsApp / pemacu USB). BBM berfungsi tanpa internet.</p>`}
  ${ST.cfg.padlet?`<hr><h3>🧱 Padlet kelas</h3><div style="width:min(200px,50vw);margin:0 auto;background:#fff;border-radius:12px;padding:6px">${qrSVG(ST.cfg.padlet)}</div>`:''}</div>
  <div class="paper"><h3>Langkah untuk setiap kumpulan</h3><ol class="steps"><li><span>Imbas QR / buka fail BBM pada tablet kumpulan.</span></li><li><span>Tekan <b>📱 Mod Kumpulan</b> ➜ pilih nama kumpulan.</span></li><li><span>Setiap ejen menaip nama sendiri (<b>Daftar Ejen</b>).</span></li><li><span>Tunggu di <b>Markas</b> sehingga guru berkata “Buka Misi 1!”.</span></li></ol>
  <h3>Kad Respons Digital (pilihan)</h3><p>Murid yang ada peranti sendiri boleh tekan <b>🅰️ Kad Respons Digital</b>. Ketik A/B/C, skrin bertukar menjadi kad berwarna besar untuk diangkat.</p>
