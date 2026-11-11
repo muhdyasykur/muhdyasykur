@@ -25,10 +25,10 @@ FONT = "Arial"
 doc = Document()
 st = doc.styles["Normal"]
 st.font.name = FONT
-st.font.size = Pt(10.5)
+st.font.size = Pt(11)
 st.element.rPr.rFonts.set(qn("w:eastAsia"), FONT)
-st.paragraph_format.space_after = Pt(3)
-st.paragraph_format.line_spacing = 1.1
+st.paragraph_format.space_after = Pt(6)
+st.paragraph_format.line_spacing = 1.5
 
 sec = doc.sections[0]
 sec.page_width, sec.page_height = Cm(21), Cm(29.7)
@@ -69,7 +69,7 @@ def add_runs(p, text, size=None, color=None, bold_all=False, italic=False):
     return p
 
 
-def para(text="", size=None, bold=False, align=None, after=3, before=0, color=None, italic=False, style=None):
+def para(text="", size=None, bold=False, align=None, after=6, before=0, color=None, italic=False, style=None):
     p = doc.add_paragraph(style=style)
     add_runs(p, text, size=size, color=color, bold_all=bold, italic=italic)
     p.paragraph_format.space_after = Pt(after)
@@ -83,7 +83,7 @@ def para(text="", size=None, bold=False, align=None, after=3, before=0, color=No
 
 def heading(text, lvl=1):
     size = {0: 16, 1: 13, 2: 11.5}[lvl]
-    p = para(text, size=size, bold=True, color=NAVY, before=10 if lvl else 0, after=4,
+    p = para(text, size=size, bold=True, color=NAVY, before=16 if lvl else 0, after=8,
              align="c" if lvl == 0 else None)
     p.paragraph_format.keep_with_next = True
     if lvl == 1:
@@ -97,7 +97,7 @@ def heading(text, lvl=1):
     return p
 
 
-def fill_cell(cell, content, size=9.5, bold=False):
+def fill_cell(cell, content, size=11, bold=False):
     """content: str atau senarai baris. Baris bermula '• ' / '1. ' dikekalkan."""
     cell.text = ""
     lines = content if isinstance(content, list) else [content]
@@ -105,8 +105,8 @@ def fill_cell(cell, content, size=9.5, bold=False):
     for ln in lines:
         p = cell.paragraphs[0] if first else cell.add_paragraph()
         first = False
-        p.paragraph_format.space_after = Pt(2)
-        p.paragraph_format.line_spacing = 1.05
+        p.paragraph_format.space_after = Pt(4)
+        p.paragraph_format.line_spacing = 1.2
         m = re.match(r"^(\s*)([•\-–]|\d+\.|[a-z]\.|\(\w+\))\s+(.*)$", ln)
         if m:
             indent = 0.35 + 0.35 * (len(m.group(1)) // 2)
@@ -132,6 +132,13 @@ def set_widths(table, widths):
         tblPr.append(tw)
     tw.set(qn("w:w"), str(int(sum(widths) * 567)))
     tw.set(qn("w:type"), "dxa")
+    mar = OxmlElement("w:tblCellMar")
+    for side, v in (("top", 85), ("bottom", 85), ("left", 115), ("right", 115)):
+        e = OxmlElement(f"w:{side}")
+        e.set(qn("w:w"), str(v))
+        e.set(qn("w:type"), "dxa")
+        mar.append(e)
+    tblPr.append(mar)
     lay = OxmlElement("w:tblLayout")
     lay.set(qn("w:type"), "fixed")
     tblPr.append(lay)
@@ -147,7 +154,7 @@ def repeat_header(row):
     trPr.append(el)
 
 
-def table(header, rows, widths, size=9.5, head_fill="DCE3F7", first_col_fill=None, header_repeat=True):
+def table(header, rows, widths, size=11, head_fill="DCE3F7", first_col_fill=None, header_repeat=True):
     ncol = len(header) if header else len(rows[0])
     t = doc.add_table(rows=1, cols=ncol)
     t.style = "Table Grid"
@@ -170,11 +177,11 @@ def table(header, rows, widths, size=9.5, head_fill="DCE3F7", first_col_fill=Non
     if not header:
         t._tbl.remove(t.rows[0]._tr)
     set_widths(t, widths)
-    doc.add_paragraph().paragraph_format.space_after = Pt(2)
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
     return t
 
 
-def kv(rows, widths=(4.2, 12.8), size=9.5):
+def kv(rows, widths=(4.2, 12.8), size=11):
     return table(None, rows, widths, size=size, first_col_fill="EEF1FB")
 
 
@@ -190,8 +197,8 @@ def new_section(landscape):
     else:
         s.orientation = WD_ORIENT.PORTRAIT
         s.page_width, s.page_height = Cm(21), Cm(29.7)
-    s.left_margin = s.right_margin = Cm(1.8 if landscape else 2)
-    s.top_margin = s.bottom_margin = Cm(1.6 if landscape else 1.8)
+    s.left_margin = s.right_margin = Cm(1.6 if landscape else 2)
+    s.top_margin = s.bottom_margin = Cm(1.3 if landscape else 1.8)
     return s
 
 
@@ -217,14 +224,14 @@ kv([
     ["NOMBOR TELEFON", "018-2011748"],
     ["ALAMAT EMEL", "g-igp22070536@moe-dl.edu.my"],
     ["NAMA PENSYARAH", "ENCIK IRWAN BIN ISDUP"],
-], widths=(5, 12), size=10)
+], widths=(5, 12), size=11)
 para("**GRED:** ____________", after=6)
 table(None, [
     ["**A. Perakuan Pelajar** (untuk diisi selepas penghantaran tugasan)\nDengan ini saya mengaku bahawa saya telah menerima maklum balas daripada pensyarah kerja kursus ini dan saya telah merujuk dan memahaminya.",
      "\n\n...................................\nTandatangan Pelajar\nTarikh: ____________"],
     ["**B. Pengesahan Pelajar Menerima Maklum Balas**\n(untuk dilengkapkan selepas menerima gred dan maklum balas daripada pensyarah)",
      "\n\n...................................\nTandatangan Pelajar\nTarikh: ____________"],
-], (11.5, 5.5), size=9.5)
+], (11.5, 5.5), size=11)
 
 # ================================================================== HALAMAN TAJUK RPH
 page_break()
@@ -240,9 +247,9 @@ kv([
     ["Masa", "9:00 pagi – 9:30 pagi (30 minit)"],
     ["Kelas / Tahun", "3 Indigo"],
     ["Kehadiran", "Enrolmen: 30  |  Hadir: 30 (L: 13, P: 17)  |  Tidak hadir: 0"],
-    ["Bidang", [f"{O} Kesihatan Diri dan Reproduktif    {O} Penyalahgunaan Bahan",
-                f"{X} **Kesihatan Mental, Emosi dan Sosial**    {O} Kekeluargaan    {O} Perhubungan",
-                f"{O} Pemakanan    {O} Penyakit    {O} Keselamatan    {O} Pertolongan Cemas"]],
+    ["Bidang", [f"{O} Kesihatan Diri dan Reproduktif", f"{O} Penyalahgunaan Bahan",
+                f"{X} **Kesihatan Mental, Emosi dan Sosial**", f"{O} Kekeluargaan", f"{O} Perhubungan",
+                f"{O} Pemakanan", f"{O} Penyakit", f"{O} Keselamatan", f"{O} Pertolongan Cemas"]],
     ["Tajuk", "Pengurusan Mental dan Emosi: **Saya Yakin, Saya Boleh!** (Keyakinan Diri)"],
     ["Standard Kandungan", "**3.0 Pengurusan Mental dan Emosi**\n**3.1** Kemahiran mengurus mental dan emosi dalam kehidupan harian (cara meningkatkan: keyakinan diri)"],
     ["Standard Pembelajaran", ["Murid boleh:", "**3.1.1** Menjelaskan maksud keyakinan diri.",
@@ -272,7 +279,7 @@ table(["Domain & aras", "Objektif pembelajaran", "Kriteria kejayaan (Saya boleh�
       "(a) **menawarkan diri secara sukarela** untuk sekurang-kurangnya **satu peranan** dalam aktiviti kumpulan atau cabaran (pembaca, penyusun, pemegang prop, pembentang atau berdiri di hadapan Cermin Ajaib) tanpa dipaksa; dan",
       "(b) **menulis satu azam “Saya boleh…”** pada **Bintang Saya Boleh** dan menampalnya di **Dinding Saya Boleh**. __(Langkah 2–5)__"],
      "Saya berani menawarkan diri untuk satu tugas dan saya boleh menulis satu azam “Saya boleh…” tentang diri saya."],
-], (3.4, 8.4, 5.2), size=9.3)
+], (3.4, 8.4, 5.2), size=11)
 
 heading("Analisis Penulisan Objektif (Format ABCD: Mager, 1997)", 2)
 table(["", "A (Audience)", "B (Behaviour: kata kerja boleh diperhati)", "C (Condition: bahan / situasi)", "D (Degree: kriteria)"], [
@@ -280,8 +287,8 @@ table(["", "A (Audience)", "B (Behaviour: kata kerja boleh diperhati)", "C (Cond
     ["K(ii)", "Murid Tahun 3", "memilih tindakan yakin", "4 situasi Kad Cabaran, Kad Respons A/B/C", "≥ 3 daripada 4 betul"],
     ["P", "Murid Tahun 3 (dalam kumpulan)", "mendemonstrasikan Gaya Wira Yakin", "Pentas Wira Yakin, prop Kad Cabaran, Meter Suara", "≥ 3 daripada 4 elemen dalam senarai semak"],
     ["A", "Murid Tahun 3", "menawarkan diri secara sukarela; menulis azam", "aktiviti kumpulan & Bintang Saya Boleh", "≥ 1 peranan sukarela + 1 azam ditampal"],
-], (1.2, 2.6, 4.4, 5.0, 3.8), size=9)
-para("__Rasional pemilihan kata kerja:__ **Kognitif** menggunakan kata kerja proses berfikir yang dapat dinilai betul/salah (melengkapkan, memilih). **Psikomotor** menggunakan kata kerja pergerakan fizikal yang boleh diperhati dan dinilai melalui senarai semak (mendemonstrasikan postur, pandangan mata, suara dan tindakan dengan prop); ia ialah **kemahiran kesihatan yang diaplikasikan (SP 3.1.2)**, bukan sekadar memegang bahan. **Afektif** tidak dinilai betul/salah; sikap dibuktikan melalui **tingkah laku sukarela** (menawarkan diri, menyatakan komitmen) mengikut aras Krathwohl __Bertindak balas__ (mengambil bahagian dengan rela) dan __Menghargai__ (menyatakan komitmen peribadi).", size=9.3, align="j")
+], (1.5, 2.6, 4.3, 4.8, 3.8), size=11)
+para("__Rasional pemilihan kata kerja:__ **Kognitif** menggunakan kata kerja proses berfikir yang dapat dinilai betul/salah (melengkapkan, memilih). **Psikomotor** menggunakan kata kerja pergerakan fizikal yang boleh diperhati dan dinilai melalui senarai semak (mendemonstrasikan postur, pandangan mata, suara dan tindakan dengan prop); ia ialah **kemahiran kesihatan yang diaplikasikan (SP 3.1.2)**, bukan sekadar memegang bahan. **Afektif** tidak dinilai betul/salah; sikap dibuktikan melalui **tingkah laku sukarela** (menawarkan diri, menyatakan komitmen) mengikut aras Krathwohl __Bertindak balas__ (mengambil bahagian dengan rela) dan __Menghargai__ (menyatakan komitmen peribadi).", size=11, align="j")
 
 heading("Jadual Penjajaran Konstruktif (Objektif ↔ Aktiviti ↔ Bahan ↔ Pentaksiran)", 2)
 table(["Objektif", "Aktiviti (Langkah)", "Bahan yang memandu", "Instrumen pentaksiran", "TP"], [
@@ -289,7 +296,7 @@ table(["Objektif", "Aktiviti (Langkah)", "Bahan yang memandu", "Instrumen pentak
     ["K(ii)", "L3 Tikar Lampu Isyarat & Kuiz Kilat (latihan); L4 Fikir & Pilih bagi 4 cabaran (pentaksiran)", "Sampul 2, Tikar, Kad Respons A/B/C, Roda Cabaran", "Kad Respons (semua murid), senarai semak K", "TP2, TP4"],
     ["P", "L4 Gaya Wira Yakin (demonstrasi guru → tiru) dan Tunjukkan (kumpulan beraksi)", "Poster Gaya, prop Kotak Cabaran, Meter Suara", "Senarai semak Gaya Wira Yakin (4 elemen)", "TP4"],
     ["A", "L2–L4 peranan sukarela; L5 Cermin Ajaib & Dinding Saya Boleh", "Kad Tugasan (peranan), Cermin Ajaib, Bintang, Dinding", "Senarai semak A1/A2, Bintang, Meter Keyakinan (persepsi kendiri)", "–"],
-], (1.6, 5.2, 4.2, 4.2, 1.8), size=9)
+], (2.2, 4.8, 3.9, 4.0, 2.1), size=11)
 
 # ================================================================== ELEMEN MERENTAS
 heading("ELEMEN MERENTAS KURIKULUM DAN BAHAN")
@@ -306,7 +313,7 @@ table(["Elemen", "Pilihan", "Bukti dalam aktiviti (Langkah)"], [
     ["Kecerdasan pelbagai", "Kinestetik, interpersonal, intrapersonal, linguistik, visual-ruang", "L4 (kinestetik), L2–L3 (interpersonal), L5 (intrapersonal)"],
     ["Kaedah / teknik", [f"{X} Permainan (misi bilik rahsia, roda, peti)", f"{X} Demonstrasi", f"{X} Gallery Walk", f"{X} Padlet Wall (Dinding Saya Boleh)", f"{O} Main peranan", f"{O} Think-Pair-Share"],
      ["**Permainan:** L1–L5 (4 kod → buka peti).", "**Demonstrasi:** L4.", "**Gallery Walk:** L3.", "**Padlet Wall:** L5."]],
-], (3.0, 6.0, 8.0), size=9)
+], (3.0, 6.0, 8.0), size=11)
 
 heading("Senarai Bahan (BBM)", 2)
 table(["Bil", "Bahan", "Kuantiti", "Fungsi dalam pendekatan berpusatkan bahan", "Langkah"], [
@@ -323,8 +330,8 @@ table(["Bil", "Bahan", "Kuantiti", "Fungsi dalam pendekatan berpusatkan bahan", 
     ["11", "**Bintang “Saya boleh…”** + **Dinding Saya Boleh** (kertas mahjung)", "30 + 1", "Padlet Wall fizikal (bukti A)", "5"],
     ["12", "**Peti Wira Yakin** + mangga 4 digit + **4 Kad Digit** + **Lencana Wira Yakin Diri**", "1 + 4 + 30", "Matlamat permainan; ganjaran; penutup sosial", "1, 5"],
     ["13", "**Pas Ejen**, pelekat ⭐, senarai semak pemerhatian", "30, 1", "Penglibatan & rekod pentaksiran", "1–5"],
-], (0.9, 5.4, 1.6, 7.3, 1.8), size=8.8)
-para("Semua bahan fizikal tersedia dalam __Bahan_Cetak_Misi2.pdf__ (14 halaman A4) dan boleh dicetak terus daripada menu **Bahan Cetak** dalam BBM digital.", size=9, italic=True)
+], (1.2, 5.0, 2.1, 6.6, 2.4), size=11)
+para("Semua bahan fizikal tersedia dalam __Bahan_Cetak_Misi2.pdf__ (14 halaman A4) dan boleh dicetak terus daripada menu **Bahan Cetak** dalam BBM digital.", size=11, italic=True)
 
 # ================================================================== KESEPADANAN PENDEKATAN
 heading("KESEPADANAN PENDEKATAN DENGAN JADUAL INDUK PENGAJARAN")
@@ -334,7 +341,7 @@ table(["Aspek", "Pilihan dalam RPH", "Justifikasi"], [
     ["Strategi", "**Pembelajaran Berasaskan Teknologi** + bahan konkrit", "BBM digital memandu aliran, memaparkan Kad Tugasan, memberi maklum balas serta-merta dan merekod senarai semak. Bahan fizikal memastikan pembelajaran konkrit (Bruner: enaktif → ikonik → simbolik)."],
     ["Kaedah", "**Permainan** dan **Demonstrasi**", "Misi bilik rahsia: 4 kod membuka Peti Wira Yakin. Demonstrasi Gaya Wira Yakin oleh guru dan kumpulan (L4)."],
     ["Teknik", "**Gallery Walk** dan **Padlet Wall**", "Gallery Walk menyemak tikar kumpulan lain (L3). Dinding Saya Boleh sebagai Padlet Wall fizikal + digital (L5)."],
-], (3.2, 4.4, 9.4), size=9)
+], (3.2, 4.4, 9.4), size=11)
 
 heading("Ciri Pendekatan Berpusatkan Bahan dan Buktinya dalam RPH", 2)
 table(["Ciri pendekatan berpusatkan bahan", "Bukti dalam RPH ini"], [
@@ -345,16 +352,16 @@ table(["Ciri pendekatan berpusatkan bahan", "Bukti dalam RPH ini"], [
     ["Pembelajaran **mengikut kadar dan keputusan murid**", "Gaya B: kumpulan menentukan peranan, susunan dan kadar dalam Sampul 1 & 2."],
     ["Guru sebagai **perancang dan fasilitator**", "Guru menyediakan Kit Misi (pra-impak), bergerak memberi maklum balas, merekod senarai semak (impak & pasca-impak)."],
     ["Bahan **pelbagai deria** (Dale, 1969)", "Visual (skrin, poster), auditori (TTS, Meter Suara), kinestetik (kad, prop, pergerakan), sentuhan (sampul, peti)."],
-], (6.0, 11.0), size=9)
+], (6.0, 11.0), size=11)
 
 # ================================================================== BAHAGIAN B (LANDSCAPE)
 new_section(True)
 heading("BAHAGIAN B: LANGKAH PdP DAN PENTAKSIRAN")
-para("**Peta aliran BBM:** Mula → Kenal → Pilih → Bertindak → Refleksi → Buka Peti  ·  **Masa:** 3 + 5 + 7 + 10 + 5 = 30 minit  ·  Setiap misi selesai = 1 Kad Digit Kod (🔑) untuk membuka Peti Wira Yakin.", size=9.5)
-para("**Pra-impak (sebelum 9:00):** susun 4 meja kumpulan; letak Beg Misi di setiap meja; edar Kad Respons, Pasport dan Pas Ejen; kunci Peti dengan kod yang sama dengan tetapan BBM (Persediaan Guru); tampal Poster Gaya dan Dinding Saya Boleh; buka BBM dalam skrin penuh; uji mikrofon/kamera.", size=9.5, after=5)
+para("**Peta aliran BBM:** Mula → Kenal → Pilih → Bertindak → Refleksi → Buka Peti  ·  **Masa:** 3 + 5 + 7 + 10 + 5 = 30 minit  ·  Setiap misi selesai = 1 Kad Digit Kod (🔑) untuk membuka Peti Wira Yakin.", size=11)
+para("**Pra-impak (sebelum 9:00):** susun 4 meja kumpulan; letak Beg Misi di setiap meja; edar Kad Respons, Pasport dan Pas Ejen; kunci Peti dengan kod yang sama dengan tetapan BBM (Persediaan Guru); tampal Poster Gaya dan Dinding Saya Boleh; buka BBM dalam skrin penuh; uji mikrofon/kamera.", size=11, after=5)
 
 H = ["Langkah / Masa", "Isi pelajaran", "Aktiviti pengajaran dan pembelajaran (Guru ↔ Murid)", "Bahan yang memandu", "Catatan (Domain / KBAT / EMK / Nilai / PAK21 / Pentaksiran)"]
-W = (2.5, 4.0, 10.1, 3.6, 5.9)
+W = (2.6, 4.1, 10.4, 3.6, 5.8)
 table(H, [
     ["**Langkah 1:\nSet Induksi\n(MULA)**\n\n3 minit\n9:00–9:03",
      ["**Rangsangan:** situasi Mei.", "Mei tahu jawapan soalan guru tetapi takut jawapannya salah.", "", "**Soalan:** “Patutkah Mei mencuba menjawab? Mengapa?”", "", "**Jangkaan jawapan:** “Patut, kerana mencuba ialah cara terbaik untuk belajar.”"],
@@ -405,7 +412,7 @@ table(H, [
       "5. **Penutup sosial (1 minit):** wakil memasukkan 4 Kad Digit pada papan kekunci skrin; Peti digital terbuka, guru membuka mangga Peti sebenar. Ketua kumpulan mengedarkan **Lencana Wira Yakin Diri**; kelas melafazkan **Ikrar Wira Yakin**. Guru memberi **Cabaran Minggu Ini**: cuba satu perkara baharu dengan yakin."],
      ["• BBM digital: Cermin Ajaib, Dinding, Meter Keyakinan, Rumusan, Buka Peti, Tahniah", "• Bintang + Dinding Saya Boleh", "• Pasport bhg 4", "• Peti + mangga + Kad Digit", "• Lencana"],
      ["**Afektif A(b):** azam ditampal (Menghargai).", "**Kognitif K(i):** pengukuhan.", "**Teknik:** Padlet Wall.", "**PK:** Menetapkan matlamat.", "**EMK:** Bahasa.", "**Pentaksiran:** Bintang, Pasport, Meter Keyakinan.", "**Penutup:** peneguhan positif, ganjaran, ikrar."]],
-], W, size=8.6)
+], W, size=11)
 
 # ================================================================== KEMBALI KE POTRET
 new_section(False)
@@ -421,7 +428,7 @@ table(["Domain", "Bukti", "Instrumen", "Kriteria “mencapai”"], [
     ["K(ii)", "Kad Respons dalam 4 cabaran", "Senarai semak K2 / kiraan dalam BBM", "≥ 3 daripada 4 betul"],
     ["P", "Aksi di Pentas Wira Yakin", "Senarai semak Gaya Wira Yakin (🧍 👀 🗣️ ✋)", "≥ 3 daripada 4 elemen"],
     ["A", "Peranan sukarela, Bintang di dinding", "Senarai semak A1, A2; Meter Keyakinan (tidak dinilai)", "≥ 1 peranan sukarela + 1 azam"],
-], (2.0, 4.5, 6.0, 4.5), size=9)
+], (2.0, 4.5, 6.0, 4.5), size=11)
 kv([
     ["Pengayaan\n(murid yang menguasai)", ["**TP5:** murid mengesyorkan satu cara meningkatkan keyakinan diri melalui amalan positif kepada rakan yang takut menjawab (menjadi “Mentor Wira” dalam kumpulan).", "**TP6:** murid berdiri di hadapan Cermin Ajaib dan berkomunikasi dengan yakin tentang keistimewaan diri: “Saya istimewa kerana…”."]],
     ["Pemulihan\n(murid yang belum menguasai)", ["Guru mengulang maksud keyakinan diri dengan Kad Gambar Sampul 1 dan boneka Mei.", "Murid berpasangan dengan rakan sebaya (buddy) untuk mengulang Tikar Lampu Isyarat (4 kad sahaja).", "Murid menyebut “Saya boleh cuba!” bersama guru dan berdemonstrasi dalam kumpulan kecil (tidak seorang diri)."]],
@@ -437,9 +444,10 @@ table(["TP", "Pernyataan", "Bukti dalam PdP"], [
     ["TP4", "Memilih cara meningkatkan keyakinan diri melalui amalan positif.", "L3 Kuiz Kilat; L4 Fikir & Pilih + Tunjukkan"],
     ["TP5", "Mengesyorkan cara meningkatkan keyakinan diri melalui amalan positif.", "Pengayaan: Mentor Wira"],
     ["TP6", "Berkomunikasi dengan yakin tentang keistimewaan diri.", "Pengayaan: “Saya istimewa kerana…”"],
-], (1.4, 9.0, 6.6), size=9)
+], (1.4, 9.0, 6.6), size=11)
 
 # ================================================================== BAHAGIAN C
+page_break()
 heading("BAHAGIAN C: REFLEKSI GURU (diisi selepas PdP)")
 kv([
     ["Objektif tercapai?", [f"Kognitif K(i): {O} Ya  {O} Sebahagian  {O} Tidak   ___ / 30 murid", f"Kognitif K(ii): {O} Ya  {O} Sebahagian  {O} Tidak   ___ / 30 murid",
@@ -450,6 +458,11 @@ kv([
     ["PdP ditunda (jika ada) dan sebab", "\n"],
 ])
 
+table(["Disediakan oleh", "Disemak oleh"], [
+    ["Nama: Muhammad Yasykur bin Muhamad Yasim", "Nama: Encik Irwan bin Isdup"],
+    ["Tandatangan:", "Tandatangan:"],
+    ["Tarikh:", "Tarikh:"],
+], (8.5, 8.5), size=11)
 page_break()
 heading("BAHAGIAN D: ULASAN DAN REFLEKSI PENSYARAH (Micro Teaching)")
 table(["Aspek dinilai", "Sangat baik", "Baik", "Sederhana", "Perlu dibaiki"], [
@@ -461,19 +474,14 @@ table(["Aspek dinilai", "Sangat baik", "Baik", "Sederhana", "Perlu dibaiki"], [
     ["Penyoalan, maklum balas dan pengurusan bilik darjah", O, O, O, O],
     ["Pentaksiran (instrumen K, P, A) dan pembezaan", O, O, O, O],
     ["Komunikasi, suara dan keyakinan guru pelatih", O, O, O, O],
-], (9.0, 2.0, 2.0, 2.0, 2.0), size=9)
+], (9.0, 2.0, 2.0, 2.0, 2.0), size=11)
 kv([
-    ["Ulasan keseluruhan pensyarah", "\n\n\n\n"],
-    ["Kekuatan", "\n\n\n"],
-    ["Cadangan penambahbaikan", "\n\n\n"],
+    ["Ulasan keseluruhan pensyarah", "\n\n"],
+    ["Kekuatan", "\n"],
+    ["Cadangan penambahbaikan", "\n"],
     ["Markah / Gred", "\n"],
-    ["Tandatangan & cop pensyarah", "\n\nNama: ENCIK IRWAN BIN ISDUP\nTarikh: ______________"],
+    ["Tandatangan & cop pensyarah", "\nNama: ENCIK IRWAN BIN ISDUP\nTarikh: ______________"],
 ], widths=(5.0, 12.0))
-table(["Disediakan oleh", "Disemak oleh"], [
-    ["Nama: Muhammad Yasykur bin Muhamad Yasim", "Nama: Encik Irwan bin Isdup"],
-    ["Tandatangan:", "Tandatangan:"],
-    ["Tarikh:", "Tarikh:"],
-], (8.5, 8.5), size=9.5)
 
 # ================================================================== LAMPIRAN
 page_break()
@@ -487,8 +495,8 @@ table(["Bil", "Pendekatan", "Gaya Mosston & Ashworth", "Strategi", "Kaedah", "Te
     ["6", "Konstruktivisme", "F. Guided Discovery, H. Divergent Discovery", "Inkuiri-Penemuan, PBL", "Kajian Kes, Eksperimen, Projek", "KWL Chart, Jigsaw, Exit Ticket"],
     ["7", "Behavioris", "A. Command, B. Practice", "Direct Instruction / Latihan Berstruktur (Mastery Learning)", "Latih Tubi, Demonstrasi", "Step-by-Step Demonstration, Pengulangan Berstruktur"],
     ["8", "Humanistik", "J. Learner-Initiated, K. Self-Teaching", "Pembelajaran Reflektif", "Perbincangan, Sumbang Saran", "Exit Ticket, Buzz Group, Circle Time"],
-], (0.9, 3.0, 3.0, 3.4, 3.3, 3.4), size=8.5)
-para("Baris 3 ialah pendekatan yang digunakan dalam RPH ini. Kesemua elemennya (Gaya B, strategi teknologi, kaedah Demonstrasi & Permainan, teknik Padlet Wall & Gallery Walk) dilaksanakan.", size=9, italic=True)
+], (1.2, 2.9, 3.0, 3.3, 3.2, 3.4), size=11)
+para("Baris 3 ialah pendekatan yang digunakan dalam RPH ini. Kesemua elemennya (Gaya B, strategi teknologi, kaedah Demonstrasi & Permainan, teknik Padlet Wall & Gallery Walk) dilaksanakan.", size=11, italic=True)
 
 heading("LAMPIRAN 2: KESEPADANAN RPH DENGAN BORANG PR1 (KOMPONEN A: PERANCANGAN)")
 table(["Aspek PR1", "Bukti dalam RPH ini"], [
@@ -503,10 +511,10 @@ table(["Aspek PR1", "Bukti dalam RPH ini"], [
     ["A1d. Penutup", "Penutup kognitif (rumusan definisi & 4 Kunci) dan sosial (buka peti, lencana, ikrar, cabaran minggu ini)."],
     ["A2a. Kaedah / teknik pedagogi", "Permainan dan Demonstrasi; Gallery Walk dan Padlet Wall; selari dengan Gaya B (Latihan)."],
     ["A3a. Kemahiran insaniah", "Kemahiran Digital (BBM, Meter Suara), Komunikasi (suara jelas, membentang), Kognitif (membuat keputusan), Kepimpinan & kerja berpasukan (peranan sukarela)."],
-], (4.5, 12.5), size=9)
+], (4.5, 12.5), size=11)
 
 heading("LAMPIRAN 3: GAMBAR KANDUNGAN BBM DIGITAL – MISI 2: SAYA YAKIN, SAYA BOLEH!")
-para("Fail: __Misi2_Saya_Yakin_Saya_Boleh.html__ (luar talian; buka dengan Chrome/Edge, tekan F untuk skrin penuh).", size=9)
+para("Fail: __Misi2_Saya_Yakin_Saya_Boleh.html__ (luar talian; buka dengan Chrome/Edge, tekan F untuk skrin penuh).", size=11)
 SHOT_CAPS = [
     ("00-laman-utama", "Laman utama"), ("01-mula-mesej", "L1 Mula: Mesej Rahsia Mei"), ("02-mula-soalan", "L1 Mula: Kad Respons A/B"), ("03-mula-misi", "L1 Mula: Misi Hari Ini (Peti berkunci)"),
     ("04-kenal-maksud", "L2 Kenal: maksud keyakinan diri"), ("05-kenal-sampul1", "L2 Kenal: Kad Tugasan Sampul 1 + pemasa"), ("06-kenal-padan", "L2 Kenal: semakan padanan 4 Kunci"), ("07-kod", "Kod ke-1 diperoleh"),
@@ -530,12 +538,12 @@ for i in range(0, len(SHOT_CAPS), 2):
         c = cells[j].add_paragraph()
         c.alignment = WD_ALIGN_PARAGRAPH.CENTER
         r = c.add_run(f"Rajah {i + j + 1}: {cap}")
-        r.font.size = Pt(8.5)
+        r.font.size = Pt(10)
         r.italic = True
 
 set_widths(IMG2, (8.5, 8.5))
 heading("LAMPIRAN 4: BAHAN FIZIKAL (BAHAN CETAK)")
-para("Fail: __Bahan_Cetak_Misi2.pdf__. Kad Tugasan, Kad Padanan, Tikar Lampu Isyarat, 8 Kad Tingkah Laku, Kad Respons, Kad Cabaran, Kad Bacaan, Pasport, Bintang, Lencana, Kad Digit, Poster Gaya, Pas Ejen dan Senarai Semak.", size=9)
+para("Fail: __Bahan_Cetak_Misi2.pdf__. Kad Tugasan, Kad Padanan, Tikar Lampu Isyarat, 8 Kad Tingkah Laku, Kad Respons, Kad Cabaran, Kad Bacaan, Pasport, Bintang, Lencana, Kad Digit, Poster Gaya, Pas Ejen dan Senarai Semak.", size=11)
 t = doc.add_table(rows=0, cols=4)
 t.alignment = WD_TABLE_ALIGNMENT.CENTER
 bcs = sorted(SHOTS.glob("bc-*.jpg"))
@@ -565,7 +573,7 @@ refs = [
     "Smaldino, S. E., Lowther, D. L., Mims, C., & Russell, J. D. (2019). __Instructional technology and media for learning__ (12th ed.). Pearson.",
 ]
 for r in refs:
-    p = para(r, size=9.5, after=3)
+    p = para(r, size=11, after=3)
     p.paragraph_format.left_indent = Cm(1)
     p.paragraph_format.first_line_indent = Cm(-1)
 
@@ -574,11 +582,11 @@ for s in doc.sections[:1]:
     fp = s.footer.paragraphs[0]
     fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r = fp.add_run("RPH PKES3143 · Misi 2: Saya Yakin, Saya Boleh! · Muhammad Yasykur  ·  ")
-    r.font.size = Pt(8)
+    r.font.size = Pt(9)
     r.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
     for kind, txt in (("begin", None), (None, "PAGE"), ("end", None)):
         run = fp.add_run()
-        run.font.size = Pt(8)
+        run.font.size = Pt(9)
         if kind:
             fc = OxmlElement("w:fldChar")
             fc.set(qn("w:fldCharType"), kind)
