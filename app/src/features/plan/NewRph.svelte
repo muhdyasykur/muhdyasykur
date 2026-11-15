@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { href, go } from '../../router.svelte';
+  import { href, go, route } from '../../router.svelte';
   import { listClasses, countPupils, saveLesson } from '../../lib/db/repo';
   import { loadSow, loadStandards, loadPhonics, searchLessons, loadIndex } from '../../lib/curriculum/loader';
   import { buildLesson } from '../../lib/lesson/create';
@@ -26,7 +26,12 @@
   let busy = $state(false);
   let error = $state('');
 
-  $effect(() => { listClasses().then((c) => (classes = c)); loadIndex().then((i) => (index = i)); });
+  // Prefill from the weekly planner: #/plan/new/<classId>/<date>/<start>/<minutes>
+  const [pClass, pDate, pStart, pDur] = route.parts.slice(1);
+  if (pDate && /^\d{4}-\d{2}-\d{2}$/.test(pDate)) date = pDate;
+  if (pStart && /^\d{2}:\d{2}$/.test(pStart)) start = pStart;
+  if (pDur && Number(pDur) >= 15) duration = Number(pDur);
+  $effect(() => { listClasses().then((c) => { classes = c; if (pClass && c.some((x) => x.id === pClass)) classId = pClass; }); loadIndex().then((i) => (index = i)); });
   const cls = $derived(classes.find((c) => c.id === classId));
   $effect(() => { if (cls) { year = cls.year; school = cls.schoolType; } });
   const hasPhonics = $derived(!!index?.years[String(year)]?.phonics);

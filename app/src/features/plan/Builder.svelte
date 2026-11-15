@@ -5,6 +5,8 @@
   import type { Lesson } from '../../lib/lesson/model';
   import type { Standards, SowFile } from '../../lib/curriculum/types';
   import Icon from '../../lib/ui/Icon.svelte';
+  import ScoreRing from '../../lib/ui/ScoreRing.svelte';
+  import { runChecks } from '../../lib/lesson/checker';
   import SetupStep from './steps/SetupStep.svelte';
   import StandardsStep from './steps/StandardsStep.svelte';
   import ObjectivesStep from './steps/ObjectivesStep.svelte';
@@ -31,6 +33,7 @@
     loadedId = want;
     getLesson(want).then(async (l) => {
       if (!l) { missing = true; return; }
+      l.checkNotes ??= {};
       lesson = l;
       [standards, sow] = await Promise.all([loadStandards(l.curriculum.year, l.curriculum.school), loadSow(l.curriculum.year, l.curriculum.school)]);
     });
@@ -57,6 +60,7 @@
 
   const idx = $derived(Math.max(0, STEPS.findIndex((s) => s.key === step)));
   const cur = $derived(STEPS[idx]);
+  const report = $derived(lesson ? runChecks(lesson) : { score: 0, failing: [] });
   // keep the current step visible in the step bar on narrow screens
   $effect(() => { void idx; queueMicrotask(() => document.querySelector('.steps [aria-current="step"]')?.scrollIntoView({ inline: 'center', block: 'nearest' })); });
 </script>
@@ -69,9 +73,12 @@
     <a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />Plan</a>
     <span class="save" role="status">{saved === 'saving' ? 'Saving…' : saved === 'error' ? 'Not saved. Check storage space.' : 'Saved on this device'}</span>
   </div>
-  <header class="no-print">
+  <header class="no-print head">
+    <div>
     <p class="eyebrow">Year {lesson.curriculum.year} {lesson.curriculum.school}{lesson.curriculum.sowLesson ? ` · SoW lesson ${lesson.curriculum.sowLesson}` : ''}{lesson.header.className ? ` · ${lesson.header.className}` : ''}</p>
     <h1>{lesson.topic || 'Untitled lesson'}</h1>
+    </div>
+    <a class="score" href={href('plan', 'edit', lesson.id, 'review')} title="See what to fix"><ScoreRing score={report.score} /><span>{report.failing.length ? `${report.failing.length} to fix` : 'Aligned'}</span></a>
   </header>
   <nav class="steps no-print" aria-label="Builder steps">
     <ol>
@@ -102,6 +109,8 @@
 
 <style>
   .bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--s-2); }
+  .head { display: flex; justify-content: space-between; align-items: center; gap: var(--s-4); }
+  .score { display: grid; justify-items: center; gap: 2px; text-decoration: none; color: var(--ink-2); font-size: var(--t-xs); font-weight: 600; }
   .save { font-size: var(--t-xs); color: var(--ink-3); }
   .steps { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); margin: 0 calc(-1 * var(--s-2)); padding: var(--s-2); overflow-x: auto; }
   .steps ol { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s-1); }

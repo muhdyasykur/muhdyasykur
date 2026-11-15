@@ -1,8 +1,10 @@
 <script lang="ts">
   import type { Lesson } from '../../../lib/lesson/model';
   import { profile } from '../../../lib/profile.svelte';
-  import { alignment, smartFor } from '../../../lib/lesson/derive';
-  import { checkTiming } from '../../../lib/lesson/frameworks';
+  import { href } from '../../../router.svelte';
+  import { runChecks, GROUPS, type Result } from '../../../lib/lesson/checker';
+  import { saveFile } from '../../../lib/export/download';
+  import ScoreRing from '../../../lib/ui/ScoreRing.svelte';
   import RphSchool from '../print/RphSchool.svelte';
   import RphBlueprint from '../print/RphBlueprint.svelte';
 
@@ -11,40 +13,84 @@
   let layout = $state<'school' | 'blueprint'>((() => { try { return localStorage.getItem(KEY) === 'blueprint' ? 'blueprint' : 'school'; } catch { return 'school'; } })());
   $effect(() => { try { localStorage.setItem(KEY, layout); } catch { /* ignore */ } });
 
-  // A short readiness list. The full 29-rule alignment checker and score arrive in milestone 3.
-  const todo = $derived.by(() => {
-    const t: string[] = [];
-    if (!lesson.topic) t.push('Add a topic (Setup).');
-    if (!lesson.standards.main.ls.length) t.push('Choose the main Learning Standard (Standards).');
-    if (!lesson.standards.comp.ls.length) t.push('Choose a complementary Learning Standard (Standards).');
-    for (const o of lesson.objectives) { const bad = smartFor(lesson, o).filter((s) => !s.ok).map((s) => s.letter); if (bad.length) t.push(`Objective ${o.role === 'main' ? 'M' : 'C'}: fix ${bad.join(', ')} (Objectives).`); }
-    for (const i of checkTiming(lesson.stages, lesson.header.durationMin)) if (i.level === 'error') t.push(i.message + ' (Lesson flow)');
-    for (const r of alignment(lesson)) if (!r.ok) t.push(`LS ${r.ls}: ${r.problem.toLowerCase()}.`);
-    return t;
-  });
+  const report = $derived(runChecks(lesson));
+  let showPassed = $state(false);
+  let noting = $state('');
+  let reason = $state('');
+  let wordState = $state('');
+
+  function accept(r: Result) {
+    if (!reason.trim()) return;
+    lesson.checkNotes = { ...(lesson.checkNotes ?? {}), [r.rule.id]: reason.trim() };
+    noting = ''; reason = '';
+  }
+  function unaccept(id: string) { const n = { ...(lesson.checkNotes ?? {}) }; delete n[id]; lesson.checkNotes = n; }
+  async function word() {
+    wordState = 'Preparing the Word file…';
+    try {
+      const { toBlob, fileName } = await import('../../../lib/export/docx'); // loaded only when needed
+      const how = await saveFile(await toBlob($state.snapshot(lesson) as Lesson, profile.value, layout), fileName(lesson, layout));
+      wordState = how === 'shared' ? 'Shared.' : 'Saved to your downloads.';
+    } catch (e) { wordState = 'The Word file could not be made: ' + (e as Error).message; }
+  }
+  const icon = { pass: '✔', accepted: '✔', fail: '✘', skip: '–' } as const;
 </script>
 
 <div class="stack">
+  <section class="no-print card stack check" id="check">
+    <div class="row between">
+      <div class="row"><ScoreRing score={report.score} size={72} /><div><h3>Alignment score</h3><p class="muted small">{report.failing.length ? `${report.failing.length} of ${report.results.filter((r) => r.status !== 'skip').length} checks need attention. Warnings never stop you saving or printing.` : 'Every check passes. This lesson is aligned.'}</p></div></div>
+      <label class="row small"><input id="rv-passed" type="checkbox" bind:checked={showPassed} />Show passed checks</label>
+    </div>
+    {#each GROUPS as g}
+      {@const rows = report.results.filter((r) => r.rule.group === g && (showPassed ? r.status !== 'skip' : r.status === 'fail' || r.status === 'accepted'))}
+      {#if rows.length}
+        <div class="grp">
+          <h4>{g}</h4>
+          <ul>
+            {#each rows as r (r.rule.id)}
+              <li class={r.status} data-rule={r.rule.id}>
+                <span class="ic" aria-hidden="true">{icon[r.status]}</span>
+                <div class="stack tight">
+                  <b>{r.rule.title}</b>
+                  <span class="muted small">{r.status === 'accepted' ? `Marked as fine: ${r.note}` : r.message}</span>
+                  {#if r.status === 'fail'}
+                    <div class="row">
+                      <a class="btn btn-text" href={href('plan', 'edit', lesson.id, r.rule.step)}>Fix it</a>
+                      {#if noting === r.rule.id}
+                        <input class="input reason" bind:value={reason} placeholder="Why is this fine for this lesson?" aria-label="Reason" />
+                        <button class="btn btn-outline" type="button" disabled={!reason.trim()} onclick={() => accept(r)}>Save</button>
+                        <button class="btn btn-text" type="button" onclick={() => (noting = '')}>Cancel</button>
+                      {:else}
+                        <button class="btn btn-text" type="button" onclick={() => { noting = r.rule.id; reason = ''; }}>Mark as fine</button>
+                      {/if}
+                    </div>
+                  {:else if r.status === 'accepted'}
+                    <button class="btn btn-text undo" type="button" onclick={() => unaccept(r.rule.id)}>Undo</button>
+                  {/if}
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/if}
+    {/each}
+  </section>
+
   <div class="no-print stack">
     <div class="row between">
       <div class="seg" role="group" aria-label="Layout">
         <button type="button" aria-pressed={layout === 'school'} onclick={() => (layout = 'school')}>School template</button>
         <button type="button" aria-pressed={layout === 'blueprint'} onclick={() => (layout = 'blueprint')}>Consilia Lesson Blueprint</button>
       </div>
-      <div class="row">
-        <label class="row small"><input id="rv-ready" type="checkbox" checked={lesson.status !== 'draft'} onchange={(e) => (lesson.status = e.currentTarget.checked ? 'ready' : 'draft')} />Mark as ready</label>
-        <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>Print or save as PDF</button>
-      </div>
+      <label class="row small"><input id="rv-ready" type="checkbox" checked={lesson.status !== 'draft'} onchange={(e) => (lesson.status = e.currentTarget.checked ? 'ready' : 'draft')} />Mark as ready</label>
     </div>
-    {#if todo.length}
-      <details class="card todo" open={todo.length <= 6}>
-        <summary><b>{todo.length} thing{todo.length === 1 ? '' : 's'} to finish before you submit</b></summary>
-        <ul>{#each todo as t}<li>{t}</li>{/each}</ul>
-      </details>
-    {:else}
-      <p class="card ok">Every standard has an objective, every objective is SMART, and the timing adds up.</p>
-    {/if}
-    <p class="muted small">In the print dialog choose A4 and "Save as PDF" to get a file. Turn on "Background graphics" to keep the colours.</p>
+    <div class="row">
+      <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>Print or save as PDF</button>
+      <button id="rv-word" class="btn btn-primary" type="button" onclick={word}>Download Word (.docx)</button>
+      {#if wordState}<span class="muted small" role="status">{wordState}</span>{/if}
+    </div>
+    <p class="muted small">PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.</p>
   </div>
   <div class="paper-wrap">
     {#if layout === 'school'}<RphSchool {lesson} profile={profile.value} />{:else}<RphBlueprint {lesson} profile={profile.value} />{/if}
@@ -54,9 +100,15 @@
 <style>
   .between { justify-content: space-between; }
   .small { font-size: var(--t-sm); }
-  .todo ul { margin: var(--s-2) 0 0; padding-left: 1.2em; display: grid; gap: 2px; font-size: var(--t-sm); }
-  .todo summary { cursor: pointer; }
-  .ok { color: var(--ok); font-weight: 600; }
+  .tight { gap: 2px; }
+  .check h3 { margin-bottom: 2px; }
+  .grp h4 { font-size: var(--t-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: var(--s-2) 0 var(--s-1); }
+  .grp ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-1); }
+  .grp li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--s-2); padding: var(--s-2); border-radius: var(--r-ctl); background: var(--sunken); }
+  .ic { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font-size: 13px; font-weight: 800; color: #fff; }
+  .fail .ic { background: var(--bad); } .pass .ic, .accepted .ic { background: var(--ok); }
+  .reason { max-width: 340px; min-height: 38px; }
+  .undo { justify-self: start; }
   .paper-wrap { overflow-x: auto; background: var(--sunken); border-radius: var(--r-card); padding: var(--s-4); }
   @media print { .paper-wrap { overflow: visible; background: none; padding: 0; } }
 </style>

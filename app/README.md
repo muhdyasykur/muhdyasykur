@@ -11,7 +11,8 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M0 Foundations: app shell, offline install, themes, EN/BM, database, CI | Done |
 | M1 Curriculum data pack: SoW, DSKP, performance levels, task bank (Years 1–6, SK and SJK) | Done, awaiting sample review |
 | M2 RPH builder: onboarding, classes, 7-step builder, three modes, frameworks, ABCD/SMART objectives, L/M/H tiers, timing, print (school template and Consilia Lesson Blueprint) | Done |
-| M3 Alignment checker and score, Plan B suggestions, Word export, weekly planner | Next |
+| M3 Alignment checker (29 rules) and score, Plan B suggestions, Word export (both layouts), weekly planner and timetable, Today dashboard, copy a lesson to another class | Done |
+| M4 Teach mode, classroom toolkit, attendance, PBD tracker | Next |
 
 ## Run it
 

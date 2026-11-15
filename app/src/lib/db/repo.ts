@@ -64,3 +64,20 @@ export async function duplicateLesson(id: string): Promise<string | null> {
   await saveLesson(copy);
   return copy.id;
 }
+
+// ---- settings (small key/value records) ----
+export async function getSetting<T>(key: string, fallback: T): Promise<T> {
+  const r = await db.settings.get(key);
+  return (r?.value as T) ?? fallback;
+}
+export const setSetting = (key: string, value: unknown) => db.settings.put({ key, value });
+/** Copy a lesson to another class (and optionally another date); class-specific parts are reset. */
+export async function copyLessonToClass(id: string, cls: { id: string; name: string; levelLabel?: string }, date?: string): Promise<string | null> {
+  const l = await getLesson(id);
+  if (!l) return null;
+  const n = await countPupils(cls.id);
+  const copy: Lesson = { ...structuredClone(l), id: uid(), status: 'draft', createdAt: Date.now(), updatedAt: Date.now(), classId: cls.id,
+    header: { ...l.header, className: cls.name, levelLabel: cls.levelLabel ?? '', pupils: n || null, date: date ?? l.header.date } };
+  await saveLesson(copy);
+  return copy.id;
+}

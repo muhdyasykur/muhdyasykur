@@ -142,7 +142,32 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   // 10. review and print
   await page.click('.steps a:has-text("Review")');
   await page.waitForSelector('article.paper');
-  check((await page.locator('.card.ok').count()) === 1, 'review finds nothing left to fix');
+  const scoreOf = async () => Number((await page.locator('#check svg.ring text').textContent()).trim());
+  const s1 = await scoreOf();
+  const failing = await page.$$eval('#check li.fail', (els) => els.map((e) => e.dataset.rule));
+  check(s1 < 100 && failing.join() === 'plan-b', `score ${s1}: only Plan B needs attention (${failing.join(', ')})`);
+  await page.click('#check li.fail[data-rule="plan-b"] a:has-text("Fix it")');
+  await page.waitForSelector('#pb-fill');
+  await page.click('#pb-fill');
+  check((await page.inputValue('[data-planb=early]')).startsWith('High-tier'), 'suggestions keep the teacher\'s own Plan B text');
+  check((await page.inputValue('[data-planb=offline]')).toLowerCase().includes('slides'), 'offline plan names the slides and their board version');
+  await page.click('.steps a:has-text("Review")');
+  await page.waitForSelector('article.paper');
+  check((await scoreOf()) === 100, 'score reaches 100 once Plan B is complete');
+  check((await page.locator('.head .score').innerText()).includes('Aligned'), 'builder header shows the lesson as aligned');
+  // mark-as-fine round trip on a fresh failure
+  await page.click('.steps a:has-text("Setup")');
+  await page.fill('#st-21', '');
+  await page.click('.steps a:has-text("Review")');
+  await page.click('#check li.fail[data-rule="cce-21"] button:has-text("Mark as fine")');
+  await page.fill('#check input.reason', 'Mentor asked to leave 21st-century skills to the school template.');
+  await page.click('#check button:has-text("Save")');
+  check((await scoreOf()) === 100 && (await page.locator('#check li.accepted').count()) === 1, 'a rule marked as fine counts, with its reason shown');
+  await page.click('#check li.accepted button:has-text("Undo")');
+  await page.click('.steps a:has-text("Setup")');
+  await page.fill('#st-21', 'Collaboration, Critical Thinking');
+  await page.click('.steps a:has-text("Review")');
+  await page.waitForSelector('article.paper');
   const school = await page.locator('article.paper').innerText();
   check(school.includes('SK(C) ANGLO CHINESE KOTA KINABALU') && school.includes('4 Zhong (Average Level, 6 Students)') && school.includes('09:10 – 10:10') && school.includes('Monday'), 'school template header filled from profile, class and time');
   check(school.includes('4.2.3 Describe basic everyday routines') && school.includes('Activity 3 (Production) (20 minutes)'), 'school template lists standards and PPP activities');
@@ -162,6 +187,45 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     await page.emulateMedia({ media: 'screen' });
   }
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no horizontal page scroll on review');
+  for (const layout of ['Consilia Lesson Blueprint', 'School template']) {
+    await page.click(`button:has-text("${layout}")`);
+    const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#rv-word')]);
+    const name = dl.suggestedFilename();
+    if (out) await dl.saveAs(`${out}/${name}`);
+    check(/^RPH-2025-11-03-4-Zhong-Whats-the-Matter(-Blueprint)?\.docx$/.test(name), `Word download for ${layout}: ${name}`);
+  }
+
+  // 10b. weekly planner and Today
+  await page.goto(base + '#/plan/week/2025-11-03');
+  await page.waitForSelector('#tt-class');
+  await page.selectOption('#tt-day', '1'); await page.fill('#tt-start', '09:10'); await page.fill('#tt-dur', '60');
+  await page.click('#tt-add');
+  await page.selectOption('#tt-day', '3'); await page.fill('#tt-start', '07:40'); await page.fill('#tt-dur', '30');
+  await page.click('#tt-add');
+  await page.selectOption('#tt-day', '1'); await page.fill('#tt-start', '09:40'); await page.fill('#tt-dur', '30');
+  await page.click('#tt-add');
+  check((await page.locator('p.warn').count()) === 1, 'overlapping timetable slots are flagged');
+  await page.locator('.slots li').filter({ hasText: '09:40' }).locator('button').click();
+  await page.click('button:has-text("Done editing timetable")');
+  const mon = page.locator('.day').first();
+  check((await mon.innerText()).includes("What's the Matter"), 'Monday slot shows the planned RPH');
+  const wed = page.locator('.day').nth(2);
+  await wed.locator('button:has-text("No class this day")').click();
+  await wed.locator('input').fill('Sports day');
+  await wed.locator('button:has-text("Mark no class")').click();
+  check((await wed.innerText()).includes('Sports day'), 'a slot can be marked as no class with a reason');
+  await page.click('a[href="#/plan/week/2025-11-10"]');
+  await page.locator('.day').first().locator('a:has-text("Plan this lesson")').click();
+  await page.waitForSelector('#nr-class');
+  check((await page.inputValue('#nr-date')) === '2025-11-10' && (await page.inputValue('#nr-start')) === '09:10' && (await page.locator('#nr-class option:checked').innerText()).startsWith('4 Zhong'), 'planning from the week fills class, date and time');
+  await page.click('nav a[href="#/today"]');
+  await page.waitForSelector('.next, .empty');
+  check((await page.locator('.next').innerText()).includes('4 Zhong'), 'Today shows the next timetabled lesson');
+  check((await page.locator('h1').first().innerText()) === 'Hello, Muhammad', 'Today greets the teacher by name');
+  if (out) await page.screenshot({ path: `${out}/today.png` });
+  await page.goto(base + '#/plan');
+  await page.waitForSelector('.list li');
+  check((await page.locator('.list li svg.ring text').first().textContent()) === '100', 'lesson list shows the score');
 
   // 11. phone width: builder steps usable
   const phone = await browser.newContext({ viewport: { width: 390, height: 844 } });
