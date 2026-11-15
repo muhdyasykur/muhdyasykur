@@ -8,3 +8,4 @@ __pycache__/
 # raw extraction output and source PDFs are never committed (textbooks and KPM PDFs stay private)
 tools/curriculum-extract/out/
 *.pdf
+!docs/samples/*.pdf

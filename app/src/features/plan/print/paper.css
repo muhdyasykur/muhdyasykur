@@ -1,0 +1,20 @@
+/* Shared look of printed RPHs. Paper is always white with black ink, in both app themes. */
+.paper { --p-ink: #111; --p-line: #444; --p-soft: #f2f4f8; --p-navy: #13294B; --p-gold: #9a7612; --p-m: #F6C9A8; --p-c: #CFE3F5;
+  width: 210mm; max-width: none; min-height: 297mm; margin: 0 auto; background: #fff; color: var(--p-ink); padding: 14mm 13mm;
+  font: 10.5pt/1.4 "Plus Jakarta Sans", Arial, sans-serif; box-shadow: 0 8px 30px rgba(0,0,0,.18);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.paper table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.paper th, .paper td { border: 1px solid var(--p-line); padding: 4px 6px; vertical-align: top; text-align: left; overflow-wrap: anywhere; }
+.paper .band { background: var(--p-soft); text-align: center; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
+.paper .m { background: var(--p-m); text-align: center; font-weight: 700; width: 9mm; }
+.paper .c { background: var(--p-c); text-align: center; font-weight: 700; width: 9mm; }
+.paper ol, .paper ul { margin: 0; padding-left: 1.3em; }
+.paper li { margin: 1px 0; }
+.paper .pre { white-space: pre-line; }
+.paper h2, .paper h3, .paper h4 { color: var(--p-ink); font-family: "Bricolage Grotesque", Arial, sans-serif; }
+.paper .keep { break-inside: avoid; }
+@media print {
+  @page { size: A4; margin: 12mm 12mm 13mm; }
+  .paper { box-shadow: none; margin: 0; min-height: auto; width: auto; padding: 0; }
+  .paper tr { break-inside: avoid; }
+}

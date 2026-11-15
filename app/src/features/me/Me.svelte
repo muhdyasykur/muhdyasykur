@@ -3,6 +3,9 @@
   import { theme, setTheme, type Theme } from '../../lib/theme.svelte';
   import { requestPersistence } from '../../lib/db/schema';
   import { pwa } from '../../lib/pwa.svelte';
+  import { profile, updateProfile } from '../../lib/profile.svelte';
+  import ProfileForm from '../../lib/ui/ProfileForm.svelte';
+  let savedNote = $state('');
 
   let persisted = $state<boolean | null>(null);
   let usage = $state<string>('');
@@ -33,6 +36,17 @@
         {/each}
       </div>
     </div>
+  </section>
+
+  <section class="card">
+    <h3>Profile</h3>
+    {#if profile.loaded}
+      {#key profile.value?.createdAt}
+        <ProfileForm value={profile.value} saveLabel="Save profile" onsave={async (p) => { await updateProfile(p); savedNote = 'Saved.'; }}>
+          {#if savedNote}<p class="muted" role="status">{savedNote}</p>{/if}
+        </ProfileForm>
+      {/key}
+    {/if}
   </section>
 
   <section class="card">

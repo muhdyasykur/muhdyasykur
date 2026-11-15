@@ -17,7 +17,10 @@
   <section class="empty">
     <h3>{t('today.empty.title')}</h3>
     <p>{t('today.empty.body')}</p>
-    <a class="btn btn-primary" href={href('library')}><Icon name="library" size={18} />{t('today.openLibrary')}</a>
+    <div class="row">
+      <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{t('today.newRph')}</a>
+      <a class="btn btn-outline" href={href('library')}><Icon name="library" size={18} />{t('today.openLibrary')}</a>
+    </div>
   </section>
 
   <section class="card">
@@ -25,6 +28,7 @@
     <ul class="status">
       <li class="done"><Icon name="check" size={18} /><span>M0 · {t('today.status.m0')}</span></li>
       <li class="done"><Icon name="check" size={18} /><span>M1 · {t('today.status.m1')}</span></li>
+      <li class="done"><Icon name="check" size={18} /><span>M2 · {t('today.status.m2')}</span></li>
       <li><span class="dot"></span><span>{t('today.status.next')}</span></li>
     </ul>
   </section>

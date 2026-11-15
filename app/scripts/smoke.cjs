@@ -13,6 +13,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     page.on('pageerror', (e) => errors.push(name + ' pageerror: ' + e.message));
     page.on('console', (m) => { if (m.type() === 'error') errors.push(name + ' console: ' + m.text()); });
     await page.goto(base);
+    await page.click('button:has-text("Skip for now")');
     await page.waitForSelector('h1');
     check((await page.locator('nav a[aria-current="page"]').innerText()).includes('Today'), `${name}: starts on Today`);
     check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${name}: no horizontal scroll`);

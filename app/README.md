@@ -10,7 +10,8 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 |---|---|
 | M0 Foundations: app shell, offline install, themes, EN/BM, database, CI | Done |
 | M1 Curriculum data pack: SoW, DSKP, performance levels, task bank (Years 1–6, SK and SJK) | Done, awaiting sample review |
-| M2 RPH builder | Next |
+| M2 RPH builder: onboarding, classes, 7-step builder, three modes, frameworks, ABCD/SMART objectives, L/M/H tiers, timing, print (school template and Consilia Lesson Blueprint) | Done |
+| M3 Alignment checker and score, Plan B suggestions, Word export, weekly planner | Next |
 
 ## Run it
 
@@ -24,7 +25,7 @@ npm run check      # type check
 npm run validate:curriculum   # integrity check of the curriculum pack
 ```
 
-Smoke test of the built app (needs Playwright on the machine): `npx vite preview --port 4173 &` then `node scripts/smoke.cjs`.
+Browser tests of the built app (need Playwright on the machine): `npx vite preview --port 4173 &`, then `npm run smoke` (shell, Library, offline) and `npm run e2e` (builds and prints a full RPH).
 
 ## Layout
 

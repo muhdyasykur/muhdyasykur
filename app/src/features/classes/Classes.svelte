@@ -1,11 +1,98 @@
 <script lang="ts">
-  import { t } from '../../lib/i18n/index.svelte';
+  import { route, href, go } from '../../router.svelte';
+  import { listClasses, saveClass, countPupils } from '../../lib/db/repo';
+  import { profile } from '../../lib/profile.svelte';
+  import type { SchoolClass } from '../../lib/db/schema';
+  import Icon from '../../lib/ui/Icon.svelte';
+  import ClassDetail from './ClassDetail.svelte';
+
+  const years = [1, 2, 3, 4, 5, 6] as const;
+  let classes = $state<SchoolClass[]>([]);
+  let counts = $state<Record<string, number>>({});
+  let year = $state<number>(4);
+  let adding = $state(false);
+  let name = $state('');
+  let level = $state('');
+  let schoolType = $state<'SK' | 'SJK'>(profile.value?.schoolType ?? 'SK');
+  let error = $state('');
+
+  async function refresh() {
+    classes = await listClasses();
+    counts = Object.fromEntries(await Promise.all(classes.map(async (c) => [c.id, await countPupils(c.id)] as const)));
+    if (classes.length && !classes.some((c) => c.year === year)) year = classes[0].year;
+  }
+  $effect(() => { if (!route.parts[0]) refresh(); });
+
+  async function add(e: SubmitEvent) {
+    e.preventDefault();
+    if (!name.trim()) { error = 'Give the class a name, for example "4 Zhong".'; return; }
+    const id = await saveClass({ year: year as SchoolClass['year'], name: name.trim(), schoolType, levelLabel: level.trim() || undefined });
+    name = ''; level = ''; adding = false; error = '';
+    go('classes', id);
+  }
+  const inYear = $derived(classes.filter((c) => c.year === year));
 </script>
+
+{#if route.parts[0]}
+  <ClassDetail id={route.parts[0]} />
+{:else}
 <div class="stack">
-  <h1>{t('classes.title')}</h1>
-  <section class="empty">
-    <h3>{t('classes.empty.title')}</h3>
-    <p>{t('classes.empty.body')}</p>
-    <span class="chip">{t('common.comingIn', { m: '4' })}</span>
-  </section>
+  <h1>Classes</h1>
+  <div class="seg years" role="group" aria-label="Year">
+    {#each years as y}
+      {@const n = classes.filter((c) => c.year === y).length}
+      <button type="button" aria-pressed={year === y} onclick={() => (year = y)}>Year {y}{#if n}<span class="count">{n}</span>{/if}</button>
+    {/each}
+  </div>
+
+  {#if inYear.length}
+    <ul class="cards">
+      {#each inYear as c (c.id)}
+        <li><a class="card raised" href={href('classes', c.id)}>
+          <span class="nm">{c.name}</span>
+          <span class="muted small">{c.schoolType}{c.levelLabel ? ` · ${c.levelLabel}` : ''} · {counts[c.id] ?? 0} pupils</span>
+        </a></li>
+      {/each}
+    </ul>
+  {:else if !adding}
+    <section class="empty">
+      <h3>No Year {year} classes yet</h3>
+      <p>Add a class to put its name and pupil count on your RPH. Pupil lists also power attendance and PBD later.</p>
+    </section>
+  {/if}
+
+  {#if adding}
+    <form class="card stack" onsubmit={add}>
+      <h3>New Year {year} class</h3>
+      <div class="grid">
+        <label class="field"><span>Class name</span><input id="cl-name" class="input" bind:value={name} placeholder="e.g. 4 Zhong" /></label>
+        <label class="field"><span>Level (optional)</span><input id="cl-level" class="input" bind:value={level} placeholder="e.g. Average" list="levels" /></label>
+        <div class="field"><span id="cl-type">School type</span>
+          <div class="seg" role="group" aria-labelledby="cl-type">
+            <button type="button" aria-pressed={schoolType === 'SK'} onclick={() => (schoolType = 'SK')}>SK</button>
+            <button type="button" aria-pressed={schoolType === 'SJK'} onclick={() => (schoolType = 'SJK')}>SJK</button>
+          </div>
+        </div>
+      </div>
+      <datalist id="levels"><option value="Low"></option><option value="Average"></option><option value="High"></option><option value="Mixed ability"></option></datalist>
+      {#if error}<p class="err">{error}</p>{/if}
+      <div class="row"><button class="btn btn-gold" type="submit">Add class</button><button class="btn btn-text" type="button" onclick={() => (adding = false)}>Cancel</button></div>
+    </form>
+  {:else}
+    <button class="btn btn-primary add" type="button" onclick={() => (adding = true)}><Icon name="plus" size={18} />Add a Year {year} class</button>
+  {/if}
 </div>
+{/if}
+
+<style>
+  .years { max-width: 100%; overflow-x: auto; }
+  .years button { white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; }
+  .count { font-size: var(--t-xs); background: var(--gold-soft); color: var(--ink); border-radius: 99px; padding: 0 6px; }
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: var(--s-3); }
+  .cards a { text-decoration: none; color: var(--ink); }
+  .nm { font: 700 var(--t-lg) var(--f-display); }
+  .small { font-size: var(--t-sm); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
+  .add { justify-self: start; }
+  .err { color: var(--bad); font-size: var(--t-sm); }
+</style>

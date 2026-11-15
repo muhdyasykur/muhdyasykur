@@ -37,3 +37,5 @@ img,svg{display:block;max-width:100%}
 .empty{border:1px dashed var(--line);border-radius:var(--r-card);padding:var(--s-8) var(--s-4);text-align:center;display:grid;gap:var(--s-2);justify-items:center;color:var(--ink-2)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+@media print { .no-print { display: none !important; } body { background: #fff; } }

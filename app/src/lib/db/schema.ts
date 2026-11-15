@@ -7,7 +7,7 @@ import Dexie, { type EntityTable } from 'dexie';
  */
 export type SchoolType = 'SK' | 'SJK';
 
-export interface Profile { id: 'me'; name: string; school: string; schoolType: SchoolType; campus?: string; createdAt: number }
+export interface Profile { id: 'me'; name: string; school: string; schoolType: SchoolType; campus?: string; programme?: string; /** School badge as a data URL, printed on the RPH header. */ logo?: string; createdAt: number }
 export interface Setting { key: string; value: unknown }
 export interface SchoolClass { id: string; year: 1 | 2 | 3 | 4 | 5 | 6; name: string; schoolType: SchoolType; curriculumPack: string; levelLabel?: string; notes?: string; archived?: boolean; createdAt: number }
 export interface Pupil { id: string; classId: string; name: string; order: number; tierOverride?: 'low' | 'mod' | 'high'; note?: string; keepApart?: string[] }

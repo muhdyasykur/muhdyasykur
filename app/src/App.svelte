@@ -9,6 +9,8 @@
   import Classes from './features/classes/Classes.svelte';
   import Library from './features/library/Library.svelte';
   import Me from './features/me/Me.svelte';
+  import Onboarding from './features/onboarding/Onboarding.svelte';
+  import { profile } from './lib/profile.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
     { name: 'today', icon: 'today', label: 'nav.today' },
@@ -51,6 +53,8 @@
   </main>
 </div>
 
+{#if profile.loaded && !profile.value && !profile.skipped}<Onboarding />{/if}
+
 {#if pwa.needRefresh}
   <div class="toast" role="status">
     <span>{t('pwa.update')}</span>
@@ -89,4 +93,10 @@
     main { padding-top: calc(var(--s-6) + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--tabbar-h) + var(--s-8) + env(safe-area-inset-bottom, 0px)); }
   }
   @media (min-width: 768px) { .toast { bottom: var(--s-6); } }
+  @media print {
+    .nav, .toast, .banner, .skip { display: none !important; }
+    .shell { display: block; min-height: 0; }
+    main { padding: 0 !important; }
+    .screen { max-width: none; animation: none; }
+  }
 </style>
