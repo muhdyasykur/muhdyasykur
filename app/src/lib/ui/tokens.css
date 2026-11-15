@@ -1,0 +1,56 @@
+/* Consilia design tokens. Every colour is defined here for light, then redefined for dark. */
+:root{
+  --navy:#13294B; --navy-2:#1E3A66; --on-navy:#FFFFFF;
+  --gold:#B8901C; --gold-strong:#E2BC4F; --gold-soft:#F3E7C2; --on-gold:#1A1405;
+  --paper:#F6F7FA; --card:#FFFFFF; --sunken:#ECEFF5;
+  --ink:#101A2E; --ink-2:#46526B; --ink-3:#6B768D; --line:#DFE3EC;
+  --main:#F6C9A8; --main-ink:#7A3B12; --comp:#CFE3F5; --comp-ink:#18476E;
+  --low:#1F8574; --mod:#A66F08; --high:#5B43B8;
+  --ok:#1A7F50; --warn:#9A6412; --bad:#B8362F;
+  --brand-bg:#13294B;
+
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --f-pupil:"Andika","Plus Jakarta Sans",system-ui,sans-serif;
+
+  /* type scale, 1.25 ratio */
+  --t-xs:.75rem; --t-sm:.875rem; --t-md:1rem; --t-lg:1.25rem; --t-xl:1.5625rem; --t-2xl:1.953rem; --t-3xl:2.441rem;
+  /* 4-point spacing */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px; --s-8:32px; --s-12:48px; --s-16:64px;
+  --r-card:14px; --r-ctl:10px; --r-pill:99px;
+  --shadow-raised:0 1px 0 rgba(19,41,75,.06),0 10px 28px -12px rgba(19,41,75,.22);
+  --shadow-overlay:0 24px 60px -20px rgba(19,41,75,.45);
+  --tap:44px;
+  --rail-w:232px; --tabbar-h:64px;
+  --dur-fast:150ms; --dur:180ms; --dur-slow:400ms;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#9DB7E8; --navy-2:#BFD0F2; --on-navy:#0B1324;
+    --gold:#E2BC4F; --gold-strong:#E2BC4F; --gold-soft:#3A3117; --on-gold:#1A1405;
+    --paper:#0B1324; --card:#121D33; --sunken:#0E182B;
+    --ink:#E9EEF8; --ink-2:#B3BDD2; --ink-3:#8E99B0; --line:#25324D;
+    --main:#5A3418; --main-ink:#FFD9BD; --comp:#173653; --comp-ink:#CFE6FB;
+    --low:#4CC4AE; --mod:#E5A83A; --high:#A996F5;
+    --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
+    --brand-bg:#16264A;
+    --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
+    --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#9DB7E8; --navy-2:#BFD0F2; --on-navy:#0B1324;
+  --gold:#E2BC4F; --gold-strong:#E2BC4F; --gold-soft:#3A3117; --on-gold:#1A1405;
+  --paper:#0B1324; --card:#121D33; --sunken:#0E182B;
+  --ink:#E9EEF8; --ink-2:#B3BDD2; --ink-3:#8E99B0; --line:#25324D;
+  --main:#5A3418; --main-ink:#FFD9BD; --comp:#173653; --comp-ink:#CFE6FB;
+  --low:#4CC4AE; --mod:#E5A83A; --high:#A996F5;
+  --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
+  --brand-bg:#16264A;
+  --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
+  --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
+  color-scheme:dark;
+}

@@ -1,0 +1,1148 @@
+{
+ "version": "1.0.0",
+ "counts": {
+  "warning": 13,
+  "info": 88,
+  "corrected": 6
+ },
+ "issues": [
+  {
+   "level": "warning",
+   "year": 3,
+   "school": "SJK",
+   "doc": "dskp",
+   "lesson": null,
+   "code": "dskp-differs",
+   "message": "The SK and SJK DSKP standards differ; both are stored."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 2,
+   "code": "ls-wording",
+   "message": "4.1.1: SoW wording differs from the Year 1 DSKP (similarity 0.01). Both are kept.",
+   "sow": "also applies to preliterate pupils here, and in all other lessons in the first few school weeks which involve writing. Please use your own judgement on this, as appropriate to the needs of your pupils.",
+   "dskp": "i) Demonstrate fine motor control of hands and fingers by using pen or pencil correctly\nii) Demonstrate correct posture and pen hold grip\niii) Develop hand-eye coordination through drawing lines and patterns"
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 3,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.1'])."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 5,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['5.1'])."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 7,
+   "code": "ls-part",
+   "message": "4.1.2: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 8,
+   "code": "ls-part",
+   "message": "4.1.2: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 10,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['5.1'])."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 22,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['5.1'])."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 28,
+   "code": "ls-part",
+   "message": "5.1.1: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 38,
+   "code": "ls-wording",
+   "message": "4.3.3: SoW wording differs from the Year 1 DSKP (similarity 0.63). Both are kept.",
+   "sow": "Plan and write words and phrases on a narrow range of familiar topics",
+   "dskp": "Plan, and write words and phrases"
+  },
+  {
+   "level": "corrected",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 50,
+   "code": "main-skill",
+   "message": "Main skill focus is blank in the document; taken from the lesson label (\"Listening 11\")."
+  },
+  {
+   "level": "corrected",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 72,
+   "code": "lesson-number",
+   "message": "The document prints LESSON: 172; it is lesson 72 in sequence."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 73,
+   "code": "ls-wording",
+   "message": "4.3.3: SoW wording differs from the Year 1 DSKP (similarity 0.63). Both are kept.",
+   "sow": "Plan and write words and phrases on a narrow range of familiar topics",
+   "dskp": "Plan, and write words and phrases"
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 2,
+   "code": "ls-wording",
+   "message": "4.1.1: SoW wording differs from the Year 1 DSKP (similarity 0.01). Both are kept.",
+   "sow": "also applies to preliterate pupils here, and in all other lessons in the first few school weeks which involve writing. Please use your own judgement on this, as appropriate to the needs of your pupils.",
+   "dskp": "i) Demonstrate fine motor control of hands and fingers by using pen or pencil correctly\nii) Demonstrate correct posture and pen hold grip\niii) Develop hand-eye coordination through drawing lines and patterns"
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 7,
+   "code": "ls-part",
+   "message": "4.1.2: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 8,
+   "code": "ls-part",
+   "message": "4.1.2: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 34,
+   "code": "outline-partial",
+   "message": "The document gives no text under: pre."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 63,
+   "code": "ls-wording",
+   "message": "3.2.3: SoW wording differs from the Year 1 DSKP (similarity 0.64). Both are kept.",
+   "sow": "i) Use visuals on the page to help understand a word of phrase",
+   "dskp": "i) Use visuals on the page to help understand a word or phrase\nii) Identify and remember high frequency sound and letter patterns"
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 73,
+   "code": "outline-partial",
+   "message": "The document gives no text under: post."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 111,
+   "code": "no-comp-ls",
+   "message": "No complementary learning standard is given in the document."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 113,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 1,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 147,
+   "code": "outline-partial",
+   "message": "The document gives no text under: post."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 18,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "corrected",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 61,
+   "code": "cs-typo",
+   "message": "comp content standard is printed with a learning-standard code; read as 1.3."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 63,
+   "code": "ls-wording",
+   "message": "3.2.3: SoW wording differs from the Year 2 DSKP (similarity 0.61). Both are kept.",
+   "sow": "i) Reread a word, phrase of sentence to understand meaning",
+   "dskp": "i) Reread a word, phrase or sentence to understand meaning\nii) Ignore unknown words in order to understand a phrase or sentence"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 65,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 76,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 109,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 113,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 7,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.1'])."
+  },
+  {
+   "level": "warning",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 9,
+   "code": "ls-code-vs-wording",
+   "message": "comp: the SoW prints code 2.1.2 but its wording is that of 2.1.1. Code kept; please check the document.",
+   "sow": "Give simple personal information using basic statements",
+   "dskp": "Find out about personal information by asking basic questions"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 9,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['2.1'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 10,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['1.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 13,
+   "code": "ls-part",
+   "message": "5.1.2: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 13,
+   "code": "ls-wording",
+   "message": "4.2.1: SoW wording differs from the Year 2 DSKP (similarity 0.65). Both are kept.",
+   "sow": "Give very basic personal information using fixed phrases",
+   "dskp": "Ask for and give basic personal information using basic questions and statements"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 15,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['2.1'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 16,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['1.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 27,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['4.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 32,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.2'])."
+  },
+  {
+   "level": "corrected",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 34,
+   "code": "main-skill",
+   "message": "Main skill focus is blank in the document; taken from the lesson label (\"Writing 5\")."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 34,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['4.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 37,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.1'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 39,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 42,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 44,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 44,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 49,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['1.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 55,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['2.1'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 61,
+   "code": "ls-part",
+   "message": "3.2.3: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "warning",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 62,
+   "code": "ls-code-vs-wording",
+   "message": "comp: the SoW prints code 2.1.2 but its wording is that of 2.1.1. Code kept; please check the document.",
+   "sow": "Give simple personal information using basic statements",
+   "dskp": "Find out about personal information by asking basic questions"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 66,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['2.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 72,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.2'])."
+  },
+  {
+   "level": "warning",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 74,
+   "code": "ls-code-vs-wording",
+   "message": "comp: the SoW prints code 4.2.5 but its wording is that of 4.3.1. Code kept; please check the document.",
+   "sow": "Use capital letters and full stops appropriately in guided writing at sentence level.",
+   "dskp": "Connect words and phrases using basic coordinating conjunctions"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 77,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['4.3'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 79,
+   "code": "cs-derived",
+   "message": "comp: no content standard is printed; taken from the learning standard code (['3.2'])."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 80,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.71). Both are kept.",
+   "sow": "Say the words to simple texts and sing simple songs with intelligible pronunciation, rhythm and intonation",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 10,
+   "code": "ls-wording",
+   "message": "5.1.1: SoW wording differs from the Year 3 DSKP (similarity 0.28). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems",
+   "dskp": "Demonstrate appreciation through non- verbal responses to:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 21,
+   "code": "ls-wording",
+   "message": "5.1.1: SoW wording differs from the Year 3 DSKP (similarity 0.34). Both are kept.",
+   "sow": "Enjoy and appreciate rhymes, poems and songs",
+   "dskp": "Demonstrate appreciation through non- verbal responses to:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 26,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.06). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems.",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "corrected",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 61,
+   "code": "ls-typo",
+   "message": "comp learning standard code is mistyped (\"Reading. 3.1 Read and enjoy …\"); matched by its wording to 3.3.1."
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 74,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.61). Both are kept.",
+   "sow": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation In addition to Year 2 text types: simple poems",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 101,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.06). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "warning",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 130,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['2.1'] do not match learning standard(s) ['2.3.1']; using ['2.3']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 133,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.06). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems.",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 138,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.06). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems.",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 15,
+   "code": "ls-wording",
+   "message": "5.1.1: SoW wording differs from the Year 3 DSKP (similarity 0.34). Both are kept.",
+   "sow": "Enjoy and appreciate rhymes, poems and songs",
+   "dskp": "Demonstrate appreciation through non- verbal responses to:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "info",
+   "year": 3,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 71,
+   "code": "ls-wording",
+   "message": "5.1.2: SoW wording differs from the Year 3 DSKP (similarity 0.06). Both are kept.",
+   "sow": "In addition to Year 2 text types: simple poems.",
+   "dskp": "Say the words in simple texts, and sing simple songs with intelligible pronunciation, rhythm and intonation:\ni) simple chants and raps\nii) simple rhymes\niii) simple action songs\niv) simple songs\nv) simple poems"
+  },
+  {
+   "level": "warning",
+   "year": 4,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 55,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['2.1'] do not match learning standard(s) ['2.2.2']; using ['2.2']. Please check the document."
+  },
+  {
+   "level": "warning",
+   "year": 4,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 55,
+   "code": "cs-ls-mismatch",
+   "message": "comp: content standard(s) ['2.2'] do not match learning standard(s) ['2.1.1']; using ['2.1']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 4,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 110,
+   "code": "ls-wording",
+   "message": "3.2.2: SoW wording differs from the Year 4 DSKP (similarity 0.79). Both are kept.",
+   "sow": "Understand specific information and details of short simple texts",
+   "dskp": "Understand specific information and details of simple texts of one or two paragraphs"
+  },
+  {
+   "level": "info",
+   "year": 4,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 139,
+   "code": "ls-wording",
+   "message": "2.1.1: SoW wording differs from the Year 4 DSKP (similarity 0.66). Both are kept.",
+   "sow": "Ask about and express basic opinions",
+   "dskp": "Explain and give reasons for basic opinions"
+  },
+  {
+   "level": "corrected",
+   "year": 4,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 157,
+   "code": "cs-typo",
+   "message": "main content standard is printed with a learning-standard code; read as 3.2."
+  },
+  {
+   "level": "warning",
+   "year": 5,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 20,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['1.1'] do not match learning standard(s) ['1.2.1']; using ['1.2']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 5,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 51,
+   "code": "ls-wording",
+   "message": "3.2.2: SoW wording differs from the Year 5 DSKP (similarity 0.79). Both are kept.",
+   "sow": "Understand specific information and details of simple longer texts",
+   "dskp": "Understand specific information and details of two paragraphs or more"
+  },
+  {
+   "level": "warning",
+   "year": 5,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 57,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['3.1'] do not match learning standard(s) ['3.3.1']; using ['3.3']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 5,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 75,
+   "code": "ls-wording",
+   "message": "1.1.1: SoW wording differs from the Year 5 DSKP (similarity 0.64). Both are kept.",
+   "sow": "Recognise and reproduce target language phonemes intelligibly",
+   "dskp": "Recognise and reproduce with little or no support a wide range of target language phonemes"
+  },
+  {
+   "level": "warning",
+   "year": 5,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 35,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['1.1'] do not match learning standard(s) ['1.2.1']; using ['1.2']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 5,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 86,
+   "code": "ls-wording",
+   "message": "3.2.2: SoW wording differs from the Year 5 DSKP (similarity 0.79). Both are kept.",
+   "sow": "Understand specific information and details of simple longer texts",
+   "dskp": "Understand specific information and details of two paragraphs or more"
+  },
+  {
+   "level": "warning",
+   "year": 5,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 97,
+   "code": "cs-ls-mismatch",
+   "message": "main: content standard(s) ['3.1'] do not match learning standard(s) ['3.3.1']; using ['3.3']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 5,
+   "school": "SK",
+   "doc": "sow",
+   "lesson": 125,
+   "code": "ls-wording",
+   "message": "1.1.1: SoW wording differs from the Year 5 DSKP (similarity 0.64). Both are kept.",
+   "sow": "Recognise and reproduce target language phonemes intelligibly",
+   "dskp": "Recognise and reproduce with little or no support a wide range of target language phonemes"
+  },
+  {
+   "level": "warning",
+   "year": 6,
+   "school": "SJK",
+   "doc": "sow",
+   "lesson": 89,
+   "code": "cs-ls-mismatch",
+   "message": "comp: content standard(s) ['3.1'] do not match learning standard(s) ['3.3.1']; using ['3.3']. Please check the document."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 1,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "warning",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 2,
+   "code": "ls-code-vs-wording",
+   "message": "main: the SoW prints code 3.1.3 but its wording is that of 3.1.2. Code kept; please check the document.",
+   "sow": "Recognise and sound out with some support beginning, medial and final sounds in a word",
+   "dskp": "Blend phonemes (CVC, CCVC, CVCV, CCV)"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 2,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 3,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 3,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 4,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 4,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 4,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 5,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 5,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 6,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 6,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 6,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 7,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 7,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 8,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 8,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 8,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 9,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 9,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 10,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 10,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 10,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 11,
+   "code": "ls-wording",
+   "message": "3.1.1: SoW wording differs from the Year 2 DSKP (similarity 0.77). Both are kept.",
+   "sow": "Identify and recognise the shapes of the letters in the alphabet",
+   "dskp": "Identify, recognise and name the letters of the alphabet"
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 11,
+   "code": "ls-part",
+   "message": "3.1.4: the SoW names one part of this standard; kept alongside the DSKP wording."
+  },
+  {
+   "level": "info",
+   "year": 2,
+   "school": "SK",
+   "doc": "phonics",
+   "lesson": 11,
+   "code": "ls-wording",
+   "message": "4.1.2: SoW wording differs from the Year 2 DSKP (similarity 0.06). Both are kept.",
+   "sow": "i) Form upper and lower case letters of regular size and shape ii) write letters and words in a straight line from left to right with regular spaces between words and spaces iii) copy letters and familiar high frequency words and phrases correctly",
+   "dskp": "No learning standard"
+  }
+ ],
+ "uncoveredLearningStandards": {
+  "Y1 SJK": [
+   "2.2.1"
+  ],
+  "Y1 SK": [
+   "2.2.1"
+  ],
+  "Y2 SK": [
+   "4.1.1",
+   "4.1.2"
+  ],
+  "Y2 SJK": [
+   "4.1.1",
+   "4.1.2"
+  ],
+  "Y3 SK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "4.2.1"
+  ],
+  "Y3 SJK": [
+   "2.1.4",
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1"
+  ],
+  "Y4 SJK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "5.1.1",
+   "5.1.2"
+  ],
+  "Y4 SK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "5.1.1",
+   "5.1.2"
+  ],
+  "Y5 SJK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "4.1.2",
+   "5.1.1",
+   "5.1.2"
+  ],
+  "Y5 SK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "4.1.2",
+   "5.1.1",
+   "5.1.2"
+  ],
+  "Y6 SJK": [
+   "2.1.2",
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "4.1.2",
+   "5.1.1",
+   "5.1.2"
+  ],
+  "Y6 SK": [
+   "3.1.1",
+   "3.1.2",
+   "3.1.3",
+   "3.1.4",
+   "4.1.1",
+   "4.1.2",
+   "5.1.1",
+   "5.1.2"
+  ]
+ }
+}

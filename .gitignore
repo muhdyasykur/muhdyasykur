@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dev-dist/
+*.log
+.DS_Store
+__pycache__/
+*.pkl
+# raw extraction output and source PDFs are never committed (textbooks and KPM PDFs stay private)
+tools/curriculum-extract/out/
+*.pdf
