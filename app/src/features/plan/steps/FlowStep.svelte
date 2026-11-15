@@ -5,6 +5,7 @@
   import { changeFramework } from '../../../lib/lesson/create';
   import { objectiveLabels } from '../../../lib/lesson/derive';
   import type { Support } from '../../../lib/curriculum/types';
+  import { bankFor, BANK } from '../../../lib/content/bank';
 
   let { lesson = $bindable(), support }: { lesson: Lesson; support: Support } = $props();
   const rec = $derived(recommend(lesson.mainSkill || 'Language Awareness', lesson.curriculum.year, lesson.focus));
@@ -32,6 +33,13 @@
     else s.activities.push(newActivity({ teacher: text, aids: t.materials, source: `SoW ${kind}-lesson task ${t.no}` }));
   }
   let openTier = $state<Record<string, Tier>>({});
+  function insertBank(s: Stage, id: string) {
+    const b = BANK.find((x) => x.id === id); if (!b) return;
+    const objs = s.key === 'pre-lesson' || s.key === 'post-lesson' ? [] : lesson.objectives.slice(0, 1).map((o) => o.id);
+    const act = newActivity({ teacher: b.teacher, pupils: b.pupils, pattern: (['whole-class', 'T-P', 'P-P', 'pairs', 'groups', 'individual'].includes(b.pattern) ? b.pattern : '') as Pattern | '', aids: b.materials === 'None' ? '' : b.materials, tiers: { ...b.tiers }, objectiveIds: objs, source: `Activity bank: ${b.title}` });
+    const blank = s.activities.findIndex((a) => !a.teacher && !a.pupils);
+    if (blank >= 0) s.activities[blank] = act; else s.activities.push(act);
+  }
 </script>
 
 <div class="stack">
@@ -79,6 +87,12 @@
         {/if}
       </header>
       <p class="muted small">{purposes.get(s.key)}</p>
+      {#if bankFor(s.key, lesson.curriculum.year, lesson.mainSkill).length}
+        <select class="select bank" aria-label="Insert from the activity bank" data-bank-stage={s.key} onchange={(e) => { insertBank(s, e.currentTarget.value); e.currentTarget.value = ''; }}>
+          <option value="">Insert from the activity bank…</option>
+          {#each bankFor(s.key, lesson.curriculum.year, lesson.mainSkill) as b}<option value={b.id}>{b.title} ({b.skill}, {b.minutes} min)</option>{/each}
+        </select>
+      {/if}
 
       {#each s.activities as a, ai (a.id)}
         <div class="card act">
@@ -136,7 +150,7 @@
   .warn { color: var(--warn); font-weight: 600; font-size: var(--t-sm); }
   .note { border-style: dashed; }
   .stage { padding-top: var(--s-4); border-top: 2px solid var(--line); }
-  .bank { width: auto; max-width: 100%; }
+  .bank { width: 100%; max-width: 440px; min-width: 0; }
   .act { gap: var(--s-3); }
   .tools { gap: 0; }
   .del { color: var(--bad); }

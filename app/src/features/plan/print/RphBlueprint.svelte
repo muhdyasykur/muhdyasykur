@@ -1,12 +1,13 @@
 <script lang="ts">
   import './paper.css';
   import type { Lesson } from '../../../lib/lesson/model';
-  import type { Profile } from '../../../lib/db/schema';
+  import type { Profile, Reflection } from '../../../lib/db/schema';
+  import Qr from '../../../lib/ui/Qr.svelte';
   import { endTime } from '../../../lib/lesson/model';
   import { FRAMEWORKS } from '../../../lib/lesson/frameworks';
   import { alignment, criteria, objectiveLabels, smartFor, longDate, weekday } from '../../../lib/lesson/derive';
 
-  let { lesson, profile }: { lesson: Lesson; profile: Profile | null } = $props();
+  let { lesson, profile, reflection = null }: { lesson: Lesson; profile: Profile | null; reflection?: Reflection | null } = $props();
   const labels = $derived(objectiveLabels(lesson));
   const colours = ['#5B6B8C', '#13294B', '#2B4E86', '#8A6A12', '#1F6F63', '#6B4FB3'];
   const rows = $derived(alignment(lesson));
@@ -99,10 +100,14 @@
   </section>
 
   <div class="two">
-    <section class="blk keep"><h4>9 · Reflection</h4><div class="lines"></div></section>
+    <section class="blk keep"><h4>9 · Reflection</h4>
+      {#if reflection && (reflection.worked || reflection.didnt || reflection.next)}
+        <p><b>Worked:</b> {reflection.worked || '–'}</p><p><b>Did not go as planned:</b> {reflection.didnt || '–'}</p><p><b>Next time:</b> {reflection.next || '–'}</p>
+      {:else}<div class="lines"></div>{/if}
+    </section>
     <section class="blk keep"><h4>10 · Appendices and links</h4>
       <p class="pre">{lesson.appendices || '–'}</p>
-      {#each lesson.links as l}<p>{l.label}: {l.url}</p>{/each}
+      {#each lesson.links as l}<p class="qrrow"><Qr url={l.url} size={52} /><span>{l.label}<br /><small>{l.url}</small></span></p>{/each}
     </section>
   </div>
   <p class="foot">Prepared by {profile?.name || '________________'}{profile?.programme ? `, ${profile.programme}` : ''}{profile?.campus ? `, ${profile.campus}` : ''} · {profile?.school || ''} · Made with Consilia</p>
@@ -133,5 +138,7 @@
   .ribbon { display: flex; height: 6mm; margin: 0 3mm 2mm; border-radius: 1.5mm; overflow: hidden; color: #fff; font-size: 7.5pt; font-weight: 700; }
   .ribbon div { display: grid; place-items: center; white-space: nowrap; overflow: hidden; }
   .lines { height: 28mm; margin: 0 3mm 2mm; background: repeating-linear-gradient(#fff 0 6.5mm, #c9ced8 6.5mm 6.8mm); }
+  .qrrow { display: flex; gap: 2mm; align-items: center; margin: 1mm 0; overflow-wrap: anywhere; }
+  .qrrow small { font-size: 7pt; color: #555; }
   .foot { font-size: 8pt; color: #555; text-align: right; margin-top: 2mm; }
 </style>

@@ -18,6 +18,10 @@
   import Signal from './tools/Signal.svelte';
   import Timer from './tools/Timer.svelte';
   import type { TeachPupil } from './types';
+  import Viewer from '../books/Viewer.svelte';
+  import { findRefs, type PageRef } from '../../lib/textbook/refs';
+  import { slotFor } from '../../lib/textbook/books';
+  import { listBooks } from '../../lib/textbook/store';
 
   let { id }: { id: string } = $props();
   let lesson = $state<Lesson | null>(null);
@@ -26,7 +30,10 @@
   let missing = $state(false);
   let needsUnlock = $state(false);
   let now = $state(Date.now());
-  let tool = $state<'' | 'picker' | 'groups' | 'noise' | 'points' | 'signal' | 'timer'>('');
+  let tool = $state<'' | 'picker' | 'groups' | 'noise' | 'points' | 'signal' | 'timer' | 'book'>('');
+  let shelf = $state<string[]>([]);
+  let bookRef = $state<{ slot: string; page: number } | null>(null);
+  $effect(() => { listBooks().then((b) => (shelf = b.map((x) => x.slot))); });
   let notes = $state(false);
   let sound = $state(soundOn());
   let chimedFor = '';
@@ -103,7 +110,11 @@
   let holdTimer: ReturnType<typeof setTimeout> | undefined; let holding = $state(false);
   const holdStart = () => { holding = true; holdTimer = setTimeout(exit, 900); };
   const holdEnd = () => { holding = false; clearTimeout(holdTimer); };
+  const pageRefs = $derived<PageRef[]>(lesson ? findRefs([lesson.sowNotes.materials, lesson.aids, ...lesson.stages.flatMap((s) => s.activities.map((a) => a.teacher))].join('\n')) : []);
+  const openable = $derived(pageRefs.map((r) => ({ r, slot: lesson ? slotFor(lesson.curriculum.year, r.kind)?.id : undefined })).filter((x) => x.slot && shelf.includes(x.slot)));
+  const sbSlot = $derived(lesson ? slotFor(lesson.curriculum.year, 'SB')?.id : undefined);
   const tools = [
+    { id: 'book', label: 'Textbook', icon: '📖' },
     { id: 'picker', label: 'Name picker', icon: '🎯' }, { id: 'groups', label: 'Groups', icon: '👥' }, { id: 'noise', label: 'Noise', icon: '🔊' },
     { id: 'points', label: 'Points', icon: '⭐' }, { id: 'signal', label: 'Attention', icon: '👀' }, { id: 'timer', label: 'Timer', icon: '⏱' }
   ] as const;
@@ -188,7 +199,8 @@
         <p class="muted">These times will appear in your reflection. Attendance has been saved.</p>
         <div class="row">
           {#if lesson.classId}<a id="teach-pbd" class="btn btn-gold" href={href('classes', lesson.classId, 'pbd', lesson.id)}>Record PBD for this lesson</a>{/if}
-          <a class="btn btn-outline" href={href('plan', 'edit', lesson.id, 'review')}>Back to the RPH</a>
+          <a class="btn btn-outline" href={href('plan', 'reflect', lesson.id)}>Write my reflection</a>
+          <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'review')}>Back to the RPH</a>
         </div>
       </main>
     {/if}
@@ -208,6 +220,14 @@
           {:else if tool === 'noise'}<Noise />
           {:else if tool === 'points'}<Points {teams} bind:points={session.points} />
           {:else if tool === 'signal'}<Signal />
+          {:else if tool === 'book'}
+            {#if !shelf.length || !sbSlot || !shelf.includes(sbSlot)}
+              <p class="muted">Add the Year {lesson.curriculum.year} Student's Book on the <a href={href('library', lesson.curriculum.year, lesson.curriculum.school.toLowerCase(), 'books')}>Textbook Shelf</a> to show its pages here.</p>
+            {/if}
+            {#if openable.length}<div class="row">{#each openable as o}<button class="btn btn-outline" type="button" onclick={() => (bookRef = { slot: o.slot!, page: o.r.page })}>{o.r.label}</button>{/each}</div>{/if}
+            {#if bookRef || (sbSlot && shelf.includes(sbSlot))}
+              {#key bookRef?.slot ?? sbSlot}<Viewer slot={bookRef?.slot ?? sbSlot!} page={bookRef?.page ?? openable[0]?.r.page ?? 1} />{/key}
+            {/if}
           {:else}<Timer />{/if}
         </div>
       </div>

@@ -3,10 +3,14 @@
   import { endTime } from '../../../lib/lesson/model';
   import { rescale } from '../../../lib/lesson/frameworks';
   import { listClasses, countPupils } from '../../../lib/db/repo';
-  import type { SchoolClass } from '../../../lib/db/schema';
+  import { db, type SchoolClass } from '../../../lib/db/schema';
+  import { listLessons } from '../../../lib/db/repo';
+  import { tipsFor } from '../../../lib/reflection';
 
   let { lesson = $bindable() }: { lesson: Lesson } = $props();
   let classes = $state<SchoolClass[]>([]);
+  let tips = $state<{ from: Lesson; text: string }[]>([]);
+  $effect(() => { void lesson.classId; Promise.all([listLessons(), db.reflections.toArray()]).then(([ls, rs]) => (tips = tipsFor(lesson, ls, rs))); });
   $effect(() => { listClasses().then((c) => (classes = c.filter((x) => x.year === lesson.curriculum.year))); });
 
   async function pickClass(id: string) {
@@ -26,6 +30,9 @@
 </script>
 
 <div class="stack">
+  {#if tips.length}
+    <aside class="card tips"><b>From your reflections</b>{#each tips as tip}<p>“{tip.text}” <span class="muted small">({tip.from.topic || 'a lesson'}, {tip.from.header.date})</span></p>{/each}</aside>
+  {/if}
   <section class="card grid">
     <label class="field"><span>Class</span>
       <select id="st-class" class="select" value={lesson.classId ?? ''} onchange={(e) => pickClass(e.currentTarget.value)}>
@@ -67,5 +74,7 @@
   .ta { min-height: 64px; padding: var(--s-2) var(--s-3); resize: vertical; }
   .ro { min-height: var(--tap); display: flex; align-items: center; font-family: var(--f-mono); }
   .note { border-style: dashed; }
+  .tips { border-left: 4px solid var(--ok); }
+  .small { font-size: var(--t-sm); }
   .pre { white-space: pre-line; color: var(--ink-2); }
 </style>

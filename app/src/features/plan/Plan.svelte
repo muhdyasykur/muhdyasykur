@@ -7,6 +7,10 @@
   import Icon from '../../lib/ui/Icon.svelte';
   import NewRph from './NewRph.svelte';
   import Week from './Week.svelte';
+  import Reflect from './Reflect.svelte';
+  import { exportLesson, importLesson, shareName } from '../../lib/share';
+  import { saveFile } from '../../lib/export/download';
+  import { saveLesson, getLesson } from '../../lib/db/repo';
   import ScoreRing from '../../lib/ui/ScoreRing.svelte';
   import { runChecks } from '../../lib/lesson/checker';
   import { listClasses, copyLessonToClass } from '../../lib/db/repo';
@@ -18,6 +22,19 @@
   let classes = $state<SchoolClass[]>([]);
   let copying = $state(''); let copyClass = $state(''); let copyDate = $state('');
   async function refresh() { [lessons, classes] = await Promise.all([listLessons(), listClasses()]); }
+  let importMsg = $state('');
+  async function share(id: string) {
+    const l = await getLesson(id); if (!l) return;
+    await saveFile(new Blob([exportLesson(l, __APP_VERSION__)], { type: 'application/json' }), shareName(l));
+  }
+  async function importFile(e: Event) {
+    const f = (e.currentTarget as HTMLInputElement).files?.[0]; (e.currentTarget as HTMLInputElement).value = '';
+    if (!f) return;
+    const r = importLesson(await f.text());
+    if (!r.ok) { importMsg = r.error; return; }
+    await saveLesson(r.lesson); importMsg = '';
+    go('plan', 'edit', r.lesson.id, 'setup');
+  }
   async function copy(id: string) {
     const c = classes.find((x) => x.id === copyClass);
     if (!c) return;
@@ -38,6 +55,8 @@
   <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New RPH</a></div>
     <nav class="tabs" aria-label="Plan views"><a href={href('plan')}>Lessons</a><a href={href('plan', 'week')} aria-current="page">This week</a></nav>
     <Week /></div>
+{:else if route.parts[0] === 'reflect' && route.parts[1]}
+  {#key route.parts[1]}<Reflect id={route.parts[1]} />{/key}
 {:else if route.parts[0] === 'edit' && route.parts[1]}
   <Builder id={route.parts[1]} step={route.parts[2] ?? 'setup'} />
 {:else}
@@ -47,6 +66,7 @@
     <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New RPH</a>
   </div>
   <nav class="tabs" aria-label="Plan views"><a href={href('plan')} aria-current="page">Lessons</a><a href={href('plan', 'week')}>This week</a></nav>
+  <div class="row"><label class="btn btn-text">Import a shared lesson (.consilia)<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
   {#if lessons && !lessons.length}
     <section class="empty">
       <h3>No lesson plans yet</h3>
@@ -72,6 +92,8 @@
           <div class="row actions">
             <a class="btn btn-text" href={href('teach', l.id)}>Teach</a>
             <a class="btn btn-text" href={href('plan', 'edit', l.id, 'review')}>Print</a>
+            {#if l.status === 'taught'}<a class="btn btn-text" href={href('plan', 'reflect', l.id)}>Reflect</a>{/if}
+            <button class="btn btn-text" type="button" onclick={() => share(l.id)} data-share={l.id}>Share</button>
             <button class="btn btn-text" type="button" onclick={() => dup(l.id)}>Duplicate</button>
             {#if classes.length}<button class="btn btn-text" type="button" onclick={() => { copying = copying === l.id ? '' : l.id; copyClass = classes.find((c) => c.id !== l.classId && c.year === l.curriculum.year)?.id ?? classes[0].id; copyDate = l.header.date; }}>Copy to class…</button>{/if}
             {#if confirm === l.id}
@@ -104,6 +126,7 @@
   .item { flex-wrap: nowrap; align-items: center; gap: var(--s-3); }
   .copy .select, .copy .input { width: auto; }
   .small { font-size: var(--t-sm); }
+  .err { color: var(--bad); font-size: var(--t-sm); }
   .list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
   .main { display: grid; gap: 4px; text-decoration: none; color: var(--ink); }
   .main b { font: 700 var(--t-lg) var(--f-display); }

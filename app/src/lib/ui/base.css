@@ -40,3 +40,8 @@ img,svg{display:block;max-width:100%}
 
 @media print { .no-print { display: none !important; } body { background: #fff; } }
 .pupil-font { font-family: var(--f-pupil); }
+@media print {
+  body[data-print='one'] * { visibility: hidden !important; }
+  body[data-print='one'] .print-target, body[data-print='one'] .print-target * { visibility: visible !important; }
+  body[data-print='one'] .print-target { position: absolute; left: 0; top: 0; width: 100%; }
+}

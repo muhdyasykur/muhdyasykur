@@ -7,6 +7,8 @@
   import ScoreRing from '../../../lib/ui/ScoreRing.svelte';
   import RphSchool from '../print/RphSchool.svelte';
   import RphBlueprint from '../print/RphBlueprint.svelte';
+  import PrintableView from '../print/PrintableView.svelte';
+  import { db, type Reflection } from '../../../lib/db/schema';
 
   let { lesson = $bindable() }: { lesson: Lesson } = $props();
   const KEY = 'consilia.layout';
@@ -14,6 +16,9 @@
   $effect(() => { try { localStorage.setItem(KEY, layout); } catch { /* ignore */ } });
 
   const report = $derived(runChecks(lesson));
+  let reflection = $state<Reflection | null>(null);
+  $effect(() => { db.reflections.get(lesson.id).then((r) => (reflection = r ?? null)); });
+  const appendix = $derived((lesson.printables ?? []).filter((p) => p.inAppendix));
   let showPassed = $state(false);
   let noting = $state('');
   let reason = $state('');
@@ -93,7 +98,8 @@
     <p class="muted small">PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.</p>
   </div>
   <div class="paper-wrap">
-    {#if layout === 'school'}<RphSchool {lesson} profile={profile.value} />{:else}<RphBlueprint {lesson} profile={profile.value} />{/if}
+    {#if layout === 'school'}<RphSchool {lesson} profile={profile.value} />{:else}<RphBlueprint {lesson} profile={profile.value} {reflection} />{/if}
+    {#each appendix as p (p.id)}<div class="apx"><PrintableView {p} {lesson} /></div>{/each}
   </div>
 </div>
 
@@ -110,5 +116,6 @@
   .reason { max-width: 340px; min-height: 38px; }
   .undo { justify-self: start; }
   .paper-wrap { overflow-x: auto; background: var(--sunken); border-radius: var(--r-card); padding: var(--s-4); }
-  @media print { .paper-wrap { overflow: visible; background: none; padding: 0; } }
+  .apx { margin-top: var(--s-4); }
+  @media print { .paper-wrap { overflow: visible; background: none; padding: 0; } .apx { break-before: page; margin: 0; } }
 </style>

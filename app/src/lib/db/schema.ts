@@ -25,6 +25,9 @@ export interface BankItem { id: string; title: string; skill: string; stage: str
 export interface Media { id: string; lessonId: string | null; name: string; type: string; blob: Blob }
 export interface FeedbackItem { id: string; mood: string; kind: string; text: string; createdAt: number; sentAt?: number }
 export interface Meta { key: string; value: unknown }
+/** A textbook PDF on the shelf. The file itself is in the browser's file storage (OPFS) or, as a fallback, in bookBlobs. */
+export interface Book { id: string; slot: string; name: string; pages: number; bytes: number; offset: number; recognised: boolean; storage: 'opfs' | 'idb'; addedAt: number; text?: string[] }
+export interface BookBlob { id: string; blob: Blob }
 
 export class ConsiliaDB extends Dexie {
   profile!: EntityTable<Profile, 'id'>;
@@ -41,6 +44,8 @@ export class ConsiliaDB extends Dexie {
   media!: EntityTable<Media, 'id'>;
   feedbackQueue!: EntityTable<FeedbackItem, 'id'>;
   meta!: EntityTable<Meta, 'key'>;
+  books!: EntityTable<Book, 'id'>;
+  bookBlobs!: EntityTable<BookBlob, 'id'>;
 
   constructor(name = 'consilia') {
     super(name);
@@ -60,6 +65,8 @@ export class ConsiliaDB extends Dexie {
       feedbackQueue: 'id, createdAt, sentAt',
       meta: 'key'
     });
+    // v2 (milestone 5): textbook shelf
+    this.version(2).stores({ books: 'id, slot', bookBlobs: 'id' });
   }
 }
 

@@ -3,12 +3,12 @@ import { describe, it, expect } from 'vitest';
 import Dexie from 'dexie';
 import { ConsiliaDB } from './schema';
 
-describe('ConsiliaDB v1', () => {
+describe('ConsiliaDB', () => {
   it('opens with every store from the blueprint', async () => {
     const db = new ConsiliaDB('test-open');
     await db.open();
     expect(db.tables.map((t) => t.name).sort()).toEqual(
-      ['attendance', 'bankCustom', 'classes', 'feedbackQueue', 'lessons', 'media', 'mentorNotes', 'meta', 'pbd', 'profile', 'pupils', 'reflections', 'sessions', 'settings'].sort()
+      ['attendance', 'bankCustom', 'bookBlobs', 'books', 'classes', 'feedbackQueue', 'lessons', 'media', 'mentorNotes', 'meta', 'pbd', 'profile', 'pupils', 'reflections', 'sessions', 'settings'].sort()
     );
     db.close();
   });

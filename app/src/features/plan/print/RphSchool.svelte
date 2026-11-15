@@ -4,6 +4,7 @@
   import type { Profile } from '../../../lib/db/schema';
   import { endTime } from '../../../lib/lesson/model';
   import { objectiveText, weekday, longDate } from '../../../lib/lesson/derive';
+  import Qr from '../../../lib/ui/Qr.svelte';
 
   /** Mirrors the SK(C) Anglo Chinese Kota Kinabalu daily lesson plan template supplied by the developer. */
   let { lesson, profile }: { lesson: Lesson; profile: Profile | null } = $props();
@@ -28,8 +29,9 @@
   {#if valuesOf(s).length}<ul>{#each valuesOf(s) as x}<li>{x}</li>{/each}</ul>{:else}<p>None Applied (N/A)</p>{/if}
 {/snippet}
 {#snippet acts(s: Lesson['stages'][number])}
-  {#each s.activities as a}
-    {#if steps(a).length}<ol>{#each steps(a) as t}<li class="pre">{t}</li>{/each}</ol>{/if}
+  {#each s.activities as a, ai}
+    {@const start = s.activities.slice(0, ai).reduce((n, x) => n + steps(x).length, 0) + 1}
+    {#if steps(a).length}<ol {start}>{#each steps(a) as t}<li class="pre">{t}</li>{/each}</ol>{/if}
     {#if tiers(a).length}<p class="diff"><b>Differentiation:</b> {#each tiers(a) as [n, t], i}{i ? '; ' : ''}<i>{n}</i>: {t.trim().replace(/[.;]+$/, '')}{/each}.</p>{/if}
   {/each}
 {/snippet}
@@ -83,7 +85,7 @@
   {#if lesson.frameworkReason}<p class="small"><b>Framework note:</b> {lesson.frameworkReason}</p>{/if}
   <table class="app"><tbody>
     <tr><td class="band">Appendices</td></tr>
-    <tr><td class="pre">{lesson.appendices || ' '}{#if lesson.links.length}<br /><br /><b>Links:</b>{#each lesson.links as l}<br />{l.label}: {l.url}{/each}{/if}</td></tr>
+    <tr><td class="pre">{lesson.appendices || ' '}{#if lesson.links.length}<br /><br /><b>Links:</b>{#each lesson.links as l}<span class="qrrow"><Qr url={l.url} size={52} /><span>{l.label}<br /><small>{l.url}</small></span></span>{/each}{/if}</td></tr>
   </tbody></table>
 </article>
 
@@ -100,5 +102,7 @@
   .diff { font-size: 9pt; margin-top: 2px; }
   .small { font-size: 9pt; margin-top: 2mm; }
   .app { margin-top: 3mm; }
+  .qrrow { display: flex; gap: 2mm; align-items: center; margin: 1.5mm 0; white-space: normal; overflow-wrap: anywhere; }
+  .qrrow small { font-size: 7pt; color: #555; }
   .app td { min-height: 30mm; }
 </style>

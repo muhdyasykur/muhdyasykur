@@ -10,15 +10,17 @@
   import Icon from '../../lib/ui/Icon.svelte';
   import Logo from '../../lib/ui/Logo.svelte';
   import ScoreRing from '../../lib/ui/ScoreRing.svelte';
+  import { db } from '../../lib/db/schema';
 
   let loaded = $state(false);
   let lessons = $state<Lesson[]>([]);
   let classes = $state<SchoolClass[]>([]);
   let slots = $state<Slot[]>([]);
   let cancelled = $state<Cancelled>({});
+  let reflected = $state<Set<string>>(new Set());
   $effect(() => {
     Promise.all([listLessons(), listClasses(), getSetting<Slot[]>('timetable', []), getSetting<Cancelled>('cancelled', {})])
-      .then(([l, c, s, x]) => { lessons = l; classes = c; slots = s; cancelled = x; loaded = true; });
+      .then(async ([l, c, s, x]) => { lessons = l; classes = c; slots = s; cancelled = x; reflected = new Set((await db.reflections.toArray()).map((r) => r.lessonId)); loaded = true; });
   });
 
   const now = new Date();
@@ -27,6 +29,7 @@
   const week = $derived(weekItems(mondayOf(today), slots, lessons, cancelled).filter((i) => !i.cancelled));
   const unplanned = $derived(week.filter((i) => !i.lesson && i.date >= today));
   const weak = $derived(lessons.filter((l) => l.status !== 'taught' && l.header.date >= today).map((l) => ({ l, score: runChecks(l).score })).filter((x) => x.score < 80));
+  const toReflect = $derived(lessons.filter((l) => l.status === 'taught' && !reflected.has(l.id)).slice(0, 3));
   const cname = (id: string) => classes.find((c) => c.id === id)?.name ?? '';
   const when = (d: string) => (d === today ? 'Today' : parseDate(d).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }));
   const first = $derived((profile.value?.name ?? '').split(/\s+/)[0]);
@@ -69,11 +72,12 @@
       </section>
     {/if}
 
-    {#if unplanned.length || weak.length}
+    {#if unplanned.length || weak.length || toReflect.length}
       <section class="stack tight" aria-label="To do">
         <h3>To do</h3>
         <ul class="nudges">
           {#each unplanned as u}<li><span class="dot warn"></span><span>{cname(u.slot.classId)}, {when(u.date)} {u.slot.start}: no RPH yet.</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>Plan</a></li>{/each}
+          {#each toReflect as r}<li><span class="dot ok"></span><span>You taught "{r.topic || 'a lesson'}". Write your reflection while it is fresh.</span><a class="btn btn-text" href={href('plan', 'reflect', r.id)}>Reflect</a></li>{/each}
           {#each weak as w}<li><span class="dot bad"></span><span>"{w.l.topic || 'Untitled'}" ({when(w.l.header.date)}) scores {w.score}. Aim for 80 or more.</span><a class="btn btn-text" href={href('plan', 'edit', w.l.id, 'review')}>Fix</a></li>{/each}
         </ul>
       </section>
@@ -106,7 +110,7 @@
   .nudges, .week { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
   .nudges li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: var(--s-2); align-items: center; padding: var(--s-1) var(--s-3); background: var(--card); border: 1px solid var(--line); border-radius: var(--r-ctl); }
   .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+  .dot.warn { background: var(--warn); } .dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); }
   .week li { display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: var(--s-3); align-items: center; padding: var(--s-2) var(--s-3); background: var(--card); border: 1px solid var(--line); border-radius: var(--r-ctl); }
   .week li.past { opacity: .6; }
   .when { font-size: var(--t-sm); font-weight: 600; }

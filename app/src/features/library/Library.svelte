@@ -5,13 +5,20 @@
   import type { PackIndex, School, SowFile, Standards, PhonicsFile, SowLesson } from '../../lib/curriculum/types';
   import Icon from '../../lib/ui/Icon.svelte';
   import LessonDetail from './LessonDetail.svelte';
+  import Shelf from '../books/Shelf.svelte';
+  import Reader from '../books/Reader.svelte';
+  import { BANK } from '../../lib/content/bank';
+  import { GUIDE, SOURCES } from '../../lib/content/guide';
 
-  type Tab = 'sow' | 'phonics' | 'standards' | 'levels' | 'tasks';
+  type Tab = 'sow' | 'phonics' | 'standards' | 'levels' | 'tasks' | 'books' | 'bank' | 'guide';
   // The whole view is addressed by the hash, so a refresh or a shared link reopens the same place:
   // #/library/<year>/<school>/<tab>/<lesson>
   const year = $derived(Math.min(6, Math.max(1, Number(route.parts[0]) || 4)));
   const school = $derived<School>(route.parts[1] === 'sjk' ? 'SJK' : 'SK');
-  const tab = $derived<Tab>((['sow', 'phonics', 'standards', 'levels', 'tasks'] as Tab[]).includes(route.parts[2] as Tab) ? (route.parts[2] as Tab) : 'sow');
+  const tab = $derived<Tab>((['sow', 'phonics', 'standards', 'levels', 'tasks', 'books', 'bank', 'guide'] as Tab[]).includes(route.parts[2] as Tab) ? (route.parts[2] as Tab) : 'sow');
+  const reading = $derived(route.parts[0] === 'read' && route.parts[1] ? { slot: route.parts[1], page: Number(route.parts[2]) || 1, slot2: route.parts[3], page2: Number(route.parts[4]) || 1 } : null);
+  let everything = $state('');
+  let bankSkill = $state('All');
   const lessonNo = $derived(Number(route.parts[3]) || 0);
   const link = (y = year, s: School = school, tb: Tab = tab, n?: number) => href('library', y, s.toLowerCase(), tb, ...(n ? [n] : []));
 
@@ -41,8 +48,27 @@
     ...(hasPhonics ? [{ id: 'phonics' as Tab, label: 'Phonics' }] : []),
     { id: 'standards', label: t('library.standards') },
     { id: 'levels', label: t('library.levels') },
-    { id: 'tasks', label: t('library.tasks') }
+    { id: 'tasks', label: t('library.tasks') },
+    { id: 'books', label: 'Textbooks' },
+    { id: 'bank', label: 'Activity bank' },
+    { id: 'guide', label: 'Method Guide' }
   ]);
+  // search everything in this year: lessons, standards, task bank, strategies, activity bank, Method Guide
+  const found = $derived.by(() => {
+    const q = everything.trim().toLowerCase();
+    if (q.length < 2 || !sow || !standards) return null;
+    const has = (...xs: string[]) => xs.join(' ').toLowerCase().includes(q);
+    return {
+      lessons: sow.lessons.filter((l) => has(String(l.no), l.label, l.topic, l.mainSkill, l.focus, l.unit, l.materials, ...l.outline.pre, ...l.outline.delivery, ...l.outline.post, ...l.std.main.ls, ...l.std.comp.ls)).slice(0, 15),
+      standards: standards.ls.filter((l) => has(l.code, l.text, l.focus)).slice(0, 10),
+      tasks: [...sow.support.pre.map((x) => ({ ...x, kind: 'Pre-lesson' })), ...sow.support.post.map((x) => ({ ...x, kind: 'Post-lesson' }))].filter((x) => has(x.title, x.aim, ...x.steps)).slice(0, 8),
+      strategies: sow.support.strategies.filter((x) => has(x.title, x.body, ...x.points)),
+      bank: BANK.filter((b) => has(b.title, b.skill, b.teacher, b.pupils)).slice(0, 10),
+      guide: GUIDE.filter((g) => has(g.title, ...g.body, ...(g.pitfalls ?? [])))
+    };
+  });
+  const bankSkills = ['All', 'Listening', 'Speaking', 'Reading', 'Writing', 'Language Arts', 'Pre-lesson', 'Post-lesson'];
+  const bankShown = $derived(BANK.filter((b) => (bankSkill === 'All' || b.skill === bankSkill) && year >= b.years[0] && year <= b.years[1]));
   const skills = $derived(standards ? Object.keys(standards.performance) : []);
   const bySkill = $derived.by(() => {
     if (!standards) return [];
@@ -54,7 +80,9 @@
   ] : []);
 </script>
 
-{#if current && standards && (activeTab === 'sow' || activeTab === 'phonics')}
+{#if reading}
+  {#key route.parts.join('/')}<Reader slot={reading.slot} page={reading.page} slot2={reading.slot2} page2={reading.page2} />{/key}
+{:else if current && standards && (activeTab === 'sow' || activeTab === 'phonics')}
   <LessonDetail lesson={current} {standards} backHref={link()}
     sourceLabel={`${activeTab === 'phonics' ? 'Phonics SoW' : 'SoW'} · ${t('library.year', { n: year })}${activeTab === 'phonics' ? '' : ' ' + school}`} />
 {:else}
@@ -73,11 +101,50 @@
     </div>
   </div>
 
+  <label class="search everything"><Icon name="search" size={18} /><span class="sr-only">Search everything</span>
+    <input id="lib-everything" class="input" type="search" bind:value={everything} placeholder="Search everything in Year {year}: lessons, standards, tasks, activities, Method Guide" /></label>
+
+  {#if found}
+    <section class="stack found" aria-label="Search results">
+      {#if found.lessons.length}<h3>SoW lessons</h3><ul class="flat">{#each found.lessons as l}<li><a href={link(year, school, 'sow', l.no)}>Lesson {l.no}: {l.topic || l.label}</a> <span class="muted small">{l.label}</span></li>{/each}</ul>{/if}
+      {#if found.standards.length}<h3>Learning Standards</h3><ul class="flat">{#each found.standards as l}<li><a href={link(year, school, 'standards')}><span class="code">{l.code}</span></a> <span class="pre">{l.text}</span></li>{/each}</ul>{/if}
+      {#if found.tasks.length}<h3>SoW task bank</h3><ul class="flat">{#each found.tasks as x}<li><a href={link(year, school, 'tasks')}>{x.kind} task {x.no}: {x.title}</a> <span class="muted small">{x.aim}</span></li>{/each}</ul>{/if}
+      {#if found.strategies.length}<h3>Differentiation strategies</h3><ul class="flat">{#each found.strategies as x}<li><a href={link(year, school, 'tasks')}>Strategy {x.no}: {x.title}</a></li>{/each}</ul>{/if}
+      {#if found.bank.length}<h3>Activity bank</h3><ul class="flat">{#each found.bank as b}<li><a href={link(year, school, 'bank')}>{b.title}</a> <span class="muted small">{b.skill} · Years {b.years[0]}–{b.years[1]}</span></li>{/each}</ul>{/if}
+      {#if found.guide.length}<h3>Method Guide</h3><ul class="flat">{#each found.guide as g}<li><a href={link(year, school, 'guide')}>{g.title}</a></li>{/each}</ul>{/if}
+      {#if !Object.values(found).some((v) => v.length)}<p class="muted">Nothing in Year {year} matches "{everything}".</p>{/if}
+    </section>
+  {/if}
+
   <div class="tabs" role="tablist">
     {#each tabs as tb}<a role="tab" aria-selected={activeTab === tb.id} href={link(year, school, tb.id)}>{tb.label}</a>{/each}
   </div>
 
-  {#if error}
+  {#if activeTab === 'books'}
+    <Shelf {year} {school} />
+  {:else if activeTab === 'bank'}
+    <div class="seg skills" role="group" aria-label="Skill">{#each bankSkills as k}<button type="button" aria-pressed={bankSkill === k} onclick={() => (bankSkill = k)}>{k}</button>{/each}</div>
+    <p class="muted small">{bankShown.length} activities for Year {year}. Insert them into a lesson from the Lesson flow step of the RPH builder.</p>
+    <div class="bank">
+      {#each bankShown as b (b.id)}
+        <details class="card" data-bank={b.id}>
+          <summary><b>{b.title}</b><span class="muted small">{b.skill} · {b.minutes} min · {b.pattern} · Years {b.years[0]}–{b.years[1]}</span></summary>
+          <p><b>Teacher:</b> {b.teacher}</p><p><b>Pupils:</b> {b.pupils}</p>
+          <ul class="tiers"><li><b>🌱 Low</b> {b.tiers.low}</li><li><b>🌿 Moderate</b> {b.tiers.mod}</li><li><b>🌳 High</b> {b.tiers.high}</li></ul>
+          <p class="muted small">Materials: {b.materials} · Offline: {b.offline}</p>
+        </details>
+      {/each}
+    </div>
+  {:else if activeTab === 'guide'}
+    <div class="stack guide">
+      {#each GUIDE as g (g.id)}
+        <section class="card" id={'guide-' + g.id}><h3>{g.title}</h3>{#each g.body as para}<p>{para}</p>{/each}
+          {#if g.pitfalls}<p class="muted small"><b>Watch out for:</b></p><ul class="small">{#each g.pitfalls as p}<li>{p}</li>{/each}</ul>{/if}
+        </section>
+      {/each}
+      <section class="card"><h3>Sources</h3><p class="muted small">The skill-to-framework advice is mainstream TESL methodology from these sources, not an official KPM rule.</p><ol class="small">{#each SOURCES as src}<li>{src}</li>{/each}</ol></section>
+    </div>
+  {:else if error}
     <p class="empty" role="alert">{error}</p>
   {:else if !sow || !standards}
     <p class="muted">{t('common.loading')}</p>
@@ -191,5 +258,12 @@
   summary { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: var(--s-3); cursor: pointer; list-style: none; min-height: var(--tap); align-items: center; }
   summary::-webkit-details-marker { display: none; }
   summary .what b, summary .what .muted { white-space: normal; }
+  .everything .input { padding-left: 38px; }
+  .found h3 { font-size: var(--t-sm); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+  .flat { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .bank { display: grid; gap: var(--s-2); }
+  .bank summary { display: grid; gap: 2px; grid-template-columns: 1fr; }
+  .tiers { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+  .guide p + p { margin-top: var(--s-2); }
   .soon { grid-template-columns: auto minmax(0, 1fr); align-items: start; border-style: dashed; }
 </style>

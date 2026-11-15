@@ -61,6 +61,8 @@ export interface Lesson {
   links: { label: string; url: string }[];
   appendices: string;
   planB: PlanB;
+  /** Printable materials made in the materials studio. */
+  printables?: import('../materials').Printable[];
   /** Checker rules the teacher has marked as fine, with their reason (rule id → reason). */
   checkNotes?: Record<string, string>;
   /** SoW guidance kept for reference while planning (differentiation note, materials, lesson note). */

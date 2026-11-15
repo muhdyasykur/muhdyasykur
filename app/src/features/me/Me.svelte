@@ -8,6 +8,8 @@
   import PinSettings from '../../lib/ui/PinSettings.svelte';
   import { lock } from '../../lib/lock.svelte';
   import Unlock from '../../lib/ui/Unlock.svelte';
+  import Mentor from './Mentor.svelte';
+  import { route, href } from '../../router.svelte';
   let savedNote = $state('');
 
   let persisted = $state<boolean | null>(null);
@@ -20,8 +22,10 @@
   });
   const themes: Theme[] = ['system', 'light', 'dark'];
 </script>
+{#if route.parts[0] === 'mentor'}<Mentor />{:else}
 <div class="stack">
   <h1>{t('me.title')}</h1>
+  <a class="card raised mentor" href={href('me', 'mentor')}><b>Mentor and lecturer feedback</b><span class="muted">Log observation comments and see what keeps coming up.</span></a>
 
   <section class="card">
     <div class="setting">
@@ -73,7 +77,10 @@
     <p class="muted small">{t('me.version', { v: __APP_VERSION__ })}</p>
   </section>
 </div>
+{/if}
+
 <style>
+  .mentor { text-decoration: none; color: var(--ink); }
   .setting { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; font-weight: 600; }
   .ok { color: var(--ok); justify-self: start; }
   .small { font-size: var(--t-sm); }
