@@ -8,12 +8,18 @@ import { startPwa } from './lib/pwa.svelte';
 import { i18n } from './lib/i18n/index.svelte';
 import { loadProfile } from './lib/profile.svelte';
 import { loadLock, lockNow } from './lib/lock.svelte';
+import { startMusicGuards } from './lib/audio/player.svelte';
+import { flush } from './lib/feedback';
 
 document.documentElement.lang = i18n.locale;
 startRouter();
 startPwa();
 loadProfile();
 loadLock();
+startMusicGuards();
+// Feedback planted while offline is sent when the app starts or comes back online
+flush(__APP_VERSION__).catch(() => {});
+window.addEventListener('online', () => { flush(__APP_VERSION__).catch(() => {}); });
 // Lock pupil data again after the app has been in the background for 5 minutes.
 let hiddenAt = 0;
 document.addEventListener('visibilitychange', () => {

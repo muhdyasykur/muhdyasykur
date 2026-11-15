@@ -14,7 +14,8 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M3 Alignment checker (29 rules) and score, Plan B suggestions, Word export (both layouts), weekly planner and timetable, Today dashboard, copy a lesson to another class | Done |
 | M4 Teach mode (stage clock, pacing coach, resume after reload, wake lock), classroom toolkit (name picker, group maker with keep-apart pairs, noise meter, team points, attention signal, timer), attendance, PBD recording, heatmap and suggested levels, Excel export, PIN lock with encrypted pupil names | Done |
 | M5 Textbook Shelf (own PDFs on the device, page maps, search, viewer with projector tools, in Teach mode), materials studio, tool links and Canva AI prompt, activity bank (70), Method Guide, search everything, guided reflection, mentor notes, share/import .consilia, QR codes on printed links | Done |
-| M6 Brand experience: splash, music, guided tour, About page, Feedback Garden, backup and restore | Next |
+| M6 Brand experience: splash (once a day, tap to skip), three original R&B instrumentals composed in code (off by default, pause in Teach mode), 8-step guided tour, About page, Feedback Garden to Jotform with an offline queue, backup and restore with a weekly reminder, confetti for a first 100 score | Done |
+| M7 QA, six tutorial videos, user manual, privacy page, OCR for scanned textbooks, pilot, v1.0 | Next |
 
 ## Run it
 
@@ -28,7 +29,7 @@ npm run check      # type check
 npm run validate:curriculum   # integrity check of the curriculum pack
 ```
 
-Browser tests of the built app (need Playwright on the machine): `npx vite preview --port 4173 &`, then `npm run smoke` (shell, Library, offline) `npm run e2e` (builds and prints a full RPH) and `npm run e2e:teach` (Teach mode, PBD and the PIN lock) and `npm run e2e:m5` (Textbook Shelf, materials, sharing, reflection; needs textbook PDFs in `UPLOAD_DIR`, never committed).
+Browser tests of the built app (need Playwright on the machine): `npx vite preview --port 4173 &`, then `npm run smoke` (shell, Library, offline) `npm run e2e` (builds and prints a full RPH) and `npm run e2e:teach` (Teach mode, PBD and the PIN lock) and `npm run e2e:m5` (Textbook Shelf, materials, sharing, reflection; needs textbook PDFs in `UPLOAD_DIR`, never committed) and `npm run e2e:m6` (splash, tour, About, Feedback Garden online and offline, music, backup and restore; the Jotform post is intercepted, nothing is sent).
 
 ## Layout
 

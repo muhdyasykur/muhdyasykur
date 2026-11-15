@@ -4,6 +4,9 @@
   import { profile, updateProfile, skipOnboarding } from '../../lib/profile.svelte';
   import ProfileForm from '../../lib/ui/ProfileForm.svelte';
   import Logo from '../../lib/ui/Logo.svelte';
+  import { startTour, tourDone } from '../../lib/tour.svelte';
+  async function save(p: Parameters<typeof updateProfile>[0]) { await updateProfile(p); if (!tourDone()) startTour(); }
+  function skip() { skipOnboarding(); if (!tourDone()) startTour(); }
   const themes: Theme[] = ['system', 'light', 'dark'];
 </script>
 
@@ -26,10 +29,10 @@
       </div>
     </div>
     <p>Tell Consilia a little about your practicum. These details fill the header of every RPH. Everything stays on this device.</p>
-    <ProfileForm value={profile.value} saveLabel="Start planning" onsave={updateProfile}>
+    <ProfileForm value={profile.value} saveLabel="Start planning" onsave={save}>
       <p class="muted small">You can change this later in Me.</p>
     </ProfileForm>
-    <button class="btn btn-text skip" type="button" onclick={skipOnboarding}>Skip for now</button>
+    <button class="btn btn-text skip" type="button" onclick={skip}>Skip for now</button>
   </div>
 </div>
 

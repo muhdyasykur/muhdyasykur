@@ -7,6 +7,7 @@
   import Icon from '../../lib/ui/Icon.svelte';
   import ScoreRing from '../../lib/ui/ScoreRing.svelte';
   import { runChecks } from '../../lib/lesson/checker';
+  import { confetti } from '../../lib/ui/confetti';
   import SetupStep from './steps/SetupStep.svelte';
   import StandardsStep from './steps/StandardsStep.svelte';
   import ObjectivesStep from './steps/ObjectivesStep.svelte';
@@ -61,6 +62,17 @@
   const idx = $derived(Math.max(0, STEPS.findIndex((s) => s.key === step)));
   const cur = $derived(STEPS[idx]);
   const report = $derived(lesson ? runChecks(lesson) : { score: 0, failing: [] });
+  // a small celebration the first time a lesson reaches 100
+  let lastScore = -1;
+  $effect(() => {
+    const s = report.score, l = lesson;
+    if (!l) return;
+    if (s === 100 && lastScore >= 0 && lastScore < 100) {
+      const KEY = 'consilia.celebrated';
+      try { const done: string[] = JSON.parse(localStorage.getItem(KEY) ?? '[]'); if (!done.includes(l.id)) { confetti(); localStorage.setItem(KEY, JSON.stringify([...done, l.id].slice(-300))); } } catch { /* ignore */ }
+    }
+    lastScore = s;
+  });
   // keep the current step visible in the step bar on narrow screens
   $effect(() => { void idx; queueMicrotask(() => document.querySelector('.steps [aria-current="step"]')?.scrollIntoView({ inline: 'center', block: 'nearest' })); });
 </script>

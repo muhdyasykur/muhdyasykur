@@ -11,6 +11,17 @@
   import Me from './features/me/Me.svelte';
   import Onboarding from './features/onboarding/Onboarding.svelte';
   import Teach from './features/teach/Teach.svelte';
+  import Splash from './lib/ui/Splash.svelte';
+  import Tour from './features/help/Tour.svelte';
+  import { tour } from './lib/tour.svelte';
+  import { pause as pauseMusic, music } from './lib/audio/player.svelte';
+
+  // Splash: at most once a day, never with reduced motion or when opening straight into Teach mode
+  const today = new Date().toDateString();
+  let splash = $state((() => { try { return localStorage.getItem('consilia.splash') !== today && !matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash.startsWith('#/teach'); } catch { return false; } })());
+  function splashDone() { splash = false; try { localStorage.setItem('consilia.splash', today); } catch { /* ignore */ } }
+  // Music never plays during a lesson
+  $effect(() => { if (route.name === 'teach' && music.playing) pauseMusic(); });
   import { profile } from './lib/profile.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
@@ -60,6 +71,8 @@
 {/if}
 
 {#if profile.loaded && !profile.value && !profile.skipped && route.name !== 'teach'}<Onboarding />{/if}
+{#if tour.open && route.name !== 'teach'}<Tour />{/if}
+{#if splash}<Splash ondone={splashDone} />{/if}
 
 {#if pwa.needRefresh}
   <div class="toast" role="status">

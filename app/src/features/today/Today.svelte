@@ -11,6 +11,7 @@
   import Logo from '../../lib/ui/Logo.svelte';
   import ScoreRing from '../../lib/ui/ScoreRing.svelte';
   import { db } from '../../lib/db/schema';
+  import { lastBackup } from '../../lib/backup';
 
   let loaded = $state(false);
   let lessons = $state<Lesson[]>([]);
@@ -18,9 +19,10 @@
   let slots = $state<Slot[]>([]);
   let cancelled = $state<Cancelled>({});
   let reflected = $state<Set<string>>(new Set());
+  let backupAge = $state<number | null>(null);
   $effect(() => {
     Promise.all([listLessons(), listClasses(), getSetting<Slot[]>('timetable', []), getSetting<Cancelled>('cancelled', {})])
-      .then(async ([l, c, s, x]) => { lessons = l; classes = c; slots = s; cancelled = x; reflected = new Set((await db.reflections.toArray()).map((r) => r.lessonId)); loaded = true; });
+      .then(async ([l, c, s, x]) => { lessons = l; classes = c; slots = s; cancelled = x; reflected = new Set((await db.reflections.toArray()).map((r) => r.lessonId)); const lb = await lastBackup(); backupAge = lb ? Math.floor((Date.now() - lb) / 86400000) : -1; loaded = true; });
   });
 
   const now = new Date();
@@ -29,6 +31,7 @@
   const week = $derived(weekItems(mondayOf(today), slots, lessons, cancelled).filter((i) => !i.cancelled));
   const unplanned = $derived(week.filter((i) => !i.lesson && i.date >= today));
   const weak = $derived(lessons.filter((l) => l.status !== 'taught' && l.header.date >= today).map((l) => ({ l, score: runChecks(l).score })).filter((x) => x.score < 80));
+  const needBackup = $derived(lessons.length > 0 && (backupAge === -1 || (backupAge ?? 0) > 7));
   const toReflect = $derived(lessons.filter((l) => l.status === 'taught' && !reflected.has(l.id)).slice(0, 3));
   const cname = (id: string) => classes.find((c) => c.id === id)?.name ?? '';
   const when = (d: string) => (d === today ? 'Today' : parseDate(d).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }));
@@ -72,11 +75,12 @@
       </section>
     {/if}
 
-    {#if unplanned.length || weak.length || toReflect.length}
+    {#if unplanned.length || weak.length || toReflect.length || needBackup}
       <section class="stack tight" aria-label="To do">
         <h3>To do</h3>
         <ul class="nudges">
           {#each unplanned as u}<li><span class="dot warn"></span><span>{cname(u.slot.classId)}, {when(u.date)} {u.slot.start}: no RPH yet.</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>Plan</a></li>{/each}
+          {#if needBackup}<li><span class="dot warn"></span><span>{backupAge === -1 ? 'You have not backed up yet.' : `Your last backup was ${backupAge} days ago.`} One file keeps your lessons safe if this device is lost.</span><a class="btn btn-text" href={href('me')}>Back up</a></li>{/if}
           {#each toReflect as r}<li><span class="dot ok"></span><span>You taught "{r.topic || 'a lesson'}". Write your reflection while it is fresh.</span><a class="btn btn-text" href={href('plan', 'reflect', r.id)}>Reflect</a></li>{/each}
           {#each weak as w}<li><span class="dot bad"></span><span>"{w.l.topic || 'Untitled'}" ({when(w.l.header.date)}) scores {w.score}. Aim for 80 or more.</span><a class="btn btn-text" href={href('plan', 'edit', w.l.id, 'review')}>Fix</a></li>{/each}
         </ul>

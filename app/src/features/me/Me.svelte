@@ -9,6 +9,10 @@
   import { lock } from '../../lib/lock.svelte';
   import Unlock from '../../lib/ui/Unlock.svelte';
   import Mentor from './Mentor.svelte';
+  import About from './About.svelte';
+  import Help from './Help.svelte';
+  import BackupCard from './BackupCard.svelte';
+  import MusicCard from './MusicCard.svelte';
   import { route, href } from '../../router.svelte';
   let savedNote = $state('');
 
@@ -22,10 +26,17 @@
   });
   const themes: Theme[] = ['system', 'light', 'dark'];
 </script>
-{#if route.parts[0] === 'mentor'}<Mentor />{:else}
+{#if route.parts[0] === 'mentor'}<Mentor />{:else if route.parts[0] === 'about'}<About />{:else if route.parts[0] === 'help'}<Help />{:else}
 <div class="stack">
   <h1>{t('me.title')}</h1>
-  <a class="card raised mentor" href={href('me', 'mentor')}><b>Mentor and lecturer feedback</b><span class="muted">Log observation comments and see what keeps coming up.</span></a>
+  <div class="links">
+    <a class="card raised mentor" href={href('me', 'mentor')}><b>Mentor and lecturer feedback</b><span class="muted">Log observation comments and see what keeps coming up.</span></a>
+    <a class="card raised mentor" href={href('me', 'help')}><b>Help</b><span class="muted">How-tos and the guided tour.</span></a>
+    <a class="card raised mentor" href={href('me', 'about')}><b>About and Feedback Garden</b><span class="muted">The story behind Consilia. Plant your feedback.</span></a>
+  </div>
+
+  <section class="card"><h3>Backup</h3><BackupCard /></section>
+  <section class="card"><h3>Background music</h3><MusicCard /></section>
 
   <section class="card">
     <div class="setting">
@@ -81,6 +92,7 @@
 
 <style>
   .mentor { text-decoration: none; color: var(--ink); }
+  .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
   .setting { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; font-weight: 600; }
   .ok { color: var(--ok); justify-self: start; }
   .small { font-size: var(--t-sm); }
