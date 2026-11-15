@@ -6,6 +6,8 @@
   import { openPdf, renderPage, pageTexts } from '../../lib/textbook/pdf';
   import { loadSow } from '../../lib/curriculum/loader';
   import { unitIndex, lessonRefs, type UnitIndex } from '../../lib/textbook/refs';
+  import { ocr, makeSearchable, pauseOcr, isScan, ocrFilesKept } from '../../lib/textbook/ocr.svelte';
+  import { pwa } from '../../lib/pwa.svelte';
   import type { SowLesson, School } from '../../lib/curriculum/types';
 
   let { year = 4, school = 'SK' }: { year?: number; school?: School } = $props();
@@ -20,6 +22,11 @@
 
   async function refresh() { books = await db.books.toArray(); disk = await space(); }
   $effect(() => { refresh(); });
+  $effect(() => { if (ocr.done || ocr.phase) refresh(); });
+  async function startOcr(b: Book) {
+    if (!pwa.online && !(await ocrFilesKept())) { error = 'Connect to the internet once so Consilia can download text recognition (about 7 MB). After that it works offline.'; return; }
+    error = ''; await makeSearchable(b); await refresh();
+  }
   $effect(() => { const y = year, s = school; loadSow(y, s).then((f) => { if (y === year) { lessons = f.lessons; units = unitIndex(f.lessons); } }); });
   const bookOf = (slot: string) => books.find((b) => b.slot === slot);
 
@@ -53,12 +60,13 @@
       const old = bookOf(p.slot); if (old) await removeBook(old);
       const storage = await putBookFile(p.slot, p.file);
       await db.books.put({ id: p.slot, slot: p.slot, name: p.file.name, pages: p.pages, bytes: p.file.size, offset: p.offset, recognised: p.known, storage, addedAt: Date.now(), text: hasText ? texts : undefined });
+      if (old && ocr.bookId === p.slot) pauseOcr();
       pending = null; busy = '';
       await refresh();
     } catch (e) { error = 'Saving failed: ' + (e as Error).message; busy = ''; }
   }
   function confirmCalibration() { if (pending && printed != null) { pending.offset = Math.min(CAL_PAGE, pending.pages) - printed; save(); } }
-  async function remove(b: Book) { await removeBook(b); await refresh(); }
+  async function remove(b: Book) { if (ocr.bookId === b.id) pauseOcr(); await removeBook(b); await refresh(); }
   async function recalibrate(b: Book) {
     const f = await getBookFile(b); if (!f) return;
     pending = { file: new File([f], b.name, { type: 'application/pdf' }), slot: b.slot, pages: b.pages, offset: b.offset, known: false };
@@ -80,7 +88,7 @@
   });
   function snippet(t: string, w: string) { const i = t.toLowerCase().indexOf(w); return (i > 40 ? '…' : '') + t.slice(Math.max(0, i - 40), i + w.length + 60) + '…'; }
   const read = (slot: string, page: number) => href('library', 'read', slot, page);
-  const scanned = $derived(books.filter((b) => !b.text).length);
+  const scanned = $derived(books.filter((b) => isScan(b) && (b.ocrDone ?? 0) < b.pages).length);
 </script>
 
 <div class="stack">
@@ -112,7 +120,7 @@
         {#each results.lessons as l}<div class="hit"><span>Lesson {l.no} · {l.topic} <span class="muted">({l.label})</span></span>{#each lessonRefs(l) as r}{@const s = slotFor(year, r.kind)}{#if s}<a class="btn btn-text" href={read(s.id, r.page)}>{r.label}</a>{/if}{/each}</div>{/each}
         {#each results.words as w}<div class="hit"><a href={read(w.slot, w.page)}>{SLOTS.find((s) => s.id === w.slot)?.title}, p. {w.page}</a><span class="muted small">{w.snippet}</span></div>{/each}
         {#if !results.units.length && !results.lessons.length && !results.words.length}<p class="muted">Nothing found for "{q}".</p>{/if}
-        {#if scanned}<p class="muted small">{scanned} of your books are scans without searchable text, so word search covers {books.length - scanned} book{books.length - scanned === 1 ? '' : 's'}. Units, topics and page numbers work for all of them.</p>{/if}
+        {#if scanned}<p class="muted small">{scanned} of your books {scanned === 1 ? 'is a scan' : 'are scans'} not yet fully searchable. Press Make searchable on {scanned === 1 ? 'it' : 'them'} below. Units, topics and page numbers already work for every book.</p>{/if}
       {/if}
     </section>
   {/if}
@@ -124,7 +132,18 @@
         <p class="eyebrow">{KIND_NAME[s.kind]}</p>
         <h3>{s.series}</h3>
         {#if b}
-          <p class="small muted">{b.name} · {b.pages} pages · {mb(b.bytes)} · {b.recognised ? 'recognised edition' : `page offset ${b.offset}`}{b.text ? ' · searchable text' : ''}</p>
+          <p class="small muted">{b.name} · {b.pages} pages · {mb(b.bytes)} · {b.recognised ? 'recognised edition' : `page offset ${b.offset}`}{!isScan(b) ? ' · searchable text' : (b.ocrDone ?? 0) >= b.pages ? ' · searchable (read on this device)' : ' · scanned'}</p>
+          {#if isScan(b) && (b.ocrDone ?? 0) < b.pages}
+            {@const running = ocr.bookId === b.id && (ocr.phase === 'loading' || ocr.phase === 'reading')}
+            {@const done = ocr.bookId === b.id ? ocr.done : (b.ocrDone ?? 0)}
+            <div class="ocr" data-ocr={b.id}>
+              {#if done > 0 || running}<progress max={b.pages} value={done} aria-label="Pages read"></progress>{/if}
+              <p class="small" role="status">{ocr.bookId === b.id && ocr.message ? ocr.message : done ? `${done} of ${b.pages} pages searchable.` : 'This book is a scan, so its words cannot be searched yet.'}</p>
+              {#if running}<button class="btn btn-outline" type="button" onclick={pauseOcr}>Pause</button>
+              {:else}<button class="btn btn-gold ocr-go" type="button" disabled={ocr.phase === 'loading' || ocr.phase === 'reading'} onclick={() => startOcr(b)}>{done ? 'Continue' : 'Make searchable'}</button>{/if}
+              {#if !done && !running}<p class="muted small">Reads each page on this device; nothing is uploaded. About {Math.max(1, Math.round(b.pages * 4 / 60))} min; you can keep working.</p>{/if}
+            </div>
+          {/if}
           <div class="row">
             <a class="btn btn-primary" href={read(s.id, 1 - b.offset > 0 ? 1 - b.offset : 1)}>Open</a>
             {#if !b.recognised}<button class="btn btn-text" type="button" onclick={() => recalibrate(b)}>Check page numbers</button>{/if}
@@ -149,6 +168,8 @@
   .slot.filled { border-style: solid; }
   .add { justify-self: start; }
   .del { color: var(--bad); }
+  .ocr { display: grid; gap: 6px; margin: var(--s-2) 0; justify-items: start; }
+  .ocr progress { width: 100%; accent-color: var(--gold-strong); }
   .hit { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; border-bottom: 1px solid var(--line); padding: 4px 0; }
   .hit .muted.small { flex-basis: 100%; }
 </style>

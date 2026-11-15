@@ -26,7 +26,9 @@ export interface Media { id: string; lessonId: string | null; name: string; type
 export interface FeedbackItem { id: string; mood: string; kind: string; text: string; createdAt: number; sentAt?: number }
 export interface Meta { key: string; value: unknown }
 /** A textbook PDF on the shelf. The file itself is in the browser's file storage (OPFS) or, as a fallback, in bookBlobs. */
-export interface Book { id: string; slot: string; name: string; pages: number; bytes: number; offset: number; recognised: boolean; storage: 'opfs' | 'idb'; addedAt: number; text?: string[] }
+export interface Book { id: string; slot: string; name: string; pages: number; bytes: number; offset: number; recognised: boolean; storage: 'opfs' | 'idb'; addedAt: number; text?: string[];
+  /** Scanned books: pages read so far by on-device text recognition (absent for books with a text layer). */
+  ocrDone?: number }
 export interface BookBlob { id: string; blob: Blob }
 
 export class ConsiliaDB extends Dexie {

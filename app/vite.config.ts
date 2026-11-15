@@ -33,9 +33,19 @@ export default defineConfig({
       },
       workbox: {
         // App shell, fonts and the whole curriculum pack are available offline after the first visit.
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,webmanifest}'],
+        globPatterns: ['**/*.{js,mjs,css,html,svg,png,webp,woff2,json,webmanifest}'],
+        // Text recognition files and tutorial videos are large and optional: fetched on first use, not at install.
+        globIgnores: ['ocr/**', 'videos/**'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
-        cleanupOutdatedCaches: true
+        cleanupOutdatedCaches: true,
+        // Tutorial videos and OCR language data are not in the install. Help and the Textbook Shelf save them on first use;
+        // these routes then serve them offline (videos with byte ranges, so seeking works).
+        runtimeCaching: [
+          { urlPattern: /\/videos\/.+\.(mp4|vtt)$/, handler: 'CacheFirst',
+            options: { cacheName: 'consilia-videos', rangeRequests: true, cacheableResponse: { statuses: [200] } } },
+          { urlPattern: /\/ocr\/.+/, handler: 'CacheFirst',
+            options: { cacheName: 'consilia-ocr', cacheableResponse: { statuses: [200] } } }
+        ]
       }
     })
   ],

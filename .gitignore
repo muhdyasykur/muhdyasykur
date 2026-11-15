@@ -9,3 +9,5 @@ __pycache__/
 tools/curriculum-extract/out/
 *.pdf
 !docs/samples/*.pdf
+# copied from node_modules by app/scripts/copy-ocr.mjs on dev and build
+app/public/ocr/
