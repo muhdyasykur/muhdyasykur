@@ -5,6 +5,11 @@
   import type { SchoolClass } from '../../lib/db/schema';
   import Icon from '../../lib/ui/Icon.svelte';
   import ClassDetail from './ClassDetail.svelte';
+  import PbdRecord from './PbdRecord.svelte';
+  import PbdProgress from './PbdProgress.svelte';
+  import PupilProfile from './PupilProfile.svelte';
+  import Unlock from '../../lib/ui/Unlock.svelte';
+  import { lock } from '../../lib/lock.svelte';
 
   const years = [1, 2, 3, 4, 5, 6] as const;
   let classes = $state<SchoolClass[]>([]);
@@ -21,7 +26,7 @@
     counts = Object.fromEntries(await Promise.all(classes.map(async (c) => [c.id, await countPupils(c.id)] as const)));
     if (classes.length && !classes.some((c) => c.year === year)) year = classes[0].year;
   }
-  $effect(() => { if (!route.parts[0]) refresh(); });
+  $effect(() => { void lock.unlocked; if (!route.parts[0]) refresh(); });
 
   async function add(e: SubmitEvent) {
     e.preventDefault();
@@ -33,7 +38,15 @@
   const inYear = $derived(classes.filter((c) => c.year === year));
 </script>
 
-{#if route.parts[0]}
+{#if lock.configured && !lock.unlocked}
+  <Unlock />
+{:else if route.parts[0] && route.parts[1] === 'pbd' && route.parts[2]}
+  {#key route.parts[2]}<PbdRecord classId={route.parts[0]} lessonId={route.parts[2]} />{/key}
+{:else if route.parts[0] && route.parts[1] === 'pbd'}
+  <PbdProgress classId={route.parts[0]} />
+{:else if route.parts[0] && route.parts[1] === 'pupil' && route.parts[2]}
+  {#key route.parts[2]}<PupilProfile classId={route.parts[0]} pupilId={route.parts[2]} />{/key}
+{:else if route.parts[0]}
   <ClassDetail id={route.parts[0]} />
 {:else}
 <div class="stack">

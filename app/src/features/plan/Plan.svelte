@@ -70,6 +70,7 @@
           </a>
           </div>
           <div class="row actions">
+            <a class="btn btn-text" href={href('teach', l.id)}>Teach</a>
             <a class="btn btn-text" href={href('plan', 'edit', l.id, 'review')}>Print</a>
             <button class="btn btn-text" type="button" onclick={() => dup(l.id)}>Duplicate</button>
             {#if classes.length}<button class="btn btn-text" type="button" onclick={() => { copying = copying === l.id ? '' : l.id; copyClass = classes.find((c) => c.id !== l.classId && c.year === l.curriculum.year)?.id ?? classes[0].id; copyDate = l.header.date; }}>Copy to class…</button>{/if}

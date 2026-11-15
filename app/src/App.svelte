@@ -10,6 +10,7 @@
   import Library from './features/library/Library.svelte';
   import Me from './features/me/Me.svelte';
   import Onboarding from './features/onboarding/Onboarding.svelte';
+  import Teach from './features/teach/Teach.svelte';
   import { profile } from './lib/profile.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
@@ -21,6 +22,9 @@
   ];
 </script>
 
+{#if route.name === 'teach' && route.parts[0]}
+  {#key route.parts[0]}<Teach id={route.parts[0]} />{/key}
+{:else}
 <a class="skip" href="#main">Skip to content</a>
 <div class="shell">
   <nav class="nav" aria-label="Main">
@@ -53,7 +57,9 @@
   </main>
 </div>
 
-{#if profile.loaded && !profile.value && !profile.skipped}<Onboarding />{/if}
+{/if}
+
+{#if profile.loaded && !profile.value && !profile.skipped && route.name !== 'teach'}<Onboarding />{/if}
 
 {#if pwa.needRefresh}
   <div class="toast" role="status">

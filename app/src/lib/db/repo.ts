@@ -1,4 +1,5 @@
 import { db, type Profile, type SchoolClass, type Pupil } from './schema';
+import { isEncrypted } from '../crypto/pin';
 import type { Lesson } from '../lesson/model';
 import { uid } from '../lesson/model';
 
@@ -17,7 +18,34 @@ export async function saveClass(c: Partial<SchoolClass> & Pick<SchoolClass, 'yea
 export async function deleteClass(id: string) {
   await db.transaction('rw', db.classes, db.pupils, async () => { await db.pupils.where('classId').equals(id).delete(); await db.classes.delete(id); });
 }
-export const listPupils = (classId: string) => db.pupils.where('classId').equals(classId).sortBy('order');
+/**
+ * Pupil names and notes are encrypted when a PIN is set. The lock module installs a cipher while unlocked;
+ * while locked, encrypted names read as "Locked".
+ */
+export interface Cipher { enc(s: string): Promise<string>; dec(s: string): Promise<string> }
+let cipher: Cipher | null = null;
+export const setCipher = (c: Cipher | null) => { cipher = c; };
+async function readable(p: Pupil): Promise<Pupil> {
+  if (!isEncrypted(p.name) && !isEncrypted(p.note)) return p;
+  if (!cipher) return { ...p, name: 'Locked', note: p.note ? 'Locked' : p.note };
+  return { ...p, name: await cipher.dec(p.name), note: p.note ? await cipher.dec(p.note) : p.note };
+}
+const sealed = async (s: string) => (cipher ? cipher.enc(s) : s);
+export async function listPupils(classId: string): Promise<Pupil[]> {
+  return Promise.all((await db.pupils.where('classId').equals(classId).sortBy('order')).map(readable));
+}
+/** Encrypt (cipher set) or decrypt (cipher null, `from` given) every pupil record. Used when a PIN is set or removed. */
+export async function resealAll(from: Cipher | null, to: Cipher | null) {
+  // Crypto runs first: an IndexedDB transaction closes if it awaits anything else.
+  const all = await db.pupils.toArray();
+  const updates: { id: string; name: string; note?: string }[] = [];
+  for (const p of all) {
+    const name = from && isEncrypted(p.name) ? await from.dec(p.name) : p.name;
+    const note = p.note && from && isEncrypted(p.note) ? await from.dec(p.note) : p.note;
+    updates.push({ id: p.id, name: to ? await to.enc(name) : name, note: note ? (to ? await to.enc(note) : note) : note });
+  }
+  await db.transaction('rw', db.pupils, async () => { for (const u of updates) await db.pupils.update(u.id, { name: u.name, note: u.note }); });
+}
 export const countPupils = (classId: string) => db.pupils.where('classId').equals(classId).count();
 
 /** Clean a pasted list: one name per line, numbering and bullets removed, blanks dropped. */
@@ -40,12 +68,29 @@ export async function addPupils(classId: string, names: string[]) {
   const existing = await listPupils(classId);
   const all = disambiguate([...existing.map((p) => p.name), ...names]);
   const start = existing.length;
+  const enc = await Promise.all(all.map(sealed));
   await db.transaction('rw', db.pupils, async () => {
-    for (let i = 0; i < existing.length; i++) if (existing[i].name !== all[i]) await db.pupils.update(existing[i].id, { name: all[i] });
-    await db.pupils.bulkAdd(all.slice(start).map((name, i): Pupil => ({ id: uid(), classId, name, order: start + i + 1 })));
+    for (let i = 0; i < existing.length; i++) if (existing[i].name !== all[i]) await db.pupils.update(existing[i].id, { name: enc[i] });
+    await db.pupils.bulkAdd(enc.slice(start).map((name, i): Pupil => ({ id: uid(), classId, name, order: start + i + 1 })));
   });
 }
-export const renamePupil = (id: string, name: string) => db.pupils.update(id, { name });
+export const renamePupil = async (id: string, name: string) => db.pupils.update(id, { name: await sealed(name) });
+/** Save a pupil's profile (tier override, note, keep-apart and keep-together pairs). */
+export async function updatePupil(id: string, patch: Partial<Pick<Pupil, 'tierOverride' | 'note' | 'keepApart' | 'keepTogether'>>) {
+  const p = { ...patch };
+  if (p.note !== undefined) p.note = p.note ? await sealed(p.note) : '';
+  await db.pupils.update(id, p);
+}
+/** Set a pair both ways; `on` false removes it. */
+export async function setPair(kind: 'keepApart' | 'keepTogether', a: string, b: string, on: boolean) {
+  for (const [x, y] of [[a, b], [b, a]]) {
+    const p = await db.pupils.get(x);
+    if (!p) continue;
+    const cur = new Set(p[kind] ?? []);
+    if (on) cur.add(y); else cur.delete(y);
+    await db.pupils.update(x, (p) => { p[kind] = [...cur]; });
+  }
+}
 export const removePupil = (id: string) => db.pupils.delete(id);
 
 // ---- lessons ----

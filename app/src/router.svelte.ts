@@ -1,6 +1,6 @@
 // Hash router: works on GitHub Pages with no server rewrites and survives an offline refresh.
-export type RouteName = 'today' | 'plan' | 'classes' | 'library' | 'me';
-const names: RouteName[] = ['today', 'plan', 'classes', 'library', 'me'];
+export type RouteName = 'today' | 'plan' | 'classes' | 'library' | 'me' | 'teach';
+const names: RouteName[] = ['today', 'plan', 'classes', 'library', 'me', 'teach'];
 
 export interface Route { name: RouteName; parts: string[] }
 

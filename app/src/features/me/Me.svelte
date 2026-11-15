@@ -5,6 +5,9 @@
   import { pwa } from '../../lib/pwa.svelte';
   import { profile, updateProfile } from '../../lib/profile.svelte';
   import ProfileForm from '../../lib/ui/ProfileForm.svelte';
+  import PinSettings from '../../lib/ui/PinSettings.svelte';
+  import { lock } from '../../lib/lock.svelte';
+  import Unlock from '../../lib/ui/Unlock.svelte';
   let savedNote = $state('');
 
   let persisted = $state<boolean | null>(null);
@@ -47,6 +50,11 @@
         </ProfileForm>
       {/key}
     {/if}
+  </section>
+
+  <section class="card">
+    <h3>PIN lock for pupil data</h3>
+    {#if lock.configured && !lock.unlocked}<Unlock why="Unlock to change your PIN." />{:else}<PinSettings />{/if}
   </section>
 
   <section class="card">

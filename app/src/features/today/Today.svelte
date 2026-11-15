@@ -50,10 +50,9 @@
           {@const s = runChecks(next.lesson).score}
           <div class="row nl"><ScoreRing score={s} size={64} /><div><h2>{next.lesson.topic || 'Untitled lesson'}</h2><p class="muted">{cname(next.slot.classId)} · {next.lesson.mainSkill} · {next.lesson.status === 'ready' ? 'Ready' : 'Draft'}</p></div></div>
           <div class="row">
-            <a class="btn btn-primary" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? 'See what to fix' : 'Open RPH'}</a>
-            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, 'review')}>Print</a>
+            <a class="btn btn-gold" href={href('teach', next.lesson.id)}>▶ Teach</a>
+            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? 'See what to fix' : 'Open RPH'}</a>
           </div>
-          <p class="muted small">Teach mode, with the stage timer and classroom tools, arrives in milestone 4.</p>
         {:else}
           <h2>{cname(next.slot.classId)} has no RPH yet</h2>
           <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />Plan this lesson</a>

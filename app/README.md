@@ -12,7 +12,8 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M1 Curriculum data pack: SoW, DSKP, performance levels, task bank (Years 1–6, SK and SJK) | Done, awaiting sample review |
 | M2 RPH builder: onboarding, classes, 7-step builder, three modes, frameworks, ABCD/SMART objectives, L/M/H tiers, timing, print (school template and Consilia Lesson Blueprint) | Done |
 | M3 Alignment checker (29 rules) and score, Plan B suggestions, Word export (both layouts), weekly planner and timetable, Today dashboard, copy a lesson to another class | Done |
-| M4 Teach mode, classroom toolkit, attendance, PBD tracker | Next |
+| M4 Teach mode (stage clock, pacing coach, resume after reload, wake lock), classroom toolkit (name picker, group maker with keep-apart pairs, noise meter, team points, attention signal, timer), attendance, PBD recording, heatmap and suggested levels, Excel export, PIN lock with encrypted pupil names | Done |
+| M5 Materials studio, tool links and Canva AI prompt, library search, Method Guide, activity bank, textbook shelf, reflection and mentor notes, sharing | Next |
 
 ## Run it
 
@@ -26,7 +27,7 @@ npm run check      # type check
 npm run validate:curriculum   # integrity check of the curriculum pack
 ```
 
-Browser tests of the built app (need Playwright on the machine): `npx vite preview --port 4173 &`, then `npm run smoke` (shell, Library, offline) and `npm run e2e` (builds and prints a full RPH).
+Browser tests of the built app (need Playwright on the machine): `npx vite preview --port 4173 &`, then `npm run smoke` (shell, Library, offline) `npm run e2e` (builds and prints a full RPH) and `npm run e2e:teach` (Teach mode, PBD and the PIN lock).
 
 ## Layout
 

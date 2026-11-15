@@ -71,6 +71,7 @@
 <div class="stack builder">
   <div class="no-print bar">
     <a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />Plan</a>
+    <a class="btn btn-gold teachbtn" href={href('teach', lesson.id)}>▶ Teach</a>
     <span class="save" role="status">{saved === 'saving' ? 'Saving…' : saved === 'error' ? 'Not saved. Check storage space.' : 'Saved on this device'}</span>
   </div>
   <header class="no-print head">

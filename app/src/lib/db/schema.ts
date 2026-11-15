@@ -10,12 +10,14 @@ export type SchoolType = 'SK' | 'SJK';
 export interface Profile { id: 'me'; name: string; school: string; schoolType: SchoolType; campus?: string; programme?: string; /** School badge as a data URL, printed on the RPH header. */ logo?: string; createdAt: number }
 export interface Setting { key: string; value: unknown }
 export interface SchoolClass { id: string; year: 1 | 2 | 3 | 4 | 5 | 6; name: string; schoolType: SchoolType; curriculumPack: string; levelLabel?: string; notes?: string; archived?: boolean; createdAt: number }
-export interface Pupil { id: string; classId: string; name: string; order: number; tierOverride?: 'low' | 'mod' | 'high'; note?: string; keepApart?: string[] }
+export interface Pupil { id: string; classId: string; name: string; order: number; tierOverride?: 'low' | 'mod' | 'high'; note?: string; keepApart?: string[]; keepTogether?: string[] }
 export type LessonStatus = 'draft' | 'ready' | 'taught';
 /** The full lesson shape is defined with the builder in milestone 2; indexed fields are fixed now. */
 export interface Lesson { id: string; classId: string | null; date: string; status: LessonStatus; updatedAt: number; [field: string]: unknown }
-export interface TeachSession { id: string; lessonId: string; startedAt: number; endedAt?: number; timing: { stage: string; plannedMin: number; actualSec: number }[] }
+/** A taught lesson. `clock` is the live Teach-mode clock, saved on every change so a reload resumes it. */
+export interface TeachSession { id: string; lessonId: string; classId: string | null; startedAt: number; endedAt?: number; clock: unknown; absent: string[]; picker?: { picked: string[] }; points?: number[]; groups?: string[][] }
 export interface Attendance { id: string; sessionId: string; pupilId: string; present: boolean }
+export interface ClockLog { key: string; title: string; plannedMin: number; actualSec: number }
 export interface PbdRecord { id: string; pupilId: string; classId: string; lessonId: string | null; ls: string; tp: 1 | 2 | 3 | 4 | 5 | 6; date: string; note?: string }
 export interface Reflection { id: string; lessonId: string; worked: string; didnt: string; next: string; createdAt: number }
 export interface MentorNote { id: string; lessonId: string | null; who: string; date: string; text: string; tags: string[] }

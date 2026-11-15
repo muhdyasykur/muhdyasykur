@@ -42,6 +42,10 @@
       <p class="eyebrow">Year {cls.year} · {cls.schoolType}</p>
       <h1>{cls.name}</h1>
     </header>
+    <div class="row">
+      <a class="btn btn-primary" href={href('classes', id, 'pbd')}>PBD progress</a>
+      <a class="btn btn-outline" href={href('classes', id, 'pbd', 'new')}>Record TP levels</a>
+    </div>
     <section class="card grid">
       <label class="field"><span>Class name</span><input id="cd-name" class="input" bind:value={cls.name} onchange={saveMeta} /></label>
       <label class="field"><span>Level</span><input id="cd-level" class="input" bind:value={cls.levelLabel} onchange={saveMeta} placeholder="e.g. Average" /></label>
@@ -65,7 +69,7 @@
       {#if pupils.length}
         <ol class="pupils">
           {#each pupils as p (p.id)}
-            <li><input class="input" aria-label="Pupil name" value={p.name} onchange={(e) => rename(p, e.currentTarget.value)} /><button class="btn btn-text" type="button" onclick={() => remove(p)}>Remove</button></li>
+            <li><input class="input" aria-label="Pupil name" value={p.name} onchange={(e) => rename(p, e.currentTarget.value)} /><a class="btn btn-text" href={href('classes', id, 'pupil', p.id)}>Profile</a><button class="btn btn-text" type="button" onclick={() => remove(p)}>Remove</button></li>
           {/each}
         </ol>
       {/if}

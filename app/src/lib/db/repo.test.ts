@@ -16,3 +16,27 @@ describe('pupil lists', () => {
     expect((await listPupils(id)).map((p) => p.name)).toEqual(['Ali A.', 'Mei Ling', 'Ali B.', 'Kumar']);
   });
 });
+
+describe('pupil encryption', async () => {
+  const { setCipher, resealAll, listPupils, addPupils, saveClass } = await import('./repo');
+  const { createPin, encryptText, decryptText } = await import('../crypto/pin');
+  const { db } = await import('./schema');
+  it('stores names encrypted once a PIN is set and reads them back while unlocked', async () => {
+    const id = await saveClass({ year: 3, name: '3 Bestari', schoolType: 'SK' });
+    await addPupils(id, ['Nur Aisyah', 'Kumar']);
+    const { key } = await createPin('2468', 1000);
+    const c = { enc: (s: string) => encryptText(key, s), dec: (s: string) => decryptText(key, s) };
+    await resealAll(null, c);
+    setCipher(c);
+    const raw = await db.pupils.where('classId').equals(id).toArray();
+    expect(raw.every((p) => p.name.startsWith('enc:v1:'))).toBe(true);
+    expect((await listPupils(id)).map((p) => p.name)).toEqual(['Nur Aisyah', 'Kumar']);
+    await addPupils(id, ['Mei Ling']);
+    setCipher(null);
+    expect((await listPupils(id)).map((p) => p.name)).toEqual(['Locked', 'Locked', 'Locked']);
+    setCipher(c);
+    expect((await listPupils(id)).map((p) => p.name)).toEqual(['Nur Aisyah', 'Kumar', 'Mei Ling']);
+    await resealAll(c, null); setCipher(null);
+    expect((await listPupils(id)).map((p) => p.name)).toEqual(['Nur Aisyah', 'Kumar', 'Mei Ling']);
+  });
+});
