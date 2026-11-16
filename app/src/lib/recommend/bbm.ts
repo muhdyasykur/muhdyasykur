@@ -111,8 +111,8 @@ export const BBM: Bbm[] = [
     steps: ['Draw the character\'s face on a paper plate or a card headband.', 'Cut eye holes (teacher) if using a plate.', 'Attach string or a rubber band, or staple the headband to fit.'],
     minutes: 25, cost: 'Under RM5', use: ['Pupils wear masks to perform the story or dialogue.', 'Hot seat: the masked pupil answers in role.'], tip: 'Headbands are quicker and easier to see faces and hear voices.', safety: 'Teacher cuts eye holes; avoid tight string around necks.' },
   { id: 'qr-cards', name: 'QR task cards', ms: 'Kad tugas QR', what: 'Cards with a QR code that opens an audio, video or game on the teacher\'s phone or tablet.', uses: ['reading', 'game', 'grouping'],
-    materials: ['Printer or the QR codes from Consilia\'s printed RPH', 'Card', 'One phone or tablet per group (or the teacher\'s phone at a station)'],
-    steps: ['Add the links to your lesson (Materials step): Consilia makes a QR code for each one.', 'Print the RPH page with QR codes, or copy the codes onto cards.', 'Write the task under each code ("Watch, then answer 3 questions").', 'Test every code before class.'],
+    materials: ['Printer or the QR codes from Consilia\'s printed lesson plans', 'Card', 'One phone or tablet per group (or the teacher\'s phone at a station)'],
+    steps: ['Add the links to your lesson (Materials step): Consilia makes a QR code for each one.', 'Print the lesson plan page with QR codes, or copy the codes onto cards.', 'Write the task under each code ("Watch, then answer 3 questions").', 'Test every code before class.'],
     minutes: 20, cost: 'Free', use: ['Stations: groups scan, watch or listen, and complete the task card.', 'Treasure hunt around the class with clues behind each code.'], tip: 'Download videos for offline use where the platform allows it, in case the internet fails.' }
 ];
 

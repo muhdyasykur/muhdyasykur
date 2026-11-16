@@ -42,7 +42,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
 
   // 3. new RPH from scratch
   await page.click('nav a[href="#/plan"]');
-  await page.click('a:has-text("New RPH")');
+  await page.click('a:has-text("New lesson plan")');
   await page.waitForSelector('#nr-class');
   await page.selectOption('#nr-class', { label: '4 Zhong · Year 4 SJK' });
   await page.fill('#nr-date', '2025-11-03');
@@ -193,7 +193,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#rv-word')]);
     const name = dl.suggestedFilename();
     if (out) await dl.saveAs(`${out}/${name}`);
-    check(/^RPH-2025-11-03-4-Zhong-Whats-the-Matter(-Blueprint)?\.docx$/.test(name), `Word download for ${layout}: ${name}`);
+    check(/^LessonPlan-2025-11-03-4-Zhong-Whats-the-Matter(-Blueprint)?\.docx$/.test(name), `Word download for ${layout}: ${name}`);
   }
 
   // 10b. weekly planner and Today

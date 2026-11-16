@@ -7,7 +7,7 @@ import Dexie, { type EntityTable } from 'dexie';
  */
 export type SchoolType = 'SK' | 'SJK';
 
-export interface Profile { id: 'me'; name: string; school: string; schoolType: SchoolType; campus?: string; programme?: string; /** School badge as a data URL, printed on the RPH header. */ logo?: string; createdAt: number }
+export interface Profile { id: 'me'; name: string; school: string; schoolType: SchoolType; campus?: string; programme?: string; /** School badge as a data URL, printed on the lesson plan header. */ logo?: string; createdAt: number }
 export interface Setting { key: string; value: unknown }
 export interface SchoolClass { id: string; year: 1 | 2 | 3 | 4 | 5 | 6; name: string; schoolType: SchoolType; curriculumPack: string; levelLabel?: string; notes?: string; archived?: boolean; createdAt: number }
 export interface Pupil { id: string; classId: string; name: string; order: number; tierOverride?: 'low' | 'mod' | 'high'; note?: string; keepApart?: string[]; keepTogether?: string[] }
@@ -17,6 +17,15 @@ export interface Lesson { id: string; classId: string | null; date: string; stat
 /** A taught lesson. `clock` is the live Teach-mode clock, saved on every change so a reload resumes it. */
 export interface TeachSession { id: string; lessonId: string; classId: string | null; startedAt: number; endedAt?: number; clock: unknown; absent: string[]; picker?: { picked: string[] }; points?: number[]; groups?: string[][] }
 export interface Attendance { id: string; sessionId: string; pupilId: string; present: boolean }
+/** Daily class register (milestone 9): one record per class per date. P present, L late, A absent, E excused (MC, school duty). */
+export type Mark = 'P' | 'L' | 'A' | 'E';
+export interface Register { id: string; classId: string; date: string; marks: Record<string, Mark>; reasons: Record<string, string>; takenAt: number }
+/** A yearly scheme of work (RPT): uploaded and extracted, or built from the SoW. */
+export interface PlanWeek { week: number; start: string; end: string; holiday: string; theme: string; topic: string; ls: string[]; lessons: number[]; notes: string }
+export interface YearPlan { id: string; name: string; calendarYear: number; year: number; school: SchoolType; classIds: string[]; source: string; weeks: PlanWeek[]; createdAt: number; updatedAt: number }
+/** How the teacher arranged one day: order of items, extra items and what is done. */
+export interface DayItem { id: string; kind: 'slot' | 'lesson' | 'extra'; ref: string; time: string; title: string; done: boolean }
+export interface DayPlan { date: string; items: DayItem[]; note: string }
 export interface ClockLog { key: string; title: string; plannedMin: number; actualSec: number }
 export interface PbdRecord { id: string; pupilId: string; classId: string; lessonId: string | null; ls: string; tp: 1 | 2 | 3 | 4 | 5 | 6; date: string; note?: string }
 export interface Reflection { id: string; lessonId: string; worked: string; didnt: string; next: string; createdAt: number }
@@ -48,6 +57,9 @@ export class ConsiliaDB extends Dexie {
   meta!: EntityTable<Meta, 'key'>;
   books!: EntityTable<Book, 'id'>;
   bookBlobs!: EntityTable<BookBlob, 'id'>;
+  register!: EntityTable<Register, 'id'>;
+  plans!: EntityTable<YearPlan, 'id'>;
+  days!: EntityTable<DayPlan, 'date'>;
 
   constructor(name = 'consilia') {
     super(name);
@@ -69,6 +81,8 @@ export class ConsiliaDB extends Dexie {
     });
     // v2 (milestone 5): textbook shelf
     this.version(2).stores({ books: 'id, slot', bookBlobs: 'id' });
+    // v3 (milestone 9): class register, yearly plans, daily arrangement
+    this.version(3).stores({ register: 'id, classId, date, [classId+date]', plans: 'id, year, calendarYear', days: 'date' });
   }
 }
 

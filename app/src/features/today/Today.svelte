@@ -47,6 +47,12 @@
       <p class="muted"><i>{t('app.tagline')}</i></p>
     </div>
   </header>
+  <nav class="quicklinks" aria-label="Shortcuts">
+    <a class="btn btn-outline" href={href('plan', 'day')} data-quick="day">📅 My day</a>
+    <a class="btn btn-outline" href={href('plan', 'year')}>🗓 Yearly plan</a>
+    <a class="btn btn-outline" href={href('classes')}>✓ Attendance</a>
+    <a class="btn btn-outline" href={href('tools')}>🧰 Tools</a>
+  </nav>
 
   {#if loaded}
     {#if next}
@@ -57,10 +63,10 @@
           <div class="row nl"><ScoreRing score={s} size={64} /><div><h2>{next.lesson.topic || 'Untitled lesson'}</h2><p class="muted">{cname(next.slot.classId)} · {next.lesson.mainSkill} · {next.lesson.status === 'ready' ? 'Ready' : 'Draft'}</p></div></div>
           <div class="row">
             <a class="btn btn-gold" href={href('teach', next.lesson.id)}>▶ Teach</a>
-            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? 'See what to fix' : 'Open RPH'}</a>
+            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? 'See what to fix' : 'Open lesson plan'}</a>
           </div>
         {:else}
-          <h2>{cname(next.slot.classId)} has no RPH yet</h2>
+          <h2>{cname(next.slot.classId)} has no lesson plan yet</h2>
           <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />Plan this lesson</a>
           <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}>✨ Let Consilia plan it</a>
         {/if}
@@ -81,7 +87,7 @@
       <section class="stack tight" aria-label="To do">
         <h3>To do</h3>
         <ul class="nudges">
-          {#each unplanned as u}<li><span class="dot warn"></span><span>{cname(u.slot.classId)}, {when(u.date)} {u.slot.start}: no RPH yet.</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>Plan</a></li>{/each}
+          {#each unplanned as u}<li><span class="dot warn"></span><span>{cname(u.slot.classId)}, {when(u.date)} {u.slot.start}: no lesson plan yet.</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>Plan</a></li>{/each}
           {#if needBackup}<li><span class="dot warn"></span><span>{backupAge === -1 ? 'You have not backed up yet.' : `Your last backup was ${backupAge} days ago.`} One file keeps your lessons safe if this device is lost.</span><a class="btn btn-text" href={href('me')}>Back up</a></li>{/if}
           {#each toReflect as r}<li><span class="dot ok"></span><span>You taught "{r.topic || 'a lesson'}". Write your reflection while it is fresh.</span><a class="btn btn-text" href={href('plan', 'reflect', r.id)}>Reflect</a></li>{/each}
           {#each weak as w}<li><span class="dot bad"></span><span>"{w.l.topic || 'Untitled'}" ({when(w.l.header.date)}) scores {w.score}. Aim for 80 or more.</span><a class="btn btn-text" href={href('plan', 'edit', w.l.id, 'review')}>Fix</a></li>{/each}
@@ -121,4 +127,5 @@
   .week li.past { opacity: .6; }
   .when { font-size: var(--t-sm); font-weight: 600; }
   .what { display: grid; min-width: 0; }
+  .quicklinks { display: flex; flex-wrap: wrap; gap: var(--s-2); }
 </style>

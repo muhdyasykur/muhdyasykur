@@ -15,7 +15,7 @@
   const planB = $derived([['Finished early', lesson.planB.early], ['Running late', lesson.planB.late], ['No internet / power', lesson.planB.offline], ['Class too noisy', lesson.planB.noisy], ['Many absent', lesson.planB.absent]].filter(([, v]) => v.trim()));
 </script>
 
-<article class="paper bp" aria-label="RPH, Consilia Lesson Blueprint">
+<article class="paper bp" aria-label="Lesson plan, Consilia Lesson Blueprint">
   <header class="head">
     <div>
       <p class="kicker">Consilia Lesson Blueprint · KSSR Semakan 2017{lesson.curriculum.sowLesson ? ` · SoW Y${lesson.curriculum.year} ${lesson.curriculum.school} Lesson ${lesson.curriculum.sowLesson}` : ''}</p>

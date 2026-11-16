@@ -25,7 +25,7 @@
       <b>Which lesson are these tools for?</b>
       <span class="muted small">Say it once: every tool fills in the year, topic and words for you.</span>
       <div class="row">
-        {#if lessons.length}<button id="ctx-latest" class="btn btn-gold" type="button" onclick={() => fromLesson(lessons[0])}>Use my latest RPH ({lessons[0].topic || 'untitled'})</button>{/if}
+        {#if lessons.length}<button id="ctx-latest" class="btn btn-gold" type="button" onclick={() => fromLesson(lessons[0])}>Use my latest lesson plan ({lessons[0].topic || 'untitled'})</button>{/if}
         <button class="btn btn-outline" type="button" onclick={() => (editing = true)}>Type my topic</button>
         <button id="ctx-example" class="btn btn-text" type="button" onclick={example}>Try an example</button>
       </div>
@@ -43,7 +43,7 @@
   {/if}
   {#if editing}
     <div class="stack tight edit">
-      {#if lessons.length}<label class="field"><span>Use one of my RPHs</span>
+      {#if lessons.length}<label class="field"><span>Use one of my lesson plans</span>
         <select id="ctx-lesson" class="select" onchange={pick} value={ctx.lessonId}>
           <option value="">Choose a lesson…</option>
           {#each lessons as l}<option value={l.id}>{[l.header.date, l.header.className, l.topic || 'Untitled'].filter(Boolean).join(' · ')}</option>{/each}

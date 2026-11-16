@@ -40,7 +40,7 @@
     <label class="field"><span>Programme (optional)</span><input id="pf-prog" class="input" bind:value={programme} placeholder="e.g. PISMP TESL" /></label>
     <label class="field"><span>Campus (optional)</span><input id="pf-campus" class="input" bind:value={campus} placeholder="e.g. IPG Kampus Gaya" /></label>
     <div class="field">
-      <span>School badge for the RPH header (optional)</span>
+      <span>School badge for the lesson plan header (optional)</span>
       <div class="row">
         {#if logo}<img src={logo} alt="School badge" class="logo" /><button type="button" class="btn btn-text" onclick={() => (logo = '')}>Remove</button>{/if}
         <label class="btn btn-outline">Choose image<input id="pf-logo" type="file" accept="image/*" class="sr-only" onchange={pick} /></label>

@@ -20,7 +20,7 @@
   <article class="card letter">
     <p class="hi">Hello to everyone using Consilia,</p>
     <p>Thank you, from the bottom of my heart, for giving this app a place in your teaching.</p>
-    <p>I'm Yasykur, a Year 4 PISMP TESL trainee teacher at IPG Kampus Gaya, Kota Kinabalu, Sabah. Consilia started during my first practicum. I still remember the late nights rewriting my RPH, trying to make my objectives match the learning standards, and walking into class with activities that looked good on paper but didn't quite fit my pupils. Some lessons ran out of time. Some pupils finished in five minutes while others hadn't even started. Deep down, I knew I wasn't the only one going through this.</p>
+    <p>I'm Yasykur, a Year 4 PISMP TESL trainee teacher at IPG Kampus Gaya, Kota Kinabalu, Sabah. Consilia started during my first practicum. I still remember the late nights rewriting my lesson plans, trying to make my objectives match the learning standards, and walking into class with activities that looked good on paper but didn't quite fit my pupils. Some lessons ran out of time. Some pupils finished in five minutes while others hadn't even started. Deep down, I knew I wasn't the only one going through this.</p>
     <p>So I asked. Eighteen of my fellow final year trainees shared their practicum stories with me, and so many of them said the same things: too much paperwork, classes with very different abilities, and never enough time.</p>
     <p>As technology keeps growing, I took this chance to build something that could help. Consilia is my small contribution to teachers, educators and trainee teachers like me, so that planning a good lesson takes less time and leaves more energy for what truly matters: our pupils.</p>
     <p>It isn't perfect, and it will keep growing with your feedback. If it saves you even one late night, or helps one lesson go a little better, then it has done its job.</p>
@@ -30,7 +30,7 @@
 
   <section class="card stack story">
     <h3>Where Consilia came from</h3>
-    <p>Before a line of code, 18 final-year trainees answered a survey about Practicum 1. Their top three problems were heavy workload (11 of 18), mixed-ability classes (9) and time constraints (7). Every main feature answers one of their stories: the RPH builder and alignment checker, Low/Moderate/High differentiation, the pacing coach and Plan B, and Teach mode that keeps working when the internet or power fails.</p>
+    <p>Before a line of code, 18 final-year trainees answered a survey about Practicum 1. Their top three problems were heavy workload (11 of 18), mixed-ability classes (9) and time constraints (7). Every main feature answers one of their stories: the lesson plan builder and alignment checker, Low/Moderate/High differentiation, the pacing coach and Plan B, and Teach mode that keeps working when the internet or power fails.</p>
   </section>
 
   <section class="stack" id="garden">

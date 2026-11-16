@@ -2,11 +2,11 @@
  *  Files live in public/videos/ and are not in the install: they download when played and are then kept for offline use. */
 export interface Video { id: string; title: string; ms: string; about: string }
 export const VIDEOS: Video[] = [
-  { id: 'first-rph', title: 'Your first RPH', ms: 'RPH pertama anda', about: 'From New RPH to a finished, aligned plan using a SoW lesson.' },
+  { id: 'first-rph', title: 'Your first lesson plan', ms: 'RPH pertama anda', about: 'From New lesson plan to a finished, aligned plan using a SoW lesson.' },
   { id: 'objectives', title: 'Objectives that pass SMART', ms: 'Objektif yang lulus SMART', about: 'Fix a vague objective with the ABCD boxes and success criteria.' },
   { id: 'teach', title: 'Teach mode', ms: 'Mod Mengajar', about: 'Attendance, the stage clock and the classroom toolkit.' },
   { id: 'classes-pbd', title: 'Classes and PBD', ms: 'Kelas dan PBD', about: 'Add a class, paste names, record TP levels and see progress.' },
-  { id: 'export', title: 'Print, PDF and Word', ms: 'Cetak, PDF dan Word', about: 'Check the score, choose a layout and download the RPH.' },
+  { id: 'export', title: 'Print, PDF and Word', ms: 'Cetak, PDF dan Word', about: 'Check the score, choose a layout and download the lesson plan.' },
   { id: 'backup', title: 'Back up and restore', ms: 'Sandaran dan pemulihan', about: 'Save one file each week and bring everything back on a new phone.' }
 ];
 export const VIDEO_CACHE = 'consilia-videos';

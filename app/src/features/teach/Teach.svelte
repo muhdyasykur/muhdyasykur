@@ -18,6 +18,7 @@
   import Signal from './tools/Signal.svelte';
   import Timer from './tools/Timer.svelte';
   import Games from '../tools/Games.svelte';
+  import { fromTeach } from '../../lib/attendance';
   import type { TeachPupil } from './types';
   import Viewer from '../books/Viewer.svelte';
   import { findRefs, type PageRef } from '../../lib/textbook/refs';
@@ -100,6 +101,7 @@
     const s = $state.snapshot(session) as TeachSession;
     await db.sessions.put(s);
     await db.attendance.bulkPut(pupils.map((p) => ({ id: `${s.id}:${p.id}`, sessionId: s.id, pupilId: p.id, present: !s.absent.includes(p.id) })));
+    if (lesson.classId && pupils.length) await fromTeach(lesson.classId, new Date(s.startedAt).toISOString().slice(0, 10), pupils.map((p) => p.id), [...s.absent]);
     lesson.status = 'taught';
     await saveLesson($state.snapshot(lesson) as Lesson);
   }
@@ -201,7 +203,7 @@
         <div class="row">
           {#if lesson.classId}<a id="teach-pbd" class="btn btn-gold" href={href('classes', lesson.classId, 'pbd', lesson.id)}>Record PBD for this lesson</a>{/if}
           <a class="btn btn-outline" href={href('plan', 'reflect', lesson.id)}>Write my reflection</a>
-          <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'review')}>Back to the RPH</a>
+          <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'review')}>Back to the lesson plan</a>
         </div>
       </main>
     {/if}

@@ -40,7 +40,7 @@
         {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
       </select>
     </label>
-    <label class="field"><span>Class name on the RPH</span><input id="st-cname" class="input" bind:value={lesson.header.className} placeholder="e.g. 4 Zhong" /></label>
+    <label class="field"><span>Class name on the lesson plan</span><input id="st-cname" class="input" bind:value={lesson.header.className} placeholder="e.g. 4 Zhong" /></label>
     <label class="field"><span>Class level</span><input id="st-level" class="input" bind:value={lesson.header.levelLabel} placeholder="e.g. Average" /></label>
     <label class="field"><span>Number of pupils</span><input id="st-pupils" class="input" type="number" min="1" max="60" bind:value={lesson.header.pupils} /></label>
     <label class="field"><span>Date</span><input id="st-date" class="input" type="date" bind:value={lesson.header.date} /></label>

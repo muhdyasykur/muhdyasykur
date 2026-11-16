@@ -36,7 +36,7 @@
   {/each}
 {/snippet}
 
-<article class="paper school" aria-label="RPH, school template">
+<article class="paper school" aria-label="Lesson plan, school template">
   <header class="top">
     {#if profile?.logo}<img src={profile.logo} alt="" class="logo" />{/if}
     <p class="sch">{(profile?.school || 'School name').toUpperCase()}</p>

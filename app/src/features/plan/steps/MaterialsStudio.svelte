@@ -54,7 +54,7 @@
       <div class="row between">
         <b>{TYPE_INFO[p.type].name}{p.words.length ? `: ${p.words.slice(0, 3).join(', ')}${p.words.length > 3 ? '…' : ''}` : ''}</b>
         <div class="row">
-          <label class="row small"><input type="checkbox" bind:checked={p.inAppendix} />In RPH appendix</label>
+          <label class="row small"><input type="checkbox" bind:checked={p.inAppendix} />In lesson plan appendix</label>
           <button class="btn btn-text" type="button" onclick={() => (open = open === p.id ? '' : p.id)}>{open === p.id ? 'Hide' : 'Preview'}</button>
           <button class="btn btn-outline" type="button" onclick={() => { open = p.id; queueMicrotask(() => printOne(els[p.id])); }} data-print-one={p.type}>Print</button>
           <button class="btn btn-text del" type="button" onclick={() => remove(p.id)}>Delete</button>

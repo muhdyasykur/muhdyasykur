@@ -48,7 +48,7 @@
     <ContextBar compact />
     {#if hasCtx()}
       <div class="quick" aria-label="Quick actions for this lesson">
-        {#if ctx.lessonId}<a class="btn btn-outline" href={href('plan', 'edit', ctx.lessonId, 'flow')}>📄 Open the RPH</a>{:else}<a class="btn btn-gold" href={href('plan', 'new', 'recommend')}>✨ Plan this lesson</a>{/if}
+        {#if ctx.lessonId}<a class="btn btn-outline" href={href('plan', 'edit', ctx.lessonId, 'flow')}>📄 Open the lesson plan</a>{:else}<a class="btn btn-gold" href={href('plan', 'new', 'recommend')}>✨ Plan this lesson</a>{/if}
         <a class="btn btn-outline" href={href('tools', 'games')} data-quick="games">🎮 Games from my words</a>
         <a class="btn btn-outline" href={href('tools', 'ideas')}>💡 Activity ideas</a>
         <a class="btn btn-outline" href={href('tools', 'objectives')}>🎯 An objective</a>

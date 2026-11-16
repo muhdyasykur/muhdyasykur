@@ -1,7 +1,7 @@
 {
   "app.tagline": "Consilium: wise planning, meaningful learning.",
   "nav.today": "Today", "nav.plan": "Plan", "nav.classes": "Classes", "nav.library": "Library", "nav.tools": "Tools", "nav.me": "Me",
-  "nav.newRph": "New RPH",
+  "nav.newRph": "New lesson plan",
   "common.comingIn": "Coming in milestone {m}",
   "common.offlineReady": "Ready to work offline",
   "common.loading": "Loading…",
@@ -16,7 +16,7 @@
   "today.status": "Build status",
   "today.status.m0": "App shell, offline install, themes and languages",
   "today.status.m1": "Curriculum data: SoW, DSKP and performance levels, Years 1–6",
-  "today.status.m2": "RPH builder: three modes, ABCD objectives, frameworks, timing and print",
+  "today.status.m2": "Lesson plan builder: three modes, ABCD objectives, frameworks, timing and print",
   "today.status.next": "Next: a two-week pilot with trainee teachers, then version 1.0",
   "plan.title": "Plan",
   "plan.empty.title": "Your lesson plans will live here",

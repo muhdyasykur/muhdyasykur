@@ -54,7 +54,7 @@
       <div class="seg" role="group" aria-label="Energy">{#each [['any', 'Any'], ['active', 'Active'], ['calm', 'Calm']] as [v, t]}<button type="button" aria-pressed={energy === v} onclick={() => (energy = v as typeof energy)}>{t}</button>{/each}</div>
     </div>
   </section>
-  <p class="muted small" aria-live="polite">{list.length} activit{list.length === 1 ? 'y' : 'ies'} for Year {ctx.year}. ★ marks the most memorable ones.{ctx.lessonId ? ' Use "Add to my lesson" to put one straight into your RPH.' : ''}</p>
+  <p class="muted small" aria-live="polite">{list.length} activit{list.length === 1 ? 'y' : 'ies'} for Year {ctx.year}. ★ marks the most memorable ones.{ctx.lessonId ? ' Use "Add to my lesson" to put one straight into your lesson plan.' : ''}</p>
   {#each list.slice(0, 40) as r (r.id)}
     <details class="card idea" data-idea={r.id}>
       <summary><span class="t"><b>{r.title}{r.wow ? ' ★' : ''}</b><span class="muted small">{r.skill} · {pat(r.pattern)} · {r.minutes} min · {r.energy === 'active' ? 'Active' : 'Calm'}</span></span>

@@ -30,10 +30,12 @@
   let busy = $state(false);
   let error = $state('');
 
-  // Prefill from the weekly planner: #/plan/new/<classId>/<date>/<start>/<minutes>; #/plan/new/recommend opens Consilia Recommends
-  const wantsRec = route.parts[1] === 'recommend';
-  const [pClass, pDate, pStart, pDur] = route.parts.slice(wantsRec ? 2 : 1);
-  if (wantsRec) mode = 'recommend';
+  // Prefill from links: #/plan/new[/recommend][/sow/<lesson>/<year>/<SK|SJK>][/<classId>/<date>/<start>/<minutes>]
+  const tokens = route.parts.slice(1);
+  if (tokens[0] === 'recommend') { mode = 'recommend'; tokens.shift(); }
+  let wantSow = 0;
+  if (tokens[0] === 'sow') { wantSow = Number(tokens[1]) || 0; if (Number(tokens[2]) >= 1) year = Number(tokens[2]); if (tokens[3] === 'SK' || tokens[3] === 'SJK') school = tokens[3]; tokens.splice(0, 4); }
+  const [pClass, pDate, pStart, pDur] = tokens;
   if (pDate && /^\d{4}-\d{2}-\d{2}$/.test(pDate)) date = pDate;
   if (pStart && /^\d{2}:\d{2}$/.test(pStart)) start = pStart;
   if (pDur && Number(pDur) >= 15) duration = Number(pDur);
@@ -44,7 +46,7 @@
   $effect(() => {
     const y = year, s = school, ph = usePhonics && hasPhonics;
     picked = null;
-    (ph ? loadPhonics(y).then((p) => p?.lessons ?? []) : loadSow(y, s).then((f) => f.lessons)).then((l) => { if (y === year) lessons = l; });
+    (ph ? loadPhonics(y).then((p) => p?.lessons ?? []) : loadSow(y, s).then((f) => f.lessons)).then((l) => { if (y === year) { lessons = l; if (wantSow && l.some((x) => x.no === wantSow)) { picked = wantSow; wantSow = 0; queueMicrotask(() => document.querySelector(`[data-sow="${picked}"]`)?.scrollIntoView({ block: 'center' })); } } });
   });
   const shown = $derived(searchLessons(lessons, query));
   const modes: { id: Mode; title: string; body: string }[] = [
@@ -98,7 +100,7 @@
 {:else}
 <div class="stack">
   <a class="btn btn-text back" href={href('plan')}><Icon name="back" size={18} />Plan</a>
-  <h1>New RPH</h1>
+  <h1>New lesson plan</h1>
 
   <section class="card stack">
     <h3>1 · Class and time</h3>
@@ -193,7 +195,7 @@
   {/if}
 
   {#if error}<p class="err" role="alert">{error}</p>{/if}
-  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>{mode === 'recommend' ? '✨ Plan it with Consilia' : 'Create RPH'}</button></div>
+  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>{mode === 'recommend' ? '✨ Plan it with Consilia' : 'Create lesson plan'}</button></div>
 </div>
 {/if}
 

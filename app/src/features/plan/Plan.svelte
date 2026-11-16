@@ -16,6 +16,9 @@
   import { listClasses, copyLessonToClass } from '../../lib/db/repo';
   import type { SchoolClass } from '../../lib/db/schema';
   import Builder from './Builder.svelte';
+  import PlanTabs from './PlanTabs.svelte';
+  import Day from './Day.svelte';
+  import YearPlan from './YearPlan.svelte';
 
   let lessons = $state<Lesson[] | null>(null);
   let confirm = $state('');
@@ -52,9 +55,17 @@
 {#if route.parts[0] === 'new'}
   <NewRph />
 {:else if route.parts[0] === 'week'}
-  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New RPH</a></div>
-    <nav class="tabs" aria-label="Plan views"><a href={href('plan')}>Lessons</a><a href={href('plan', 'week')} aria-current="page">This week</a></nav>
+  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+    <PlanTabs current="week" />
     <Week /></div>
+{:else if route.parts[0] === 'day'}
+  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+    <PlanTabs current="day" />
+    {#key route.parts[1]}<Day />{/key}</div>
+{:else if route.parts[0] === 'year'}
+  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+    <PlanTabs current="year" />
+    <YearPlan /></div>
 {:else if route.parts[0] === 'reflect' && route.parts[1]}
   {#key route.parts[1]}<Reflect id={route.parts[1]} />{/key}
 {:else if route.parts[0] === 'edit' && route.parts[1]}
@@ -63,9 +74,9 @@
 <div class="stack">
   <div class="row top">
     <h1>Plan</h1>
-    <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New RPH</a>
+    <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a>
   </div>
-  <nav class="tabs" aria-label="Plan views"><a href={href('plan')} aria-current="page">Lessons</a><a href={href('plan', 'week')}>This week</a></nav>
+  <PlanTabs current="lessons" />
   <div class="row"><label class="btn btn-text">Import a shared lesson (.consilia)<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
   {#if lessons && !lessons.length}
     <section class="empty">
@@ -120,9 +131,6 @@
 
 <style>
   .top { justify-content: space-between; }
-  .tabs { display: flex; gap: var(--s-1); border-bottom: 1px solid var(--line); }
-  .tabs a { padding: var(--s-3); min-height: var(--tap); text-decoration: none; color: var(--ink-2); font-weight: 600; font-size: var(--t-sm); border-bottom: 3px solid transparent; }
-  .tabs a[aria-current='page'] { color: var(--navy); border-color: var(--gold-strong); }
   .item { flex-wrap: nowrap; align-items: center; gap: var(--s-3); }
   .copy .select, .copy .input { width: auto; }
   .small { font-size: var(--t-sm); }

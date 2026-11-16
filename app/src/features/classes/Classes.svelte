@@ -8,6 +8,7 @@
   import PbdRecord from './PbdRecord.svelte';
   import PbdProgress from './PbdProgress.svelte';
   import PupilProfile from './PupilProfile.svelte';
+  import Attendance from './Attendance.svelte';
   import Unlock from '../../lib/ui/Unlock.svelte';
   import { lock } from '../../lib/lock.svelte';
 
@@ -42,6 +43,8 @@
   <Unlock />
 {:else if route.parts[0] && route.parts[1] === 'pbd' && route.parts[2]}
   {#key route.parts[2]}<PbdRecord classId={route.parts[0]} lessonId={route.parts[2]} />{/key}
+{:else if route.parts[0] && route.parts[1] === 'attendance'}
+  {#key route.parts[0]}<Attendance classId={route.parts[0]} initialDate={route.parts[2] ?? ''} />{/key}
 {:else if route.parts[0] && route.parts[1] === 'pbd'}
   <PbdProgress classId={route.parts[0]} />
 {:else if route.parts[0] && route.parts[1] === 'pupil' && route.parts[2]}
@@ -70,7 +73,7 @@
   {:else if !adding}
     <section class="empty">
       <h3>No Year {year} classes yet</h3>
-      <p>Add a class to put its name and pupil count on your RPH. Pupil lists also power attendance and PBD later.</p>
+      <p>Add a class to put its name and pupil count on your lesson plan. Pupil lists also power attendance and PBD later.</p>
     </section>
   {/if}
 

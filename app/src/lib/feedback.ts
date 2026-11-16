@@ -15,8 +15,8 @@ export const MOODS = [
 ] as const;
 export const KINDS = ['Idea', 'Bug', 'Praise', 'Question'] as const;
 export const IDEAS = [
-  'Photo of a textbook page → RPH draft (AI)', 'Full Canva connection', 'KSSR 2027 curriculum when it is published',
-  'Template designer for my school\'s RPH', 'Mentor accounts to comment on my RPH', 'Other subjects besides English', 'Text search inside scanned textbooks'
+  'Photo of a textbook page → lesson plan draft (AI)', 'Full Canva connection', 'KSSR 2027 curriculum when it is published',
+  'Template designer for my school\'s lesson plan', 'Mentor accounts to comment on my lesson plan', 'Other subjects besides English', 'Text search inside scanned textbooks'
 ];
 export interface Draft { mood: string; kind: string; text: string; votes: string[]; name: string }
 

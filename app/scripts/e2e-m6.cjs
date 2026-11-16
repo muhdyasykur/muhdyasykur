@@ -57,7 +57,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     await page.click('#tour-next');
     await page.waitForTimeout(300);
   }
-  check(titles.join('|') === 'Welcome to Consilia|Today|Plan|New RPH|Classes|Library|Tools|Me|You are ready' && (await page.locator('.tour').count()) === 0, 'tour walks through all nine steps and closes');
+  check(titles.join('|') === 'Welcome to Consilia|Today|Plan|New lesson plan|Classes|Library|Tools|Me|You are ready' && (await page.locator('.tour').count()) === 0, 'tour walks through all nine steps and closes');
   await page.goto(base + '#/me/help');
   await page.click('#help-tour');
   await page.waitForSelector('#tour-title');

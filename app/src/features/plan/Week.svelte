@@ -71,7 +71,7 @@
   {/if}
 
   {#if !slots.length && !editing}
-    <section class="empty"><h3>No timetable yet</h3><p>Add your English periods once. Each week then shows which lessons are planned and which still need an RPH.</p><button class="btn btn-primary" type="button" onclick={() => (editing = true)}>Set up timetable</button></section>
+    <section class="empty"><h3>No timetable yet</h3><p>Add your English periods once. Each week then shows which lessons are planned and which still need a lesson plan.</p><button class="btn btn-primary" type="button" onclick={() => (editing = true)}>Set up timetable</button></section>
   {/if}
 
   <div class="days">

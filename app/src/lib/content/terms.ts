@@ -12,7 +12,7 @@ export const TERMS: Record<'en' | 'ms', TermsText> = {
     sections: [
       { h: '1. Consilia is a tool, you are the teacher', p: [
         'Lesson plans, activities, objectives, teaching aids (BBM) and scores in Consilia are suggestions. You decide what is right for your pupils and your school.',
-        'Always check your RPH against the latest DSKP, Scheme of Work and your school\'s or institute\'s format, and follow your mentor\'s and lecturer\'s advice where it differs.',
+        'Always check your lesson plan against the latest DSKP, Scheme of Work and your school\'s or institute\'s format, and follow your mentor\'s and lecturer\'s advice where it differs.',
         'The alignment score checks the plan on paper. It cannot tell how a lesson will go in your classroom.'
       ] },
       { h: '2. Check before you use it with pupils', p: [
@@ -21,7 +21,7 @@ export const TERMS: Record<'en' | 'ms', TermsText> = {
         'When you make teaching aids, use safe materials and do the cutting yourself for young pupils.'
       ] },
       { h: '3. Your own work and academic honesty', p: [
-        'If your RPH, assignment or practicum file is assessed, follow your institute\'s rules on using digital and AI tools, and say that you used Consilia if you are asked to.',
+        'If your lesson plan, assignment or practicum file is assessed, follow your institute\'s rules on using digital and AI tools, and say that you used Consilia if you are asked to.',
         'Adapt the suggestions in your own words and for your own class. Copying a plan without understanding it will not help you in an observation.'
       ] },
       { h: '4. Pupils\' privacy', p: [

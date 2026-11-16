@@ -105,7 +105,7 @@ export function schoolDoc(l: Lesson, profile: Profile | null): Document {
   ]);
   const app = table([W], [band('Appendices', 1), new TableRow({ children: [cell([p(l.appendices || ' '), ...(l.links.length ? [p('Links:', { bold: true }), ...l.links.map((x) => p(`${x.label}: ${x.url}`))] : [])])] })]);
   return new Document({
-    creator: profile?.name || 'Consilia', title: `RPH ${l.topic}`, description: 'Daily lesson plan made with Consilia',
+    creator: profile?.name || 'Consilia', title: `Lesson plan: ${l.topic}`, description: 'Daily lesson plan made with Consilia',
     styles: { default: { document: { run: { font: FONT, size: 20 } } } },
     sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 720, bottom: 720, left: 720, right: 720 } } }, children: [
       ...logo(profile),
@@ -162,7 +162,7 @@ export function blueprintDoc(l: Lesson, profile: Profile | null): Document {
 
 export function fileName(l: Lesson, layout: 'school' | 'blueprint') {
   const safe = (s: string) => s.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-');
-  return `RPH-${l.header.date}-${safe(l.header.className || 'Y' + l.curriculum.year)}-${safe(l.topic || 'lesson')}${layout === 'blueprint' ? '-Blueprint' : ''}.docx`;
+  return `LessonPlan-${l.header.date}-${safe(l.header.className || 'Y' + l.curriculum.year)}-${safe(l.topic || 'lesson')}${layout === 'blueprint' ? '-Blueprint' : ''}.docx`;
 }
 export async function toBlob(l: Lesson, profile: Profile | null, layout: 'school' | 'blueprint'): Promise<Blob> {
   return Packer.toBlob(layout === 'school' ? schoolDoc(l, profile) : blueprintDoc(l, profile));

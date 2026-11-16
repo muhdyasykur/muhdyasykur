@@ -124,7 +124,7 @@
     <Shelf {year} {school} />
   {:else if activeTab === 'bank'}
     <div class="seg skills" role="group" aria-label="Skill">{#each bankSkills as k}<button type="button" aria-pressed={bankSkill === k} onclick={() => (bankSkill = k)}>{k}</button>{/each}</div>
-    <p class="muted small">{bankShown.length} activities for Year {year}. Insert them into a lesson from the Lesson flow step of the RPH builder.</p>
+    <p class="muted small">{bankShown.length} activities for Year {year}. Insert them into a lesson from the Lesson flow step of the lesson plan builder.</p>
     <div class="bank">
       {#each bankShown as b (b.id)}
         <details class="card" data-bank={b.id}>

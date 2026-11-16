@@ -28,7 +28,7 @@
         {#each themes as th}<button type="button" aria-pressed={theme.value === th} onclick={() => setTheme(th)}>{th[0].toUpperCase() + th.slice(1)}</button>{/each}
       </div>
     </div>
-    <p>Tell Consilia a little about your practicum. These details fill the header of every RPH. Everything stays on this device.</p>
+    <p>Tell Consilia a little about your practicum. These details fill the header of every lesson plan. Everything stays on this device.</p>
     <ProfileForm value={profile.value} saveLabel="Start planning" onsave={save}>
       <p class="muted small">You can change this later in Me.</p>
     </ProfileForm>
