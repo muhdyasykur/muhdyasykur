@@ -56,12 +56,14 @@ app: the guided tour, six videos and the manual in Me → Help, and the Feedback
 | 7 | Mid-pilot message: "What is the one thing that annoyed you most?" | Collect top 3 issues, fix the worst |
 | 8–12 | Normal use: plan 3+ lessons, add a textbook PDF, try Canva AI prompt | Scanned-book text recognition speed on phones |
 | 13 | Write a reflection, log mentor feedback | — |
-| 14 | Fill in the end-of-pilot survey (below) | Survey results; decide v1.0 fixes |
+| 14 | Fill in the end-of-pilot survey (link below) | Survey results; decide v1.0 fixes |
 
 ## End-of-pilot survey
 
-Use the System Usability Scale so the result is comparable with other studies, plus four open questions.
-(Ask me to make this a Jotform form like the original survey.)
+Send testers this form on day 14: **https://form.jotform.com/263188117235054** (English and BM, about 5 minutes;
+edit it at https://www.jotform.com/build/263188117235054). It asks about the tester's phone and school, which features
+they used, the System Usability Scale (each item a separate 1–5 question, so the results export cleanly), and the
+open questions below.
 
 **SUS** (1 = strongly disagree … 5 = strongly agree)
 
