@@ -14,7 +14,7 @@ function csp(): Plugin {
       const policy = [
         "default-src 'self'", `script-src 'self' ${inline.join(' ')}`, "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data: blob:", "font-src 'self' data:", "media-src 'self' blob:",
-        "connect-src 'self' https://submit.jotform.com https://generativelanguage.googleapis.com", "worker-src 'self' blob:", "manifest-src 'self'",
+        "connect-src 'self' https://submit.jotform.com https://api.anthropic.com https://generativelanguage.googleapis.com", "worker-src 'self' blob:", "manifest-src 'self'",
         "object-src 'none'", "base-uri 'self'", "form-action 'none'", "frame-src 'none'"
       ].join('; ');
       return html.replace(/<meta charset="utf-8" \/>/, `<meta charset="utf-8" />\n    <meta http-equiv="Content-Security-Policy" content="${policy}" />`);

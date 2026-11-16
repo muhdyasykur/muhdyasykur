@@ -444,7 +444,7 @@ const VIDEOS = {
     await d.say('Download PowerPoint to open it in PowerPoint, or import it into Canva or Google Slides to add pictures.', 'Muat turun PowerPoint untuk membukanya dalam PowerPoint, atau import ke Canva atau Google Slides untuk menambah gambar.', 3200);
     await Promise.all([page.waitForEvent('download'), d.click('#sl-pptx', 1200)]);
     await d.click('details.help summary', 1800);
-    await d.say('Want a reading text, a dialogue or more questions? Copy the prompt to any AI, or turn on Cloud AI in Me with your own free Gemini key.', 'Mahu teks bacaan, dialog atau lebih banyak soalan? Salin gesaan ke mana-mana AI, atau hidupkan Cloud AI dalam Saya dengan kunci Gemini percuma anda sendiri.', 3800);
+    await d.say('Want a reading text, a dialogue or more questions? Copy the prompt to any AI, or connect Claude in Me, AI assistant, with your own key.', 'Mahu teks bacaan, dialog atau lebih banyak soalan? Salin gesaan ke mana-mana AI, atau sambungkan Claude dalam Saya, AI assistant, dengan kunci anda sendiri.', 3800);
     await d.point('.aibox'); await d.wait(1200);
     await d.say('AI slides are marked AI, so you check them before class. Next: watch "Classes and PBD".', 'Slaid AI ditanda AI, supaya anda menyemaknya sebelum kelas. Seterusnya: tonton "Kelas dan PBD".', 3000);
   } },

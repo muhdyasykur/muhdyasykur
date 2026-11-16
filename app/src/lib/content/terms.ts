@@ -18,7 +18,7 @@ export const TERMS: Record<'en' | 'ms', TermsText> = {
       { h: '2. Check before you use it with pupils', p: [
         'Read every activity, worksheet and link before class. Make sure content is suitable for the age, language level, culture and religion of your pupils.',
         'Outside websites (Canva, Wordwall, YouTube, Quizizz and others) and AI chatbots are run by other companies. Their content and adverts can change, and AI answers can be wrong. Preview them first and never let pupils browse unsupervised.',
-        'Cloud AI is optional and off until you turn it on with your own Google key. When you use it, what is sent is handled by Google under Google\'s terms, and you are responsible for the key and for checking every AI answer.',
+        'The AI assistant (Claude by Anthropic, or Gemini by Google) is optional and off until you turn it on with your own key. When you use it, what is sent is handled by that company under its terms, any charges for your key are yours, and you are responsible for the key and for checking every AI answer.',
         'When you make teaching aids, use safe materials and do the cutting yourself for young pupils.'
       ] },
       { h: '3. Your own work and academic honesty', p: [
@@ -58,7 +58,7 @@ export const TERMS: Record<'en' | 'ms', TermsText> = {
       { h: '2. Semak sebelum digunakan bersama murid', p: [
         'Baca setiap aktiviti, lembaran kerja dan pautan sebelum kelas. Pastikan kandungannya sesuai dengan umur, tahap bahasa, budaya dan agama murid anda.',
         'Laman web luar (Canva, Wordwall, YouTube, Quizizz dan lain-lain) dan chatbot AI dikendalikan oleh syarikat lain. Kandungan dan iklannya boleh berubah, dan jawapan AI boleh salah. Pratonton dahulu dan jangan biarkan murid melayari tanpa pengawasan.',
-        'AI Awan adalah pilihan dan dimatikan sehingga anda menghidupkannya dengan kunci Google anda sendiri. Apabila anda menggunakannya, apa yang dihantar dikendalikan oleh Google di bawah terma Google, dan anda bertanggungjawab atas kunci itu dan menyemak setiap jawapan AI.',
+        'Pembantu AI (Claude oleh Anthropic, atau Gemini oleh Google) adalah pilihan dan dimatikan sehingga anda menghidupkannya dengan kunci anda sendiri. Apabila anda menggunakannya, apa yang dihantar dikendalikan oleh syarikat itu di bawah termanya, sebarang caj bagi kunci anda adalah tanggungan anda, dan anda bertanggungjawab atas kunci itu dan menyemak setiap jawapan AI.',
         'Apabila membuat BBM, gunakan bahan yang selamat dan lakukan kerja memotong sendiri untuk murid kecil.'
       ] },
       { h: '3. Hasil kerja sendiri dan integriti akademik', p: [

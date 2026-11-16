@@ -1,8 +1,9 @@
 // End-to-end for milestone 10: lesson slides made from a lesson plan (editor, themes, reorder, add, delete, saved),
 // presenting with keys and answer reveal, PowerPoint download (opened and checked), slides in Teach mode, the Tools
-// entry; AI content by copy-and-paste; optional Cloud AI (Gemini) settings, consent, key test, model choice, slide
-// content and "ask Gemini here", errors, what is sent, the key kept out of backups; offline; phone layout.
-// Google is intercepted: nothing is really sent. Run against `vite preview`: node scripts/e2e-m10.cjs [out-dir]
+// entry; AI content by copy-and-paste; the optional AI assistant: Claude by default (settings, consent, key test, model
+// choice, slide content, "ask Claude here", errors, what is sent) and Gemini as the alternative; keys kept out of
+// backups; settings from beta.5 carried over; offline; phone layout. Anthropic and Google are intercepted: nothing is
+// really sent. Run against `vite preview`: node scripts/e2e-m10.cjs [out-dir]
 const { chromium } = require('playwright');
 const fs = require('fs');
 const os = require('os');
@@ -11,6 +12,7 @@ const JSZip = require('jszip');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 const KEY = 'AIzaSyTEST-not-a-real-key-0123456789';
+const CKEY = 'sk-ant-api03-TEST-not-a-real-key-0123456789';
 
 (async () => {
   const browser = await chromium.launch();
@@ -34,6 +36,23 @@ const KEY = 'AIzaSyTEST-not-a-real-key-0123456789';
       text: { title: 'New friends', body: 'Ali has three new friends.\nKenji is from Japan.\nPriya is from India.' }, dialogue: ['A: Where is he from?', 'B: He is from Japan.'],
       questions: [{ q: 'Where is Kenji from?', a: 'Japan.' }, { q: 'How many new friends does Ali have?', a: 'Three.' }] }) : 'Here is a short text about friends from many countries.';
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }) });
+  });
+
+  // Anthropic's API, intercepted
+  const csent = []; let cmode = 'ok';
+  const cjson = { vocabulary: [{ word: 'Thailand', meaning: 'a country next to Malaysia' }], examples: ['He is from Thailand.'],
+    text: { title: 'Pen pals', body: 'Aiman has a pen pal.\nHis pen pal is from Thailand.\nHer name is Nok.' }, dialogue: ['A: Where is your pen pal from?', 'B: She is from Thailand.'],
+    questions: [{ q: 'Where is Nok from?', a: 'Thailand.' }, { q: 'Who has a pen pal?', a: 'Aiman.' }] };
+  await ctx.route('https://api.anthropic.com/**', async (route) => {
+    const req = route.request();
+    if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET, POST' } });
+    csent.push({ url: req.url(), headers: req.headers(), body: req.postData() || '' });
+    const h = { 'access-control-allow-origin': '*', 'content-type': 'application/json', 'retry-after': '0', 'request-id': 'req_e2e' };
+    if (cmode === 'credit') return route.fulfill({ status: 400, headers: h, body: JSON.stringify({ type: 'error', error: { type: 'invalid_request_error', message: 'Your credit balance is too low to access the Anthropic API.' } }) });
+    if (req.method() === 'GET') return route.fulfill({ status: 200, headers: h, body: JSON.stringify({ data: ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-opus-4-8'].map((id) => ({ id, type: 'model', display_name: id, created_at: '2026-10-01T00:00:00Z' })), has_more: false, first_id: 'a', last_id: 'b' }) });
+    const body = JSON.parse(req.postData());
+    const text = body.output_config && body.output_config.format ? JSON.stringify(cjson) : 'Here is a short reading text about pen pals from many countries.';
+    return route.fulfill({ status: 200, headers: h, body: JSON.stringify({ id: 'msg_e2e', type: 'message', role: 'assistant', model: body.model, stop_reason: 'end_turn', stop_sequence: null, content: [{ type: 'text', text }], usage: { input_tokens: 100, output_tokens: 100 } }) });
   });
 
   const page = await ctx.newPage();
@@ -138,8 +157,8 @@ const KEY = 'AIzaSyTEST-not-a-real-key-0123456789';
   check((await page.locator('details.help').textContent()).includes('Import file'), 'Canva and Google Slides import steps are explained');
   fs.copyFileSync(file, path.join(out || os.tmpdir(), 'm10-sample.pptx'));
 
-  // ---- AI by copy and paste (Cloud AI off)
-  check((await page.locator('#ai-setup').count()) === 1 && (await page.locator('#ai-run').count()) === 0, 'with Cloud AI off, slides offer the copy-and-paste route');
+  // ---- AI by copy and paste (AI assistant off)
+  check((await page.locator('#ai-setup').count()) === 1 && (await page.locator('#ai-run').count()) === 0, 'with the AI assistant off, slides offer the copy-and-paste route');
   await page.click('.aibox .ai-copy');
   const clip = await page.evaluate(() => navigator.clipboard.readText());
   check(clip.includes('Year 4') && clip.includes('He is from') && !clip.includes('Aina') && !clip.includes('4 Bestari'), 'the slide prompt has the lesson but no pupil or class names');
@@ -150,60 +169,93 @@ const KEY = 'AIzaSyTEST-not-a-real-key-0123456789';
   await page.click('#ai-remove');
   check((await page.locator('.tn:has-text("AI")').count()) === 0, 'AI slides can be removed in one tap');
 
-  // ---- Cloud AI settings
+  // ---- AI assistant: Claude by default
   await page.goto(base + '#/me');
-  check((await page.locator('#me-ai').innerText()).includes('off'), 'Me shows Cloud AI, off by default');
+  check((await page.locator('#me-ai').innerText()).includes('off'), 'Me shows the AI assistant, off by default');
   await page.click('#me-ai');
   await page.waitForSelector('#ai-key');
-  check(sent.length === 0, 'nothing is sent to Google before the teacher turns it on');
-  await page.fill('#ai-key', KEY);
-  check(await page.locator('#ai-on').isDisabled(), 'Cloud AI cannot be turned on before agreeing');
+  check((await page.locator('#ai-p-claude').getAttribute('aria-checked')) === 'true', 'Claude is the recommended, preselected AI');
+  check(csent.length === 0 && sent.length === 0, 'nothing is sent to Anthropic or Google before the teacher turns it on');
+  await page.fill('#ai-key', CKEY);
+  check(await page.locator('#ai-on').isDisabled(), 'the AI assistant cannot be turned on before agreeing');
   await page.click('#ai-test');
   await page.waitForSelector('#ai-status');
-  check((await page.locator('#ai-status').innerText()).includes('gemini-3.8-flash') && (await page.locator('#ai-model option').count()) === 3, 'Test the key finds the models and picks the newest Flash');
+  check((await page.locator('#ai-status').innerText()).includes('Claude Opus 5.5') && (await page.locator('#ai-model option').count()) === 3, 'Test the key finds the Claude models and picks Claude Opus 5.5');
+  check((await page.locator('#ai-agree2').locator('xpath=..').innerText()).includes('Anthropic'), 'the agreement names Anthropic');
   for (const i of [1, 2, 3]) await page.check(`#ai-agree${i}`);
   await page.click('#ai-on');
   await page.waitForSelector('#ai-off');
-  check((await page.locator('#ai-state').innerText()).includes('on'), 'Cloud AI turns on after the key and three agreements');
+  check((await page.locator('#ai-state').innerText()).includes('Claude is on'), 'Claude turns on after the key and three agreements');
   await page.click('#ai-sample');
-  await page.waitForSelector('#ai-status:has-text("Gemini says")');
-  check(true, 'Try it gets an answer');
-  check(sent.every((s) => s.key === KEY && !s.url.includes(KEY)), 'the key is sent in a header, never in the address');
+  await page.waitForSelector('#ai-status:has-text("Claude says")');
+  check(true, 'Try it gets an answer from Claude');
+  const authOk = csent.every((r) => r.headers['authorization'] === `Bearer ${CKEY}` && !r.url.includes(CKEY));
+  check(authOk && csent.every((r) => r.headers['anthropic-dangerous-direct-browser-access'] === 'true'), 'the Claude key travels in a header from this device, never in the address');
 
-  // ---- Gemini for slides
+  // ---- Claude for slides
   await page.goto(base + `#/plan/slides/${lessonId}`);
   await page.waitForSelector('#ai-run');
-  await page.click('.aibox summary:has-text("What is sent")');
+  check((await page.locator('#ai-run').innerText()) === 'Add with Claude', 'the slides offer "Add with Claude"');
+  await page.click('.aibox summary:has-text("What is sent to Anthropic")');
   const shown = await page.locator('.aibox pre.sent').innerText();
   check(shown.includes('Key words: Malaysia') && !shown.includes('4 Bestari'), 'the teacher can see exactly what is sent');
   const before = await page.locator('[data-thumb]').count();
-  sent.length = 0;
+  csent.length = 0;
   await page.click('#ai-run');
   await page.waitForSelector('#ai-msg');
   const added = (await page.locator('[data-thumb]').count()) - before;
-  const reqBody = sent.map((s) => s.body).join(' ');
-  check(added === 4, `Gemini adds a text, dialogue and question slides (${added})`);
-  check(sent.length === 1 && !/Aina|Bala|Chong|Dhia|4 Bestari/.test(reqBody) && reqBody.includes('responseSchema'), 'one request, with no pupil or class names, asking for JSON');
-  check((await page.locator('.thumbs').innerText()).includes('Kenji is from Japan.'), 'the AI text is on a slide');
+  const creq = JSON.parse(csent[0].body);
+  check(added === 4, `Claude adds a text, dialogue and question slides (${added})`);
+  check(csent.length === 1 && !/Aina|Bala|Chong|Dhia|4 Bestari/.test(csent[0].body), 'one request, with no pupil or class names');
+  check(creq.model === 'claude-opus-5-5' && creq.output_config.format.type === 'json_schema' && creq.fallbacks === 'default', 'it asks Claude Opus 5.5 for JSON in a fixed shape, with a fallback model if Claude declines');
+  check((await page.locator('.thumbs').innerText()).includes('His pen pal is from Thailand.'), 'Claude\'s text is on a slide');
+  cmode = 'credit';
+  await page.click('#ai-run');
+  await page.waitForSelector('#ai-err');
+  check((await page.locator('#ai-err').innerText()).includes('no credit left') && (await page.locator('[data-thumb]').count()) === before + added, 'no credit left gives a plain message and keeps the slides');
+  cmode = 'ok';
+
+  // ---- ask Claude here (AI prompt builder), and Claude.ai in the chat buttons
+  await page.goto(base + '#/tools/ai');
+  await page.waitForSelector('.ai-run');
+  check((await page.locator('.ai-run').innerText()).includes('ask Claude here') && (await page.locator('.ai a.btn:has-text("Claude")').count()) === 1, 'the AI prompt builder has "ask Claude here" and a Claude.ai button');
+  await page.click('.ai-run');
+  await page.waitForSelector('.answer .out');
+  check((await page.locator('.answer .out').innerText()).includes('pen pals') && /claude/i.test(await page.locator('.answer .eyebrow').innerText()), 'the AI prompt builder shows Claude\'s answer inside the app');
+
+  // ---- or Gemini (free)
+  await page.goto(base + '#/me/ai');
+  await page.click('#ai-p-gemini');
+  check((await page.locator('#ai-state').innerText()).includes('off') && await page.locator('#ai-on').isDisabled(), 'switching to Gemini turns the assistant off until the teacher agrees again');
+  await page.fill('#ai-key', KEY);
+  await page.click('#ai-test');
+  await page.waitForSelector('#ai-status');
+  check((await page.locator('#ai-status').innerText()).includes('gemini-3.8-flash'), 'Gemini: Test the key picks the newest Flash');
+  for (const i of [1, 2, 3]) await page.check(`#ai-agree${i}`);
+  await page.click('#ai-on');
+  await page.waitForSelector('#ai-off');
+  check(sent.every((r) => r.key === KEY && !r.url.includes(KEY)), 'the Gemini key is sent in a header, never in the address');
+  await page.goto(base + `#/plan/slides/${lessonId}`);
+  await page.waitForSelector('#ai-run');
+  sent.length = 0;
+  await page.click('#ai-run');
+  await page.waitForSelector('#ai-msg');
+  check(sent.length === 1 && (await page.locator('.thumbs').innerText()).includes('Kenji is from Japan.') && !/Aina|4 Bestari/.test(sent[0].body), 'Gemini replaces the AI slides, with no pupil or class names sent');
   mode = 'quota';
   await page.click('#ai-run');
   await page.waitForSelector('#ai-err');
-  check((await page.locator('#ai-err').innerText()).includes('free limit') && (await page.locator('[data-thumb]').count()) === before + added, 'a used-up free limit gives a plain message and keeps the slides');
+  check((await page.locator('#ai-err').innerText()).includes('free limit'), 'a used-up Gemini free limit gives a plain message');
   mode = 'ok';
-
-  // ---- ask Gemini here (AI prompt builder)
-  await page.goto(base + '#/tools/ai');
-  await page.waitForSelector('.ai-run');
-  await page.click('.ai-run');
-  await page.waitForSelector('.answer .out');
-  check((await page.locator('.answer .out').innerText()).includes('short text'), 'the AI prompt builder can ask Gemini inside the app');
+  await page.goto(base + '#/me/ai');
+  await page.click('#ai-p-claude');
+  check((await page.inputValue('#ai-key')) === CKEY, 'each AI keeps its own key');
 
   // ---- the key never leaves in a backup
   await page.goto(base + '#/me');
   const [bk] = await Promise.all([page.waitForEvent('download'), page.click('#bk-save')]);
   const bkFile = path.join(os.tmpdir(), bk.suggestedFilename()); await bk.saveAs(bkFile);
   const bkText = fs.readFileSync(bkFile, 'utf8');
-  check(!bkText.includes(KEY) && bkText.includes('"slides"'), 'backups keep the slides but never the API key');
+  check(!bkText.includes(KEY) && !bkText.includes(CKEY) && bkText.includes('"slides"'), 'backups keep the slides but never an API key');
 
   // ---- Tools and Teach mode
   await page.goto(base + '#/tools');
@@ -226,14 +278,18 @@ const KEY = 'AIzaSyTEST-not-a-real-key-0123456789';
   if (out) await page.screenshot({ path: `${out}/m10-teach.png` });
 
   // ---- turning off, forgetting
-  await page.goto(base + '#/me/ai');
-  await page.click('#ai-off');
   await page.goto(base + `#/plan/slides/${lessonId}`);
   await page.waitForSelector('#ai-setup');
-  check((await page.locator('#ai-run').count()) === 0, 'with Cloud AI off, no Gemini buttons are shown');
+  check((await page.locator('#ai-run').count()) === 0, 'with the AI assistant off, no Claude or Gemini buttons are shown');
   await page.goto(base + '#/me/ai');
   await page.click('#ai-forget');
-  check((await page.evaluate(() => localStorage.getItem('consilia.ai'))) === null, 'Remove the key deletes it from the device');
+  check((await page.evaluate(() => localStorage.getItem('consilia.ai'))) === null, 'Remove all keys deletes them from the device');
+  // settings saved by beta.5 (Gemini only) carry over
+  await page.evaluate((k) => localStorage.setItem('consilia.ai', JSON.stringify({ on: true, key: k, model: 'gemini-3.8-flash', agreed: 1 })), KEY);
+  await page.reload();
+  await page.waitForSelector('#ai-state');
+  check((await page.locator('#ai-state').innerText()).includes('Gemini is on') && (await page.inputValue('#ai-key')) === KEY, 'a Gemini key saved by the previous version still works');
+  await page.click('#ai-forget');
 
   // ---- offline
   await ctx.setOffline(true);

@@ -15,7 +15,7 @@ function lesson() {
 const on = { on: true, key: 'AIzaTESTKEY-0123456789abcdef', model: 'gemini-9.9-flash', agreed: 1 };
 const res = (status: number, body: unknown) => async () => new Response(typeof body === 'string' ? body : JSON.stringify(body), { status });
 
-describe('Cloud AI (Gemini)', () => {
+describe('AI assistant: Gemini', () => {
   it('picks the newest stable Flash model the key can use', () => {
     expect(pickModel(['models/gemini-2.5-flash', 'models/gemini-3.8-flash', 'models/gemini-3.6-flash', 'models/gemini-3.8-flash-lite', 'models/gemini-4-pro'])).toBe('gemini-3.8-flash');
     expect(pickModel(['gemini-flash-latest', 'gemini-3-flash-preview'])).toBe('gemini-flash-latest');
@@ -36,8 +36,8 @@ describe('Cloud AI (Gemini)', () => {
     expect(url).not.toContain(on.key);
     expect(headers['x-goog-api-key']).toBe(on.key);
   });
-  it('refuses to call when Cloud AI is off', async () => {
-    await expect(generate({ ...on, on: false }, 'hi', undefined, res(200, {}) as unknown as typeof fetch)).rejects.toThrow(/off/);
+  it('refuses to call without a key', async () => {
+    await expect(generate({ ...on, key: '' }, 'hi', undefined, res(200, {}) as unknown as typeof fetch)).rejects.toThrow(/No Gemini key/);
   });
   it('sends a JSON schema and returns the text; reports offline and blocked requests', async () => {
     let sent: { generationConfig: { responseMimeType?: string } } | null = null;

@@ -13,8 +13,8 @@
   import Help from './Help.svelte';
   import Privacy from './Privacy.svelte';
   import Terms from '../onboarding/Terms.svelte';
-  import CloudAi from './CloudAi.svelte';
-  import { ai } from '../../lib/ai/settings.svelte';
+  import AiAssistant from './AiAssistant.svelte';
+  import { ai, aiName } from '../../lib/ai/settings.svelte';
   import BackupCard from './BackupCard.svelte';
   import MusicCard from './MusicCard.svelte';
   import { route, href } from '../../router.svelte';
@@ -30,12 +30,12 @@
   });
   const themes: Theme[] = ['system', 'light', 'dark'];
 </script>
-{#if route.parts[0] === 'mentor'}<Mentor />{:else if route.parts[0] === 'about'}<About />{:else if route.parts[0] === 'help'}<Help />{:else if route.parts[0] === 'privacy'}<Privacy />{:else if route.parts[0] === 'terms'}<Terms />{:else if route.parts[0] === 'ai'}<CloudAi />{:else}
+{#if route.parts[0] === 'mentor'}<Mentor />{:else if route.parts[0] === 'about'}<About />{:else if route.parts[0] === 'help'}<Help />{:else if route.parts[0] === 'privacy'}<Privacy />{:else if route.parts[0] === 'terms'}<Terms />{:else if route.parts[0] === 'ai'}<AiAssistant />{:else}
 <div class="stack">
   <h1>{t('me.title')}</h1>
   <div class="links">
     <a class="card raised mentor" href={href('me', 'mentor')}><b>Mentor and lecturer feedback</b><span class="muted">Log observation comments and see what keeps coming up.</span></a>
-    <a class="card raised mentor" href={href('me', 'ai')} id="me-ai"><b>Cloud AI {ai.on ? '· on' : '· off'}</b><span class="muted">Optional: let Google Gemini write texts, dialogues and questions with your own free key.</span></a>
+    <a class="card raised mentor" href={href('me', 'ai')} id="me-ai"><b>AI assistant {ai.on ? `· ${aiName()} on` : '· off'}</b><span class="muted">Optional: let Claude (or Gemini) write texts, dialogues and questions for your lessons, with your own key.</span></a>
     <a class="card raised mentor" href={href('me', 'help')}><b>Help</b><span class="muted">How-tos and the guided tour.</span></a>
     <a class="card raised mentor" href={href('me', 'about')}><b>About and Feedback Garden</b><span class="muted">The story behind Consilia. Plant your feedback.</span></a>
     <a class="card raised mentor" href={href('me', 'privacy')}><b>Privacy</b><span class="muted">What stays on this device, and what never leaves it.</span></a>

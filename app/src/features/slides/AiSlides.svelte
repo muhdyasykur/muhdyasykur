@@ -2,14 +2,15 @@
   import { href } from '../../router.svelte';
   import type { Lesson } from '../../lib/lesson/model';
   import { mergeAi, type Deck } from '../../lib/slides/deck';
-  import { generate, slidePrompt, parseSlideContent, SLIDE_SCHEMA, AiError, type SlidePart } from '../../lib/ai/gemini';
-  import { ai, aiReady } from '../../lib/ai/settings.svelte';
+  import { slidePrompt, parseSlideContent, AiError, type SlidePart } from '../../lib/ai/common';
+  import { askSlides } from '../../lib/ai/ask';
+  import { aiReady, aiName } from '../../lib/ai/settings.svelte';
   import { pwa } from '../../lib/pwa.svelte';
   import AiButtons from '../tools/AiButtons.svelte';
 
   /**
    * Extra slide content from AI: a reading or listening text, a dialogue, word meanings, more examples and questions.
-   * With Cloud AI on, Gemini writes it here; otherwise the teacher copies the prompt to any AI chat and pastes the answer.
+   * With the AI assistant on, Claude (or Gemini) writes it here; otherwise the teacher copies the prompt to any AI chat and pastes the answer.
    * AI slides are marked "AI" so the teacher checks them, and can be removed in one tap.
    */
   let { lesson, deck = $bindable(), onchange }: { lesson: Lesson; deck: Deck; onchange: () => void } = $props();
@@ -36,7 +37,7 @@
   }
   async function run() {
     busy = true; msg = ''; err = '';
-    try { apply(await generate(ai, prompt, SLIDE_SCHEMA), [...parts]); }
+    try { apply(await askSlides(prompt), [...parts]); }
     catch (e) { err = e instanceof AiError ? e.message : 'The AI request did not work. Try again.'; }
     busy = false;
   }
@@ -52,14 +53,14 @@
   </fieldset>
   {#if aiReady()}
     <div class="row">
-      <button class="btn btn-gold" type="button" onclick={run} disabled={busy || !parts.length || !pwa.online} id="ai-run">{busy ? 'Asking Gemini…' : 'Add with Gemini'}</button>
+      <button class="btn btn-gold" type="button" onclick={run} disabled={busy || !parts.length || !pwa.online} id="ai-run">{busy ? `Asking ${aiName()}…` : `Add with ${aiName()}`}</button>
       {#if aiCount}<button class="btn btn-text" type="button" onclick={removeAi} id="ai-remove">Remove {aiCount} AI slide{aiCount === 1 ? '' : 's'}</button>{/if}
-      <a class="btn btn-text" href={href('me', 'ai')}>Cloud AI settings</a>
+      <a class="btn btn-text" href={href('me', 'ai')}>AI assistant settings</a>
     </div>
-    {#if !pwa.online}<p class="muted small">You are offline. Cloud AI needs the internet; everything else on this page works offline.</p>{/if}
-    <details><summary class="small">What is sent to Google</summary><pre class="sent">{prompt}</pre></details>
+    {#if !pwa.online}<p class="muted small">You are offline. The AI assistant needs the internet; everything else on this page works offline.</p>{/if}
+    <details><summary class="small">What is sent to {aiName() === 'Claude' ? 'Anthropic' : 'Google'}</summary><pre class="sent">{prompt}</pre></details>
   {:else}
-    <p class="small"><a href={href('me', 'ai')} id="ai-setup">Turn on Cloud AI</a> with your own free Google Gemini key to do this in one tap, or use any AI chat:</p>
+    <p class="small"><a href={href('me', 'ai')} id="ai-setup">Connect Claude</a> (or Gemini) with your own key to do this in one tap, or use any AI chat, such as the free Claude.ai:</p>
     <AiButtons prompt={chatPrompt} label="Slide content" />
     <label class="field">Paste the AI's answer here
       <textarea class="input" rows="4" bind:value={pasted} id="ai-paste" placeholder={'{ "text": { "title": "…", "body": "…" }, "dialogue": ["A: …", "B: …"], … }'}></textarea></label>

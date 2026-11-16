@@ -48,7 +48,7 @@ const verbose = process.argv.includes('--verbose');
     ['Library: SoW', '#/library/4/sk/sow'], ['Library: SoW lesson', '#/library/4/sk/sow/1'], ['Library: standards', '#/library/4/sk/standards'], ['Library: levels', '#/library/4/sk/levels'],
     ['Library: tasks', '#/library/4/sk/tasks'], ['Library: textbooks', '#/library/4/sk/books'], ['Library: activity bank', '#/library/4/sk/bank'], ['Library: Method Guide', '#/library/4/sk/guide'],
     ['New lesson plan: recommend', '#/plan/new/recommend'], ['Tools', '#/tools'], ...['ideas', 'bbm', 'digital', 'games', 'ai', 'objectives', 'chant', 'differentiate', 'worksheets', 'manage', 'slides'].map((t) => [`Tools: ${t}`, `#/tools/${t}`]),
-    ['Me', '#/me'], ['Cloud AI', '#/me/ai'], ['Terms', '#/me/terms'], ['Mentor', '#/me/mentor'], ['Help', '#/me/help'], ['About', '#/me/about'], ['Privacy', '#/me/privacy'],
+    ['Me', '#/me'], ['AI assistant', '#/me/ai'], ['Terms', '#/me/terms'], ['Mentor', '#/me/mentor'], ['Help', '#/me/help'], ['About', '#/me/about'], ['Privacy', '#/me/privacy'],
     ['Teach', `#/teach/${lessonId}`]
   ];
   const results = []; let serious = 0;

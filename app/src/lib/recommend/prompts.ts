@@ -1,12 +1,13 @@
 /**
  * "Improve with AI": Consilia writes the prompt, the teacher chooses to paste it into ChatGPT, Gemini, Copilot or
- * Canva AI. Nothing is sent by Consilia itself, and prompts never contain pupils' names.
+ * Canva AI, or Consilia asks the AI assistant the teacher connected (Claude or Gemini). Nothing is sent by Consilia itself without that, and prompts never contain pupils' names.
  */
 import type { Plan, Brief } from './engine';
 import { compose } from '../lesson/objectives';
 import type { Objective } from '../lesson/model';
 
 export const AI_SITES = [
+  { id: 'claude', name: 'Claude', url: 'https://claude.ai/new' },
   { id: 'chatgpt', name: 'ChatGPT', url: 'https://chatgpt.com/' },
   { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com/app' },
   { id: 'copilot', name: 'Copilot', url: 'https://copilot.microsoft.com/' },

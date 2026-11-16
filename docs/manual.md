@@ -218,19 +218,19 @@ Video: Me → Help → Video tutorials.
 
 ### Improve with AI
 
-Consilia writes careful prompts for your pupils' level (Year and CEFR) that you paste into ChatGPT, Gemini, Copilot or Canva AI: reading or listening texts, comprehension questions, dialogues, worksheets in three levels, songs, flashcard pictures, stories, rubrics, or feedback on your whole plan.
+Consilia writes careful prompts for your pupils' level (Year and CEFR) that you paste into Claude, ChatGPT, Gemini, Copilot or Canva AI: reading or listening texts, comprehension questions, dialogues, worksheets in three levels, songs, flashcard pictures, stories, rubrics, or feedback on your whole plan.
 
-Without Cloud AI, Consilia never sends anything itself, and prompts never contain pupils' names. AI answers can be wrong: check them before using them with pupils, and follow your institute's rules on AI.
+Without the AI assistant, Consilia never sends anything itself, and prompts never contain pupils' names. AI answers can be wrong: check them before using them with pupils, and follow your institute's rules on AI.
 
-For slides, copy the slide prompt, paste it into any AI chat, then paste the answer into "Paste the AI's answer here": a reading text, dialogue, word meanings, examples and questions are added as slides marked AI.
+For slides, copy the slide prompt, paste it into any AI chat (such as the free Claude.ai), then paste the answer into "Paste the AI's answer here": a reading text, dialogue, word meanings, examples and questions are added as slides marked AI.
 
-### Cloud AI with your own Gemini key (optional)
+### AI assistant: Claude (or Gemini) with your own key
 
-Consilia works fully without AI. If you want answers inside the app, go to Me → Cloud AI: get a free key from Google AI Studio, paste it, tap Test the key (Consilia picks the newest Flash model your key can use), read and tick the three agreements, then Turn Cloud AI on.
+Consilia works fully without AI. If you want answers inside the app, go to Me → AI assistant. Claude (by Anthropic) is recommended: in the Claude Console add a little credit under Billing (you can set a spend limit), create an API key and paste it. A slide request costs a few sen. Gemini (by Google) is the free alternative, with a key from Google AI Studio. Tap Test the key (for Claude you can choose Opus 5.5, Sonnet 5.5 or Haiku 5.5), read and tick the three agreements, then turn it on.
 
-Then "Add with Gemini" on Lesson slides writes a reading or listening text, a dialogue, questions, word meanings or more examples, and places them in the deck (marked AI; "Remove AI slides" takes them out). In the AI prompt builder and Improve with AI, "ask Gemini here" shows the answer in Consilia.
+Then "Add with Claude" on Lesson slides writes a reading or listening text, a dialogue, questions, word meanings or more examples, and places them in the deck (marked AI; "Remove AI slides" takes them out). In the AI prompt builder and Improve with AI, "ask Claude here" shows the answer in Consilia.
 
-What is sent: the lesson's year, topic, theme, skill, key words, target sentence and objectives, or the prompt you can see. Never pupils' names, class names, marks, attendance or your details. On the free tier Google may use it to improve its products. The key stays in this browser only (not in backups or shared lessons). It needs the internet; the free tier has daily limits. Turn it off or remove the key in Me → Cloud AI.
+What is sent: the lesson's year, topic, theme, skill, key words, target sentence and objectives, or the prompt you can see. Never pupils' names, class names, marks, attendance or your details. Keys stay in this browser only (not in backups or shared lessons); each AI keeps its own key. It needs the internet. Turn it off or remove the keys in Me → AI assistant. No key? Every AI button also copies the prompt for the free Claude.ai chat.
 
 ### Terms of use
 
