@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Lesson } from '../../../lib/lesson/model';
   import { href } from '../../../router.svelte';
+  import { pwa } from '../../../lib/pwa.svelte';
   import { findRefs } from '../../../lib/textbook/refs';
   import { slotFor } from '../../../lib/textbook/books';
   import { listBooks } from '../../../lib/textbook/store';
@@ -57,6 +58,7 @@
   <section class="card stack">
     <h3>Find ready-made materials</h3>
     <p class="muted small">Opens a search for "{lesson.topic || lesson.mainSkill}" in a new tab. Needs internet. Remember the offline version in Plan B.</p>
+    {#if !pwa.online}<p class="offline-note" role="status">You are offline. These sites will open once you are connected; your lesson is saved meanwhile.</p>{/if}
     <div class="row">{#each toolLinks(lesson) as t}<a class="btn btn-outline" href={t.url} target="_blank" rel="noopener">{t.name}</a>{/each}</div>
   </section>
 
@@ -66,7 +68,7 @@
       <select class="select auto" bind:value={cKind} aria-label="Material type"><option value="worksheet">Worksheet</option><option value="flashcards">Flashcards</option><option value="slides">Slides</option><option value="poster">Poster</option></select>
       <select class="select auto" bind:value={cTier} aria-label="Level"><option value="all">All levels</option><option value="low">🌱 Low</option><option value="mod">🌿 Moderate</option><option value="high">🌳 High</option></select>
     </div>
-    <textarea id="canva-prompt" class="input ta" rows="4" readonly value={prompt}></textarea>
+    <textarea id="canva-prompt" class="input ta" rows="4" readonly value={prompt} aria-label="Prompt for Canva AI"></textarea>
     <div class="row"><button id="canva-copy" class="btn btn-primary" type="button" onclick={copyPrompt}>Copy prompt</button><a class="btn btn-gold" href={CANVA_AI} target="_blank" rel="noopener">Open Canva AI</a>{#if copied}<span class="muted small" role="status">{copied}</span>{/if}</div>
     <p class="muted small">Paste the finished design's link below so it opens from Teach mode.</p>
   </section>
@@ -100,4 +102,5 @@
   .bad { color: var(--bad); font-size: var(--t-sm); }
   .add { justify-self: start; }
   .auto { width: auto; }
+  .offline-note { color: var(--warn); font-weight: 600; font-size: var(--t-sm); }
 </style>

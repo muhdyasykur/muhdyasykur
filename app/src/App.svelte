@@ -23,6 +23,7 @@
   // Music never plays during a lesson
   $effect(() => { if (route.name === 'teach' && music.playing) pauseMusic(); });
   import { profile } from './lib/profile.svelte';
+  import { appError, clearError } from './lib/errors.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
     { name: 'today', icon: 'today', label: 'nav.today' },
@@ -74,6 +75,13 @@
 {#if tour.open && route.name !== 'teach'}<Tour />{/if}
 {#if splash}<Splash ondone={splashDone} />{/if}
 
+{#if appError.message}
+  <div class="toast err" role="alert">
+    <span><b>{appError.message}</b> {appError.next}</span>
+    <button class="btn btn-outline" type="button" onclick={clearError}>OK</button>
+  </div>
+{/if}
+
 {#if pwa.needRefresh}
   <div class="toast" role="status">
     <span>{t('pwa.update')}</span>
@@ -111,6 +119,7 @@
     .nav a[aria-current='page'] { background: transparent; box-shadow: inset 0 3px 0 var(--gold-strong); }
     main { padding-top: calc(var(--s-6) + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--tabbar-h) + var(--s-8) + env(safe-area-inset-bottom, 0px)); }
   }
+  .toast.err { border-color: var(--bad); border-left-width: 4px; }
   @media (min-width: 768px) { .toast { bottom: var(--s-6); } }
   @media print {
     .nav, .toast, .banner, .skip { display: none !important; }

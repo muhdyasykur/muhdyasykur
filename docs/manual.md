@@ -223,7 +223,7 @@ Consilia asks one quick question ("One quick check for this PDF") so printed pag
 
 Many textbook PDFs are scans, so their words cannot be searched with "Search the books". On the Textbook Shelf, press Make searchable. Consilia reads each page on your device (nothing is uploaded) and you can keep using the app while it works. It takes a few minutes per book and only happens once.
 
-The first time, about 4 MB of language data is downloaded and saved for offline use.
+The first time, about 7 MB of text recognition files are downloaded (with internet) and kept for offline use. Press Pause at any time; Continue picks up from the same page, even after closing the app.
 
 <a id="data"></a>
 ## Your data, backup and privacy

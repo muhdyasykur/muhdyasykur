@@ -117,7 +117,7 @@
       <input id="nr-search" class="input" type="search" placeholder="Search by lesson number, topic, skill or LS code" bind:value={query} />
       <ul class="pick" role="listbox" aria-label="SoW lessons">
         {#each shown.slice(0, 200) as l (l.no)}
-          <li><button type="button" role="option" aria-selected={picked === l.no} data-sow={l.no} onclick={() => (picked = l.no)}>
+          <li role="none"><button type="button" role="option" aria-selected={picked === l.no} data-sow={l.no} onclick={() => (picked = l.no)}>
             <span class="no">{l.no}</span><span class="what"><b>{l.topic || l.label}</b><span class="muted">{l.label}{l.unit ? ` · ${l.unit}` : ''} · LS {l.std.main.ls.join(', ') || 'teacher choice'}</span></span>
           </button></li>
         {/each}

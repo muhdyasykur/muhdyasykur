@@ -45,3 +45,6 @@ img,svg{display:block;max-width:100%}
   body[data-print='one'] .print-target, body[data-print='one'] .print-target * { visibility: visible !important; }
   body[data-print='one'] .print-target { position: absolute; left: 0; top: 0; width: 100%; }
 }
+
+/* Bigger checkboxes and radios: easier to hit on a phone; the label around them extends the tap area. */
+input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:var(--navy);flex:none;cursor:pointer}

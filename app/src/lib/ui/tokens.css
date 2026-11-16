@@ -1,9 +1,9 @@
 /* Consilia design tokens. Every colour is defined here for light, then redefined for dark. */
 :root{
   --navy:#13294B; --navy-2:#1E3A66; --on-navy:#FFFFFF;
-  --gold:#B8901C; --gold-strong:#E2BC4F; --gold-soft:#F3E7C2; --on-gold:#1A1405;
+  --gold:#86660F; --gold-strong:#E2BC4F; --gold-soft:#F3E7C2; --on-gold:#1A1405;
   --paper:#F6F7FA; --card:#FFFFFF; --sunken:#ECEFF5;
-  --ink:#101A2E; --ink-2:#46526B; --ink-3:#6B768D; --line:#DFE3EC;
+  --ink:#101A2E; --ink-2:#46526B; --ink-3:#5E6980; --line:#DFE3EC;
   --main:#F6C9A8; --main-ink:#7A3B12; --comp:#CFE3F5; --comp-ink:#18476E;
   --low:#1F8574; --mod:#A66F08; --high:#5B43B8;
   --ok:#1A7F50; --warn:#9A6412; --bad:#B8362F;

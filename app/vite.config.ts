@@ -1,6 +1,26 @@
 import { defineConfig } from 'vitest/config';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { VitePWA } from 'vite-plugin-pwa';
+import { createHash } from 'node:crypto';
+import type { Plugin } from 'vite';
+
+/** Strict Content-Security-Policy for the built app (blueprint: Security). Scripts only from the app itself, plus the
+ *  one inline theme script by hash; the only outside address the app may call is the Feedback Garden form. */
+function csp(): Plugin {
+  return {
+    name: 'consilia-csp', apply: 'build', enforce: 'post',
+    transformIndexHtml(html) {
+      const inline = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map((m) => `'sha256-${createHash('sha256').update(m[1]).digest('base64')}'`);
+      const policy = [
+        "default-src 'self'", `script-src 'self' ${inline.join(' ')}`, "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data: blob:", "font-src 'self' data:", "media-src 'self' blob:",
+        "connect-src 'self' https://submit.jotform.com", "worker-src 'self' blob:", "manifest-src 'self'",
+        "object-src 'none'", "base-uri 'self'", "form-action 'none'", "frame-src 'none'"
+      ].join('; ');
+      return html.replace(/<meta charset="utf-8" \/>/, `<meta charset="utf-8" />\n    <meta http-equiv="Content-Security-Policy" content="${policy}" />`);
+    }
+  };
+}
 
 // Relative base: the same build works at muhdyasykur.github.io/muhdyasykur/, a custom domain, or Netlify.
 import pkg from './package.json' with { type: 'json' };
@@ -10,6 +30,7 @@ export default defineConfig({
   base: './',
   plugins: [
     svelte(),
+    csp(),
     VitePWA({
       registerType: 'prompt', // never swap versions silently mid-lesson
       includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],

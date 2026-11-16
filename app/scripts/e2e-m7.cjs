@@ -39,7 +39,7 @@ function imagePdf(pages) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
   await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   const page = await ctx.newPage();
-  page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+  page.on('pageerror', (e) => { errors.push('pageerror: ' + e.name + ': ' + e.message); if (process.env.DEBUG) console.log('PAGEERROR', e.name, e.message, (e.stack || '').slice(0, 600)); });
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()); });
   await page.goto(base);
   await page.click('button:has-text("Skip for now")');
@@ -93,6 +93,52 @@ function imagePdf(pages) {
     check((await page.locator('[role=alert]').innerText()).includes('not been saved yet'), 'offline, an unsaved video explains it needs internet once');
     await ctx.setOffline(false);
   } else check(false, 'videos are missing from dist/videos (run npm run videos, then build)');
+
+  // ---- Fault injection: damaged files, a newer backup, a full device, offline links
+  const ftmp = fs.mkdtempSync(path.join(os.tmpdir(), 'consilia-bad-'));
+  const bad = (name, text) => { const f = path.join(ftmp, name); fs.writeFileSync(f, text); return f; };
+  await page.goto(base + '#/me');
+  await page.setInputFiles('#bk-file', bad('broken.consilia-backup', '{ this is not json'));
+  check((await page.locator('section:has(#bk-file)').innerText()).includes('not a Consilia backup file'), 'a damaged backup file is refused with a plain message');
+  await page.setInputFiles('#bk-file', bad('newer.consilia-backup', JSON.stringify({ format: 'consilia-backup', version: 2, tables: {} })));
+  check((await page.locator('section:has(#bk-file)').innerText()).includes('newer Consilia'), 'a backup from a newer version asks for an update');
+  await page.goto(base + '#/plan');
+  await page.setInputFiles('#plan-import', bad('broken.consilia', 'PK\u0003\u0004 garbage'));
+  await page.waitForSelector('#plan-import ~ * , .err[role=alert]');
+  check((await page.locator('.err[role=alert]').count()) === 1, `a damaged shared lesson is refused (${(await page.locator('.err[role=alert]').innerText().catch(() => '')).slice(0, 60)})`);
+  // full device: every IndexedDB write fails with QuotaExceededError
+  await page.goto(base + '#/classes');
+  await page.evaluate(() => {
+    const full = () => { throw new DOMException('The quota has been exceeded.', 'QuotaExceededError'); };
+    window.__put = IDBObjectStore.prototype.put; window.__add = IDBObjectStore.prototype.add;
+    IDBObjectStore.prototype.put = full; IDBObjectStore.prototype.add = full;
+  });
+  await page.click('button:has-text("Add a Year 4 class")');
+  await page.fill('#cl-name', '4 Penuh');
+  await page.click('button:has-text("Add class")');
+  await page.waitForSelector('.toast.err', { timeout: 5000 }).catch(() => {});
+  const toast = await page.locator('.toast.err').innerText().catch(() => '');
+  check(/out of storage/.test(toast) && /Remove a textbook/.test(toast), `a full device shows a plain message and a next step ("${toast.slice(0, 70)}…")`);
+  await page.evaluate(() => { IDBObjectStore.prototype.put = window.__put; IDBObjectStore.prototype.add = window.__add; });
+  await page.click('.toast.err button');
+  for (let i = errors.length - 1; i >= 0; i--) if (/quota/i.test(errors[i])) errors.splice(i, 1); // expected from the injected fault
+  // offline: links to outside tools say they need a connection
+  // the form stays open after the failed save, so the teacher can simply try again
+  check(await page.locator('#cl-name').isVisible(), 'after the failed save the form is still open to try again');
+  await page.fill('#cl-name', '4 Bestari');
+  await page.click('button:has-text("Add class")');
+  await page.waitForSelector('#cd-paste');
+  await page.goto(base + '#/plan/new');
+  await page.selectOption('#nr-class', { label: '4 Bestari · Year 4 SK' });
+  await page.click('[data-sow="1"]');
+  await page.click('#nr-create');
+  await page.waitForURL(/setup$/);
+  await ctx.setOffline(true);
+  await page.click('.steps a:has-text("Materials")');
+  await page.waitForSelector('#canva-prompt');
+  check((await page.locator('.offline-note').count()) === 1, 'offline, the tool links say they open once connected');
+  await ctx.setOffline(false);
+  fs.rmSync(ftmp, { recursive: true, force: true });
 
   // ---- Text recognition of a scanned book
   const lines = [['Unit 3: Where are you from?', 'Listen and read.', 'Mei Ling is from Malaysia.', 'She lives in Kota Kinabalu, Sabah.', 'Her favourite food is hinava.'],
@@ -151,6 +197,14 @@ function imagePdf(pages) {
   await ctx.setOffline(false);
   if (out) await page.screenshot({ path: `${out}/m7-shelf.png` });
 
+  // reduced motion: no splash, no confetti
+  const calm = await browser.newContext({ reducedMotion: 'reduce' });
+  await calm.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); } catch (e) {} });
+  const cp = await calm.newPage();
+  await cp.goto(base);
+  await cp.waitForTimeout(800);
+  check((await cp.locator('.splash').count()) === 0, 'with reduced motion the opening animation does not play');
+  await calm.close();
   fs.rmSync(tmp, { recursive: true, force: true });
   await browser.close();
   if (errors.length) { console.error('\n' + errors.join('\n')); process.exit(1); }

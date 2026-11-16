@@ -10,7 +10,9 @@ import { loadProfile } from './lib/profile.svelte';
 import { loadLock, lockNow } from './lib/lock.svelte';
 import { startMusicGuards } from './lib/audio/player.svelte';
 import { flush } from './lib/feedback';
+import { startErrorGuard } from './lib/errors.svelte';
 
+startErrorGuard();
 document.documentElement.lang = i18n.locale;
 startRouter();
 startPwa();

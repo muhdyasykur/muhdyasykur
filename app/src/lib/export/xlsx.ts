@@ -35,8 +35,11 @@ export function pbdSheets(classes: { cls: SchoolClass; pupils: Pupil[]; records:
 }
 
 export async function sheetsToBlob(sheets: XSheet[]): Promise<Blob> {
-  const { default: write } = await import('write-excel-file');
-  const data = sheets.map((s) => s.rows.map((r) => r.map((c) => (c.value === null ? null : { value: c.value, fontWeight: c.bold ? ('bold' as const) : undefined, backgroundColor: c.fill }))));
-  const widths = sheets.map((s) => (s.rows[1] ?? s.rows[0] ?? []).map((_, i) => ({ width: i === 1 ? 28 : i === 2 ? 22 : 11 })));
-  return (await (write as unknown as (d: unknown, o: unknown) => Promise<Blob>)(data, { sheets: sheets.map((s) => s.name), columns: widths })) as Blob;
+  const { default: write } = await import('write-excel-file/browser');
+  const out = sheets.map((s) => ({
+    sheet: s.name,
+    data: s.rows.map((r) => r.map((c) => (c.value === null ? null : { value: c.value, fontWeight: c.bold ? ('bold' as const) : undefined, backgroundColor: c.fill }))),
+    columns: (s.rows[1] ?? s.rows[0] ?? []).map((_, i) => ({ width: i === 1 ? 28 : i === 2 ? 22 : 11 }))
+  }));
+  return write(out).toBlob();
 }
