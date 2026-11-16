@@ -9,7 +9,7 @@ const names = ['Aina', 'Bala', 'Chong Wei', 'Dhia', 'Elena', 'Faris', 'Gopal', '
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
-  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
+  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   let page = await ctx.newPage();
   const watch = (p) => { p.on('pageerror', (e) => errors.push('pageerror: ' + e.message)); p.on('console', (m) => { if (m.type() === 'error' && !/microphone|getUserMedia|NotAllowed|NotFound|Permission/i.test(m.text())) errors.push('console: ' + m.text()); }); };
   watch(page);
@@ -159,7 +159,7 @@ const names = ['Aina', 'Bala', 'Chong Wei', 'Dhia', 'Elena', 'Faris', 'Gopal', '
 
   // phone layout
   const phone = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  await phone.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
+  await phone.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   const p2 = await phone.newPage(); watch(p2);
   await p2.goto(base); await p2.click('button:has-text("Skip for now")');
   await p2.goto(base + '#/plan/new'); await p2.waitForSelector('[data-sow="1"]'); await p2.click('[data-sow="1"]'); await p2.click('#nr-create'); await p2.waitForURL(/setup$/);

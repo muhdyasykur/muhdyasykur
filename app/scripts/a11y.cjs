@@ -8,7 +8,7 @@ const verbose = process.argv.includes('--verbose');
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 }, bypassCSP: true }); // axe is injected as an inline script
-  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
+  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   const page = await ctx.newPage();
   await page.goto(base);
   await page.click('button:has-text("Skip for now")');
@@ -67,7 +67,7 @@ const verbose = process.argv.includes('--verbose');
 
   // phone: tap targets and 200% text
   const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, storageState: await ctx.storageState({ indexedDB: true }) });
-  await phone.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
+  await phone.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   const p = await phone.newPage();
   const small = []; const overflow = [];
   for (const [name, r] of routes) {

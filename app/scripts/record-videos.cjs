@@ -12,7 +12,7 @@ const W = 1280, H = 720;
 const PUPILS = ['Aina', 'Bala', 'Chong Wei', 'Dhia', 'Elena', 'Faris', 'Gopal', 'Hana', 'Irfan', 'Jia Hui', 'Kavin', 'Lina'];
 
 const prep = () => {
-  try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {}
+  try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {}
   const add = () => {
     if (document.getElementById('__cur')) return;
     const c = document.createElement('div'); c.id = '__cur';

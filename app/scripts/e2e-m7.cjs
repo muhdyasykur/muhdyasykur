@@ -37,7 +37,7 @@ function imagePdf(pages) {
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });
-  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
+  await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); localStorage.setItem('consilia.splash', new Date().toDateString()); } catch (e) {} });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => { errors.push('pageerror: ' + e.name + ': ' + e.message); if (process.env.DEBUG) console.log('PAGEERROR', e.name, e.message, (e.stack || '').slice(0, 600)); });
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()); });
@@ -199,7 +199,7 @@ function imagePdf(pages) {
 
   // reduced motion: no splash, no confetti
   const calm = await browser.newContext({ reducedMotion: 'reduce' });
-  await calm.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); } catch (e) {} });
+  await calm.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); } catch (e) {} });
   const cp = await calm.newPage();
   await cp.goto(base);
   await cp.waitForTimeout(800);

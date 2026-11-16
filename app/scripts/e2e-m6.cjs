@@ -26,6 +26,24 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.waitForTimeout(400);
   check((await page.locator('button.splash').count()) === 0, 'splash plays at most once a day');
 
+  // terms of use: must agree before anything else
+  await page.waitForSelector('#terms-title');
+  check((await page.locator('#pf-name').count()) === 0, 'the terms come before onboarding');
+  check(await page.locator('#terms-accept').isDisabled(), 'Agree is disabled until every box is ticked');
+  await page.click('button[aria-pressed]:has-text("Bahasa Melayu")');
+  check((await page.locator('#terms-title').innerText()) === 'Sebelum anda bermula', 'the terms can be read in Bahasa Melayu');
+  await page.click('button[aria-pressed]:has-text("English")');
+  for (const i of [0, 1]) await page.check(`[data-agree="${i}"]`);
+  check(await page.locator('#terms-accept').isDisabled(), 'two of three boxes are not enough');
+  await page.check('[data-agree="2"]');
+  await page.click('#terms-accept');
+  await page.waitForSelector('#terms-title', { state: 'detached' });
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('consilia.terms') || 'null'));
+  check(saved && saved.v === 1 && !!saved.at, 'agreement is saved with the terms version and date');
+  await page.reload();
+  await page.waitForTimeout(400);
+  check((await page.locator('#terms-title').count()) === 0, 'the terms are not asked again once agreed');
+
   // onboarding → tour
   await page.fill('#pf-name', 'Muhammad Yasykur bin Muhamad Yasim');
   await page.fill('#pf-school', 'SK(C) Anglo Chinese Kota Kinabalu');

@@ -24,6 +24,8 @@
   $effect(() => { if (route.name === 'teach' && music.playing) pauseMusic(); });
   import { profile } from './lib/profile.svelte';
   import { appError, clearError } from './lib/errors.svelte';
+  import { terms } from './lib/terms.svelte';
+  import Terms from './features/onboarding/Terms.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
     { name: 'today', icon: 'today', label: 'nav.today' },
@@ -71,8 +73,9 @@
 
 {/if}
 
-{#if profile.loaded && !profile.value && !profile.skipped && route.name !== 'teach'}<Onboarding />{/if}
-{#if tour.open && route.name !== 'teach'}<Tour />{/if}
+{#if terms.accepted && profile.loaded && !profile.value && !profile.skipped && route.name !== 'teach'}<Onboarding />{/if}
+{#if terms.accepted && tour.open && route.name !== 'teach'}<Tour />{/if}
+{#if !terms.accepted && !splash}<Terms gate />{/if}
 {#if splash}<Splash ondone={splashDone} />{/if}
 
 {#if appError.message}

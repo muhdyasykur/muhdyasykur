@@ -1,7 +1,7 @@
 import type { School } from '../curriculum/types';
 
 /** How the teacher started this RPH (blueprint F04). */
-export type Mode = 'follow-sow' | 'sow-standards' | 'scratch';
+export type Mode = 'follow-sow' | 'sow-standards' | 'scratch' | 'recommend';
 export type Role = 'main' | 'comp';
 export type Tier = 'low' | 'mod' | 'high';
 export type FrameworkId = 'pwp' | 'ppp' | 'process' | 'hybrid' | 'tblt' | 'la';
