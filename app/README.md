@@ -16,6 +16,7 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M5 Textbook Shelf (own PDFs on the device, page maps, search, viewer with projector tools, in Teach mode), materials studio, tool links and Canva AI prompt, activity bank (70), Method Guide, search everything, guided reflection, mentor notes, share/import .consilia, QR codes on printed links | Done |
 | M6 Brand experience: splash (once a day, tap to skip), three original R&B instrumentals composed in code (off by default, pause in Teach mode), 8-step guided tour, About page, Feedback Garden to Jotform with an offline queue, backup and restore with a weekly reminder, confetti for a first 100 score | Done |
 | M7 QA (accessibility, security, performance, fault injection), six captioned tutorial videos, searchable manual, privacy page (EN/BM), on-device text recognition for scanned textbooks, pilot kit | Done: 1.0.0-beta.1 |
+| M8 Consilia Recommends (whole-lesson planning engine), Tools tab with 11 tools, projector games, BBM guide with pictures, AI prompt builder, terms of use | Done: 1.0.0-beta.2 |
 | Pilot: two weeks with trainee teachers (see `docs/pilot.md`), then 1.0.0 | Next |
 
 ## Run it
@@ -35,11 +36,12 @@ Browser tests of the built app (need Playwright on the machine): `npx vite previ
 Milestone 7 checks (same preview server):
 
 ```bash
+npm run e2e:m8    # Consilia Recommends, Tools hub, every tool, games, terms page
 npm run e2e:m7    # privacy, manual, videos offline, text recognition online and offline, fault injection, reduced motion
 npm run a11y      # axe-core on 31 screens in light and dark, 44 px tap targets and 200% text on a phone
 npm run perf      # load-time budget on an emulated slow phone (first and repeat visit)
 npm run videos    # re-record the six Help videos and their EN/BM captions into public/videos (needs ffmpeg)
-npm run docs      # regenerate docs/manual.md and docs/privacy.md from the in-app text
+npm run docs      # regenerate docs/manual.md, docs/privacy.md and docs/terms.md from the in-app text
 ```
 
 The full test plan and the latest results are in `docs/test-plan.md`.

@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.0.0-beta.2 · 17 November 2026 (milestone 8: Consilia Recommends and Tools)
+
+**New**
+- **Consilia recommends**, a fourth way to start an RPH (also "Let Consilia plan it" on Today). The teacher answers a
+  few questions about the class (ability, shy or energetic pupils, weak readers, large class, special needs, projector,
+  speakers, internet, devices), the lesson (key words, target sentence) and today's goals (speaking time, fun, calm,
+  creativity, assessment, observation, technology) and preparation time. Consilia plans the whole lesson on the device:
+  framework with its reason, one or two activities per stage with a step-by-step teacher script, Low / Moderate / High
+  versions, teaching aids with pictures and making steps, a digital option that suits the classroom, SMART objectives,
+  assessment, 21st-century skills and Plan B. A planning log explains every decision. "Another idea" swaps one stage;
+  the preparation checklist keeps within the teacher's time. Every one of the 927 SoW lessons (SK, Years 1–6) with standards plans
+  into an RPH scoring 96–100 on the checker. Answers are remembered per class.
+- **Tools** tab with 11 tools: Consilia recommends, Activity ideas (86 activities, 16 new signature activities such as
+  Fly-swatter slap, Escape envelopes, Living sentences, Running dictation, News reporter, QR stations), Objective
+  writer, Differentiation helper, BBM guide (25 teaching aids with original pictures, materials, making steps, use in
+  class, cost and safety), Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and
+  Classroom management.
+- **Classroom games** for the projector, offline, from the teacher's words: Spin wheel, Unjumble, Mystery word and
+  Quiz show with team scores, full screen. Also in Teach mode as the 🎮 Games tool, filled with the lesson's words.
+- **Improve with AI**: Consilia writes prompts at the pupils' level (Year and CEFR) and opens ChatGPT, Gemini,
+  Copilot or Canva AI. Nothing is sent by Consilia itself; prompts never contain pupils' names.
+- **Terms of use** in English and Bahasa Melayu, agreed before first use (three ticks), readable again in Me.
+
+**Changed**
+- Privacy page explains the AI prompt buttons. Manual has a new chapter (41 articles). Guided tour has 9 steps.
+
+**Fixed**
+- On phones, six navigation tabs now fit on one row (found by the browser tests).
+
 ## 1.0.0-beta.1 · 16 November 2026 (milestone 7: QA, videos and pilot)
 
 Ready for the two-week pilot with trainee teachers (see `pilot.md`).

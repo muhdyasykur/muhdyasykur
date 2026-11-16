@@ -1,21 +1,21 @@
 # Consilia test plan and results
 
-Version tested: **1.0.0-beta.1** · 16 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
+Version tested: **1.0.0-beta.2** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
 (`vite preview`). Commands are run from `app/`; see the README.
 
 ## Summary
 
 | Area | Method | Pass criterion | Result |
 |---|---|---|---|
-| Type safety | `npm run check` (svelte-check, 542 files) | 0 errors, 0 warnings | ✅ 0 / 0 |
-| Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages | All pass | ✅ 106 tests in 26 files |
+| Type safety | `npm run check` (svelte-check, 569 files) | 0 errors, 0 warnings | ✅ 0 / 0 |
+| Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages, the Recommends engine (every SoW lesson planned and checked) | All pass | ✅ 113 tests in 27 files |
 | Curriculum data | `npm run validate:curriculum` | Every SoW reference resolves | ✅ 1,489 lessons, all valid |
-| Core journeys | 6 browser suites, 160 checks (below) | All pass, no console errors | ✅ 160 / 160 |
-| Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 31 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
+| Core journeys | 7 browser suites, 205 checks (below) | All pass, no console errors | ✅ 205 / 205 |
+| Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 44 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
 | Tap targets | Same script, 390 × 844 phone | Every control ≥ 44 px (or its label) | ✅ none smaller |
 | Text size | Same script, root font at 200% on a phone | No horizontal scrolling | ✅ none |
 | Reduced motion | `e2e:m7` with `prefers-reduced-motion: reduce` | No splash, no confetti | ✅ |
-| Performance | `npm run perf`: emulated phone, 4× slower CPU, fast 3G (1.6 Mbps, 150 ms) | First visit usable < 6 s; repeat < 2.5 s | ✅ 1.8 s (203 KB), repeat 0.4 s (0 KB) |
+| Performance | `npm run perf`: emulated phone, 4× slower CPU, fast 3G (1.6 Mbps, 150 ms) | First visit usable < 6 s; repeat < 2.5 s | ✅ 2.1 s (259 KB), repeat 0.3 s (0 KB) |
 | Offline | `smoke`, `e2e:m5`, `e2e:m7` with the network switched off | Every core feature works offline | ✅ incl. textbooks, saved videos (with seeking) and text recognition |
 | Security: CSP | Built `index.html` carries a strict policy; all suites run with it enforced | No blocked resources in any journey | ✅ |
 | Security: escaping | Code review: Svelte escapes all text; the only raw HTML is the QR code SVG made by the `qrcode` library from a URL | No user text rendered as HTML | ✅ |
@@ -33,8 +33,15 @@ Version tested: **1.0.0-beta.1** · 16 November 2026 · Chromium (Playwright 1.6
 | `e2e` | 42 | Onboarding, class with pasted names, a full RPH from scratch (standards, ABCD/SMART objectives, PPP, tiers, timing errors, materials, Plan B, autosave), checker to 100, mark as fine, both print layouts, Word downloads, weekly planner |
 | `e2e:teach` | 26 | Teach mode (attendance, clock, overrun and pacing coach, resume after reload), toolkit (name picker, groups with keep-apart, points, noise light without microphone, timer), PBD grid, heatmap, Excel export, PIN lock |
 | `e2e:m5` | 31 | Textbook Shelf with real PDFs (recognised editions, calibration, private file storage), search, viewer and projector tools, materials studio, activity bank, Canva AI prompt, sharing and import, reflection, mentor notes |
-| `e2e:m6` | 17 | Splash once a day, 8-step tour, Help replay, About, Feedback Garden online and offline queue, music start and pause in Teach mode, backup and restore |
+| `e2e:m6` | 23 | Terms of use gate (EN/BM, three ticks, remembered), splash once a day, 9-step tour, Help replay, About, Feedback Garden online and offline queue, music start and pause in Teach mode, backup and restore |
 | `e2e:m7` | 26 | Privacy page EN/BM, manual search and links, six videos (length, EN/BM captions, saved for offline, byte ranges offline, unsaved video offline message), text recognition of a scanned PDF (online, then offline), fault injection, offline tool notice, reduced motion |
+
+| `e2e:m8` | 39 | Consilia Recommends (class questions, planning log, scripts with the teacher's words, 100 score, teaching aid making steps, Another idea on one stage only, preparation checklist, AI prompt without pupil names, saved RPH, class answers remembered, offline-only suggestions without internet), Tools hub, all 11 tools, four projector games, Games in Teach mode, terms page, phone layouts |
+
+## Found and fixed during M8 testing
+
+- With six navigation tabs, the phone tab bar wrapped onto two rows and covered buttons. Fixed to one row of six.
+- The BBM guide has 25 teaching aids, not 24 as first written.
 
 ## Found and fixed during M7 testing
 

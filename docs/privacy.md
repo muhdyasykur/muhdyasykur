@@ -16,11 +16,13 @@ Links you tap: Canva, Wordwall, Liveworksheets, Quizizz, Kahoot, YouTube and Goo
 
 Files you save or share: Word, PDF, Excel, backup and .consilia files go wherever you send them (Google Drive, WhatsApp, email). A shared .consilia lesson never includes your class or pupil names.
 
+AI prompts: "Improve with AI" and the AI prompt builder only copy a prompt to your clipboard and open the AI site you pick (ChatGPT, Gemini, Copilot or Canva AI). Nothing is sent unless you paste it there yourself. Prompts contain your topic, words and lesson plan, never pupils' names. Those sites have their own privacy policies.
+
 ## What Consilia never does
 
 No analytics, no trackers, no advertising, no cookies for tracking, no selling or sharing of data.
 
-No AI service reads your lessons. All checking (SMART objectives, alignment, timing) is done by rules inside the app.
+No AI service reads your lessons. Consilia Recommends, the alignment checker and all the tools run on your device, from rules and content written for Consilia.
 
 The microphone (noise meter in Teach mode) only measures loudness while the meter is open. Nothing is recorded or saved.
 
@@ -54,7 +56,7 @@ This page follows the spirit of the Personal Data Protection Act 2010 (Malaysia)
 
 Questions, or a request to delete feedback you sent: write in the Feedback Garden (choose "Question") and include a way to reach you, or contact the developer, Muhammad Yasykur bin Muhamad Yasim, IPG Kampus Gaya.
 
-_Last updated 16 November 2026_
+_Last updated 17 November 2026_
 
 ---
 
@@ -76,11 +78,13 @@ Pautan yang anda tekan: Canva, Wordwall, Liveworksheets, Quizizz, Kahoot, YouTub
 
 Fail yang anda simpan atau kongsi: fail Word, PDF, Excel, sandaran dan .consilia pergi ke mana sahaja anda hantar (Google Drive, WhatsApp, e-mel). Pelajaran .consilia yang dikongsi tidak pernah mengandungi kelas atau nama murid anda.
 
+Gesaan AI: "Improve with AI" dan pembina gesaan AI hanya menyalin gesaan ke papan keratan anda dan membuka laman AI yang anda pilih (ChatGPT, Gemini, Copilot atau Canva AI). Tiada apa yang dihantar melainkan anda sendiri menampalnya di sana. Gesaan mengandungi topik, perkataan dan rancangan pelajaran anda, bukan nama murid. Laman-laman itu mempunyai dasar privasi sendiri.
+
 ## Apa yang Consilia tidak pernah lakukan
 
 Tiada analitik, tiada penjejak, tiada iklan, tiada kuki penjejakan, tiada penjualan atau perkongsian data.
 
-Tiada perkhidmatan AI membaca pelajaran anda. Semua semakan (objektif SMART, penjajaran, masa) dibuat oleh peraturan dalam aplikasi.
+Tiada perkhidmatan AI membaca pelajaran anda. Consilia Recommends, penyemak penjajaran dan semua alat berjalan dalam peranti anda, berdasarkan peraturan dan kandungan yang ditulis untuk Consilia.
 
 Mikrofon (meter bunyi dalam Mod Mengajar) hanya mengukur kekuatan bunyi semasa meter dibuka. Tiada apa yang dirakam atau disimpan.
 
@@ -114,5 +118,5 @@ Halaman ini mengikut semangat Akta Perlindungan Data Peribadi 2010 (Malaysia): k
 
 Pertanyaan, atau permintaan untuk memadam maklum balas yang dihantar: tulis di Taman Maklum Balas (pilih "Question") dan sertakan cara untuk menghubungi anda, atau hubungi pembangun, Muhammad Yasykur bin Muhamad Yasim, IPG Kampus Gaya.
 
-_Kemas kini terakhir 16 November 2026_
+_Kemas kini terakhir 17 November 2026_
 

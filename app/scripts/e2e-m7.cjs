@@ -99,8 +99,10 @@ function imagePdf(pages) {
   const bad = (name, text) => { const f = path.join(ftmp, name); fs.writeFileSync(f, text); return f; };
   await page.goto(base + '#/me');
   await page.setInputFiles('#bk-file', bad('broken.consilia-backup', '{ this is not json'));
+  await page.waitForSelector('section:has(#bk-file) .err[role=alert]', { timeout: 5000 }).catch(() => {});
   check((await page.locator('section:has(#bk-file)').innerText()).includes('not a Consilia backup file'), 'a damaged backup file is refused with a plain message');
   await page.setInputFiles('#bk-file', bad('newer.consilia-backup', JSON.stringify({ format: 'consilia-backup', version: 2, tables: {} })));
+  await page.waitForFunction(() => document.querySelector('section:has(#bk-file) .err')?.textContent.includes('newer'), null, { timeout: 5000 }).catch(() => {});
   check((await page.locator('section:has(#bk-file)').innerText()).includes('newer Consilia'), 'a backup from a newer version asks for an update');
   await page.goto(base + '#/plan');
   await page.setInputFiles('#plan-import', bad('broken.consilia', 'PK\u0003\u0004 garbage'));

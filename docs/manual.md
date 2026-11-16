@@ -6,6 +6,7 @@ The same manual is in the app (Me → Help) with search and the six video tutori
 
 - [Getting started](#start)
 - [Planning a lesson (RPH)](#plan)
+- [Consilia Recommends and Tools](#recommend)
 - [Teaching with Consilia](#teach)
 - [Classes, pupils and PBD](#classes)
 - [Library and textbooks](#library)
@@ -55,7 +56,9 @@ Plan → New RPH. Three short questions set up the plan, then the builder walks 
 
 Video: Me → Help → Video tutorials.
 
-### Three ways to start
+### Four ways to start
+
+Consilia recommends: tell Consilia about your class and it plans the whole lesson for you (see "Let Consilia plan a lesson").
 
 Follow the SoW: everything from the SoW lesson is filled in (standards, outline steps and materials). Improve and expand it.
 
@@ -129,6 +132,50 @@ In Plan, each lesson has Duplicate (for another class), Copy, Share and Delete.
 
 Share makes a .consilia file you can send on WhatsApp or Drive. It never includes your class or pupil names. A friend opens it with "Import a shared lesson (.consilia)".
 
+<a id="recommend"></a>
+## Consilia Recommends and Tools
+
+### Let Consilia plan a lesson
+
+Plan → New RPH → ✨ Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
+
+Consilia then plans the whole lesson on your device and shows how it decided: the framework and why, one or two activities for every stage with a step-by-step script, Low / Moderate / High versions, teaching aids (BBM) with pictures and making steps, a digital option that suits your classroom, SMART objectives, assessment and Plan B.
+
+Nothing is sent anywhere: Consilia's planning engine uses the KSSR data, the framework rules and more than 80 activities written for primary English.
+
+1. Answer the questions; Consilia remembers them for that class.
+2. Read the plan. Press ↻ Another idea on any stage you want to change; the other stages stay as they are.
+3. Tick the teaching aids you already have in the preparation checklist.
+4. Press Use this plan. It opens in the builder, where you can change anything.
+
+> Tip: Choose "Observation lesson" as a goal for activities with a memorable moment.
+>
+> Tip: Without internet, Consilia only suggests activities and digital options that work offline.
+>
+> Tip: The plan is a starting point: adapt it to your pupils and check it with your mentor.
+
+### The Tools page
+
+Tools collects everything besides the RPH builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, BBM guide, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
+
+### Classroom games on the projector
+
+Tools → Classroom games, or the 🎮 Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. Your words are remembered on this device.
+
+### Teaching aids (BBM) step by step
+
+Tools → BBM guide shows 25 cheap teaching aids with a picture, what you need, how to make them step by step, how to use them in class, a time and cost estimate, and safety notes. Filter by use (vocabulary, phonics, stories, assessment…) or "Ready in 10 minutes".
+
+### Improve with AI
+
+Consilia writes careful prompts for your pupils' level (Year and CEFR) that you paste into ChatGPT, Gemini, Copilot or Canva AI: reading or listening texts, comprehension questions, dialogues, worksheets in three levels, songs, flashcard pictures, stories, rubrics, or feedback on your whole plan.
+
+Consilia never sends anything itself and prompts never contain pupils' names. AI answers can be wrong: check them before using them with pupils, and follow your institute's rules on AI.
+
+### Terms of use
+
+Before first use, every teacher agrees that Consilia is a planning tool: you stay responsible for your lessons, check suggestions and websites before using them, and protect pupils' privacy. Read them again in Me → Terms of use.
+
 <a id="teach"></a>
 ## Teaching with Consilia
 
@@ -157,7 +204,7 @@ Groups: mixed ability or by level, and it respects "Keep apart" and "Keep togeth
 
 Noise: uses the microphone to show a green, amber or red light. Nothing is recorded. If the microphone is not allowed, tap the colours yourself.
 
-Points: +1 or − for groups. Attention: a 3-2-1 signal. Timer: quick countdowns. Textbook: opens the pages linked to the lesson.
+Points: +1 or − for groups. Attention: a 3-2-1 signal. Timer: quick countdowns. Textbook: opens the pages linked to the lesson. Games: the projector games, filled with the lesson's key words.
 
 ### Projecting a textbook page
 

@@ -43,7 +43,8 @@ const verbose = process.argv.includes('--verbose');
     ['Classes', '#/classes'], ['Class', `#/classes/${classId}`], ['Pupil profile', pupilHref], ['PBD record', `#/classes/${classId}/pbd/new`], ['PBD progress', `#/classes/${classId}/pbd`],
     ['Library: SoW', '#/library/4/sk/sow'], ['Library: SoW lesson', '#/library/4/sk/sow/1'], ['Library: standards', '#/library/4/sk/standards'], ['Library: levels', '#/library/4/sk/levels'],
     ['Library: tasks', '#/library/4/sk/tasks'], ['Library: textbooks', '#/library/4/sk/books'], ['Library: activity bank', '#/library/4/sk/bank'], ['Library: Method Guide', '#/library/4/sk/guide'],
-    ['Me', '#/me'], ['Mentor', '#/me/mentor'], ['Help', '#/me/help'], ['About', '#/me/about'], ['Privacy', '#/me/privacy'],
+    ['New RPH: recommend', '#/plan/new/recommend'], ['Tools', '#/tools'], ...['ideas', 'bbm', 'digital', 'games', 'ai', 'objectives', 'chant', 'differentiate', 'worksheets', 'manage'].map((t) => [`Tools: ${t}`, `#/tools/${t}`]),
+    ['Me', '#/me'], ['Terms', '#/me/terms'], ['Mentor', '#/me/mentor'], ['Help', '#/me/help'], ['About', '#/me/about'], ['Privacy', '#/me/privacy'],
     ['Teach', `#/teach/${lessonId}`]
   ];
   const results = []; let serious = 0;

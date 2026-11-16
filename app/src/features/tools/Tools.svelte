@@ -19,7 +19,7 @@
     { id: 'ideas', icon: '💡', title: 'Activity ideas', about: '86 tried activities. Filter by skill, stage, year, time and what your class has.', group: 'Plan' },
     { id: 'objectives', icon: '🎯', title: 'Objective writer', about: 'ABCD objectives that pass SMART, with success criteria for pupils.', group: 'Plan' },
     { id: 'differentiate', icon: '🪜', title: 'Differentiation helper', about: 'Low, moderate and high versions of any activity.', group: 'Plan' },
-    { id: 'bbm', icon: '✂️', title: 'BBM guide', about: '24 teaching aids with pictures, what you need and how to make them step by step.', group: 'Make' },
+    { id: 'bbm', icon: '✂️', title: 'BBM guide', about: '25 teaching aids with pictures, what you need and how to make them step by step.', group: 'Make' },
     { id: 'worksheets', icon: '📝', title: 'Worksheet maker', about: 'Flashcards, gap-fill, matching, strips, tiered worksheets, rubrics. Print offline.', group: 'Make' },
     { id: 'chant', icon: '🎵', title: 'Chant maker', about: 'Turn your key words into a catchy chant with actions.', group: 'Make' },
     { id: 'ai', icon: '🤖', title: 'AI prompt builder', about: 'Ready prompts for ChatGPT, Gemini, Copilot or Canva AI: texts, questions, songs, pictures.', group: 'Make' },

@@ -120,7 +120,7 @@
     .shell { grid-template-columns: 1fr; }
     .nav { position: fixed; inset: auto 0 0 0; height: auto; z-index: 30; border-right: 0; border-top: 1px solid var(--line); padding: 0 0 env(safe-area-inset-bottom, 0px); display: block; }
     .brand { display: none; }
-    ul { grid-template-columns: repeat(5, 1fr); gap: 0; }
+    ul { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; }
     .nav a[href]:not(.brand) { flex-direction: column; justify-content: center; gap: 2px; height: var(--tabbar-h); padding: 0; border-radius: 0; font-size: 0.6875rem; }
     .nav a[aria-current='page'] { background: transparent; box-shadow: inset 0 3px 0 var(--gold-strong); }
     main { padding-top: calc(var(--s-6) + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--tabbar-h) + var(--s-8) + env(safe-area-inset-bottom, 0px)); }

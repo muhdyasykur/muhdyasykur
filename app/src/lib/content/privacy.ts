@@ -3,12 +3,12 @@
 export interface Section { h: string; p: string[] }
 export interface PrivacyText { title: string; updated: string; lead: string; sections: Section[] }
 
-export const PRIVACY_UPDATED = '2026-11-16';
+export const PRIVACY_UPDATED = '2026-11-17';
 
 export const PRIVACY: Record<'en' | 'ms', PrivacyText> = {
   en: {
     title: 'Privacy',
-    updated: 'Last updated 16 November 2026',
+    updated: 'Last updated 17 November 2026',
     lead: 'Consilia has no server, no account and no sign-in. Your lessons and your pupils stay on this device. This page explains exactly what that means.',
     sections: [
       { h: 'What stays on your device', p: [
@@ -18,11 +18,12 @@ export const PRIVACY: Record<'en' | 'ms', PrivacyText> = {
       { h: 'What leaves your device, and only when you choose', p: [
         'Feedback Garden: when you press "Plant it", your mood, message, idea votes, the app version and your name (only if you type one) are sent to the developer\'s feedback form on Jotform. Nothing about your pupils or lessons is sent. If you are offline it waits on your device and is sent later.',
         'Links you tap: Canva, Wordwall, Liveworksheets, Quizizz, Kahoot, YouTube and Google open in a new tab. Those sites have their own privacy policies. Consilia only copies a prompt or a search for you; it never sends your lesson to them by itself.',
-        'Files you save or share: Word, PDF, Excel, backup and .consilia files go wherever you send them (Google Drive, WhatsApp, email). A shared .consilia lesson never includes your class or pupil names.'
+        'Files you save or share: Word, PDF, Excel, backup and .consilia files go wherever you send them (Google Drive, WhatsApp, email). A shared .consilia lesson never includes your class or pupil names.',
+        'AI prompts: "Improve with AI" and the AI prompt builder only copy a prompt to your clipboard and open the AI site you pick (ChatGPT, Gemini, Copilot or Canva AI). Nothing is sent unless you paste it there yourself. Prompts contain your topic, words and lesson plan, never pupils\' names. Those sites have their own privacy policies.'
       ] },
       { h: 'What Consilia never does', p: [
         'No analytics, no trackers, no advertising, no cookies for tracking, no selling or sharing of data.',
-        'No AI service reads your lessons. All checking (SMART objectives, alignment, timing) is done by rules inside the app.',
+        'No AI service reads your lessons. Consilia Recommends, the alignment checker and all the tools run on your device, from rules and content written for Consilia.',
         'The microphone (noise meter in Teach mode) only measures loudness while the meter is open. Nothing is recorded or saved.',
         'Text recognition for scanned textbooks runs on your device. The pages are never uploaded.'
       ] },
@@ -48,7 +49,7 @@ export const PRIVACY: Record<'en' | 'ms', PrivacyText> = {
   },
   ms: {
     title: 'Privasi',
-    updated: 'Kemas kini terakhir 16 November 2026',
+    updated: 'Kemas kini terakhir 17 November 2026',
     lead: 'Consilia tiada pelayan, tiada akaun dan tiada log masuk. Rancangan pelajaran dan data murid anda kekal dalam peranti ini. Halaman ini menerangkan maksudnya dengan tepat.',
     sections: [
       { h: 'Apa yang kekal dalam peranti anda', p: [
@@ -58,11 +59,12 @@ export const PRIVACY: Record<'en' | 'ms', PrivacyText> = {
       { h: 'Apa yang keluar dari peranti anda, hanya apabila anda memilih', p: [
         'Taman Maklum Balas: apabila anda menekan "Plant it", mood, mesej, undian idea, versi aplikasi dan nama anda (hanya jika anda menaipnya) dihantar ke borang maklum balas pembangun di Jotform. Tiada maklumat tentang murid atau pelajaran anda dihantar. Jika anda di luar talian, ia menunggu dalam peranti dan dihantar kemudian.',
         'Pautan yang anda tekan: Canva, Wordwall, Liveworksheets, Quizizz, Kahoot, YouTube dan Google dibuka dalam tab baharu. Laman-laman itu mempunyai dasar privasi sendiri. Consilia hanya menyalin gesaan atau carian untuk anda; ia tidak menghantar pelajaran anda kepada mereka dengan sendirinya.',
-        'Fail yang anda simpan atau kongsi: fail Word, PDF, Excel, sandaran dan .consilia pergi ke mana sahaja anda hantar (Google Drive, WhatsApp, e-mel). Pelajaran .consilia yang dikongsi tidak pernah mengandungi kelas atau nama murid anda.'
+        'Fail yang anda simpan atau kongsi: fail Word, PDF, Excel, sandaran dan .consilia pergi ke mana sahaja anda hantar (Google Drive, WhatsApp, e-mel). Pelajaran .consilia yang dikongsi tidak pernah mengandungi kelas atau nama murid anda.',
+        'Gesaan AI: "Improve with AI" dan pembina gesaan AI hanya menyalin gesaan ke papan keratan anda dan membuka laman AI yang anda pilih (ChatGPT, Gemini, Copilot atau Canva AI). Tiada apa yang dihantar melainkan anda sendiri menampalnya di sana. Gesaan mengandungi topik, perkataan dan rancangan pelajaran anda, bukan nama murid. Laman-laman itu mempunyai dasar privasi sendiri.'
       ] },
       { h: 'Apa yang Consilia tidak pernah lakukan', p: [
         'Tiada analitik, tiada penjejak, tiada iklan, tiada kuki penjejakan, tiada penjualan atau perkongsian data.',
-        'Tiada perkhidmatan AI membaca pelajaran anda. Semua semakan (objektif SMART, penjajaran, masa) dibuat oleh peraturan dalam aplikasi.',
+        'Tiada perkhidmatan AI membaca pelajaran anda. Consilia Recommends, penyemak penjajaran dan semua alat berjalan dalam peranti anda, berdasarkan peraturan dan kandungan yang ditulis untuk Consilia.',
         'Mikrofon (meter bunyi dalam Mod Mengajar) hanya mengukur kekuatan bunyi semasa meter dibuka. Tiada apa yang dirakam atau disimpan.',
         'Pengecaman teks untuk buku teks imbasan berjalan dalam peranti anda. Halaman tidak pernah dimuat naik.'
       ] },
