@@ -11,6 +11,7 @@
   import Differentiate from './Differentiate.svelte';
   import Worksheets from './Worksheets.svelte';
   import Manage from './Manage.svelte';
+  import SlidesPick from '../slides/SlidesPick.svelte';
   import ContextBar from './ContextBar.svelte';
   import { ctx, hasCtx } from '../../lib/tools/context.svelte';
 
@@ -24,6 +25,7 @@
     { id: 'bbm', icon: '✂️', title: 'BBM guide', about: '25 teaching aids with pictures, what you need and how to make them step by step.', group: 'Make', keys: 'bbm bahan bantu mengajar teaching aids kad imbas flashcard puppet boneka dice dadu spinner make buat craft' },
     { id: 'worksheets', icon: '📝', title: 'Worksheet maker', about: 'Flashcards, gap-fill, matching, strips, tiered worksheets, rubrics. Print offline.', group: 'Make', keys: 'worksheet lembaran kerja printable cetak flashcard gap fill matching rubric exit ticket' },
     { id: 'chant', icon: '🎵', title: 'Chant maker', about: 'Turn your key words into a catchy chant with actions.', group: 'Make', keys: 'chant song lagu nyanyian rhyme poem sajak music' },
+    { id: 'slides', icon: '🖼', title: 'Lesson slides', about: 'Turn a lesson plan into a full slide deck. Present it, or download PowerPoint for Canva and Google Slides.', group: 'Make', keys: 'slides slaid powerpoint pptx canva google slides presentation pembentangan projector deck tayangan' },
     { id: 'ai', icon: '🤖', title: 'AI prompt builder', about: 'Ready prompts for ChatGPT, Gemini, Copilot or Canva AI: texts, questions, songs, pictures.', group: 'Make', keys: 'ai chatgpt gemini copilot canva prompt text story questions soalan cerita' },
     { id: 'games', icon: '🎮', title: 'Classroom games', about: 'Spin wheel, Unjumble, Mystery word and Quiz show on the projector. Offline.', group: 'Teach', keys: 'game permainan projector wheel spin roda quiz kuiz unjumble mystery word teka' },
     { id: 'digital', icon: '🌐', title: 'Digital tools', about: 'Ready-made Wordwall, Liveworksheets, Quizizz, StoryWeaver and more for your topic.', group: 'Teach', keys: 'digital online wordwall liveworksheets quizizz kahoot youtube video internet tmk ict' },
@@ -38,8 +40,8 @@
   <div class="stack">
     <a class="btn btn-text back" href={href('tools')}><Icon name="back" size={18} />Tools</a>
     <h1><span aria-hidden="true">{current.icon}</span> {current.title}</h1>
-    {#if !['bbm', 'manage'].includes(current.id)}<ContextBar />{/if}
-    {#if current.id === 'ideas'}<Ideas />{:else if current.id === 'bbm'}<BbmGuide />{:else if current.id === 'digital'}<DigitalTools />{:else if current.id === 'games'}<Games />{:else if current.id === 'ai'}<Prompts />{:else if current.id === 'objectives'}<ObjectiveWriter />{:else if current.id === 'chant'}<Chant />{:else if current.id === 'differentiate'}<Differentiate />{:else if current.id === 'worksheets'}<Worksheets />{:else if current.id === 'manage'}<Manage />{/if}
+    {#if !['bbm', 'manage', 'slides'].includes(current.id)}<ContextBar />{/if}
+    {#if current.id === 'ideas'}<Ideas />{:else if current.id === 'bbm'}<BbmGuide />{:else if current.id === 'digital'}<DigitalTools />{:else if current.id === 'games'}<Games />{:else if current.id === 'ai'}<Prompts />{:else if current.id === 'objectives'}<ObjectiveWriter />{:else if current.id === 'chant'}<Chant />{:else if current.id === 'differentiate'}<Differentiate />{:else if current.id === 'worksheets'}<Worksheets />{:else if current.id === 'manage'}<Manage />{:else if current.id === 'slides'}<SlidesPick />{/if}
   </div>
 {:else}
   <div class="stack">
@@ -49,6 +51,7 @@
     {#if hasCtx()}
       <div class="quick" aria-label="Quick actions for this lesson">
         {#if ctx.lessonId}<a class="btn btn-outline" href={href('plan', 'edit', ctx.lessonId, 'flow')}>📄 Open the lesson plan</a>{:else}<a class="btn btn-gold" href={href('plan', 'new', 'recommend')}>✨ Plan this lesson</a>{/if}
+        {#if ctx.lessonId}<a class="btn btn-outline" href={href('plan', 'slides', ctx.lessonId)} data-quick="slides">🖼 Slides for this lesson</a>{/if}
         <a class="btn btn-outline" href={href('tools', 'games')} data-quick="games">🎮 Games from my words</a>
         <a class="btn btn-outline" href={href('tools', 'ideas')}>💡 Activity ideas</a>
         <a class="btn btn-outline" href={href('tools', 'objectives')}>🎯 An objective</a>

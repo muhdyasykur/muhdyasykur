@@ -54,6 +54,12 @@
     <label class="field"><span>Method: how you check</span><input id="mt-method" class="input" bind:value={lesson.assessment.method} placeholder="e.g. Checklist while monitoring, questioning" /></label>
   </section>
 
+  <section class="card stack slides-card">
+    <h3>🖼 Lesson slides</h3>
+    <p class="muted small">{lesson.slides ? `${lesson.slides.slides.length} slides made from this plan.` : 'Turn this plan into a full slide deck for the projector, with your notes on every slide.'} Present them here or in Teach mode, or download PowerPoint for Canva, Google Slides or PowerPoint. Works offline.</p>
+    <div class="row"><a id="mt-slides" class="btn btn-gold" href={href('plan', 'slides', lesson.id)}>{lesson.slides ? 'Open lesson slides' : 'Make lesson slides'}</a></div>
+  </section>
+
   <MaterialsStudio bind:lesson />
 
   <section class="card stack">

@@ -1,6 +1,6 @@
 # Consilia test plan and results
 
-Version tested: **1.0.0-beta.4** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
+Version tested: **1.0.0-beta.5** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
 (`vite preview`). Commands are run from `app/`; see the README.
 
 ## Summary
@@ -8,22 +8,22 @@ Version tested: **1.0.0-beta.4** · 17 November 2026 · Chromium (Playwright 1.6
 | Area | Method | Pass criterion | Result |
 |---|---|---|---|
 | Type safety | `npm run check` (svelte-check, 569 files) | 0 errors, 0 warnings | ✅ 0 / 0 |
-| Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages, the Recommends engine (every SoW lesson planned and checked), attendance register, My day, yearly plan extraction (Malay/English dates, holidays, a real .docx) | All pass | ✅ 127 tests in 30 files |
+| Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages, the Recommends engine (every SoW lesson planned and checked), attendance register, My day, yearly plan extraction (Malay/English dates, holidays, a real .docx), lesson slides and PowerPoint (opened and checked), Cloud AI (model choice, errors, key in a header, nothing personal sent, answers checked) | All pass | ✅ 142 tests in 32 files |
 | Curriculum data | `npm run validate:curriculum` | Every SoW reference resolves | ✅ 1,489 lessons, all valid |
-| Core journeys | 8 browser suites, 246 checks (below) | All pass, no console errors | ✅ 246 / 246 |
-| Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 47 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
+| Core journeys | 9 browser suites, 297 checks (below) | All pass, no console errors | ✅ 297 / 297 |
+| Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 50 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
 | Tap targets | Same script, 390 × 844 phone | Every control ≥ 44 px (or its label) | ✅ none smaller |
 | Text size | Same script, root font at 200% on a phone | No horizontal scrolling | ✅ none |
 | Reduced motion | `e2e:m7` with `prefers-reduced-motion: reduce` | No splash, no confetti | ✅ |
-| Performance | `npm run perf`: emulated phone, 4× slower CPU, fast 3G (1.6 Mbps, 150 ms) | First visit usable < 6 s; repeat < 2.5 s | ✅ 2.1 s (259 KB), repeat 0.3 s (0 KB) |
+| Performance | `npm run perf`: emulated phone, 4× slower CPU, fast 3G (1.6 Mbps, 150 ms) | First visit usable < 6 s; repeat < 2.5 s | ✅ 2.1 s (302 KB), repeat 0.2 s (0 KB) |
 | Offline | `smoke`, `e2e:m5`, `e2e:m7` with the network switched off | Every core feature works offline | ✅ incl. textbooks, saved videos (with seeking) and text recognition |
-| Security: CSP | Built `index.html` carries a strict policy; all suites run with it enforced | No blocked resources in any journey | ✅ |
+| Security: CSP | Built `index.html` carries a strict policy (outside addresses: the feedback form and, only with Cloud AI on, Google's Gemini API); all suites run with it enforced | No blocked resources in any journey | ✅ |
 | Security: escaping | Code review: Svelte escapes all text; the only raw HTML is the QR code SVG made by the `qrcode` library from a URL | No user text rendered as HTML | ✅ |
 | Security: imports | Unit tests + `e2e:m7`: damaged backup, newer-version backup, damaged .consilia | Refused with a plain message, nothing changed | ✅ |
 | Security: encryption | `e2e:teach`: PIN set → names stored as `enc:v1:…`; wrong PIN refused; right PIN restores names | Round trip works | ✅ |
 | Dependencies | `npm audit --omit=dev` | No known vulnerabilities in shipped code | ✅ 0 |
 | Error handling | `e2e:m7` fault injection: every database write fails (full device) | Plain message + next step, no data loss, form stays open | ✅ |
-| Privacy | `e2e:m7` checks text recognition loads nothing from other sites; Feedback Garden posts only the listed fields (`e2e:m6`) | Nothing else leaves the device | ✅ |
+| Privacy | `e2e:m7` checks text recognition loads nothing from other sites; Feedback Garden posts only the listed fields (`e2e:m6`); `e2e:m10` checks nothing goes to Google until Cloud AI is on, requests hold no pupil or class names, the key travels in a header and is never in backups | Nothing else leaves the device | ✅ |
 
 ## Browser suites
 
@@ -37,7 +37,16 @@ Version tested: **1.0.0-beta.4** · 17 November 2026 · Chromium (Playwright 1.6
 | `e2e:m7` | 26 | Privacy page EN/BM, manual search and links, six videos (length, EN/BM captions, saved for offline, byte ranges offline, unsaved video offline message), text recognition of a scanned PDF (online, then offline), fault injection, offline tool notice, reduced motion |
 
 | `e2e:m9` | 29 | "Lesson plan" wording; attendance (marks, reasons, everyone else present, saved, month view, Excel, Teach mode keeps the teacher's marks); My day (periods in time order, own items, reorder, ticks kept, Plan/Attendance per period); yearly plans from Word, Excel and CSV, old .doc message, build from SoW with holiday weeks; yearly, monthly and weekly views; periods matched to SoW lessons opening New lesson plan with lesson, class and time; phone layouts |
+| `e2e:m10` | 51 | Lesson slides from a Consilia-planned lesson (three looks, full deck, teacher's words, no pupil names), edit, add a question, move, delete, saved after reload; presenting (arrows, answer reveal, notes, Esc); PowerPoint opened and checked (every slide, speaker notes); Canva/Google Slides steps; AI by copy and paste (no pupil or class names, add and remove AI slides); Cloud AI (nothing sent before it is on, agreements required, key test and model choice, key in a header, Gemini slides with no pupil or class names, free-limit message, ask Gemini here, key not in backups, off and forget); Tools entry and search; Teach mode slides with the clicker; offline download; SoW teacher steps kept off the slides; phone layouts |
 | `e2e:m8` | 51 | Lesson bar shared by all tools (latest RPH, choose an RPH, Try an example), Add to my lesson (activity, objective, chant), Tools for this step in the builder, search by need and Malay words, game keyboard shortcuts, "Improve my lesson plan" filled from the RPH; Consilia Recommends (class questions, planning log, scripts with the teacher's words, 100 score, teaching aid making steps, Another idea on one stage only, preparation checklist, AI prompt without pupil names, saved RPH, class answers remembered, offline-only suggestions without internet), Tools hub, all 11 tools, four projector games, Games in Teach mode, terms page, phone layouts |
+
+## Found and fixed during M10 testing
+
+- A slide edit made just before leaving the slides page was saved with no lesson id (the page had closed), which showed
+  an error message. The save now keeps the lesson id and also finishes when the page is hidden.
+- Five or more key words overflowed the slide on screen (found by recording the tutorial video). Slide text now fits by
+  number of lines as well as length, and long word lists use two columns; the PowerPoint uses the same rule.
+- AI content added parts the teacher had not ticked; only the ticked parts are added now.
 
 ## Found and fixed during M8 testing
 
@@ -66,6 +75,8 @@ Version tested: **1.0.0-beta.4** · 17 November 2026 · Chromium (Playwright 1.6
 
 | Item | Why | Plan |
 |---|---|---|
+| Cloud AI tested against an intercepted copy of Google's API, not the live service | No real key in automated tests | Pilot: one volunteer tries Cloud AI with a personal key; check the model chosen and the quality of texts |
+| PowerPoint checked by unzipping and in LibreOffice, not in PowerPoint, Canva or Google Slides | Those apps are not in the test machine | Pilot: import one deck into Canva and Google Slides |
 | Real devices (iPhone Safari, Samsung Internet) not tested | Automated tests run in Chromium only | Pilot: at least 3 iPhones and 3 Samsung phones (`pilot.md`) |
 | Screen-reader passes (TalkBack, VoiceOver) | Need a person and a device | Pilot volunteer with TalkBack; axe covers structure and names |
 | Word file in Google Docs and WPS | Checked in code and by unzipping, not in each app | Pilot day 2–3 |

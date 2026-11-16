@@ -19,6 +19,7 @@
   import PlanTabs from './PlanTabs.svelte';
   import Day from './Day.svelte';
   import YearPlan from './YearPlan.svelte';
+  import Slides from '../slides/Slides.svelte';
 
   let lessons = $state<Lesson[] | null>(null);
   let confirm = $state('');
@@ -68,6 +69,8 @@
     <YearPlan /></div>
 {:else if route.parts[0] === 'reflect' && route.parts[1]}
   {#key route.parts[1]}<Reflect id={route.parts[1]} />{/key}
+{:else if route.parts[0] === 'slides' && route.parts[1]}
+  {#key route.parts[1]}<Slides id={route.parts[1]} />{/key}
 {:else if route.parts[0] === 'edit' && route.parts[1]}
   <Builder id={route.parts[1]} step={route.parts[2] ?? 'setup'} />
 {:else}
@@ -102,6 +105,7 @@
           </div>
           <div class="row actions">
             <a class="btn btn-text" href={href('teach', l.id)}>Teach</a>
+            <a class="btn btn-text" href={href('plan', 'slides', l.id)} data-slides={l.id}>Slides</a>
             <a class="btn btn-text" href={href('plan', 'edit', l.id, 'review')}>Print</a>
             {#if l.status === 'taught'}<a class="btn btn-text" href={href('plan', 'reflect', l.id)}>Reflect</a>{/if}
             <button class="btn btn-text" type="button" onclick={() => share(l.id)} data-share={l.id}>Share</button>

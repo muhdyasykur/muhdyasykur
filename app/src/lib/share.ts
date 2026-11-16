@@ -11,7 +11,13 @@ export interface Envelope { format: typeof FORMAT; version: 1; exportedAt: strin
 
 export function exportLesson(l: Lesson, appVersion: string): string {
   const lesson: Lesson = { ...structuredClone(l), classId: null, status: 'draft' };
-  lesson.header = { ...lesson.header, pupils: null };
+  const cn = lesson.header.className.trim();
+  lesson.header = { ...lesson.header, pupils: null, className: '', levelLabel: '' };
+  // the class name never travels, not even on a slide
+  if (lesson.slides && cn) {
+    const strip = (x: string) => x.split(` · ${cn}`).join('').split(cn).join('').trim();
+    lesson.slides.slides = lesson.slides.slides.map((sl) => ({ ...sl, title: strip(sl.title), lines: sl.lines.map(strip).filter(Boolean), notes: strip(sl.notes) }));
+  }
   return JSON.stringify({ format: FORMAT, version: 1, exportedAt: new Date().toISOString(), app: appVersion, lesson } satisfies Envelope);
 }
 const isStr = (x: unknown) => typeof x === 'string';

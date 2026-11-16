@@ -18,6 +18,7 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M7 QA (accessibility, security, performance, fault injection), six captioned tutorial videos, searchable manual, privacy page (EN/BM), on-device text recognition for scanned textbooks, pilot kit | Done: 1.0.0-beta.1 |
 | M8 Consilia Recommends (whole-lesson planning engine), Tools tab with 11 tools, projector games, BBM guide with pictures, AI prompt builder, terms of use | Done: 1.0.0-beta.2 |
 | M9 Yearly plan (upload RPT or build from SoW; yearly, monthly, weekly views), My day, attendance register, "lesson plan" wording, ten re-recorded videos | Done: 1.0.0-beta.4 |
+| M10 Lesson slides from any lesson plan (editor, three looks, presenter with clicker keys, in Teach mode, PowerPoint for Canva and Google Slides), optional Cloud AI with the teacher's own Google Gemini key (slide texts, dialogues, questions; "ask Gemini here"), 11 videos | Done: 1.0.0-beta.5 |
 | Pilot: two weeks with trainee teachers (see `docs/pilot.md`), then 1.0.0 | Next |
 
 ## Run it
@@ -38,6 +39,7 @@ Milestone 7 checks (same preview server):
 
 ```bash
 npm run e2e:m9    # yearly plans (Word, Excel, CSV, build from SoW), My day, attendance
+npm run e2e:m10   # lesson slides, PowerPoint, Teach mode, AI paste, Cloud AI (Google intercepted)
 npm run e2e:m8    # Consilia Recommends, Tools hub, every tool, games, terms page
 npm run e2e:m7    # privacy, manual, videos offline, text recognition online and offline, fault injection, reduced motion
 npm run a11y      # axe-core on 31 screens in light and dark, 44 px tap targets and 200% text on a phone

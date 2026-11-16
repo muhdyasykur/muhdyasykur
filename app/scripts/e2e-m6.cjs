@@ -39,7 +39,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.click('#terms-accept');
   await page.waitForSelector('#terms-title', { state: 'detached' });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('consilia.terms') || 'null'));
-  check(saved && saved.v === 1 && !!saved.at, 'agreement is saved with the terms version and date');
+  check(saved && saved.v === 2 && !!saved.at, 'agreement is saved with the terms version and date');
   await page.reload();
   await page.waitForTimeout(400);
   check((await page.locator('#terms-title').count()) === 0, 'the terms are not asked again once agreed');

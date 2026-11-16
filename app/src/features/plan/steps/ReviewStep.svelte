@@ -93,6 +93,7 @@
     <div class="row">
       <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>Print or save as PDF</button>
       <button id="rv-word" class="btn btn-primary" type="button" onclick={word}>Download Word (.docx)</button>
+      <a id="rv-slides" class="btn btn-outline" href={href('plan', 'slides', lesson.id)}>🖼 Lesson slides</a>
       {#if wordState}<span class="muted small" role="status">{wordState}</span>{/if}
     </div>
     <p class="muted small">PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.</p>

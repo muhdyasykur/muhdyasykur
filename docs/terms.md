@@ -1,6 +1,6 @@
 # Terms of use
 
-_Terms of use, version 1 · 16 November 2026_
+_Terms of use, version 2 · 17 November 2026_
 
 Consilia is a free planning tool made by a trainee teacher for trainee teachers. It helps you plan and teach; it does not replace your judgement, your mentor or the official KPM documents. Please read and agree to these points.
 
@@ -17,6 +17,8 @@ The alignment score checks the plan on paper. It cannot tell how a lesson will g
 Read every activity, worksheet and link before class. Make sure content is suitable for the age, language level, culture and religion of your pupils.
 
 Outside websites (Canva, Wordwall, YouTube, Quizizz and others) and AI chatbots are run by other companies. Their content and adverts can change, and AI answers can be wrong. Preview them first and never let pupils browse unsupervised.
+
+Cloud AI is optional and off until you turn it on with your own Google key. When you use it, what is sent is handled by Google under Google's terms, and you are responsible for the key and for checking every AI answer.
 
 When you make teaching aids, use safe materials and do the cutting yourself for young pupils.
 
@@ -52,7 +54,7 @@ These terms can change with a new version. If they do, Consilia will ask you to 
 
 # Terma penggunaan
 
-_Terma penggunaan, versi 1 · 16 November 2026_
+_Terma penggunaan, versi 2 · 17 November 2026_
 
 Consilia ialah alat perancangan percuma yang dibina oleh seorang guru pelatih untuk guru pelatih. Ia membantu anda merancang dan mengajar; ia tidak menggantikan pertimbangan anda, mentor anda atau dokumen rasmi KPM. Sila baca dan bersetuju dengan perkara berikut.
 
@@ -69,6 +71,8 @@ Skor penjajaran menyemak rancangan di atas kertas. Ia tidak dapat menentukan bag
 Baca setiap aktiviti, lembaran kerja dan pautan sebelum kelas. Pastikan kandungannya sesuai dengan umur, tahap bahasa, budaya dan agama murid anda.
 
 Laman web luar (Canva, Wordwall, YouTube, Quizizz dan lain-lain) dan chatbot AI dikendalikan oleh syarikat lain. Kandungan dan iklannya boleh berubah, dan jawapan AI boleh salah. Pratonton dahulu dan jangan biarkan murid melayari tanpa pengawasan.
+
+AI Awan adalah pilihan dan dimatikan sehingga anda menghidupkannya dengan kunci Google anda sendiri. Apabila anda menggunakannya, apa yang dihantar dikendalikan oleh Google di bawah terma Google, dan anda bertanggungjawab atas kunci itu dan menyemak setiap jawapan AI.
 
 Apabila membuat BBM, gunakan bahan yang selamat dan lakukan kerja memotong sendiri untuk murid kecil.
 

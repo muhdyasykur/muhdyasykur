@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.0.0-beta.5 · 17 November 2026 (milestone 10: lesson slides and Cloud AI)
+
+**New**
+- **Lesson slides.** Any lesson plan becomes a full slide deck for the projector, made on the device and offline:
+  topic, "I can" goals, warm-up, key words, the target sentence with examples, one slide per activity (pupil steps,
+  pairs or groups, minutes), quick-check questions with answers, a thumbs check, an exit ticket and a closing slide.
+  Teacher notes go with every slide; steps written only for the teacher stay in the notes. Three looks. Edit, move,
+  duplicate, delete and add slides; the deck is saved with the lesson plan and in backups. Open it from Materials,
+  Review, the Plan list or Tools → Lesson slides.
+- **Present** full screen with the arrow keys, Space or a presentation clicker (a question shows its answer on the
+  next press), F for full screen, N for notes. The 🖼 Slides tool in Teach mode opens at the stage being taught.
+- **PowerPoint (.pptx)** download, offline, with speaker notes and an answer slide after each question. Opens in
+  PowerPoint, and imports into **Canva** (Create a design → Import file) and **Google Slides**. On a phone it can be sent
+  straight to the Canva or Google Slides app.
+- **Add more with AI** on the slides: a reading or listening text, a dialogue, questions, word meanings or more
+  examples at the pupils' level, placed in the right part of the deck and marked AI. Copy the prompt to any AI chat and
+  paste the answer back, or:
+- **Cloud AI (optional)**, Me → Cloud AI: the teacher's own free Google Gemini key. Off by default; turned on only with a
+  key and three agreements (what is sent, Google's free-tier terms, checking AI answers). "Add with Gemini" on the
+  slides and "ask Gemini here" in the AI prompt builder and Improve with AI. Consilia picks the newest Flash model the
+  key can use. Only lesson content is sent (year, topic, theme, skill, key words, sentence, objectives), never pupils'
+  names, class names, marks or the teacher's details, and the teacher can see exactly what is sent. The key stays in
+  this browser only (not in backups or shared lessons) and can be removed in one tap. Plain messages for a wrong key,
+  a used-up free limit, no internet and Google's safety filter.
+- New video: Lesson slides (11 videos).
+
+**Changed**
+- Terms of use version 2 (a clause on Cloud AI): teachers are asked to agree again. Privacy page explains Cloud AI and
+  slide files. Manual: Lesson slides and Cloud AI articles (46 articles). Tools has 12 tools.
+- Shared .consilia lessons no longer carry the class name (in the header or on slides), as the privacy page says.
+- Security: the Content-Security-Policy allows one more address, Google's Gemini API, used only when Cloud AI is on.
+
 ## 1.0.0-beta.4 · 17 November 2026 (milestone 9: plans, attendance, my day)
 
 **New**

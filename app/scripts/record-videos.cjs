@@ -1,4 +1,4 @@
-// Records the six Help videos from the real app (blueprint F25) with a visible cursor, a title card and captions in
+// Records the Help videos from the real app (blueprint F25) with a visible cursor, a title card and captions in
 // English and Bahasa Melayu (WebVTT, timed from the recording itself). Output: public/videos/<id>.mp4 + .en.vtt + .ms.vtt
 // Needs ffmpeg and `vite preview --port 4173` running a fresh build.   Usage: npm run videos [-- id ...]
 const { chromium } = require('playwright');
@@ -407,6 +407,48 @@ const VIDEOS = {
     await d.say('No file? "Build it from the Scheme of Work" lays out the lessons week by week. Next: watch "Classes and PBD".', 'Tiada fail? "Build it from the Scheme of Work" menyusun pelajaran minggu demi minggu. Seterusnya: tonton "Kelas dan PBD".', 3400);
   } },
 
+  'slides': { title: 'Lesson slides', ms: 'Slaid pelajaran',
+    async setup(page, s) { // a lesson planned by Consilia, so the slides have full activities (not recorded)
+      await page.goto(base + '#/plan/new/recommend');
+      await page.waitForSelector('#rc-words');
+      await page.selectOption('#nr-class', { label: '4 Bestari · Year 4 SK' });
+      await page.click('[data-sow="2"]');
+      await page.fill('#rc-words', 'Malaysia, Japan, China, India, Thailand');
+      await page.fill('#rc-sentence', 'He is from …');
+      await page.click('#nr-create');
+      await page.waitForSelector('#rc-use', { timeout: 20000 });
+      await page.click('#rc-use');
+      await page.waitForURL(/review$/);
+      s.slidesLesson = page.url().split('/').slice(-2)[0];
+      await page.goto(base + '#/today'); await page.waitForTimeout(600);
+    },
+    async run(d, page, s) {
+    await page.goto(base + `#/plan/edit/${s.slidesLesson}/materials`); await d.wait(900);
+    await d.say('Any lesson plan can become slides for the projector. In Materials, tap Make lesson slides.', 'Mana-mana rancangan pelajaran boleh menjadi slaid untuk projektor. Dalam Materials, tekan Make lesson slides.');
+    await d.click('#mt-slides', 1200);
+    await d.say('Choose a look. You can change it later.', 'Pilih rupa. Anda boleh menukarnya kemudian.');
+    await d.click('[data-make="bright"]', 1500);
+    await d.say('Consilia makes the whole deck from your plan: goals, key words, the target sentence, every activity, questions and an exit ticket.', 'Consilia membuat seluruh slaid daripada rancangan anda: matlamat, perkataan utama, ayat sasaran, setiap aktiviti, soalan dan tiket keluar.', 3600);
+    await d.point('[data-thumb="3"]'); await page.mouse.wheel(0, 400); await d.wait(900); await page.mouse.wheel(0, -400); await d.wait(400);
+    await d.say('Tap a slide to change its words. Your teacher notes go with every slide.', 'Ketik slaid untuk menukar perkataannya. Nota guru anda ada pada setiap slaid.');
+    await d.click('[data-thumb="5"]', 900);
+    await d.point('#sl-notes'); await d.wait(1200);
+    await d.say('Press Present. Use the arrow keys or a clicker. A question shows its answer on the next press.', 'Tekan Present. Gunakan kekunci anak panah atau klik. Soalan menunjukkan jawapannya pada tekanan seterusnya.');
+    await d.click('[data-thumb="0"]', 500);
+    await d.click('#sl-present', 1500);
+    for (let i = 0; i < 4; i++) { await page.keyboard.press('ArrowRight'); await d.wait(1300); }
+    const q = await page.locator('.show [data-slide-jump] option').evaluateAll((os) => os.findIndex((o) => o.textContent.includes('Quick check')));
+    if (q > 0) { await page.selectOption('.show [data-slide-jump]', String(q)); await d.wait(1500); await page.keyboard.press('ArrowRight'); await d.wait(1800); }
+    await page.keyboard.press('Escape'); await d.wait(700);
+    await d.say('In Teach mode, the Slides tool opens them at the stage you are teaching.', 'Dalam Mod Mengajar, alat Slides membukanya pada peringkat yang sedang anda ajar.');
+    await d.say('Download PowerPoint to open it in PowerPoint, or import it into Canva or Google Slides to add pictures.', 'Muat turun PowerPoint untuk membukanya dalam PowerPoint, atau import ke Canva atau Google Slides untuk menambah gambar.', 3200);
+    await Promise.all([page.waitForEvent('download'), d.click('#sl-pptx', 1200)]);
+    await d.click('details.help summary', 1800);
+    await d.say('Want a reading text, a dialogue or more questions? Copy the prompt to any AI, or turn on Cloud AI in Me with your own free Gemini key.', 'Mahu teks bacaan, dialog atau lebih banyak soalan? Salin gesaan ke mana-mana AI, atau hidupkan Cloud AI dalam Saya dengan kunci Gemini percuma anda sendiri.', 3800);
+    await d.point('.aibox'); await d.wait(1200);
+    await d.say('AI slides are marked AI, so you check them before class. Next: watch "Classes and PBD".', 'Slaid AI ditanda AI, supaya anda menyemaknya sebelum kelas. Seterusnya: tonton "Kelas dan PBD".', 3000);
+  } },
+
   'backup': { title: 'Back up and restore', ms: 'Sandaran dan pemulihan', async run(d, page, s) {
     await page.goto(base + '#/today'); await d.wait(900);
     await d.say('Everything lives on your device, so keep a backup. Today reminds you every week.', 'Semuanya disimpan dalam peranti anda, jadi simpan sandaran. Hari Ini mengingatkan anda setiap minggu.');
@@ -444,6 +486,7 @@ const VIDEOS = {
     const ctx = await browser.newContext({ viewport: { width: W, height: H }, storageState: s.state, recordVideo: { dir, size: { width: W, height: H } }, acceptDownloads: true });
     await ctx.addInitScript(prep);
     const page = await ctx.newPage();
+    if (v.setup) await v.setup(page, s); // trimmed from the video
     const t0 = Date.now();
     await page.goto(base + '#/today');
     await page.waitForSelector('nav');

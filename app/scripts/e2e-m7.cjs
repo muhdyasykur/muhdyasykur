@@ -74,7 +74,7 @@ function imagePdf(pages) {
 
   // ---- Videos
   const videos = await page.locator('[data-video]').count();
-  check(videos === 10, `ten tutorial videos are listed (${videos})`);
+  check(videos === 11, `eleven tutorial videos are listed (${videos})`);
   const haveFiles = fs.existsSync(path.join(__dirname, '../dist/videos/teach.mp4'));
   if (haveFiles) {
     await page.click('[data-video="teach"]');

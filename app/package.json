@@ -1,7 +1,7 @@
 {
   "name": "consilia",
   "private": true,
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "type": "module",
   "scripts": {
     "predev": "node scripts/copy-ocr.mjs",
@@ -23,7 +23,8 @@
     "docs": "node scripts/make-docs.mjs",
     "videos": "node scripts/record-videos.cjs",
     "a11y": "node scripts/a11y.cjs",
-    "perf": "node scripts/perf.cjs"
+    "perf": "node scripts/perf.cjs",
+    "e2e:m10": "node scripts/e2e-m10.cjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
@@ -48,8 +49,12 @@
     "docx": "^9.15.4",
     "jszip": "^3.10.2",
     "pdfjs-dist": "^4.10.38",
+    "pptxgenjs": "4.0.1",
     "qrcode": "^1.5.4",
     "tesseract.js": "7.0.0",
     "write-excel-file": "4.1.1"
+  },
+  "overrides": {
+    "image-size": "2.0.4"
   }
 }

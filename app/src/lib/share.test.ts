@@ -13,6 +13,7 @@ describe('lesson sharing', () => {
   it('round-trips a lesson without class data, as a new draft', () => {
     const text = exportLesson(l, '0.4.0');
     expect(text).not.toContain('class-1');
+    expect(text).not.toContain('4 Zhong');
     const r = importLesson(text);
     expect(r.ok).toBe(true);
     if (r.ok) {
@@ -38,4 +39,13 @@ describe('lesson sharing', () => {
     expect(r.ok && r.lesson.links.map((x) => x.label)).toEqual(['ok']);
   });
   it('names the file after the topic', () => expect(shareName(l)).toBe('Where-are-you-from-Y4.consilia'));
+  it('keeps the slides but takes the class name off them', async () => {
+    const { buildDeck } = await import('./slides/deck');
+    const withSlides = { ...l, slides: buildDeck(l) };
+    expect(JSON.stringify(withSlides.slides)).toContain('4 Zhong');
+    const text = exportLesson(withSlides, '1.0.0');
+    expect(text).not.toContain('4 Zhong');
+    const r = importLesson(text);
+    expect(r.ok && r.lesson.slides?.slides[0].lines[0]).toBe('Year 4');
+  });
 });

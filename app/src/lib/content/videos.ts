@@ -6,6 +6,7 @@ export const VIDEOS: Video[] = [
   { id: 'recommend', title: 'Let Consilia plan a lesson', ms: 'Biar Consilia rancang pelajaran', about: 'Tell Consilia about your class and get a whole lesson, step by step.' },
   { id: 'objectives', title: 'Objectives that pass SMART', ms: 'Objektif yang lulus SMART', about: 'Fix a vague objective with the ABCD boxes and success criteria.' },
   { id: 'tools', title: 'The Tools page', ms: 'Halaman Alat', about: 'Say your lesson once; games, teaching aids and activities fill themselves in.' },
+  { id: 'slides', title: 'Lesson slides', ms: 'Slaid pelajaran', about: 'Turn a lesson plan into slides; present them or open them in Canva.' },
   { id: 'teach', title: 'Teach mode', ms: 'Mod Mengajar', about: 'Attendance, the stage clock and the classroom toolkit.' },
   { id: 'attendance-day', title: 'Attendance and My day', ms: 'Kehadiran dan Hari Saya', about: 'Take attendance in seconds and arrange your day.' },
   { id: 'yearly-plan', title: 'Your yearly plan', ms: 'Rancangan tahunan anda', about: 'Upload your RPT; see it by year, month and week.' },

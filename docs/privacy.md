@@ -18,11 +18,15 @@ Files you save or share: Word, PDF, Excel, backup and .consilia files go whereve
 
 AI prompts: "Improve with AI" and the AI prompt builder only copy a prompt to your clipboard and open the AI site you pick (ChatGPT, Gemini, Copilot or Canva AI). Nothing is sent unless you paste it there yourself. Prompts contain your topic, words and lesson plan, never pupils' names. Those sites have their own privacy policies.
 
+Cloud AI (optional, off by default): only if you turn it on in Me → Cloud AI, paste your own Google Gemini key and agree to the notice, the AI buttons send the lesson's year, topic, theme, skill, key words, target sentence and objectives (or the prompt you see) straight from your device to Google, which sends back text. Pupils' names, class names, marks, attendance and your details are never sent. On Google's free tier, Google may use what is sent to improve its products (Google's terms apply). Your key stays in this browser only: it is not in backups or shared lessons. Turn it off or remove the key at any time.
+
+Lesson slides and PowerPoint files are made on your device. Canva and Google Slides only see a slide file if you import it there yourself.
+
 ## What Consilia never does
 
 No analytics, no trackers, no advertising, no cookies for tracking, no selling or sharing of data.
 
-No AI service reads your lessons. Consilia Recommends, the alignment checker and all the tools run on your device, from rules and content written for Consilia.
+No AI service reads your lessons unless you turn on Cloud AI and tap an AI button. Consilia Recommends, lesson slides, the alignment checker and all the tools run on your device, from rules and content written for Consilia.
 
 The microphone (noise meter in Teach mode) only measures loudness while the meter is open. Nothing is recorded or saved.
 
@@ -80,11 +84,15 @@ Fail yang anda simpan atau kongsi: fail Word, PDF, Excel, sandaran dan .consilia
 
 Gesaan AI: "Improve with AI" dan pembina gesaan AI hanya menyalin gesaan ke papan keratan anda dan membuka laman AI yang anda pilih (ChatGPT, Gemini, Copilot atau Canva AI). Tiada apa yang dihantar melainkan anda sendiri menampalnya di sana. Gesaan mengandungi topik, perkataan dan rancangan pelajaran anda, bukan nama murid. Laman-laman itu mempunyai dasar privasi sendiri.
 
+AI Awan (pilihan, dimatikan secara lalai): hanya jika anda menghidupkannya di Me → Cloud AI, menampal kunci Google Gemini anda sendiri dan bersetuju dengan notisnya, butang AI menghantar tahun, topik, tema, kemahiran, perkataan utama, ayat sasaran dan objektif pelajaran (atau gesaan yang anda lihat) terus dari peranti anda kepada Google, yang menghantar balik teks. Nama murid, nama kelas, markah, kehadiran dan butiran anda tidak pernah dihantar. Pada peringkat percuma Google, Google mungkin menggunakan apa yang dihantar untuk menambah baik produknya (terma Google terpakai). Kunci anda kekal dalam pelayar ini sahaja: ia tiada dalam sandaran atau pelajaran yang dikongsi. Matikan atau buang kunci pada bila-bila masa.
+
+Slaid pelajaran dan fail PowerPoint dibuat dalam peranti anda. Canva dan Google Slides hanya melihat fail slaid jika anda sendiri mengimportnya ke sana.
+
 ## Apa yang Consilia tidak pernah lakukan
 
 Tiada analitik, tiada penjejak, tiada iklan, tiada kuki penjejakan, tiada penjualan atau perkongsian data.
 
-Tiada perkhidmatan AI membaca pelajaran anda. Consilia Recommends, penyemak penjajaran dan semua alat berjalan dalam peranti anda, berdasarkan peraturan dan kandungan yang ditulis untuk Consilia.
+Tiada perkhidmatan AI membaca pelajaran anda melainkan anda menghidupkan AI Awan dan menekan butang AI. Consilia Recommends, slaid pelajaran, penyemak penjajaran dan semua alat berjalan dalam peranti anda, berdasarkan peraturan dan kandungan yang ditulis untuk Consilia.
 
 Mikrofon (meter bunyi dalam Mod Mengajar) hanya mengukur kekuatan bunyi semasa meter dibuka. Tiada apa yang dirakam atau disimpan.
 

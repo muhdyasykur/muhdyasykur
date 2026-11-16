@@ -97,12 +97,12 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   // ---- Tools hub: the lesson bar is already filled with the lesson just planned
   await page.click('nav a[href="#/tools"]');
   await page.waitForSelector('[data-tool-card]');
-  check((await page.locator('[data-tool-card]').count()) === 11, 'the Tools hub lists 11 tools');
+  check((await page.locator('[data-tool-card]').count()) === 12, 'the Tools hub lists 12 tools');
   check((await page.locator('#ctx-summary').innerText()).includes('Where are you from?'), 'the lesson bar follows the lesson Consilia just planned');
   await page.click('#ctx-change');
   await page.selectOption('#ctx-lesson', lessonId);
   check((await page.locator('#ctx-summary').innerText()).includes('Year 4') && (await page.locator('a:has-text("Open the lesson plan")').count()) === 1, 'one of my RPHs can be chosen in the lesson bar');
-  check((await page.locator('[data-quick]').count()) === 1, 'quick actions for this lesson appear on the hub');
+  check((await page.locator('[data-quick="games"]').count()) === 1 && (await page.locator('[data-quick="slides"]').count()) === 1, 'quick actions for this lesson appear on the hub (games, slides)');
   await page.fill('#tools-q', 'chant');
   check((await page.locator('[data-tool-card]').count()) === 1, 'tools can be searched');
   await page.fill('#tools-q', 'kad imbas');
