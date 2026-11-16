@@ -94,16 +94,27 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   const needs = await page.locator('.dig .muted').allInnerTexts();
   check(needs.every((n) => !n.includes('internet')), 'without internet, only offline digital options are suggested');
 
-  // ---- Tools hub
+  // ---- Tools hub: the lesson bar is already filled with the lesson just planned
   await page.click('nav a[href="#/tools"]');
   await page.waitForSelector('[data-tool-card]');
   check((await page.locator('[data-tool-card]').count()) === 11, 'the Tools hub lists 11 tools');
+  check((await page.locator('#ctx-summary').innerText()).includes('Where are you from?'), 'the lesson bar follows the lesson Consilia just planned');
+  await page.click('#ctx-change');
+  await page.selectOption('#ctx-lesson', lessonId);
+  check((await page.locator('#ctx-summary').innerText()).includes('Year 4') && (await page.locator('a:has-text("Open the RPH")').count()) === 1, 'one of my RPHs can be chosen in the lesson bar');
+  check((await page.locator('[data-quick]').count()) === 1, 'quick actions for this lesson appear on the hub');
   await page.fill('#tools-q', 'chant');
   check((await page.locator('[data-tool-card]').count()) === 1, 'tools can be searched');
+  await page.fill('#tools-q', 'kad imbas');
+  check((await page.locator('[data-tool-card="bbm"]').count()) === 1, 'search understands Malay words (kad imbas → BBM guide)');
+  await page.fill('#tools-q', 'noisy class');
+  check((await page.locator('[data-tool-card="manage"]').count()) === 1, 'search understands needs (noisy class → classroom management)');
   await page.fill('#tools-q', '');
 
-  // games
+  // games: words come from the lesson
   await page.goto(base + '#/tools/games/wheel');
+  check((await page.locator('#g-words').inputValue()).includes('Japan'), 'the games are filled with the lesson\'s key words');
+  await page.click('summary:has-text("Your words")');
   await page.fill('#g-words', 'Malaysia, Japan, China, India');
   await page.click('#g-spin');
   await page.waitForFunction(() => document.querySelector('.result')?.textContent.trim().length > 1, null, { timeout: 8000 });
@@ -112,51 +123,84 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.click('[data-game="unjumble"]');
   await page.fill('#g-sent', 'He is from Japan.\nShe lives in Kota Kinabalu.');
   await page.waitForSelector('.tile');
-  await page.click('#g-reveal');
-  check((await page.locator('.answer').innerText()).includes('He is from Japan.'), 'Unjumble mixes the sentence and reveals it');
+  await page.locator('h1').click();
+  await page.keyboard.press('Space');
+  check((await page.locator('.answer').innerText()).includes('He is from Japan.'), 'Unjumble mixes the sentence and Space reveals it');
   await page.click('[data-game="mystery"]');
-  await page.click('#g-letter');
-  check((await page.locator('.letter').evaluateAll((els) => els.filter((e) => e.textContent.trim()).length)) === 1, 'Mystery word reveals one letter at a time');
+  await page.locator('h1').click();
+  await page.keyboard.press('Space');
+  check((await page.locator('.letter').evaluateAll((els) => els.filter((e) => e.textContent.trim()).length)) === 1, 'Mystery word reveals one letter per key press');
   await page.click('[data-game="quiz"]');
   await page.fill('#g-quiz', 'Where is Mount Kinabalu? | Sabah');
   await page.click('#g-answer');
   await page.click('button[aria-label="Team 2 plus one"]');
   check((await page.locator('.answer').innerText()) === 'Sabah' && (await page.locator('.team .n').nth(1).innerText()) === '1', 'Quiz show reveals answers and keeps team scores');
 
-  // the other tools
+  // the other tools, filled from the lesson bar
   await page.goto(base + '#/tools/bbm');
   check((await page.locator('[data-bbm]').count()) === 25, 'the BBM guide shows all 25 teaching aids');
   await page.click('button.pick:has-text("Phonics")');
   check((await page.locator('[data-bbm]').count()) < 25, 'teaching aids can be filtered by use');
   await page.goto(base + '#/tools/ideas');
+  await page.selectOption('#id-skill', 'Any');
   const n1 = await page.locator('[data-idea]').count();
   await page.selectOption('#id-skill', 'Reading');
   check(n1 > 0 && (await page.locator('[data-idea]').count()) < n1, 'activity ideas filter by skill');
-  await page.locator('[data-idea]').first().locator('summary').click();
-  check((await page.locator('[data-idea] ol li').count()) >= 4, 'an activity idea opens with its steps');
+  await page.selectOption('#id-skill', 'Speaking');
+  const idea = page.locator('[data-idea]').first();
+  await idea.locator('summary').click();
+  check((await idea.locator('ol li').count()) >= 4, 'an activity idea opens with its steps');
+  const ideaTitle = (await idea.locator('summary b').innerText()).replace(' ★', '');
+  await idea.locator('.add-btn').click();
+  await page.waitForSelector('[data-idea] .ok');
+  const saved = await page.evaluate((id) => new Promise((res) => { const r = indexedDB.open('consilia'); r.onsuccess = () => { const q = r.result.transaction('lessons').objectStore('lessons').get(id); q.onsuccess = () => res(q.result.stages.flatMap((s) => s.activities.map((a) => a.source || ''))); }; }), lessonId);
+  check(saved.includes(`Tools: ${ideaTitle}`), `"Add to my lesson" puts the activity into the RPH (${ideaTitle})`);
   await page.goto(base + '#/tools/objectives');
-  await page.fill('#ow-topic', 'My family');
-  await page.click('#ow-suggest');
-  check((await page.locator('.smart li.ok').count()) === 5, 'the objective writer suggests an objective that passes all five SMART checks');
+  await page.waitForSelector('#ow-out');
+  check((await page.locator('.smart li.ok').count()) === 5 && (await page.locator('#ow-out').innerText()).includes('Where are you from?'), 'the objective writer shows a SMART objective at once, from the lesson bar');
+  await page.click('#ow-use');
+  check((await page.locator('[role=status]').last().innerText()).includes('Saved as the main objective'), 'the objective can be saved straight into the RPH');
   await page.goto(base + '#/tools/chant');
-  await page.fill('#ch-words', 'Japan, China, India'); await page.fill('#ch-frame', 'He is from …');
-  check((await page.locator('[data-chant="echo"] .lines').innerText()).includes('He is from Japan'), 'the chant maker writes chants with the teacher\'s words');
+  check((await page.locator('[data-chant="echo"] .lines').innerText()).includes('He is from Japan'), 'the chant maker uses the lesson\'s words and sentence with no typing');
+  await page.locator('[data-chant="echo"] .add-chant').click();
+  await page.waitForFunction(() => document.querySelector('[data-chant="echo"]').innerText.includes('Added'), null, { timeout: 5000 }).catch(() => {});
+  check((await page.locator('[data-chant="echo"]').innerText()).includes('Added to the appendices'), 'a chant can be added to the RPH appendices');
   await page.goto(base + '#/tools/differentiate');
   await page.fill('#df-act', 'Pupils interview a partner about hobbies');
   check((await page.locator('.tiers ul').count()) === 3, 'the differentiation helper gives Low, Moderate and High versions');
   await page.goto(base + '#/tools/ai');
-  await page.click('[data-kind="questions"]');
-  await page.fill('#ai-topic', 'Healthy habits');
+  await page.click('[data-kind="improve"]');
+  await page.waitForTimeout(400);
   await page.click('.ai-copy');
-  check((await page.evaluate(() => navigator.clipboard.readText())).includes('comprehension questions'), 'the AI prompt builder copies a prompt for the chosen task');
+  const p1 = await page.evaluate(() => navigator.clipboard.readText());
+  check(p1.includes('LESSON PLAN') && p1.includes('Stages:') && !p1.includes('Aina'), '"Improve my lesson plan" fills in the whole RPH, without pupil names');
   await page.goto(base + '#/tools/digital');
-  await page.fill('#dt-topic', 'animals');
-  check((await page.locator('[data-digital="wordwall"] a').getAttribute('href')).includes('animals'), 'digital tools link to ready-made activities for the topic');
+  check((await page.locator('[data-digital="wordwall"] a').getAttribute('href')).includes('Where'), 'digital tools search for the lesson\'s topic');
   await page.goto(base + '#/tools/manage');
   await page.click('[data-need="shy"]');
   check((await page.locator('section h3').allInnerTexts()).includes('For shy pupils'), 'classroom management suggests routines for the class');
   await page.goto(base + '#/tools/worksheets');
-  check((await page.locator('#ms-type').count()) === 1, 'the worksheet maker works without a lesson');
+  check((await page.locator('#ms-words').inputValue().catch(() => '')).length >= 0 && (await page.locator('#ms-type').count()) === 1, 'the worksheet maker works without a lesson');
+
+  // tools inside the builder open filled with that lesson
+  await page.evaluate(() => localStorage.removeItem('consilia.toolctx'));
+  await page.goto(base + `#/plan/edit/${lessonId}/materials`);
+  await page.waitForSelector('[data-steptool]');
+  check((await page.locator('[data-steptool]').count()) === 5, 'the Materials step offers its tools');
+  await page.click('[data-steptool="chant"]');
+  await page.waitForSelector('#ctx-summary');
+  check((await page.locator('#ctx-summary').innerText()).includes('Where are you from?'), 'a builder tool link opens the tool filled with that lesson');
+
+  // a new teacher: one tap for an example
+  const fresh = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await fresh.addInitScript(() => { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: 'x' })); });
+  const pf = await fresh.newPage();
+  await pf.goto(base + '#/tools/chant');
+  await pf.click('button:has-text("Skip for now")').catch(() => {});
+  await pf.waitForSelector('#ctx-example');
+  await pf.click('#ctx-example');
+  check((await pf.locator('[data-chant="echo"] .lines').innerText()).includes('He is from'), '"Try an example" shows a tool working with no typing');
+  await fresh.close();
 
   // games inside Teach mode, terms page
   await page.goto(base + '#/teach/' + lessonId);

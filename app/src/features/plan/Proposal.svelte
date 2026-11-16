@@ -9,10 +9,13 @@
   import BbmCard from '../tools/BbmCard.svelte';
   import AiButtons from '../tools/AiButtons.svelte';
   import ScoreRing from '../../lib/ui/ScoreRing.svelte';
+  import { ctx, saveCtx, fromLesson } from '../../lib/tools/context.svelte';
 
   /** The lesson Consilia proposes: how it planned it, every stage step by step, aids, tools and preparation. */
   let { base, brief, profile, onuse, onback }: { base: Lesson; brief: Brief; profile: ClassProfile; onuse: (l: Lesson) => void; onback: () => void } = $props();
 
+  // the tools now work for this lesson (games, chants, prompts open filled in)
+  untrack(() => { Object.assign(ctx, { year: brief.year, skill: brief.mainSkill || ctx.skill, topic: brief.topic, words: brief.words.join(', '), sentence: brief.sentence, lessonId: '', lessonLabel: '' }); saveCtx(); });
   let avoid = $state<Record<string, string[]>>({});
   let lock = $state<Record<string, string[]>>({});
   let plan = $state.raw<Plan>(untrack(() => planLesson(profile, brief, { seed: Date.now() % 9973 })));
@@ -35,7 +38,7 @@
     plan = planLesson(profile, brief, { seed: 7, avoid: $state.snapshot(avoid), lock: $state.snapshot(lock) });
     shown = 99;
   }
-  function use() { onuse(applyPlan(structuredClone($state.snapshot(base)) as Lesson, plan, brief)); }
+  function use() { const l = applyPlan(structuredClone($state.snapshot(base)) as Lesson, plan, brief); fromLesson(l); onuse(l); }
   const objs = $derived(preview.objectives);
   const prompt = $derived(buildPrompt('improve', { year: brief.year, topic: brief.topic, skill: brief.mainSkill, words: brief.words, sentence: brief.sentence, extra: planAsText(plan, brief, objs.length ? objs : [newObjective('main', brief.year)]) }));
   const pat = (p: string) => ({ pairs: 'Pairs', groups: 'Groups', individual: 'Individual', 'whole-class': 'Whole class' } as Record<string, string>)[p] ?? p;
@@ -59,6 +62,10 @@
   </details>
 
   {#if !thinking}
+    <div class="row actions">
+      <button id="rc-use" class="btn btn-gold" type="button" onclick={use}>Use this plan</button>
+      <button class="btn btn-outline" type="button" onclick={onback}>Change my answers</button>
+    </div>
     <section class="card stack tight">
       <h3>Objectives and success criteria</h3>
       {#each objs as o}<p><span class="chip">{o.role === 'main' ? 'Main' : 'Complementary'}</span> {compose(o)}</p>{/each}
@@ -99,10 +106,6 @@
 
     <section class="card stack tight"><h3>Want even more ideas?</h3><AiButtons {prompt} label="Improve with AI" /></section>
 
-    <div class="row actions">
-      <button id="rc-use" class="btn btn-gold" type="button" onclick={use}>Use this plan</button>
-      <button class="btn btn-outline" type="button" onclick={onback}>Change my answers</button>
-    </div>
     <p class="muted small">You can change everything in the builder afterwards. Consilia's plan is a starting point: check it with your mentor and your school's requirements.</p>
   {/if}
 </section>
@@ -137,5 +140,6 @@
   .dig ol { margin: 4px 0 0; padding-left: 1.3em; }
   .comp { background: var(--comp); color: var(--comp-ink); }
   .tick { align-items: center; min-height: var(--tap); cursor: pointer; }
-  .actions { gap: var(--s-3); }
+  .actions { gap: var(--s-3); position: sticky; bottom: var(--s-3); z-index: 5; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); padding: var(--s-3); box-shadow: var(--shadow-raised); }
+  @media (max-width: 767px) { .actions { bottom: calc(var(--tabbar-h) + var(--s-2) + env(safe-area-inset-bottom, 0px)); } }
 </style>

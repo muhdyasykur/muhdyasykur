@@ -158,9 +158,19 @@ Nothing is sent anywhere: Consilia's planning engine uses the KSSR data, the fra
 
 Tools collects everything besides the RPH builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, BBM guide, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
 
+1. Tell the tools your lesson once: in the bar at the top press "Use my latest RPH", choose one of your RPHs, or type the topic and key words. Every tool fills itself in from it.
+2. Use a tool. Results already use your year, topic, words and sentence.
+3. Press "＋ Add to my lesson" (activity ideas, chants) or "Use as main objective" to put the result straight into your RPH.
+
+> Tip: In the RPH builder, "Tools for this step" opens the right tools already filled with that lesson.
+>
+> Tip: Search the Tools page by what you need, in English or Malay: "warm-up", "kad imbas", "noisy class", "lagu".
+>
+> Tip: New to a tool? Press "Try an example" to see it working before you type anything.
+
 ### Classroom games on the projector
 
-Tools → Classroom games, or the 🎮 Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. Your words are remembered on this device.
+Tools → Classroom games, or the 🎮 Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. The words come from the lesson bar. With a keyboard or a presentation clicker: Space spins the wheel, shows the answer or the next letter; → goes to the next item.
 
 ### Teaching aids (BBM) step by step
 

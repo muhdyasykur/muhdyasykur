@@ -312,6 +312,7 @@ export function applyPlan(l: Lesson, plan: Plan, b: Brief): Lesson {
   const names = [...new Set(plan.stages.flatMap((s) => s.picks.flatMap((x) => [...x.bbm.map((y) => y.name), ...x.digital.map((d) => d.name)])))];
   l.aids = [l.aids, names.join(', ')].filter((x) => x.trim()).join('; ');
   l.vocabulary = b.words.join(', ');
+  if (b.sentence.trim()) l.sentence = b.sentence.trim();
   l.assessment = { evidence: plan.evidence, method: plan.method };
   l.skills21 = plan.skills21; l.values = l.values || plan.values; l.pedagogy = plan.pedagogy;
   if (!l.cce.trim()) l.cce = 'Language';

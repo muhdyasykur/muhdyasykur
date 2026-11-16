@@ -2,11 +2,10 @@
   import { DIGITAL } from '../../lib/recommend/digital';
   import { href } from '../../router.svelte';
   import { pwa } from '../../lib/pwa.svelte';
-  let topic = $state(''); let year = $state(4);
+  import { ctx } from '../../lib/tools/context.svelte';
+  const topic = $derived(ctx.topic); const year = $derived(ctx.year);
 </script>
 <div class="stack">
-  <div class="row"><label class="field grow"><span>Your topic</span><input id="dt-topic" class="input" bind:value={topic} placeholder="e.g. Where are you from?" /></label>
-    <label class="field"><span>Year</span><select class="select" bind:value={year}>{#each [1, 2, 3, 4, 5, 6] as y}<option value={y}>Year {y}</option>{/each}</select></label></div>
   {#if !pwa.online}<p class="warn" role="status">You are offline. Consilia's own games work now; the other sites open once you are connected.</p>{/if}
   <div class="grid">
     {#each DIGITAL as d (d.id)}
@@ -24,7 +23,6 @@
   <p class="muted small">Outside sites belong to other companies: preview everything before class, and check adverts on video sites.</p>
 </div>
 <style>
-  .grow { flex: 1; min-width: 220px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--s-3); }
   .tight { gap: var(--s-2); }
   .small { font-size: var(--t-sm); }

@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0-beta.3 · 17 November 2026 (easier tools)
+
+- **Say the lesson once.** A lesson bar at the top of every tool (and on the Tools page) holds the year, skill, topic,
+  key words and target sentence. Fill it with one tap from your latest RPH, choose any RPH, type it, or "Try an
+  example". Every tool fills itself in; the separate year, topic and word boxes are gone.
+- **"Add to my lesson"**: put an activity idea into a chosen stage, save an objective as the main or complementary
+  objective, or add a chant to the appendices, straight from the tool.
+- **Tools for this step** in the RPH builder (Objectives, Lesson flow, Materials, Plan B, Review) open the right tools
+  already filled with that lesson.
+- Objective writer shows a SMART objective at once; "Improve my lesson plan" fills in the whole RPH by itself.
+- Tools page: quick actions for the current lesson, and search by need in English or Malay ("kad imbas", "noisy class").
+- Projector games: keyboard and presentation-clicker shortcuts (Space, →).
+- Consilia recommends: every question is marked optional; "Use this plan" stays in reach while scrolling; the tools
+  switch to the planned lesson automatically. RPHs now keep a target sentence (Materials step) for the tools.
+- Fixed: an update loop in the Objective writer.
+
 ## 1.0.0-beta.2 · 17 November 2026 (milestone 8: Consilia Recommends and Tools)
 
 **New**

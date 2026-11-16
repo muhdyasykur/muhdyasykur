@@ -1,6 +1,6 @@
 # Consilia test plan and results
 
-Version tested: **1.0.0-beta.2** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
+Version tested: **1.0.0-beta.3** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
 (`vite preview`). Commands are run from `app/`; see the README.
 
 ## Summary
@@ -10,7 +10,7 @@ Version tested: **1.0.0-beta.2** · 17 November 2026 · Chromium (Playwright 1.6
 | Type safety | `npm run check` (svelte-check, 569 files) | 0 errors, 0 warnings | ✅ 0 / 0 |
 | Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages, the Recommends engine (every SoW lesson planned and checked) | All pass | ✅ 113 tests in 27 files |
 | Curriculum data | `npm run validate:curriculum` | Every SoW reference resolves | ✅ 1,489 lessons, all valid |
-| Core journeys | 7 browser suites, 205 checks (below) | All pass, no console errors | ✅ 205 / 205 |
+| Core journeys | 7 browser suites, 217 checks (below) | All pass, no console errors | ✅ 217 / 217 |
 | Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 44 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
 | Tap targets | Same script, 390 × 844 phone | Every control ≥ 44 px (or its label) | ✅ none smaller |
 | Text size | Same script, root font at 200% on a phone | No horizontal scrolling | ✅ none |
@@ -36,9 +36,12 @@ Version tested: **1.0.0-beta.2** · 17 November 2026 · Chromium (Playwright 1.6
 | `e2e:m6` | 23 | Terms of use gate (EN/BM, three ticks, remembered), splash once a day, 9-step tour, Help replay, About, Feedback Garden online and offline queue, music start and pause in Teach mode, backup and restore |
 | `e2e:m7` | 26 | Privacy page EN/BM, manual search and links, six videos (length, EN/BM captions, saved for offline, byte ranges offline, unsaved video offline message), text recognition of a scanned PDF (online, then offline), fault injection, offline tool notice, reduced motion |
 
-| `e2e:m8` | 39 | Consilia Recommends (class questions, planning log, scripts with the teacher's words, 100 score, teaching aid making steps, Another idea on one stage only, preparation checklist, AI prompt without pupil names, saved RPH, class answers remembered, offline-only suggestions without internet), Tools hub, all 11 tools, four projector games, Games in Teach mode, terms page, phone layouts |
+| `e2e:m8` | 51 | Lesson bar shared by all tools (latest RPH, choose an RPH, Try an example), Add to my lesson (activity, objective, chant), Tools for this step in the builder, search by need and Malay words, game keyboard shortcuts, "Improve my lesson plan" filled from the RPH; Consilia Recommends (class questions, planning log, scripts with the teacher's words, 100 score, teaching aid making steps, Another idea on one stage only, preparation checklist, AI prompt without pupil names, saved RPH, class answers remembered, offline-only suggestions without internet), Tools hub, all 11 tools, four projector games, Games in Teach mode, terms page, phone layouts |
 
 ## Found and fixed during M8 testing
+
+- The Objective writer's live suggestion re-ran itself in a loop (Svelte effect read and wrote the same state); found by the browser test's page-error check.
+- RPHs did not keep a target sentence, so the tools lost it when switching lessons; RPHs now store it.
 
 - With six navigation tabs, the phone tab bar wrapped onto two rows and covered buttons. Fixed to one row of six.
 - The BBM guide has 25 teaching aids, not 24 as first written.

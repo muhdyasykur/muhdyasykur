@@ -15,6 +15,7 @@
   import MaterialsStep from './steps/MaterialsStep.svelte';
   import PlanBStep from './steps/PlanBStep.svelte';
   import ReviewStep from './steps/ReviewStep.svelte';
+  import StepTools from './StepTools.svelte';
 
   let { id, step }: { id: string; step: string } = $props();
   const STEPS = [
@@ -110,6 +111,8 @@
     {:else if cur.key === 'planb'}<PlanBStep bind:lesson />
     {:else}<ReviewStep bind:lesson />{/if}
   </section>
+
+  <StepTools {lesson} step={cur.key} />
 
   <div class="row nav no-print">
     {#if idx > 0}<a class="btn btn-outline" href={href('plan', 'edit', lesson.id, STEPS[idx - 1].key)}><Icon name="back" size={18} />{STEPS[idx - 1].label}</a>{/if}

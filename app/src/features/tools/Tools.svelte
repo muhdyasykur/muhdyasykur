@@ -11,24 +11,26 @@
   import Differentiate from './Differentiate.svelte';
   import Worksheets from './Worksheets.svelte';
   import Manage from './Manage.svelte';
+  import ContextBar from './ContextBar.svelte';
+  import { ctx, hasCtx } from '../../lib/tools/context.svelte';
 
   /** Tools: everything a trainee needs besides the RPH builder, in one place (blueprint F15, extended in M8). */
-  interface Tool { id: string; icon: string; title: string; about: string; group: 'Plan' | 'Make' | 'Teach'; href?: string }
+  interface Tool { id: string; icon: string; title: string; about: string; group: 'Plan' | 'Make' | 'Teach'; href?: string; keys?: string }
   const TOOLS: Tool[] = [
-    { id: 'recommend', icon: '✨', title: 'Consilia recommends', about: 'Tell Consilia about your class; get a whole lesson with step-by-step activities, teaching aids and digital tools.', group: 'Plan', href: href('plan', 'new', 'recommend') },
-    { id: 'ideas', icon: '💡', title: 'Activity ideas', about: '86 tried activities. Filter by skill, stage, year, time and what your class has.', group: 'Plan' },
-    { id: 'objectives', icon: '🎯', title: 'Objective writer', about: 'ABCD objectives that pass SMART, with success criteria for pupils.', group: 'Plan' },
-    { id: 'differentiate', icon: '🪜', title: 'Differentiation helper', about: 'Low, moderate and high versions of any activity.', group: 'Plan' },
-    { id: 'bbm', icon: '✂️', title: 'BBM guide', about: '25 teaching aids with pictures, what you need and how to make them step by step.', group: 'Make' },
-    { id: 'worksheets', icon: '📝', title: 'Worksheet maker', about: 'Flashcards, gap-fill, matching, strips, tiered worksheets, rubrics. Print offline.', group: 'Make' },
-    { id: 'chant', icon: '🎵', title: 'Chant maker', about: 'Turn your key words into a catchy chant with actions.', group: 'Make' },
-    { id: 'ai', icon: '🤖', title: 'AI prompt builder', about: 'Ready prompts for ChatGPT, Gemini, Copilot or Canva AI: texts, questions, songs, pictures.', group: 'Make' },
-    { id: 'games', icon: '🎮', title: 'Classroom games', about: 'Spin wheel, Unjumble, Mystery word and Quiz show on the projector. Offline.', group: 'Teach' },
-    { id: 'digital', icon: '🌐', title: 'Digital tools', about: 'Ready-made Wordwall, Liveworksheets, Quizizz, StoryWeaver and more for your topic.', group: 'Teach' },
-    { id: 'manage', icon: '🧭', title: 'Classroom management', about: 'Routines, attention signals and rewards for your class.', group: 'Teach' }
+    { id: 'recommend', icon: '✨', title: 'Consilia recommends', about: 'Tell Consilia about your class; get a whole lesson with step-by-step activities, teaching aids and digital tools.', group: 'Plan', href: href('plan', 'new', 'recommend'), keys: 'ai generate whole lesson rph auto rancang pelajaran cadangan agentic' },
+    { id: 'ideas', icon: '💡', title: 'Activity ideas', about: '86 tried activities. Filter by skill, stage, year, time and what your class has.', group: 'Plan', keys: 'activity aktiviti warm-up warmer set induction set induksi penutup closure game permainan practice production' },
+    { id: 'objectives', icon: '🎯', title: 'Objective writer', about: 'ABCD objectives that pass SMART, with success criteria for pupils.', group: 'Plan', keys: 'objective objektif abcd smart success criteria kriteria kejayaan' },
+    { id: 'differentiate', icon: '🪜', title: 'Differentiation helper', about: 'Low, moderate and high versions of any activity.', group: 'Plan', keys: 'differentiation pembezaan low moderate high tier weak pupils lemah murid cerdas' },
+    { id: 'bbm', icon: '✂️', title: 'BBM guide', about: '25 teaching aids with pictures, what you need and how to make them step by step.', group: 'Make', keys: 'bbm bahan bantu mengajar teaching aids kad imbas flashcard puppet boneka dice dadu spinner make buat craft' },
+    { id: 'worksheets', icon: '📝', title: 'Worksheet maker', about: 'Flashcards, gap-fill, matching, strips, tiered worksheets, rubrics. Print offline.', group: 'Make', keys: 'worksheet lembaran kerja printable cetak flashcard gap fill matching rubric exit ticket' },
+    { id: 'chant', icon: '🎵', title: 'Chant maker', about: 'Turn your key words into a catchy chant with actions.', group: 'Make', keys: 'chant song lagu nyanyian rhyme poem sajak music' },
+    { id: 'ai', icon: '🤖', title: 'AI prompt builder', about: 'Ready prompts for ChatGPT, Gemini, Copilot or Canva AI: texts, questions, songs, pictures.', group: 'Make', keys: 'ai chatgpt gemini copilot canva prompt text story questions soalan cerita' },
+    { id: 'games', icon: '🎮', title: 'Classroom games', about: 'Spin wheel, Unjumble, Mystery word and Quiz show on the projector. Offline.', group: 'Teach', keys: 'game permainan projector wheel spin roda quiz kuiz unjumble mystery word teka' },
+    { id: 'digital', icon: '🌐', title: 'Digital tools', about: 'Ready-made Wordwall, Liveworksheets, Quizizz, StoryWeaver and more for your topic.', group: 'Teach', keys: 'digital online wordwall liveworksheets quizizz kahoot youtube video internet tmk ict' },
+    { id: 'manage', icon: '🧭', title: 'Classroom management', about: 'Routines, attention signals and rewards for your class.', group: 'Teach', keys: 'classroom management pengurusan bilik darjah noisy bising discipline disiplin routine rutin attention reward' }
   ];
   let q = $state('');
-  const shown = $derived(TOOLS.filter((t) => !q.trim() || (t.title + ' ' + t.about).toLowerCase().includes(q.trim().toLowerCase())));
+  const shown = $derived(TOOLS.filter((t) => { const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean); const hay = (t.title + ' ' + t.about + ' ' + (t.keys ?? '')).toLowerCase(); return !words.length || words.some((w) => w.length > 2 && hay.includes(w)) || hay.includes(q.trim().toLowerCase()); }));
   const current = $derived(TOOLS.find((t) => t.id === route.parts[0] && !t.href));
 </script>
 
@@ -36,13 +38,25 @@
   <div class="stack">
     <a class="btn btn-text back" href={href('tools')}><Icon name="back" size={18} />Tools</a>
     <h1><span aria-hidden="true">{current.icon}</span> {current.title}</h1>
+    {#if !['bbm', 'manage'].includes(current.id)}<ContextBar />{/if}
     {#if current.id === 'ideas'}<Ideas />{:else if current.id === 'bbm'}<BbmGuide />{:else if current.id === 'digital'}<DigitalTools />{:else if current.id === 'games'}<Games />{:else if current.id === 'ai'}<Prompts />{:else if current.id === 'objectives'}<ObjectiveWriter />{:else if current.id === 'chant'}<Chant />{:else if current.id === 'differentiate'}<Differentiate />{:else if current.id === 'worksheets'}<Worksheets />{:else if current.id === 'manage'}<Manage />{/if}
   </div>
 {:else}
   <div class="stack">
     <h1>Tools</h1>
     <p class="muted">Everything works on this device and offline, except the outside sites you choose to open.</p>
-    <label class="search"><Icon name="search" size={18} /><span class="sr-only">Search tools</span><input id="tools-q" class="input" type="search" bind:value={q} placeholder="Search tools: games, BBM, objectives…" /></label>
+    <ContextBar compact />
+    {#if hasCtx()}
+      <div class="quick" aria-label="Quick actions for this lesson">
+        {#if ctx.lessonId}<a class="btn btn-outline" href={href('plan', 'edit', ctx.lessonId, 'flow')}>📄 Open the RPH</a>{:else}<a class="btn btn-gold" href={href('plan', 'new', 'recommend')}>✨ Plan this lesson</a>{/if}
+        <a class="btn btn-outline" href={href('tools', 'games')} data-quick="games">🎮 Games from my words</a>
+        <a class="btn btn-outline" href={href('tools', 'ideas')}>💡 Activity ideas</a>
+        <a class="btn btn-outline" href={href('tools', 'objectives')}>🎯 An objective</a>
+        <a class="btn btn-outline" href={href('tools', 'chant')}>🎵 A chant</a>
+        <a class="btn btn-outline" href={href('tools', 'ai')}>🤖 A text with AI</a>
+      </div>
+    {/if}
+    <label class="search"><Icon name="search" size={18} /><span class="sr-only">Search tools</span><input id="tools-q" class="input" type="search" bind:value={q} placeholder="What do you need? e.g. warm-up, kad imbas, noisy class, song" /></label>
     {#each ['Plan', 'Make', 'Teach'] as g}
       {@const list = shown.filter((t) => t.group === g)}
       {#if list.length}
@@ -58,7 +72,7 @@
         </section>
       {/if}
     {/each}
-    {#if !shown.length}<p class="muted">No tool matches "{q}".</p>{/if}
+    {#if !shown.length}<p class="muted">No tool matches "{q}". Try a simpler word, such as game, BBM or objective.</p>{/if}
   </div>
 {/if}
 
@@ -68,6 +82,7 @@
   h2 { font-size: var(--t-lg); margin: var(--s-2) 0 0; }
   .tight { gap: var(--s-2); }
   .small { font-size: var(--t-sm); }
+  .quick { display: flex; flex-wrap: wrap; gap: var(--s-2); }
   .search { display: flex; align-items: center; gap: var(--s-2); }
   .search .input { flex: 1; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }

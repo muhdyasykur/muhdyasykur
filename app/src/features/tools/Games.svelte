@@ -1,6 +1,7 @@
 <script lang="ts">
   import { untrack } from 'svelte';
   import { route, href } from '../../router.svelte';
+  import { ctx } from '../../lib/tools/context.svelte';
 
   /** Projector games made from the teacher's own words. Offline; the words are remembered on this device. */
   let { initialWords = '', embedded = false }: { initialWords?: string; embedded?: boolean } = $props();
@@ -12,7 +13,7 @@
   let sentences = $state<string>(saved.sentences || '');
   let quiz = $state<string>(saved.quiz || '');
   $effect(() => { const v = { words, sentences, quiz }; try { localStorage.setItem('consilia.games', JSON.stringify(v)); } catch { /* fine */ } });
-  const W = $derived(words.split(/[,\n]+/).map((w) => w.trim()).filter(Boolean).slice(0, 16));
+  const W = $derived((embedded ? words : ctx.words).split(/[,\n]+/).map((w) => w.trim()).filter(Boolean).slice(0, 16));
   const S = $derived(sentences.split(/\n+/).map((w) => w.trim()).filter((x) => x.split(/\s+/).length >= 2));
   const Q = $derived(quiz.split(/\n+/).map((l) => l.split('|').map((x) => x.trim())).filter((x) => x[0] && x[1]).map(([q, a]) => ({ q, a })));
   const reduced = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -52,9 +53,22 @@
   let teams = $state(3); let scores = $state<number[]>([0, 0, 0, 0]); let qi = $state(0); let reveal = $state(false);
 
   let stageEl = $state<HTMLElement>();
+  /** Space or Enter: the main action; → (or a presentation clicker): next. Ignored while typing. */
+  function key(e: KeyboardEvent) {
+    const t = e.target as HTMLElement;
+    if (t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'BUTTON' || t.isContentEditable)) return;
+    const main = e.key === ' ' || e.key === 'Enter', next = e.key === 'ArrowRight' || e.key === 'PageDown';
+    if (!main && !next) return;
+    e.preventDefault();
+    if (game === 'wheel') spin();
+    else if (game === 'unjumble') { if (main && !showAnswer) showAnswer = true; else if (S.length) { si = (si + 1) % S.length; deal(si); } }
+    else if (game === 'mystery') { if (main) nextLetter(); else nextWord(); }
+    else if (Q.length) { if (main && !reveal) reveal = true; else { qi = (qi + 1) % Q.length; reveal = false; } }
+  }
   function full() { stageEl?.requestFullscreen?.().catch(() => {}); }
 </script>
 
+<svelte:window onkeydown={key} />
 <div class="stack games">
   <div class="tabs" role="tablist" aria-label="Games">
     {#each GAMES as [id, label]}<a role="tab" aria-selected={game === id} href={embedded ? undefined : href('tools', 'games', id)} onclick={(e) => { if (embedded) e.preventDefault(); game = id; }} data-game={id}>{label}</a>{/each}
@@ -63,7 +77,7 @@
   <details class="card" open={(game === 'wheel' || game === 'mystery') ? W.length < 2 : game === 'unjumble' ? !S.length : !Q.length}>
     <summary><b>Your words</b> <span class="muted small">(saved on this device)</span></summary>
     <div class="grid">
-      {#if game === 'wheel' || game === 'mystery'}<label class="field"><span>Words or questions (comma or one per line)</span><textarea id="g-words" class="input ta" rows="3" bind:value={words} placeholder="Malaysia, Japan, China, India"></textarea></label>{/if}
+      {#if game === 'wheel' || game === 'mystery'}<label class="field"><span>Words or questions (comma or one per line)</span>{#if embedded}<textarea id="g-words" class="input ta" rows="3" bind:value={words} placeholder="Malaysia, Japan, China, India"></textarea>{:else}<textarea id="g-words" class="input ta" rows="3" bind:value={ctx.words} placeholder="Malaysia, Japan, China, India"></textarea>{/if}</label>{/if}
       {#if game === 'unjumble'}<label class="field"><span>Sentences (one per line)</span><textarea id="g-sent" class="input ta" rows="4" bind:value={sentences} placeholder={'He is from Japan.\nShe lives in Kota Kinabalu.'}></textarea></label>{/if}
       {#if game === 'quiz'}<label class="field"><span>Question | answer (one per line)</span><textarea id="g-quiz" class="input ta" rows="4" bind:value={quiz} placeholder={'Where is Mount Kinabalu? | Sabah\nWhat is the capital of Japan? | Tokyo'}></textarea></label>{/if}
     </div>
@@ -108,7 +122,7 @@
       {/if}
     {/if}
   </section>
-  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}>⛶ Full screen for the projector</button></div>{/if}
+  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}>⛶ Full screen for the projector</button><span class="muted small">Keyboard or clicker: Space = {game === 'wheel' ? 'spin' : game === 'mystery' ? 'next letter' : 'show the answer'}, → = next.</span></div>{/if}
 </div>
 
 <style>

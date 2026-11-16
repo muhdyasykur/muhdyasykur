@@ -161,7 +161,7 @@
   {#if mode === 'recommend'}
     <section class="card stack rec" aria-labelledby="rc-h">
       <h3 id="rc-h">4 · Tell Consilia about your class</h3>
-      <p class="muted small">{cls ? `Remembered for ${cls.name} next time.` : 'Choose a class above and Consilia remembers these answers for it.'}</p>
+      <p class="muted small">Every question is optional: skip straight to the button and Consilia uses sensible defaults. {cls ? `Your answers are remembered for ${cls.name}.` : 'Choose a class above and Consilia remembers your answers for it.'}</p>
       <div class="field"><span id="rc-level">Ability of the class</span>
         <div class="seg" role="group" aria-labelledby="rc-level">{#each [['low', 'Mostly lower'], ['mixed', 'Mixed'], ['high', 'Mostly higher']] as [v, t]}<button type="button" aria-pressed={prof.level === v} onclick={() => (prof.level = v as ClassProfile['level'])}>{t}</button>{/each}</div>
       </div>

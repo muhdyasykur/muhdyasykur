@@ -46,6 +46,7 @@
   <section class="card grid">
     <label class="field wide"><span>Teaching aids and materials</span><textarea id="mt-aids" class="input ta" rows="3" bind:value={lesson.aids} placeholder="e.g. Picture flashcards, worksheet, writing paper"></textarea></label>
     <label class="field wide"><span>Key vocabulary</span><input id="mt-vocab" class="input" bind:value={lesson.vocabulary} placeholder="e.g. healthy, unhealthy, brush, junk food" /></label>
+    <label class="field wide"><span>Target sentence or structure (used by Tools: games, chants, prompts)</span><input id="mt-sentence" class="input" bind:value={lesson.sentence} placeholder="e.g. You should … because …" /></label>
   </section>
   <section class="card grid">
     <h3 class="wide">Assessment (PBD)</h3>

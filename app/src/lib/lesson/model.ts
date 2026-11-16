@@ -57,6 +57,8 @@ export interface Lesson {
   stages: Stage[];
   aids: string;
   vocabulary: string;
+  /** The lesson's target sentence or structure, e.g. "He is from …" (used by the tools). */
+  sentence?: string;
   assessment: { evidence: string; method: string };
   links: { label: string; url: string }[];
   appendices: string;
