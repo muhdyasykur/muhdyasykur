@@ -17,6 +17,7 @@
   import Points from './tools/Points.svelte';
   import Signal from './tools/Signal.svelte';
   import Timer from './tools/Timer.svelte';
+  import Games from '../tools/Games.svelte';
   import type { TeachPupil } from './types';
   import Viewer from '../books/Viewer.svelte';
   import { findRefs, type PageRef } from '../../lib/textbook/refs';
@@ -30,7 +31,7 @@
   let missing = $state(false);
   let needsUnlock = $state(false);
   let now = $state(Date.now());
-  let tool = $state<'' | 'picker' | 'groups' | 'noise' | 'points' | 'signal' | 'timer' | 'book'>('');
+  let tool = $state<'' | 'picker' | 'groups' | 'noise' | 'points' | 'signal' | 'timer' | 'book' | 'games'>('');
   let shelf = $state<string[]>([]);
   let bookRef = $state<{ slot: string; page: number } | null>(null);
   $effect(() => { listBooks().then((b) => (shelf = b.map((x) => x.slot))); });
@@ -116,7 +117,7 @@
   const tools = [
     { id: 'book', label: 'Textbook', icon: '📖' },
     { id: 'picker', label: 'Name picker', icon: '🎯' }, { id: 'groups', label: 'Groups', icon: '👥' }, { id: 'noise', label: 'Noise', icon: '🔊' },
-    { id: 'points', label: 'Points', icon: '⭐' }, { id: 'signal', label: 'Attention', icon: '👀' }, { id: 'timer', label: 'Timer', icon: '⏱' }
+    { id: 'points', label: 'Points', icon: '⭐' }, { id: 'signal', label: 'Attention', icon: '👀' }, { id: 'timer', label: 'Timer', icon: '⏱' }, { id: 'games', label: 'Games', icon: '🎮' }
   ] as const;
 </script>
 
@@ -228,6 +229,7 @@
             {#if bookRef || (sbSlot && shelf.includes(sbSlot))}
               {#key bookRef?.slot ?? sbSlot}<Viewer slot={bookRef?.slot ?? sbSlot!} page={bookRef?.page ?? openable[0]?.r.page ?? 1} />{/key}
             {/if}
+          {:else if tool === 'games'}<Games embedded initialWords={lesson.vocabulary} />
           {:else}<Timer />{/if}
         </div>
       </div>

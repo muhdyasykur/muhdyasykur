@@ -1,6 +1,6 @@
 {
   "app.tagline": "Consilium: wise planning, meaningful learning.",
-  "nav.today": "Today", "nav.plan": "Plan", "nav.classes": "Classes", "nav.library": "Library", "nav.me": "Me",
+  "nav.today": "Today", "nav.plan": "Plan", "nav.classes": "Classes", "nav.library": "Library", "nav.tools": "Tools", "nav.me": "Me",
   "nav.newRph": "New RPH",
   "common.comingIn": "Coming in milestone {m}",
   "common.offlineReady": "Ready to work offline",

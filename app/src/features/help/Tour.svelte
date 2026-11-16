@@ -2,14 +2,15 @@
   import { tour, endTour } from '../../lib/tour.svelte';
   import { go } from '../../router.svelte';
 
-  /** Eight short steps that highlight the real controls. Works on phone (bottom bar) and laptop (side rail). */
+  /** Nine short steps that highlight the real controls. Works on phone (bottom bar) and laptop (side rail). */
   const steps: { target?: string; route?: Parameters<typeof go>; title: string; body: string }[] = [
-    { title: 'Welcome to Consilia', body: 'A quick tour of the five places you will use. It takes under a minute. You can replay it any time from Me → Help.' },
+    { title: 'Welcome to Consilia', body: 'A quick tour of the six places you will use. It takes under a minute. You can replay it any time from Me → Help.' },
     { target: 'a[href="#/today"]', route: ['today'], title: 'Today', body: 'Your next lesson, what still needs planning, and reminders to reflect and back up.' },
     { target: 'a[href="#/plan"]', route: ['plan'], title: 'Plan', body: 'Every RPH you make, your weekly timetable, and sharing lessons with friends.' },
-    { target: '.btn-gold[href="#/plan/new"]', route: ['plan'], title: 'New RPH', body: 'Start from a Scheme of Work lesson, keep its standards with your own activities, or plan from scratch. Consilia checks alignment as you go.' },
+    { target: '.btn-gold[href="#/plan/new"]', route: ['plan'], title: 'New RPH', body: 'Let Consilia recommend a whole lesson, follow a Scheme of Work lesson, keep its standards with your own activities, or plan from scratch. Consilia checks alignment as you go.' },
     { target: 'a[href="#/classes"]', route: ['classes'], title: 'Classes', body: 'Paste your pupil lists, record TP levels after teaching and see who needs support.' },
     { target: 'a[href="#/library"]', route: ['library'], title: 'Library', body: 'The full KSSR Scheme of Work, DSKP standards, your textbooks, the activity bank and the Method Guide. All offline.' },
+    { target: 'a[href="#/tools"]', route: ['tools'], title: 'Tools', body: 'Let Consilia plan a whole lesson for your class, play projector games made from your words, find teaching aids with step-by-step making guides, and write prompts for AI.' },
     { target: 'a[href="#/me"]', route: ['me'], title: 'Me', body: 'Your profile, PIN lock, background music, backups, help and the Feedback Garden.' },
     { title: 'You are ready', body: 'Plan your first lesson. When you teach, press ▶ Teach for the stage timer and classroom tools.' }
   ];

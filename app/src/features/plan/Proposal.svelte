@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import { planLesson, applyPlan, type Brief, type ClassProfile, type Plan } from '../../lib/recommend/engine';
   import { buildPrompt, planAsText } from '../../lib/recommend/prompts';
   import { compose } from '../../lib/lesson/objectives';
@@ -14,7 +15,7 @@
 
   let avoid = $state<Record<string, string[]>>({});
   let lock = $state<Record<string, string[]>>({});
-  let plan = $state.raw<Plan>(planLesson(profile, brief, { seed: Date.now() % 9973 }));
+  let plan = $state.raw<Plan>(untrack(() => planLesson(profile, brief, { seed: Date.now() % 9973 })));
   const reduced = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   let shown = $state(reduced ? 99 : 0);
   $effect(() => { if (shown < plan.log.length) { const t = setTimeout(() => (shown += 1), 260); return () => clearTimeout(t); } });

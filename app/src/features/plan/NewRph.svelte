@@ -8,6 +8,10 @@
   import type { SchoolClass } from '../../lib/db/schema';
   import { profile } from '../../lib/profile.svelte';
   import Icon from '../../lib/ui/Icon.svelte';
+  import Proposal from './Proposal.svelte';
+  import { briefFrom, type Brief, type ClassProfile, type Goal, type Trait, type Devices } from '../../lib/recommend/engine';
+  import { getSetting, setSetting } from '../../lib/db/repo';
+  import type { Lesson } from '../../lib/lesson/model';
 
   const today = new Date().toISOString().slice(0, 10);
   let classes = $state<SchoolClass[]>([]);
@@ -26,8 +30,10 @@
   let busy = $state(false);
   let error = $state('');
 
-  // Prefill from the weekly planner: #/plan/new/<classId>/<date>/<start>/<minutes>
-  const [pClass, pDate, pStart, pDur] = route.parts.slice(1);
+  // Prefill from the weekly planner: #/plan/new/<classId>/<date>/<start>/<minutes>; #/plan/new/recommend opens Consilia Recommends
+  const wantsRec = route.parts[1] === 'recommend';
+  const [pClass, pDate, pStart, pDur] = route.parts.slice(wantsRec ? 2 : 1);
+  if (wantsRec) mode = 'recommend';
   if (pDate && /^\d{4}-\d{2}-\d{2}$/.test(pDate)) date = pDate;
   if (pStart && /^\d{2}:\d{2}$/.test(pStart)) start = pStart;
   if (pDur && Number(pDur) >= 15) duration = Number(pDur);
@@ -42,10 +48,22 @@
   });
   const shown = $derived(searchLessons(lessons, query));
   const modes: { id: Mode; title: string; body: string }[] = [
+    { id: 'recommend', title: '✨ Consilia recommends', body: 'Tell Consilia about your class. It plans the whole lesson: creative step-by-step activities, teaching aids with pictures and how to make them, and ready digital tools.' },
     { id: 'follow-sow', title: 'Follow the SoW', body: 'Everything from the SoW lesson is filled in: standards, outline steps and materials. Improve and expand it.' },
     { id: 'sow-standards', title: 'SoW standards, my activities', body: 'The CS, LS, skills and theme come from the SoW. You design the activities.' },
     { id: 'scratch', title: 'From scratch', body: 'Choose your own standards from the DSKP and plan everything yourself.' }
   ];
+
+  // ---- Consilia Recommends: what the teacher tells us about the class and the lesson
+  let prof = $state<ClassProfile>({ level: 'mixed', traits: [], projector: true, speakers: true, internet: false, devices: 'teacher' });
+  let goals = $state<Goal[]>([]);
+  let words = $state(''); let sentence = $state(''); let prep = $state(30);
+  let proposal = $state.raw<{ base: Lesson; brief: Brief; profile: ClassProfile } | null>(null);
+  $effect(() => { const id = classId; if (id) getSetting<(ClassProfile & { prep?: number }) | null>(`recommend:${id}`, null).then((p) => { if (p && id === classId) { prof = { level: p.level, traits: [...p.traits], projector: p.projector, speakers: p.speakers, internet: p.internet, devices: p.devices }; if (p.prep) prep = p.prep; } }); });
+  const TRAITS: [Trait, string][] = [['shy', 'Shy speakers'], ['energetic', 'Very energetic'], ['weak-readers', 'Many weak readers'], ['large-class', 'Large class (30+)'], ['sen', 'Pupils with special needs'], ['mixed-languages', 'Many home languages']];
+  const GOALS: [Goal, string][] = [['speaking', 'More speaking time'], ['fun', 'Fun and lively'], ['calm', 'Calm and focused'], ['creative', 'Creativity'], ['assessment', 'Clear assessment'], ['observation', 'Observation lesson'], ['tech', 'Use technology']];
+  const DEVICES: [Devices, string][] = [['none', 'None'], ['teacher', 'My phone only'], ['shared', 'A few to share'], ['one-each', 'One each']];
+  const toggle = <T,>(xs: T[], x: T) => (xs.includes(x) ? xs.filter((y) => y !== x) : [...xs, x]);
 
   async function create() {
     error = '';
@@ -57,12 +75,27 @@
       const sow = picked != null ? lessons.find((l) => l.no === picked) ?? null : null;
       const l = buildLesson({ mode, year, school, sow, phonics: usePhonics && hasPhonics, date, start, durationMin: duration,
         classId: cls?.id ?? null, className: cls?.name ?? '', levelLabel: cls?.levelLabel ?? '', pupils: cls ? await countPupils(cls.id) || null : null }, std);
+      if (mode === 'recommend') {
+        const profile = $state.snapshot(prof) as ClassProfile;
+        if (cls) await setSetting(`recommend:${cls.id}`, { ...profile, prep });
+        const brief = briefFrom(l, { words: words.split(/[,;\n]+/).map((w) => w.trim()).filter(Boolean).slice(0, 12), sentence: sentence.trim(), goals: [...goals], prepMinutes: prep });
+        proposal = { base: l, brief, profile };
+        busy = false;
+        scrollTo({ top: 0 });
+        return;
+      }
       await saveLesson(l);
       go('plan', 'edit', l.id, mode === 'scratch' ? 'standards' : 'setup');
     } catch (e) { error = (e as Error).message; busy = false; }
   }
 </script>
 
+{#if proposal}
+<div class="stack">
+  <button class="btn btn-text back" type="button" onclick={() => (proposal = null)}><Icon name="back" size={18} />Change my answers</button>
+  <Proposal base={proposal.base} brief={proposal.brief} profile={proposal.profile} onback={() => (proposal = null)} onuse={async (l) => { await saveLesson(l); go('plan', 'edit', l.id, 'review'); }} />
+</div>
+{:else}
 <div class="stack">
   <a class="btn btn-text back" href={href('plan')}><Icon name="back" size={18} />Plan</a>
   <h1>New RPH</h1>
@@ -125,9 +158,44 @@
     </section>
   {/if}
 
+  {#if mode === 'recommend'}
+    <section class="card stack rec" aria-labelledby="rc-h">
+      <h3 id="rc-h">4 · Tell Consilia about your class</h3>
+      <p class="muted small">{cls ? `Remembered for ${cls.name} next time.` : 'Choose a class above and Consilia remembers these answers for it.'}</p>
+      <div class="field"><span id="rc-level">Ability of the class</span>
+        <div class="seg" role="group" aria-labelledby="rc-level">{#each [['low', 'Mostly lower'], ['mixed', 'Mixed'], ['high', 'Mostly higher']] as [v, t]}<button type="button" aria-pressed={prof.level === v} onclick={() => (prof.level = v as ClassProfile['level'])}>{t}</button>{/each}</div>
+      </div>
+      <div class="field"><span id="rc-traits">About the pupils (choose any)</span>
+        <div class="chips" role="group" aria-labelledby="rc-traits">{#each TRAITS as [v, t]}<button type="button" class="chip pickable" aria-pressed={prof.traits.includes(v)} data-trait={v} onclick={() => (prof.traits = toggle(prof.traits, v))}>{t}</button>{/each}</div>
+      </div>
+      <div class="field"><span id="rc-res">In your classroom</span>
+        <div class="chips" role="group" aria-labelledby="rc-res">
+          <button type="button" class="chip pickable" aria-pressed={prof.projector} data-res="projector" onclick={() => (prof.projector = !prof.projector)}>📽 Projector or TV</button>
+          <button type="button" class="chip pickable" aria-pressed={prof.speakers} onclick={() => (prof.speakers = !prof.speakers)}>🔈 Speakers</button>
+          <button type="button" class="chip pickable" aria-pressed={prof.internet} data-res="internet" onclick={() => (prof.internet = !prof.internet)}>📶 Internet</button>
+        </div>
+      </div>
+      <div class="field"><span id="rc-dev">Devices for pupils</span>
+        <div class="seg" role="group" aria-labelledby="rc-dev">{#each DEVICES as [v, t]}<button type="button" aria-pressed={prof.devices === v} onclick={() => (prof.devices = v)}>{t}</button>{/each}</div>
+      </div>
+      <h3>5 · About this lesson</h3>
+      <div class="grid">
+        <label class="field"><span>Key words (optional, comma separated)</span><input id="rc-words" class="input" bind:value={words} placeholder="e.g. Malaysia, Japan, China, India" /></label>
+        <label class="field"><span>Target sentence (optional)</span><input id="rc-sentence" class="input" bind:value={sentence} placeholder="e.g. He is from …" /></label>
+      </div>
+      <div class="field"><span id="rc-goals">What matters most today? (choose up to 3)</span>
+        <div class="chips" role="group" aria-labelledby="rc-goals">{#each GOALS as [v, t]}<button type="button" class="chip pickable" aria-pressed={goals.includes(v)} data-goal={v} disabled={!goals.includes(v) && goals.length >= 3} onclick={() => (goals = toggle(goals, v))}>{t}</button>{/each}</div>
+      </div>
+      <div class="field"><span id="rc-prep">Time you have to prepare</span>
+        <div class="seg" role="group" aria-labelledby="rc-prep">{#each [10, 30, 60] as m}<button type="button" aria-pressed={prep === m} onclick={() => (prep = m)}>{m === 60 ? '1 hour+' : `${m} min`}</button>{/each}</div>
+      </div>
+    </section>
+  {/if}
+
   {#if error}<p class="err" role="alert">{error}</p>{/if}
-  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>Create RPH</button></div>
+  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>{mode === 'recommend' ? '✨ Plan it with Consilia' : 'Create RPH'}</button></div>
 </div>
+{/if}
 
 <style>
   .back { justify-self: start; }
@@ -146,4 +214,10 @@
   .what { display: grid; min-width: 0; }
   .what .muted { font-size: var(--t-sm); }
   .err { color: var(--bad); }
+  .rec { border: 2px solid var(--gold-strong); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .pickable { cursor: pointer; min-height: var(--tap); padding: 0 var(--s-3); font: 600 var(--t-sm) var(--f-body); border: 1px solid var(--line); background: var(--card); color: var(--ink-2); }
+  .pickable[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
+  .pickable:disabled { opacity: .45; cursor: not-allowed; }
+  .mode:first-child { background: linear-gradient(135deg, var(--gold-soft), var(--card)); }
 </style>

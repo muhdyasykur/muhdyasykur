@@ -62,6 +62,7 @@
         {:else}
           <h2>{cname(next.slot.classId)} has no RPH yet</h2>
           <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />Plan this lesson</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}>✨ Let Consilia plan it</a>
         {/if}
       </section>
     {:else if !slots.length}
@@ -70,6 +71,7 @@
         <p>{lessons.length ? 'With your English periods set once, Today shows your next lesson and what still needs planning.' : t('today.empty.body')}</p>
         <div class="row">
           <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{t('today.newRph')}</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}>✨ Let Consilia plan it</a>
           <a class="btn btn-outline" href={href('plan', 'week')}>Set up timetable</a>
         </div>
       </section>

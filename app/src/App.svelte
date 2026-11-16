@@ -26,12 +26,14 @@
   import { appError, clearError } from './lib/errors.svelte';
   import { terms } from './lib/terms.svelte';
   import Terms from './features/onboarding/Terms.svelte';
+  import Tools from './features/tools/Tools.svelte';
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
     { name: 'today', icon: 'today', label: 'nav.today' },
     { name: 'plan', icon: 'plan', label: 'nav.plan' },
     { name: 'classes', icon: 'classes', label: 'nav.classes' },
     { name: 'library', icon: 'library', label: 'nav.library' },
+    { name: 'tools', icon: 'tools', label: 'nav.tools' },
     { name: 'me', icon: 'me', label: 'nav.me' }
   ];
 </script>
@@ -65,6 +67,7 @@
         {:else if route.name === 'plan'}<Plan />
         {:else if route.name === 'classes'}<Classes />
         {:else if route.name === 'library'}<Library />
+        {:else if route.name === 'tools'}<Tools />
         {:else}<Me />{/if}
       </div>
     {/key}

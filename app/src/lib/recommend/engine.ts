@@ -85,7 +85,7 @@ interface Ctx { b: Brief; p: ClassProfile; skill: string; stageKey: string; stag
 function score(r: Recipe, c: Ctx): { s: number; why: string[] } {
   const why: string[] = []; let s = 0;
   const g = new Set(c.b.goals), t = new Set(c.p.traits);
-  if (r.skill === c.skill) { s += 3; why.push(`practises ${c.skill.toLowerCase()}`); }
+  if (r.skill === c.skill) { s += 3; why.push(c.skill === 'Pre-lesson' ? 'a quick, active start' : c.skill === 'Post-lesson' ? 'pupils review their own learning' : `practises ${c.skill.toLowerCase()}`); }
   else if (r.skill === c.b.mainSkill || r.skill === c.b.compSkill) s += 1;
   const over = r.minutes - c.stageMin;
   if (over > 3) s -= (over - 3) * 0.6; else why.push(`fits the ${c.stageMin} minutes`);
