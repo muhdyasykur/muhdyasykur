@@ -8,7 +8,7 @@ describe('ConsiliaDB', () => {
     const db = new ConsiliaDB('test-open');
     await db.open();
     expect(db.tables.map((t) => t.name).sort()).toEqual(
-      ['attendance', 'bankCustom', 'bookBlobs', 'books', 'classes', 'feedbackQueue', 'lessons', 'media', 'mentorNotes', 'meta', 'pbd', 'profile', 'pupils', 'reflections', 'sessions', 'settings'].sort()
+      ['attendance', 'bankCustom', 'bookBlobs', 'books', 'classes', 'feedbackQueue', 'lessons', 'media', 'mentorNotes', 'meta', 'pbd', 'profile', 'pupils', 'reflections', 'sessions', 'settings', 'register', 'plans', 'days'].sort()
     );
     db.close();
   });

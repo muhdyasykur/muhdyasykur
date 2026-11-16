@@ -28,7 +28,7 @@ describe('Word export', () => {
     for (const s of ['CONSILIA LESSON BLUEPRINT', 'Alignment score:', '8 · ALIGNMENT MAP', '7 · PLAN B', 'Where are you from?']) expect(t, s).toContain(s);
   });
   it('names files by date, class and topic', () => {
-    expect(fileName(l, 'school')).toBe('RPH-2025-11-03-4-Zhong-Where-are-you-from.docx');
+    expect(fileName(l, 'school')).toBe('LessonPlan-2025-11-03-4-Zhong-Where-are-you-from.docx');
     expect(fileName(l, 'blueprint')).toMatch(/-Blueprint\.docx$/);
   });
 });
