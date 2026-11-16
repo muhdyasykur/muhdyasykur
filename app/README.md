@@ -17,6 +17,7 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M6 Brand experience: splash (once a day, tap to skip), three original R&B instrumentals composed in code (off by default, pause in Teach mode), 8-step guided tour, About page, Feedback Garden to Jotform with an offline queue, backup and restore with a weekly reminder, confetti for a first 100 score | Done |
 | M7 QA (accessibility, security, performance, fault injection), six captioned tutorial videos, searchable manual, privacy page (EN/BM), on-device text recognition for scanned textbooks, pilot kit | Done: 1.0.0-beta.1 |
 | M8 Consilia Recommends (whole-lesson planning engine), Tools tab with 11 tools, projector games, BBM guide with pictures, AI prompt builder, terms of use | Done: 1.0.0-beta.2 |
+| M9 Yearly plan (upload RPT or build from SoW; yearly, monthly, weekly views), My day, attendance register, "lesson plan" wording, ten re-recorded videos | Done: 1.0.0-beta.4 |
 | Pilot: two weeks with trainee teachers (see `docs/pilot.md`), then 1.0.0 | Next |
 
 ## Run it
@@ -36,11 +37,12 @@ Browser tests of the built app (need Playwright on the machine): `npx vite previ
 Milestone 7 checks (same preview server):
 
 ```bash
+npm run e2e:m9    # yearly plans (Word, Excel, CSV, build from SoW), My day, attendance
 npm run e2e:m8    # Consilia Recommends, Tools hub, every tool, games, terms page
 npm run e2e:m7    # privacy, manual, videos offline, text recognition online and offline, fault injection, reduced motion
 npm run a11y      # axe-core on 31 screens in light and dark, 44 px tap targets and 200% text on a phone
 npm run perf      # load-time budget on an emulated slow phone (first and repeat visit)
-npm run videos    # re-record the six Help videos and their EN/BM captions into public/videos (needs ffmpeg)
+npm run videos    # re-record the ten Help videos and their EN/BM captions into public/videos (needs ffmpeg)
 npm run docs      # regenerate docs/manual.md, docs/privacy.md and docs/terms.md from the in-app text
 ```
 

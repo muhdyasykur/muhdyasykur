@@ -125,18 +125,45 @@ async function seed(browser) {
   }
   await page.goto(base + `#/plan/edit/${lessonId}/planb`);
   await page.click('#pb-fill');
+  await page.goto(base + `#/plan/edit/${lessonId}/materials`);
+  await page.fill('#mt-vocab', 'Malaysia, Japan, China, India, Thailand');
+  await page.fill('#mt-sentence', 'He is from …');
   await page.waitForTimeout(900);
+  // a timetable for today, so My day and the weekly plan have periods
+  const todayDay = String(((new Date().getDay() + 6) % 7) + 1);
+  await page.goto(base + '#/plan/week');
+  await page.waitForSelector('#tt-class');
+  for (const [st, du] of [['07:40', '30'], ['09:10', '60']]) { await page.selectOption('#tt-day', todayDay); await page.fill('#tt-start', st); await page.fill('#tt-dur', du); await page.click('#tt-add'); }
+  await page.waitForTimeout(500);
   const state = await ctx.storageState({ indexedDB: true });
   await ctx.close();
   return { state, classId, lessonId };
 }
 
-// ---------------------------------------------------------------- the six videos
+/** A school yearly plan (RPT) in Word with this term's dates, for the yearly-plan video. */
+async function makeRpt() {
+  const { Document, Packer, Table, TableRow, TableCell, Paragraph } = require('docx');
+  const mon = new Date(); mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+  const at = (n) => { const x = new Date(mon); x.setDate(x.getDate() + n); return `${x.getDate()}.${x.getMonth() + 1}.${x.getFullYear()}`; };
+  const rows = [['MINGGU', 'TARIKH', 'TEMA', 'UNIT / TOPIK', 'STANDARD PEMBELAJARAN', 'PELAJARAN', 'CATATAN'],
+    ['1', `${at(-7)} - ${at(-3)}`, 'World of Self, Family and Friends', 'Unit 1: Where are you from?', '1.2.2 2.1.5 3.2.2', '1-3', ''],
+    ['2', `${at(0)} - ${at(4)}`, 'World of Self, Family and Friends', 'Unit 1: Where are you from?', '4.2.4 5.3.1 1.2.4', '4-6', 'Bring a world map'],
+    ['3', `${at(7)} - ${at(11)}`, 'World of Knowledge', 'Unit 2: Days', '2.1.1 3.2.1', '7-9', ''],
+    ['CUTI PERTENGAHAN PENGGAL', '', '', '', '', '', ''],
+    ['4', `${at(21)} - ${at(25)}`, 'World of Knowledge', 'Unit 2: Days', '4.2.1 5.2.1', '10-12', '']];
+  const t = new Table({ rows: rows.map((r) => new TableRow({ children: r.map((c) => new TableCell({ children: [new Paragraph(c)] })) })) });
+  const file = path.join(os.tmpdir(), `RPT English Tahun 4 ${mon.getFullYear()}.docx`);
+  fs.writeFileSync(file, await Packer.toBuffer(new Document({ sections: [{ children: [new Paragraph(`RANCANGAN PENGAJARAN TAHUNAN BAHASA INGGERIS TAHUN 4 ${mon.getFullYear()}`), t] }] })));
+  return file;
+}
+
+// ---------------------------------------------------------------- the videos
 const VIDEOS = {
-  'first-rph': { title: 'Your first RPH', ms: 'RPH pertama anda', async run(d, page, s) {
-    await d.say('Let\'s plan a lesson from the Scheme of Work. Start on Today.', 'Mari rancang pelajaran daripada Skema Pelajaran. Mula di Hari Ini.');
-    await d.say('Press the gold New RPH button. It is on every screen.', 'Tekan butang emas New RPH. Ia ada di setiap skrin.', 1200);
-    await d.click('a.btn-gold[href="#/plan/new"]', 1200);
+  'first-rph': { title: 'Your first lesson plan', ms: 'RPH pertama anda', async run(d, page, s) {
+    await d.say('Let\'s plan a lesson from the Scheme of Work. Open Plan.', 'Mari rancang pelajaran daripada Skema Pelajaran. Buka Rancang.');
+    await d.click('nav a[href="#/plan"]', 1000);
+    await d.say('Press the gold New lesson plan button.', 'Tekan butang emas New lesson plan.', 1200);
+    await d.click('.row.top a.btn-gold[href="#/plan/new"]', 1200);
     await d.say('Step 1: choose your class, the date and the time.', 'Langkah 1: pilih kelas, tarikh dan masa.');
     await d.point('#nr-class'); await page.selectOption('#nr-class', { label: '4 Bestari · Year 4 SK' }); await d.wait(600);
     await d.point('#nr-start'); await page.fill('#nr-start', '10:40'); await d.wait(700);
@@ -148,7 +175,7 @@ const VIDEOS = {
     await d.say('Step 3: choose the SoW lesson. Consilia shows the topic, skill and textbook pages.', 'Langkah 3: pilih pelajaran SoW. Consilia menunjukkan topik, kemahiran dan halaman buku teks.');
     await d.click('[data-sow="2"]');
     await d.click('#nr-create', 1500);
-    await d.say('The builder has seven steps. Everything saves as you type.', 'Pembina RPH ada tujuh langkah. Semuanya disimpan semasa anda menaip.');
+    await d.say('The builder has seven steps. Everything saves as you type.', 'Pembina rancangan pelajaran ada tujuh langkah. Semuanya disimpan semasa anda menaip.');
     await d.point('.steps');
     await d.say('Setup is filled from your class and the SoW: theme, topic, values and more.', 'Setup diisi daripada kelas dan SoW anda: tema, topik, nilai dan lain-lain.');
     await page.mouse.wheel(0, 500); await d.wait(900); await page.mouse.wheel(0, -500); await d.wait(500);
@@ -161,6 +188,8 @@ const VIDEOS = {
     await d.type(`${o} >> [data-field=content]`, 'and answer 4 questions about where friends come from');
     await d.type(`${o} >> [data-field=degree]`, 'with at least 3 correct answers');
     await d.point(`${o} >> .smart`); await d.wait(1200);
+    await d.say('Below every step, "Tools for this step" opens helpers already filled with this lesson.', 'Di bawah setiap langkah, "Tools for this step" membuka alat bantu yang sudah diisi dengan pelajaran ini.');
+    await d.point('.steptools'); await d.wait(800);
     await d.click('.steps a:has-text("Lesson flow")', 1200);
     await d.say('Lesson flow suggests a framework for the skill and explains why. Here it is PPP for a speaking lesson.', 'Aliran pelajaran mencadangkan rangka untuk kemahiran itu dan sebabnya. Di sini PPP untuk pelajaran bertutur.');
     await d.point('.chip:has-text("Recommended")'); await d.wait(800);
@@ -168,7 +197,7 @@ const VIDEOS = {
     await d.click('.head .score', 1500);
     await d.say('The score ring shows what still needs attention. Each item jumps to the fix.', 'Cincin skor menunjukkan apa yang perlu diperbaiki. Setiap item membawa anda terus ke pembetulan.');
     await d.point('#check li.fail >> nth=0'); await d.wait(800);
-    await d.say('That\'s your first RPH. Next: watch "Objectives that pass SMART".', 'Itulah RPH pertama anda. Seterusnya: tonton "Objektif yang lulus SMART".', 3000);
+    await d.say('That\'s your first lesson plan. Next: watch "Let Consilia plan a lesson".', 'Itulah rancangan pelajaran pertama anda. Seterusnya: tonton "Biar Consilia rancang pelajaran".', 3000);
   } },
 
   'objectives': { title: 'Objectives that pass SMART', ms: 'Objektif yang lulus SMART', async run(d, page, s) {
@@ -193,10 +222,10 @@ const VIDEOS = {
     await d.point('.sc input');
     await d.say('Success criteria for pupils are written for you, as "I can…" statements.', 'Kriteria kejayaan untuk murid ditulis untuk anda, sebagai pernyataan "I can…".');
     await d.point(`${o} >> .sentence`);
-    await d.say('The sentence below shows the whole objective exactly as it will appear in your RPH.', 'Ayat di bawah menunjukkan objektif penuh seperti yang akan dipaparkan dalam RPH anda.');
+    await d.say('The sentence below shows the whole objective exactly as it will appear in your lesson plan.', 'Ayat di bawah menunjukkan objektif penuh seperti yang akan dipaparkan dalam RPH anda.');
     await d.point(`${o} >> button:has-text("Type it myself")`);
     await d.say('Prefer to write it in your own words? Press Type it myself. Consilia still checks it.', 'Lebih suka menulis dengan ayat sendiri? Tekan Type it myself. Consilia tetap menyemaknya.');
-    await d.say('Add a complementary objective the same way. Next: watch "Teach mode".', 'Tambah objektif sampingan dengan cara yang sama. Seterusnya: tonton "Mod Mengajar".', 3000);
+    await d.say('Add a complementary objective the same way. Next: watch "The Tools page".', 'Tambah objektif sampingan dengan cara yang sama. Seterusnya: tonton "Halaman Alat".', 3000);
   } },
 
   'teach': { title: 'Teach mode', ms: 'Mod Mengajar', async run(d, page, s) {
@@ -217,6 +246,9 @@ const VIDEOS = {
     await d.say('There is also a noise light, team points, an attention signal and a timer.', 'Ada juga lampu bunyi, mata pasukan, isyarat perhatian dan pemasa.');
     await d.click('[data-tool=timer]', 600); await d.click('.sheet button:has-text("1 min")', 2000);
     await d.click('.sheet button:has-text("Close")', 600);
+    await d.say('Games puts a spin wheel, unjumble and quiz on the projector, made from the lesson\'s words.', 'Games memaparkan roda putar, susun ayat dan kuiz pada projektor, daripada perkataan pelajaran.');
+    await d.click('[data-tool=games]', 600); await d.click('#g-spin', 4600);
+    await d.click('.sheet button:has-text("Close")', 600);
     await d.say('Press Next to move to the next stage.', 'Tekan Next untuk ke peringkat seterusnya.');
     await d.click('#teach-next', 1200); await d.click('#teach-next', 1000);
     await d.say('If the phone locks or the page reloads, Teach mode carries on from the same stage.', 'Jika telefon terkunci atau halaman dimuat semula, Mod Mengajar bersambung dari peringkat yang sama.');
@@ -224,7 +256,7 @@ const VIDEOS = {
     await d.wait(800);
     await d.say('At the end, compare planned and actual time, then record PBD or write your reflection.', 'Di akhir, bandingkan masa dirancang dan sebenar, kemudian rekod PBD atau tulis refleksi anda.', 3600);
     await d.point('#teach-pbd'); await d.wait(800);
-    await d.say('Next: watch "Classes and PBD".', 'Seterusnya: tonton "Kelas dan PBD".', 2400);
+    await d.say('Next: watch "Attendance and My day".', 'Seterusnya: tonton "Kehadiran dan Hari Saya".', 2400);
   } },
 
   'classes-pbd': { title: 'Classes and PBD', ms: 'Kelas dan PBD', async run(d, page, s) {
@@ -278,7 +310,101 @@ const VIDEOS = {
     await d.point('button:has-text("Print or save as PDF")'); await d.wait(700);
     await d.say('Or download a Word file to edit in Word, Google Docs or WPS.', 'Atau muat turun fail Word untuk disunting dalam Word, Google Docs atau WPS.');
     await Promise.all([page.waitForEvent('download'), d.click('#rv-word', 1500)]);
-    await d.say('Links you add get QR codes on the printed plan. Next: watch "Back up and restore".', 'Pautan yang anda tambah mendapat kod QR pada RPH bercetak. Seterusnya: tonton "Sandaran dan pemulihan".', 3200);
+    await d.say('Links you add get QR codes on the printed lesson plan. Next: watch "Back up and restore".', 'Pautan yang anda tambah mendapat kod QR pada RPH bercetak. Seterusnya: tonton "Sandaran dan pemulihan".', 3200);
+  } },
+
+  'recommend': { title: 'Let Consilia plan a lesson', ms: 'Biar Consilia rancang pelajaran', async run(d, page, s) {
+    await d.say('Consilia can plan a whole lesson for your class. On Today, press "Let Consilia plan it".', 'Consilia boleh merancang seluruh pelajaran untuk kelas anda. Di Hari Ini, tekan "Let Consilia plan it".');
+    await d.click('a:has-text("Let Consilia plan it")', 1200);
+    await d.point('#nr-class'); await page.selectOption('#nr-class', { label: '4 Bestari · Year 4 SK' }); await d.wait(500);
+    await d.say('Choose the SoW lesson.', 'Pilih pelajaran SoW.', 1500);
+    await d.click('[data-sow="2"]', 700);
+    await d.say('Tell Consilia about your class. Every question is optional, and it remembers your answers for this class.', 'Beritahu Consilia tentang kelas anda. Semua soalan pilihan, dan jawapan diingat untuk kelas ini.');
+    await d.click('[data-trait="shy"]', 400); await d.click('[data-trait="large-class"]', 400);
+    await d.type('#rc-words', 'Malaysia, Japan, China, India, Thailand', 18);
+    await d.type('#rc-sentence', 'He is from …', 40);
+    await d.say('What matters today? Here: more speaking, and an observation lesson.', 'Apa yang penting hari ini? Di sini: lebih banyak bertutur, dan pelajaran pencerapan.');
+    await d.click('[data-goal="speaking"]', 400); await d.click('[data-goal="observation"]', 600);
+    await d.click('#nr-create', 1200);
+    await d.say('Consilia shows how it decided: the framework, the class, and why each activity fits.', 'Consilia menunjukkan cara ia memutuskan: kerangka, kelas, dan sebab setiap aktiviti sesuai.', 4200);
+    await page.waitForSelector('#rc-use');
+    await d.point('.proposal .head'); await d.wait(800);
+    await d.say('Every stage has a step-by-step script, with Low, Moderate and High versions.', 'Setiap peringkat ada skrip langkah demi langkah, dengan versi Rendah, Sederhana dan Tinggi.');
+    await d.point('[data-stage] .script >> nth=1'); await d.wait(1000);
+    await d.say('Tap a teaching aid to see how to make it, step by step.', 'Ketik BBM untuk melihat cara membuatnya, langkah demi langkah.');
+    await d.click('.proposal details.bbm >> nth=0 >> summary', 2200);
+    await d.say('Not keen on an activity? Press "Another idea" — only that stage changes.', 'Kurang suka satu aktiviti? Tekan "Another idea" — hanya peringkat itu berubah.');
+    await d.click('[data-stage] >> nth=2 >> .another', 1600);
+    await d.say('Press Use this plan. It opens in the builder, scored and ready to edit.', 'Tekan Use this plan. Ia dibuka dalam pembina, sudah diberi skor dan sedia disunting.');
+    await d.click('#rc-use', 2200);
+    await d.say('Next: watch "Objectives that pass SMART".', 'Seterusnya: tonton "Objektif yang lulus SMART".', 2400);
+  } },
+
+  'tools': { title: 'The Tools page', ms: 'Halaman Alat', async run(d, page, s) {
+    await d.say('Tools has everything besides the lesson plan builder. Open the Tools tab.', 'Alat mengandungi semua selain pembina rancangan pelajaran. Buka tab Alat.');
+    await d.click('nav a[href="#/tools"]', 1000);
+    await d.say('Say your lesson once: "Use my latest lesson plan". Every tool fills itself in.', 'Sebut pelajaran anda sekali: "Use my latest lesson plan". Setiap alat terisi sendiri.');
+    if (await page.locator('#ctx-latest').count()) await d.click('#ctx-latest', 1200); else { await d.click('#ctx-change', 600); await page.selectOption('#ctx-lesson', s.lessonId); await d.wait(800); }
+    await d.say('Search by what you need, in English or Malay: "kad imbas" finds the BBM guide.', 'Cari ikut keperluan, dalam BI atau BM: "kad imbas" menjumpai panduan BBM.');
+    await d.type('#tools-q', 'kad imbas', 70); await d.wait(800); await page.fill('#tools-q', '');
+    await d.say('Classroom games are made from your words, for the projector, even offline.', 'Permainan kelas dibuat daripada perkataan anda, untuk projektor, walaupun luar talian.');
+    await d.click('[data-quick="games"]', 1200); await d.click('#g-spin', 4800);
+    await d.say('Activity ideas: filter by stage and time, then "Add to my lesson" puts one straight into your plan.', 'Idea aktiviti: tapis ikut peringkat dan masa, kemudian "Add to my lesson" memasukkannya terus ke rancangan.');
+    await page.goto(base + '#/tools/ideas'); await d.wait(900);
+    await d.click('[data-idea] >> nth=0 >> summary', 1500);
+    await d.click('[data-idea] >> nth=0 >> .add-btn', 1500);
+    await d.say('The BBM guide shows 25 teaching aids with pictures and how to make them.', 'Panduan BBM menunjukkan 25 BBM dengan gambar dan cara membuatnya.');
+    await page.goto(base + '#/tools/bbm'); await d.wait(900);
+    await d.click('[data-bbm="spinner"] summary', 2400);
+    await d.say('And "Improve with AI" writes a careful prompt for ChatGPT, Gemini or Canva AI, with no pupil names.', 'Dan "Improve with AI" menulis gesaan yang teliti untuk ChatGPT, Gemini atau Canva AI, tanpa nama murid.');
+    await page.goto(base + '#/tools/ai'); await d.wait(900); await d.point('.ai-copy'); await d.wait(800);
+    await d.say('Next: watch "Teach mode".', 'Seterusnya: tonton "Mod Mengajar".', 2400);
+  } },
+
+  'attendance-day': { title: 'Attendance and My day', ms: 'Kehadiran dan Hari Saya', async run(d, page, s) {
+    await d.say('Take attendance for any class, on any day. Open the class and press Take attendance.', 'Ambil kehadiran mana-mana kelas, pada bila-bila hari. Buka kelas dan tekan Take attendance.');
+    await page.goto(base + `#/classes/${s.classId}`); await d.wait(900);
+    await d.click('#cd-attendance', 1200);
+    await d.say('Tap A for absent, L for late, or E for excused, and add a reason if you like.', 'Ketik A untuk tidak hadir, L untuk lewat, atau E untuk dikecualikan, dan tambah sebab jika mahu.');
+    await d.click('[data-att="Dhia"] [data-mark="A"]', 600);
+    await d.type('[data-att="Dhia"] .reason', 'MC', 80);
+    await d.click('[data-att="Kavin"] [data-mark="L"]', 700);
+    await d.say('Then one tap marks everyone else present. It saves as you go.', 'Kemudian satu ketikan menandakan semua yang lain hadir. Ia disimpan serta-merta.');
+    await d.click('#att-all', 1500);
+    await d.say('Month shows every day, each pupil\'s rate, and exports to Excel.', 'Bulan menunjukkan setiap hari, kadar setiap murid, dan boleh dieksport ke Excel.');
+    await d.click('#att-month', 2000);
+    await d.say('Now arrange your day. Open Plan, then My day.', 'Sekarang susun hari anda. Buka Rancang, kemudian Hari Saya.');
+    await page.goto(base + '#/plan/day'); await d.wait(1200);
+    await d.say('Your periods come from your timetable. Add anything else: a relief class, a meeting, marking.', 'Waktu anda datang daripada jadual. Tambah apa sahaja: kelas ganti, mesyuarat, menanda.');
+    await d.point('input[aria-label="Time"]'); await page.fill('input[aria-label="Time"]', '08:20'); await d.wait(400);
+    await d.type('#day-add', 'Relief class 5 Cemerlang', 30); await d.click('#day-add-btn', 1200);
+    await d.say('Use the arrows or drag to put the day in your order, and tick items off as you go.', 'Guna anak panah atau seret untuk menyusun hari anda, dan tandakan item yang selesai.');
+    await d.click('[data-day-item] >> nth=2 >> button[aria-label="Move up"]', 900);
+    await d.click('[data-day-item] >> nth=0 >> input[type=checkbox]', 900);
+    await d.say('Each period has Plan, Teach and Attendance one tap away. Next: watch "Your yearly plan".', 'Setiap waktu ada Rancang, Ajar dan Kehadiran dengan satu ketikan. Seterusnya: tonton "Rancangan tahunan anda".', 3200);
+  } },
+
+  'yearly-plan': { title: 'Your yearly plan', ms: 'Rancangan tahunan anda', async run(d, page, s) {
+    await d.say('Your school\'s yearly plan, the RPT, shows what to teach each week. Open Plan, then Yearly plan.', 'Rancangan Pengajaran Tahunan sekolah menunjukkan apa yang diajar setiap minggu. Buka Rancang, kemudian Rancangan tahunan.');
+    await page.goto(base + '#/plan/year'); await d.wait(1200);
+    await d.say('Upload it as Word, Excel, CSV or PDF. Consilia reads the table on your phone. Nothing is uploaded.', 'Muat naiknya sebagai Word, Excel, CSV atau PDF. Consilia membaca jadual dalam telefon anda. Tiada apa dimuat naik.');
+    await d.point('label:has-text("Choose file")');
+    await page.setInputFiles('#yp-file', s.rptFile); await page.waitForSelector('#yp-save'); await d.wait(800);
+    await d.say('It finds the weeks, dates, topics, Learning Standards, SoW lessons and holidays, in Malay or English.', 'Ia menjumpai minggu, tarikh, topik, Standard Pembelajaran, pelajaran SoW dan cuti, dalam BM atau BI.');
+    await d.point('.ok-box'); await d.wait(1200);
+    await d.say('Check it, fix anything, and choose the classes that follow it. Then save.', 'Semak, betulkan apa-apa, dan pilih kelas yang mengikutinya. Kemudian simpan.');
+    await page.mouse.wheel(0, 500); await d.wait(1000);
+    await d.click('#yp-save', 1500);
+    await d.say('Yearly shows every week, with this week highlighted.', 'Tahunan menunjukkan setiap minggu, dengan minggu ini diserlahkan.');
+    await d.point('table.weeks tr.now'); await d.wait(800);
+    await d.say('Monthly shows the weeks as a calendar.', 'Bulanan menunjukkan minggu sebagai kalendar.');
+    await d.click('[data-ypview="month"]', 2000);
+    await d.say('Weekly shows the topic and SoW lessons, matched to your periods this week.', 'Mingguan menunjukkan topik dan pelajaran SoW, dipadankan dengan waktu anda minggu ini.');
+    await d.click('[data-ypview="week"]', 1500);
+    await d.point('[data-period-plan] >> nth=0'); await d.wait(900);
+    await d.say('"Plan lesson 4" opens New lesson plan with the lesson, class and time already chosen.', '"Plan lesson 4" membuka rancangan baharu dengan pelajaran, kelas dan masa sudah dipilih.');
+    await d.click('[data-period-plan] >> nth=0', 2200);
+    await d.say('No file? "Build it from the Scheme of Work" lays out the lessons week by week. Next: watch "Classes and PBD".', 'Tiada fail? "Build it from the Scheme of Work" menyusun pelajaran minggu demi minggu. Seterusnya: tonton "Kelas dan PBD".', 3400);
   } },
 
   'backup': { title: 'Back up and restore', ms: 'Sandaran dan pemulihan', async run(d, page, s) {
@@ -311,6 +437,7 @@ const VIDEOS = {
   const only = process.argv.slice(2);
   const browser = await chromium.launch();
   const s = await seed(browser);
+  s.rptFile = await makeRpt();
   for (const [id, v] of Object.entries(VIDEOS)) {
     if (only.length && !only.includes(id)) continue;
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'consilia-rec-'));

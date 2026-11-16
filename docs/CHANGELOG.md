@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.0.0-beta.4 · 17 November 2026 (milestone 9: plans, attendance, my day)
+
+**New**
+- **Yearly plan (RPT)**: upload the school's yearly plan as Word, Excel, CSV or PDF (with text). Consilia reads the table
+  on the device into weeks, dates, themes and topics, Learning Standards, SoW lesson numbers and holiday or exam weeks,
+  with Malay or English headers and dates. Check and correct it, link the classes that follow it, and save. Or build
+  one from the Scheme of Work (lessons per week, holiday weeks skipped). Views: Yearly (this week highlighted),
+  Monthly (calendar) and Weekly (topic, standards and SoW lessons matched to the week's timetable periods; "Plan lesson
+  N" opens New lesson plan with the lesson, class and time chosen). Excel export.
+- **My day**: the day's timetable periods and lesson plans with the teacher's own items (relief class, meeting,
+  marking), arranged by drag or ↑ ↓, ticked off, with notes; Plan, ▶ Teach and ✓ Attendance from each item; what the
+  yearly plan says for the week.
+- **Attendance** for any class and day: present, late, absent or excused with a reason, "Everyone else present",
+  month view with each pupil's rate, Excel export and a copyable summary. Teach mode adds its absences to the register
+  without changing the teacher's marks.
+- Plan has four tabs (Lessons, My day, This week, Yearly plan); Today has shortcuts to them.
+- **Ten tutorial videos**, re-recorded on the current app with English and Malay captions, including four new ones:
+  Let Consilia plan a lesson, The Tools page, Attendance and My day, Your yearly plan.
+
+**Changed**
+- The English screens say "lesson plan" instead of "RPH" (the Malay screens keep RPH). Word files are named
+  `LessonPlan-…docx`.
+- Manual: new articles on attendance, My day and yearly plans (44 articles).
+
 ## 1.0.0-beta.3 · 17 November 2026 (easier tools)
 
 - **Say the lesson once.** A lesson bar at the top of every tool (and on the Tools page) holds the year, skill, topic,

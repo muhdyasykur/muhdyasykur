@@ -1,10 +1,14 @@
-/** The six tutorial videos (blueprint F25). Recorded from the real app by scripts/record-videos.cjs, captioned in English and BM.
+/** The tutorial videos (blueprint F25). Recorded from the real app by scripts/record-videos.cjs, captioned in English and BM.
  *  Files live in public/videos/ and are not in the install: they download when played and are then kept for offline use. */
 export interface Video { id: string; title: string; ms: string; about: string }
 export const VIDEOS: Video[] = [
   { id: 'first-rph', title: 'Your first lesson plan', ms: 'RPH pertama anda', about: 'From New lesson plan to a finished, aligned plan using a SoW lesson.' },
+  { id: 'recommend', title: 'Let Consilia plan a lesson', ms: 'Biar Consilia rancang pelajaran', about: 'Tell Consilia about your class and get a whole lesson, step by step.' },
   { id: 'objectives', title: 'Objectives that pass SMART', ms: 'Objektif yang lulus SMART', about: 'Fix a vague objective with the ABCD boxes and success criteria.' },
+  { id: 'tools', title: 'The Tools page', ms: 'Halaman Alat', about: 'Say your lesson once; games, teaching aids and activities fill themselves in.' },
   { id: 'teach', title: 'Teach mode', ms: 'Mod Mengajar', about: 'Attendance, the stage clock and the classroom toolkit.' },
+  { id: 'attendance-day', title: 'Attendance and My day', ms: 'Kehadiran dan Hari Saya', about: 'Take attendance in seconds and arrange your day.' },
+  { id: 'yearly-plan', title: 'Your yearly plan', ms: 'Rancangan tahunan anda', about: 'Upload your RPT; see it by year, month and week.' },
   { id: 'classes-pbd', title: 'Classes and PBD', ms: 'Kelas dan PBD', about: 'Add a class, paste names, record TP levels and see progress.' },
   { id: 'export', title: 'Print, PDF and Word', ms: 'Cetak, PDF dan Word', about: 'Check the score, choose a layout and download the lesson plan.' },
   { id: 'backup', title: 'Back up and restore', ms: 'Sandaran dan pemulihan', about: 'Save one file each week and bring everything back on a new phone.' }

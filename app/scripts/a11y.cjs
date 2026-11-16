@@ -37,10 +37,10 @@ const verbose = process.argv.includes('--verbose');
   await page.waitForSelector('.ok');
 
   const routes = [
-    ['Today', '#/today'], ['Plan', '#/plan'], ['Week planner', '#/plan/week'], ['New lesson plan', '#/plan/new'],
+    ['Today', '#/today'], ['Plan', '#/plan'], ['Week planner', '#/plan/week'], ['My day', '#/plan/day'], ['Yearly plan', '#/plan/year'], ['New lesson plan', '#/plan/new'],
     ...['setup', 'standards', 'objectives', 'flow', 'materials', 'planb', 'review'].map((s) => [`Builder: ${s}`, `#/plan/edit/${lessonId}/${s}`]),
     ['Reflection', `#/plan/reflect/${lessonId}`],
-    ['Classes', '#/classes'], ['Class', `#/classes/${classId}`], ['Pupil profile', pupilHref], ['PBD record', `#/classes/${classId}/pbd/new`], ['PBD progress', `#/classes/${classId}/pbd`],
+    ['Classes', '#/classes'], ['Class', `#/classes/${classId}`], ['Pupil profile', pupilHref], ['PBD record', `#/classes/${classId}/pbd/new`], ['PBD progress', `#/classes/${classId}/pbd`], ['Attendance', `#/classes/${classId}/attendance`],
     ['Library: SoW', '#/library/4/sk/sow'], ['Library: SoW lesson', '#/library/4/sk/sow/1'], ['Library: standards', '#/library/4/sk/standards'], ['Library: levels', '#/library/4/sk/levels'],
     ['Library: tasks', '#/library/4/sk/tasks'], ['Library: textbooks', '#/library/4/sk/books'], ['Library: activity bank', '#/library/4/sk/bank'], ['Library: Method Guide', '#/library/4/sk/guide'],
     ['New lesson plan: recommend', '#/plan/new/recommend'], ['Tools', '#/tools'], ...['ideas', 'bbm', 'digital', 'games', 'ai', 'objectives', 'chant', 'differentiate', 'worksheets', 'manage'].map((t) => [`Tools: ${t}`, `#/tools/${t}`]),

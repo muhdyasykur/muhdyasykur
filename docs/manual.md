@@ -5,7 +5,7 @@ The same manual is in the app (Me → Help) with search and the six video tutori
 ## Contents
 
 - [Getting started](#start)
-- [Planning a lesson (RPH)](#plan)
+- [Planning a lesson](#plan)
 - [Consilia Recommends and Tools](#recommend)
 - [Teaching with Consilia](#teach)
 - [Classes, pupils and PBD](#classes)
@@ -29,7 +29,7 @@ Consilia is a web app. Open the link once with internet, and it saves itself on 
 
 ### Set up your profile
 
-The first screen asks for your language, name, practicum school, school type (SK or SJK) and programme. Your name and school appear on printed RPH. Change them any time in Me → Profile.
+The first screen asks for your language, name, practicum school, school type (SK or SJK) and programme. Your name and school appear on printed lesson plans. Change them any time in Me → Profile.
 
 ### Take the guided tour
 
@@ -37,20 +37,20 @@ An 8-step tour shows the main screens the first time you use Consilia. Replay it
 
 ### Find your way around
 
-Today: this week's lessons and your to-do list. Plan: every lesson plan and the weekly planner. Classes: Year 1 to Year 6 classes, pupils and PBD. Library: the SoW, DSKP, Method Guide, activity bank and your textbooks. Me: settings, backup, help, privacy and feedback.
+Today: this week's lessons, shortcuts and your to-do list. Plan: every lesson plan, My day, the weekly timetable and your yearly plan. Classes: Year 1 to Year 6 classes, pupils and PBD. Library: the SoW, DSKP, Method Guide, activity bank and your textbooks. Me: settings, backup, help, privacy and feedback.
 
-The gold "+ New RPH" button starts a lesson plan from anywhere.
+The gold "+ New lesson plan" button starts a lesson plan from anywhere.
 
 <a id="plan"></a>
-## Planning a lesson (RPH)
+## Planning a lesson
 
-### Plan your first RPH
+### Plan your first lesson
 
-Plan → New RPH. Three short questions set up the plan, then the builder walks you through seven steps. Everything saves as you type.
+Plan → New lesson plan. Three short questions set up the plan, then the builder walks you through seven steps. Everything saves as you type.
 
 1. Class and time: choose your class (or type one), the date, start time and length.
-2. How do you want to start? Pick one of three ways (see below).
-3. Choose the SoW lesson, then press Create RPH.
+2. How do you want to start? Pick one of four ways (see below).
+3. Choose the SoW lesson, then press Create lesson plan.
 
 > Tip: The score ring at the top shows how well the plan is aligned. Tap it to see what to fix.
 
@@ -102,9 +102,9 @@ List the teaching aids, key vocabulary and appendices. Add textbook pages so the
 
 Design with Canva AI: Consilia writes a prompt from your lesson. Press Copy prompt, then Open Canva AI and paste it.
 
-Find ready-made materials opens searches on Wordwall, Liveworksheets, Quizizz, Kahoot and YouTube. Add any link you use to the lesson; it gets a QR code on the printed RPH.
+Find ready-made materials opens searches on Wordwall, Liveworksheets, Quizizz, Kahoot and YouTube. Add any link you use to the lesson; it gets a QR code on the printed lesson plans.
 
-The Materials studio makes printables from your lesson: flashcards, gap-fill and matching worksheets, sentence strips, exit tickets, tiered worksheets and an assessment rubric. Tick "In RPH appendix" to print them with the plan.
+The Materials studio makes printables from your lesson: flashcards, gap-fill and matching worksheets, sentence strips, exit tickets, tiered worksheets and an assessment rubric. Tick "In lesson plan appendix" to print them with the plan.
 
 ### Step 6 · Plan B
 
@@ -114,7 +114,7 @@ Plan for what often goes wrong: pupils finish early, the lesson runs late, no pr
 
 The alignment score checks that objectives, activities, assessment and timing all match. Each item says what is wrong and jumps to the fix. If something is fine for your context, press Mark as fine and add a note.
 
-Choose a layout: School template (the standard RPH format) or Consilia Lesson Blueprint (a one-page visual plan).
+Choose a layout: School template (the standard lesson plan format) or Consilia Lesson Blueprint (a one-page visual plan).
 
 Print or save as PDF, or Download Word (.docx) to edit in Word, Google Docs or WPS.
 
@@ -122,9 +122,33 @@ Video: Me → Help → Video tutorials.
 
 ### Weekly planner and timetable
 
-Plan → This week. Set up your English timetable once (day, time, class, minutes). Each slot shows whether the lesson is planned, and "Plan this lesson" starts the RPH with the class and time filled in.
+Plan → This week. Set up your English timetable once (day, time, class, minutes). Each slot shows whether the lesson is planned, and "Plan this lesson" starts the lesson plan with the class and time filled in.
 
 For sports day or a holiday, choose "No class this day…" and Mark no class. Undo brings it back.
+
+### My day: arrange your day
+
+Plan → My day (or 📅 My day on Today) shows one day: your English periods from the timetable, lesson plans dated that day, and anything you add yourself, such as a relief class, a meeting or marking.
+
+Drag items, or use ↑ ↓, to put them in the order you want, and tick them off as you go. Each period has Plan this lesson, ▶ Teach and ✓ Attendance. Notes for the day are kept with it.
+
+> Tip: If you have a yearly plan, My day shows what it says for this week.
+
+Video: Me → Help → Video tutorials.
+
+### Yearly, monthly and weekly plans
+
+Plan → Yearly plan. Upload your school's yearly plan (Rancangan Pengajaran Tahunan) as a Word (.docx), Excel (.xlsx), CSV or PDF file made from Word. Consilia reads the table on this device: weeks, dates, themes and topics, Learning Standards, SoW lesson numbers and holiday or exam weeks, in Malay or English.
+
+Check the result, correct anything, choose the classes that follow it and save. No file? Choose "Build it from the Scheme of Work": Consilia lays out the SoW lessons week by week, skipping the holiday weeks you list.
+
+Yearly shows every week with this week highlighted. Monthly shows the weeks as a calendar. Weekly shows the week's topic, standards and SoW lessons, and matches them to your timetable periods: "Plan lesson 12" opens New lesson plan with the lesson, class and time already chosen.
+
+> Tip: Old .doc or .xls files: open them and "Save as" .docx or .xlsx first.
+>
+> Tip: A scanned PDF has no text to read: upload the Word or Excel version instead.
+
+Video: Me → Help → Video tutorials.
 
 ### Copy, duplicate, share and delete lessons
 
@@ -137,7 +161,7 @@ Share makes a .consilia file you can send on WhatsApp or Drive. It never include
 
 ### Let Consilia plan a lesson
 
-Plan → New RPH → ✨ Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
+Plan → New lesson plan → ✨ Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
 
 Consilia then plans the whole lesson on your device and shows how it decided: the framework and why, one or two activities for every stage with a step-by-step script, Low / Moderate / High versions, teaching aids (BBM) with pictures and making steps, a digital option that suits your classroom, SMART objectives, assessment and Plan B.
 
@@ -154,19 +178,23 @@ Nothing is sent anywhere: Consilia's planning engine uses the KSSR data, the fra
 >
 > Tip: The plan is a starting point: adapt it to your pupils and check it with your mentor.
 
+Video: Me → Help → Video tutorials.
+
 ### The Tools page
 
-Tools collects everything besides the RPH builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, BBM guide, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
+Tools collects everything besides the lesson plan builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, BBM guide, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
 
-1. Tell the tools your lesson once: in the bar at the top press "Use my latest RPH", choose one of your RPHs, or type the topic and key words. Every tool fills itself in from it.
+1. Tell the tools your lesson once: in the bar at the top press "Use my latest lesson plan", choose one of your lesson plans, or type the topic and key words. Every tool fills itself in from it.
 2. Use a tool. Results already use your year, topic, words and sentence.
-3. Press "＋ Add to my lesson" (activity ideas, chants) or "Use as main objective" to put the result straight into your RPH.
+3. Press "＋ Add to my lesson" (activity ideas, chants) or "Use as main objective" to put the result straight into your lesson plan.
 
-> Tip: In the RPH builder, "Tools for this step" opens the right tools already filled with that lesson.
+> Tip: In the lesson plan builder, "Tools for this step" opens the right tools already filled with that lesson.
 >
 > Tip: Search the Tools page by what you need, in English or Malay: "warm-up", "kad imbas", "noisy class", "lagu".
 >
 > Tip: New to a tool? Press "Try an example" to see it working before you type anything.
+
+Video: Me → Help → Video tutorials.
 
 ### Classroom games on the projector
 
@@ -232,6 +260,14 @@ Write my reflection asks what happened, what worked and what to change, with pro
 Classes → choose Year 1 to Year 6 → Add class. Give it a name ("4 Zhong"), school type (SK or SJK) and an optional level.
 
 Open the class and paste names, one per line, from Excel, Google Sheets or WhatsApp. Numbers and bullets are removed for you, and duplicate names get a letter (Ali A., Ali B.).
+
+Video: Me → Help → Video tutorials.
+
+### Take attendance
+
+Classes → your class → ✓ Take attendance (or ✓ Attendance in My day). Tap P (present), L (late), A (absent) or E (excused, such as MC or school duty) for each pupil, add a reason if you like, then "Everyone else present" marks the rest in one tap. It saves as you go, for any date.
+
+Month shows every day recorded with each pupil's attendance rate (below 80% is highlighted) and exports to Excel. Copy summary gives a short text for the class teacher. Absences you mark in Teach mode are added too, without changing marks you set.
 
 Video: Me → Help → Video tutorials.
 

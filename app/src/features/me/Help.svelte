@@ -8,7 +8,7 @@
   import { music, pause } from '../../lib/audio/player.svelte';
   import Icon from '../../lib/ui/Icon.svelte';
 
-  /** Help: guided tour, six captioned videos and the searchable manual. #/me/help/<article id> opens one article. */
+  /** Help: guided tour, ten captioned videos and the searchable manual. #/me/help/<article id> opens one article. */
   let q = $state('');
   const hits = $derived(searchManual(q));
   const openId = $derived(route.parts[1] ?? '');
