@@ -1,6 +1,6 @@
 // Smoke test of the built app: loads, navigates, switches language and theme, then works offline.
 // Run: npm run build && npx vite preview --port 4173 &  then  node scripts/smoke.cjs [screenshot-dir]
-const { launch } = require('./browser.cjs');
+const { launch, name: browserName } = require('./browser.cjs');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
@@ -41,7 +41,10 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     await page.click('.seg button:has-text("Gelap")');
     check((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', `${name}: dark theme applies`);
     if (out) await page.screenshot({ path: `${out}/${name}-me-dark-ms.png` });
-    // offline: wait for the service worker to take control, then reload with the network cut
+    // offline: wait for the service worker to take control, then reload with the network cut.
+    // Playwright's WebKit cannot reload a page while its offline emulation is on ("internal error"), so on WebKit
+    // the offline checks are left to Chromium and Firefox and to the pilot on real iPhones.
+    if (browserName === 'webkit') { console.log(`SKIP ${name}: offline reload (not supported by Playwright's WebKit)`); await ctx.close(); continue; }
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => {});
     await page.waitForTimeout(1500);
