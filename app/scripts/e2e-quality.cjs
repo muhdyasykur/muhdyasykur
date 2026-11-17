@@ -23,7 +23,12 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.fill('#cl-name', '4 Bestari');
   await page.click('button:has-text("Add class")');
   await page.waitForSelector('#cd-paste');
-  await page.fill('#cd-paste', 'Aina\nBala\nChong Wei');
+  await page.waitForFunction(() => document.title.startsWith('4 Bestari'));
+  // WebKit can still be settling the new screen when the names are typed: type again if the button did not update
+  for (let i = 0; i < 3; i++) {
+    await page.fill('#cd-paste', 'Aina\nBala\nChong Wei');
+    if (await page.waitForSelector('button:has-text("Add 3 pupils"):not([disabled])', { timeout: 3000 }).then(() => true, () => false)) break;
+  }
   await page.click('button:has-text("Add 3 pupils")');
   await page.waitForSelector('.pupils li:nth-child(3)');
   await page.goto(base + '#/plan/new');
