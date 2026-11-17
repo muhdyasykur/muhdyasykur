@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased (audit stage 1 and Bahasa Melayu)
+
+**Fixed**
+- Before 8 am in Malaysia, new lesson plans, PBD records, mentor notes, attendance and Teach mode attendance used
+  yesterday's date, and attendance's next/previous day buttons got stuck or skipped a day (dates were taken in UTC).
+- Keyboard: dialogs keep focus inside and give it back when closed; after moving to another screen, focus lands on
+  its heading and the browser tab shows the screen's name.
+- A screen that fails to draw shows a recovery panel (try again, reload, go to Today, back up my data) instead of a
+  blank page.
+- Full screen on phones without it (iPhone): the game or slides fill the window, with a note and an exit button.
+- When Consilia updates in another tab, this tab asks to reload instead of failing on the next save.
+
+**New**
+- **The whole interface in Bahasa Melayu**: every screen, message, the alignment checker, the BBM guide, digital
+  tools, classroom management, the Consilia Recommends explanations and the 46-article manual. Dates and day names
+  follow the language. What pupils see and the lesson itself stay in English: lesson plans, slides, worksheets,
+  projector games and Teach-mode pupil text. The Malay text loads only when chosen.
+
+**Quality**
+- Every browser suite, the accessibility audit and the speed budget now run automatically on each push, in Malaysian
+  time; the main journeys also run on Safari's engine (WebKit) and Firefox.
+- A test fails if any interface text lacks a Malay translation; data saved by older versions is tested to open.
+
 ## 1.0.0-beta.5 · 17 November 2026 (milestone 10: lesson slides and Claude)
 
 **New**

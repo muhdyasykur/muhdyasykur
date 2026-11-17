@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { t } from '../../lib/i18n/index.svelte';
   import type { SowLesson, Standards, Role } from '../../lib/curriculum/types';
   import Icon from '../../lib/ui/Icon.svelte';
@@ -43,10 +44,10 @@
         <div class="std">
           <span class={r.role === 'main' ? 'pill-m' : 'pill-c'} title={t(r.label)}>{r.pill}</span>
           <div class="stack tight">
-            {#each lesson.std[r.role].cs as c}<p><span class="code">CS {c}</span> {csText(c)}</p>{/each}
+            {#each lesson.std[r.role].cs as c}<p><span class="code">{tr('CS {c}', { c })}</span> {csText(c)}</p>{/each}
             {#each lesson.std[r.role].ls as c}
-              <p class="ls"><span class="code">LS {c}</span> {lsText(c)}</p>
-              {#if lesson.std.sowWording?.[c]}<p class="muted small">SoW: {lesson.std.sowWording[c]}</p>{/if}
+              <p class="ls"><span class="code">{tr('LS {c}', { c })}</span> {lsText(c)}</p>
+              {#if lesson.std.sowWording?.[c]}<p class="muted small">{tr('SoW: {x}', { x: lesson.std.sowWording[c] })}</p>{/if}
             {/each}
           </div>
         </div>

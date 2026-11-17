@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { tr } from '../i18n/index.svelte';
   /** Alignment score ring: amber below 80, green from 80. */
-  let { score, size = 56, label = 'Alignment score' }: { score: number; size?: number; label?: string } = $props();
+  let { score, size = 56, label = tr('Alignment score') }: { score: number; size?: number; label?: string } = $props();
   const r = 15.9155; // circumference 100
   const tone = $derived(score >= 80 ? 'ok' : score >= 50 ? 'warn' : 'bad');
 </script>
-<svg class="ring {tone}" viewBox="0 0 36 36" width={size} height={size} role="img" aria-label="{label}: {score} out of 100">
+<svg class="ring {tone}" viewBox="0 0 36 36" width={size} height={size} role="img" aria-label={tr('{label}: {score} out of 100', { label, score })}>
   <circle cx="18" cy="18" r={r} class="track" />
   <circle cx="18" cy="18" r={r} class="val" stroke-dasharray="{score} 100" />
   <text x="18" y="18" dy="0.35em" text-anchor="middle">{score}</text>

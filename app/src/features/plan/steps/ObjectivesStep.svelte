@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import type { Lesson, Objective, Role } from '../../../lib/lesson/model';
   import { newObjective } from '../../../lib/lesson/model';
   import { compose, skillOfLs, successCriterion, verbsFor } from '../../../lib/lesson/objectives';
@@ -24,7 +25,7 @@
 </script>
 
 <div class="stack">
-  <p class="muted">Write each objective in four parts: <b class="a-a">Audience</b>, <b class="a-b">Behaviour</b> (one observable verb and what pupils produce), <b class="a-c">Condition</b> and <b class="a-d">Degree</b>. Every Learning Standard, main and complementary, needs at least one objective.</p>
+  <p class="muted">{tr('Write each objective in four parts:')} <b class="a-a">{tr('Audience')}</b>, <b class="a-b">{tr('Behaviour')}</b> {tr('(one observable verb and what pupils produce),')} <b class="a-c">{tr('Condition')}</b> {tr('and')} <b class="a-d">{tr('Degree')}</b>{tr('. Every Learning Standard, main and complementary, needs at least one objective.')}</p>
 
   {#each lesson.objectives as o (o.id)}
     {@const smart = smartFor(lesson, o)}
@@ -32,47 +33,47 @@
     <section class="card stack obj">
       <div class="row between">
         <div class="row"><span class={o.role === 'main' ? 'pill-m' : 'pill-c'}>{o.role === 'main' ? 'M' : 'C'}</span><b>{labels.get(o.id)}</b>
-          <span class="muted small">{lesson.standards[o.role].ls.map((l) => 'LS ' + l.code).join(', ') || 'No standard chosen'}{skill ? ` · ${skill}` : ''}</span></div>
+          <span class="muted small">{lesson.standards[o.role].ls.map((l) => 'LS ' + l.code).join(', ') || tr('No standard chosen')}{skill ? ` · ${skill}` : ''}</span></div>
         <div class="row">
-          <button class="btn btn-text" type="button" onclick={() => toggleFree(o)}>{o.free === undefined ? 'Type it myself' : 'Use the ABCD builder'}</button>
-          {#if lesson.objectives.filter((x) => x.role === o.role).length > 1 || o.role === 'comp'}<button class="btn btn-text del" type="button" onclick={() => remove(o)}>Remove</button>{/if}
+          <button class="btn btn-text" type="button" onclick={() => toggleFree(o)}>{o.free === undefined ? tr('Type it myself') : tr('Use the ABCD builder')}</button>
+          {#if lesson.objectives.filter((x) => x.role === o.role).length > 1 || o.role === 'comp'}<button class="btn btn-text del" type="button" onclick={() => remove(o)}>{tr('Remove')}</button>{/if}
         </div>
       </div>
 
       {#if o.free === undefined}
         <div class="abcd">
-          <label class="field a"><span>A · Audience</span><input class="input" bind:value={o.audience} /></label>
-          <label class="field b"><span>B · Verb</span><input class="input" list={'verbs-' + o.id} bind:value={o.verb} placeholder="e.g. write" data-field="verb" /></label>
-          <label class="field b2"><span>B · What pupils will produce</span><input class="input" bind:value={o.content} placeholder="e.g. 5 sentences using should and shouldn't about healthy routines" data-field="content" /></label>
-          <label class="field c"><span>C · Condition</span><input class="input" bind:value={o.condition} placeholder="e.g. based on a picture worksheet" data-field="condition" /></label>
-          <label class="field d"><span>D · Degree</span><input class="input" list="degrees" bind:value={o.degree} placeholder="e.g. with at least 4 out of 5 correct" data-field="degree" /></label>
+          <label class="field a"><span>{tr('A · Audience')}</span><input class="input" bind:value={o.audience} /></label>
+          <label class="field b"><span>{tr('B · Verb')}</span><input class="input" list={'verbs-' + o.id} bind:value={o.verb} placeholder={tr('e.g. write')} data-field="verb" /></label>
+          <label class="field b2"><span>{tr('B · What pupils will produce')}</span><input class="input" bind:value={o.content} placeholder={tr('e.g. 5 sentences using should and shouldn\'t about healthy routines')} data-field="content" /></label>
+          <label class="field c"><span>{tr('C · Condition')}</span><input class="input" bind:value={o.condition} placeholder={tr('e.g. based on a picture worksheet')} data-field="condition" /></label>
+          <label class="field d"><span>{tr('D · Degree')}</span><input class="input" list="degrees" bind:value={o.degree} placeholder={tr('e.g. with at least 4 out of 5 correct')} data-field="degree" /></label>
         </div>
         <datalist id={'verbs-' + o.id}>{#each verbsFor(skill) as v}<option value={v}></option>{/each}</datalist>
         <p class="sentence"><span class="a-a">{o.audience}</span> <span class="a-b">{o.verb || '…'}</span> {o.content} <span class="a-c">{o.condition}</span> <span class="a-d">{o.degree}</span></p>
       {:else}
-        <label class="field"><span>Objective</span><textarea class="input ta" rows="3" bind:value={o.free}></textarea></label>
+        <label class="field"><span>{tr('Objective')}</span><textarea class="input ta" rows="3" bind:value={o.free}></textarea></label>
       {/if}
 
-      <ul class="smart" aria-label="SMART check">
-        {#each smart as s}<li class:ok={s.ok} title={s.message}><span class="l">{s.letter}</span><span class="sr-only">{s.ok ? 'passes' : 'needs work'}: {s.message}</span></li>{/each}
+      <ul class="smart" aria-label={tr('SMART check')}>
+        {#each smart as s}<li class:ok={s.ok} title={s.message}><span class="l">{s.letter}</span><span class="sr-only">{s.ok ? 'passes' : tr('needs work')}: {s.message}</span></li>{/each}
       </ul>
       {#each smart.filter((s) => !s.ok) as s}<p class="fix"><b>{s.letter}</b> {s.message}</p>{/each}
     </section>
   {/each}
 
   <div class="row">
-    <button class="btn btn-outline" type="button" onclick={() => add('main')}>+ Main objective</button>
-    <button class="btn btn-outline" type="button" onclick={() => add('comp')}>+ Complementary objective</button>
+    <button class="btn btn-outline" type="button" onclick={() => add('main')}>{tr('+ Main objective')}</button>
+    <button class="btn btn-outline" type="button" onclick={() => add('comp')}>{tr('+ Complementary objective')}</button>
   </div>
 
   <section class="card stack">
-    <h3>Success criteria</h3>
-    <p class="muted small">Written for pupils as "I can…". Shown in Teach mode and used for self-checks. Generated from each objective; edit if you like.</p>
+    <h3>{tr('Success criteria')}</h3>
+    <p class="muted small">{tr('Written for pupils as "I can…". Shown in Teach mode and used for self-checks. Generated from each objective; edit if you like.')}</p>
     {#each criteria(lesson) as c (c.objective.id)}
       <div class="sc">
         <span class="lbl">{labels.get(c.objective.id)}</span>
-        <input class="input pupil" value={c.text} onchange={(e) => setCriterion(c.objective, e.currentTarget.value)} aria-label="Success criterion" />
-        {#if c.edited && successCriterion(c.objective)}<button class="btn btn-text" type="button" onclick={() => resetCriterion(c.objective)}>Reset</button>{/if}
+        <input class="input pupil" value={c.text} onchange={(e) => setCriterion(c.objective, e.currentTarget.value)} aria-label={tr('Success criterion')} />
+        {#if c.edited && successCriterion(c.objective)}<button class="btn btn-text" type="button" onclick={() => resetCriterion(c.objective)}>{tr('Reset')}</button>{/if}
       </div>
     {/each}
   </section>

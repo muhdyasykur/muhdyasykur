@@ -37,6 +37,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     if (out) await page.screenshot({ path: `${out}/${name}-levels.png` });
     await page.click('nav a[href="#/me"]');
     await page.click('button:has-text("Bahasa Melayu")');
+    await page.waitForFunction(() => document.querySelector('h1')?.textContent === 'Saya', null, { timeout: 5000 }).catch(() => {});
     check((await page.locator('h1').innerText()) === 'Saya', `${name}: switches to Bahasa Melayu`);
     await page.click('.seg button:has-text("Gelap")');
     check((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', `${name}: dark theme applies`);

@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { tr } from './lib/i18n/index.svelte';
   import { route, href, type RouteName } from './router.svelte';
-  import { t, type Key } from './lib/i18n/index.svelte';
+  import { t, i18n, type Key } from './lib/i18n/index.svelte';
   import { pwa } from './lib/pwa.svelte';
   import Icon, { type IconName } from './lib/ui/Icon.svelte';
   import Logo from './lib/ui/Logo.svelte';
@@ -45,6 +46,8 @@
   ];
 </script>
 
+<!-- A language change re-creates the screens, so text built in code switches too -->
+{#key i18n.locale}
 {#if route.name === 'teach' && route.parts[0]}
   {#key route.parts[0]}
     <svelte:boundary onerror={logCrash}>
@@ -53,12 +56,12 @@
     </svelte:boundary>
   {/key}
 {:else}
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">{tr('Skip to content')}</a>
 <div class="shell">
-  <nav class="nav" aria-label="Main">
+  <nav class="nav" aria-label={tr('Main')}>
     <a class="brand" href={href('today')}>
       <Logo size={36} />
-      <span class="word">Consilia</span>
+      <span class="word">{tr('Consilia')}</span>
     </a>
     <ul>
       {#each tabs as tab}
@@ -91,6 +94,8 @@
 
 {/if}
 
+{/key}
+
 {#if terms.accepted && profile.loaded && !profile.value && !profile.skipped && route.name !== 'teach'}<Onboarding />{/if}
 {#if terms.accepted && tour.open && route.name !== 'teach'}<Tour />{/if}
 {#if !terms.accepted && !splash}<Terms gate />{/if}
@@ -99,18 +104,18 @@
 {#if appError.message}
   <div class="toast err" role="alert">
     <span><b>{appError.message}</b> {appError.next}</span>
-    <button class="btn btn-outline" type="button" onclick={clearError}>OK</button>
+    <button class="btn btn-outline" type="button" onclick={clearError}>{tr('OK')}</button>
   </div>
 {/if}
 
 {#if dbHealth.stale}
   <div class="toast err" role="alert" data-db-stale>
-    <span><b>Consilia was updated in another tab.</b> Reload this tab to keep working; your saved work is safe.</span>
-    <button class="btn btn-gold" type="button" onclick={() => location.reload()}>Reload</button>
+    <span><b>{tr('Consilia was updated in another tab.')}</b> {tr('Reload this tab to keep working; your saved work is safe.')}</span>
+    <button class="btn btn-gold" type="button" onclick={() => location.reload()}>{tr('Reload')}</button>
   </div>
 {:else if dbHealth.blocked}
   <div class="toast" role="status" data-db-blocked>
-    <span><b>Finishing an update.</b> Close Consilia in your other tabs or windows to continue.</span>
+    <span><b>{tr('Finishing an update.')}</b> {tr('Close Consilia in your other tabs or windows to continue.')}</span>
   </div>
 {/if}
 

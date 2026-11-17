@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import type { Lesson, Role } from '../../../lib/lesson/model';
   import type { Standards } from '../../../lib/curriculum/types';
   import { skillOfLs } from '../../../lib/lesson/objectives';
@@ -22,7 +23,7 @@
   }
   const list = $derived(standards.ls.filter((l) => l.skill === skill));
   const chosen = (code: string) => lesson.standards[role].ls.some((x) => x.code === code);
-  const roles: { r: Role; pill: string; name: string }[] = [{ r: 'main', pill: 'M', name: 'Main skill' }, { r: 'comp', pill: 'C', name: 'Complementary skill' }];
+  const roles: { r: Role; pill: string; name: string }[] = [{ r: 'main', pill: 'M', name: tr('Main skill') }, { r: 'comp', pill: 'C', name: tr('Complementary skill') }];
 </script>
 
 <div class="stack">
@@ -31,25 +32,25 @@
       <span class={x.r === 'main' ? 'pill-m' : 'pill-c'}>{x.pill}</span>
       <div class="stack tight">
         <b>{x.name}{#if x.r === 'main' && lesson.mainSkill}: {lesson.mainSkill}{:else if x.r === 'comp' && lesson.compSkill}: {lesson.compSkill}{/if}</b>
-        {#each lesson.standards[x.r].cs as c}<p><span class="code">CS {c.code}</span> {c.text}</p>{/each}
-        {#each lesson.standards[x.r].ls as l}<p class="pre"><span class="code">LS {l.code}</span> {l.text}</p>{/each}
-        {#if !lesson.standards[x.r].ls.length}<p class="muted">{x.r === 'comp' ? 'No complementary standard yet. The SoW pairs every lesson with one, and it needs its own objective.' : 'Choose the main Learning Standard below.'}</p>{/if}
+        {#each lesson.standards[x.r].cs as c}<p><span class="code">{tr('CS {code}', { code: c.code })}</span> {c.text}</p>{/each}
+        {#each lesson.standards[x.r].ls as l}<p class="pre"><span class="code">{tr('LS {code}', { code: l.code })}</span> {l.text}</p>{/each}
+        {#if !lesson.standards[x.r].ls.length}<p class="muted">{x.r === 'comp' ? tr('No complementary standard yet. The SoW pairs every lesson with one, and it needs its own objective.') : tr('Choose the main Learning Standard below.')}</p>{/if}
       </div>
     </section>
   {/each}
   {#if lesson.sowNotes.note && !lesson.standards.main.ls.length}<p class="card note pre">{lesson.sowNotes.note}</p>{/if}
 
   {#if !unlocked}
-    <p class="muted">These standards come from SoW lesson {lesson.curriculum.sowLesson}. <button class="btn btn-text" type="button" onclick={() => (unlocked = true)}>Change them</button></p>
+    <p class="muted">{tr('These standards come from SoW lesson {sowLesson}.', { sowLesson: lesson.curriculum.sowLesson })} <button class="btn btn-text" type="button" onclick={() => (unlocked = true)}>{tr('Change them')}</button></p>
   {:else}
     <section class="card stack">
-      <h3>Choose from the Year {lesson.curriculum.year} DSKP</h3>
+      <h3>{tr('Choose from the Year {year} DSKP', { year: lesson.curriculum.year })}</h3>
       <div class="row">
-        <div class="seg" role="group" aria-label="Standard role">
+        <div class="seg" role="group" aria-label={tr('Standard role')}>
           {#each roles as x}<button type="button" aria-pressed={role === x.r} onclick={() => (role = x.r)}>{x.pill} · {x.name}</button>{/each}
         </div>
       </div>
-      <div class="seg skills" role="group" aria-label="Skill">
+      <div class="seg skills" role="group" aria-label={tr('Skill')}>
         {#each skills as s}<button type="button" aria-pressed={skill === s} onclick={() => (skill = s)}>{s}</button>{/each}
       </div>
       <ul class="pick">

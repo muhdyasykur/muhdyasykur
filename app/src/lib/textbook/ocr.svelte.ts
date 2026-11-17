@@ -1,3 +1,4 @@
+import { tr } from '../i18n/index.svelte';
 import { db, type Book } from '../db/schema';
 import { getBookFile } from './store';
 import { openPdf } from './pdf';
@@ -36,24 +37,24 @@ export async function ocrFilesKept(): Promise<boolean> {
 export async function makeSearchable(book: Book, opts: { scale?: number } = {}) {
   if (ocr.phase === 'loading' || ocr.phase === 'reading') return;
   stop = false;
-  Object.assign(ocr, { bookId: book.id, done: book.ocrDone ?? 0, total: book.pages, phase: 'loading', message: 'Getting text recognition ready…' });
+  Object.assign(ocr, { bookId: book.id, done: book.ocrDone ?? 0, total: book.pages, phase: 'loading', message: tr('Getting text recognition ready…') });
   let worker: import('tesseract.js').Worker | null = null;
   try {
     const file = await getBookFile(book);
-    if (!file) throw new Error('The PDF is no longer on this device. Add it again on the Textbook Shelf.');
+    if (!file) throw Object.assign(new Error('The PDF is no longer on this device.'), { code: 'pdf-missing' });
     const doc = await openPdf(file);
     const { createWorker, OEM } = await import('tesseract.js');
     const base = new URL(`${import.meta.env.BASE_URL}ocr/`, location.href).href;
     worker = await createWorker('eng', OEM.LSTM_ONLY, {
       workerPath: base + 'worker.min.js', corePath: base, langPath: base.replace(/\/$/, ''), workerBlobURL: false, gzip: true,
-      logger: (m: { status: string; progress: number }) => { if (ocr.phase === 'loading' && /loading|initializ/.test(m.status)) ocr.message = `Getting text recognition ready… ${Math.round(m.progress * 100)}%`; }
+      logger: (m: { status: string; progress: number }) => { if (ocr.phase === 'loading' && /loading|initializ/.test(m.status)) ocr.message = tr('Getting text recognition ready… {x}%', { x: Math.round(m.progress * 100) }); }
     });
     const text = [...(book.text ?? Array(book.pages).fill(''))];
     const canvas = document.createElement('canvas');
     ocr.phase = 'reading';
     for (let i = book.ocrDone ?? 0; i < book.pages; i++) {
-      if (stop) { ocr.phase = 'paused'; ocr.message = `Paused at page ${i} of ${book.pages}.`; return; }
-      ocr.message = `Reading page ${i + 1} of ${book.pages}…`;
+      if (stop) { ocr.phase = 'paused'; ocr.message = tr('Paused at page {i} of {pages}.', { i, pages: book.pages }); return; }
+      ocr.message = tr('Reading page {x} of {pages}…', { x: i + 1, pages: book.pages });
       const page = await doc.getPage(i + 1);
       const v1 = page.getViewport({ scale: 1 });
       const vp = page.getViewport({ scale: (opts.scale ?? 1600) / v1.width });
@@ -67,10 +68,10 @@ export async function makeSearchable(book: Book, opts: { scale?: number } = {}) 
       ocr.done = i + 1;
       await new Promise((r) => setTimeout(r, 30)); // let the app breathe between pages
     }
-    ocr.phase = 'finished'; ocr.message = `Finished. ${book.pages} pages are now searchable.`;
+    ocr.phase = 'finished'; ocr.message = tr('Finished. {pages} pages are now searchable.', { pages: book.pages });
   } catch (e) {
     ocr.phase = 'error';
-    ocr.message = (e as Error).message?.startsWith('The PDF') ? (e as Error).message : 'Text recognition stopped. Check that you were online the first time, then press Continue.';
+    ocr.message = (e as { code?: string }).code === 'pdf-missing' ? tr('The PDF is no longer on this device. Add it again on the Textbook Shelf.') : tr('Text recognition stopped. Check that you were online the first time, then press Continue.');
   } finally {
     await worker?.terminate().catch(() => {});
   }

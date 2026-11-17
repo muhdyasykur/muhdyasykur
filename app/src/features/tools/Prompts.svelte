@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { PROMPT_KINDS, buildPrompt, cefr, type PromptKind } from '../../lib/recommend/prompts';
   import AiButtons from './AiButtons.svelte';
   import { ctx, ctxWords } from '../../lib/tools/context.svelte';
@@ -13,13 +14,13 @@
   const needsExtra = $derived(kind === 'improve' || kind === 'differentiate' || kind === 'rubric');
 </script>
 <div class="stack">
-  <p class="muted">Choose what you need. Consilia writes a careful prompt for your pupils' level (Year {ctx.year} ≈ CEFR {cefr(ctx.year)}). You paste it into the AI you prefer.</p>
-  <div class="kinds" role="radiogroup" aria-label="What do you need?">
-    {#each PROMPT_KINDS as k}<button type="button" role="radio" aria-checked={kind === k.id} class="card kind" data-kind={k.id} onclick={() => (kind = k.id)}><b>{k.title}</b><span class="muted small">{k.about}</span></button>{/each}
+  <p class="muted">{tr('Choose what you need. Consilia writes a careful prompt for your pupils\' level (Year {year} ≈ CEFR {x}). You paste it into the AI you prefer.', { year: ctx.year, x: cefr(ctx.year) })}</p>
+  <div class="kinds" role="radiogroup" aria-label={tr('What do you need?')}>
+    {#each PROMPT_KINDS as k}<button type="button" role="radio" aria-checked={kind === k.id} class="card kind" data-kind={k.id} onclick={() => (kind = k.id)}><b>{tr(k.title)}</b><span class="muted small">{tr(k.about)}</span></button>{/each}
   </div>
   <section class="card stack">
-    {#if needsExtra}<label class="field"><span>{kind === 'improve' ? 'Paste your lesson plan' : kind === 'rubric' ? 'Your objectives' : 'The activity'}</span><textarea class="input ta" rows="4" bind:value={extra}></textarea></label>{/if}
-    <AiButtons {prompt} label="Get it from AI" />
+    {#if needsExtra}<label class="field"><span>{kind === 'improve' ? tr('Paste your lesson plan') : kind === 'rubric' ? tr('Your objectives') : tr('The activity')}</span><textarea class="input ta" rows="4" bind:value={extra}></textarea></label>{/if}
+    <AiButtons {prompt} label={tr('Get it from AI')} />
   </section>
 </div>
 <style>

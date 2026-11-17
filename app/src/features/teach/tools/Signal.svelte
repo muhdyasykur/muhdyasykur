@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import { signal } from '../../../lib/audio/sfx';
   let count = $state(0);
   $effect(() => { signal(); });
@@ -8,7 +9,7 @@
   <p class="big pupil-font">Eyes on me! 👀</p>
   <p class="sub pupil-font">Stop · Look · Listen</p>
   {#if count > 0}<p class="count" aria-live="assertive">{count}</p>{/if}
-  <button class="btn btn-outline" type="button" onclick={again}>Signal again with 3-2-1</button>
+  <button class="btn btn-outline" type="button" onclick={again}>{tr('Signal again with 3-2-1')}</button>
 </div>
 <style>
   .tool { display: grid; gap: var(--s-3); justify-items: center; text-align: center; padding: var(--s-8) 0; }

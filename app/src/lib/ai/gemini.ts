@@ -2,6 +2,7 @@
  * Google Gemini, one of the two AI assistants a teacher can connect with their own key (free tier). Requests go straight
  * from the device to Google: Consilia has no server. See common.ts for what is sent.
  */
+import { tr } from '../i18n/index.svelte';
 import { AiError } from './common';
 export { AiError, slidePrompt, lessonBrief, parseSlideContent, SLIDE_SCHEMA, type SlidePart } from './common';
 
@@ -11,12 +12,12 @@ export const FALLBACK_MODEL = 'gemini-flash-latest';
 
 /** Turn a Google error into a plain message with a next step. */
 export function explain(status: number, body = ''): AiError {
-  if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return new AiError('key', 'Google did not accept the key. Copy it again from Google AI Studio and paste it in Me → AI assistant.');
-  if (status === 401 || status === 403) return new AiError('key', 'Google refused the key. Check it in Me → AI assistant, or make a new key in Google AI Studio.');
-  if (status === 429) return new AiError('quota', 'The free limit for now is used up. Wait a minute and try again, or try again tomorrow.');
-  if (status === 404) return new AiError('bad', 'That AI model is not available to your key. In Me → AI assistant, tap "Test the key" to choose another.');
-  if (status >= 500) return new AiError('server', 'Google\'s AI is busy. Try again in a minute.');
-  return new AiError('bad', 'The AI request did not work. Try again; the built-in slides are unchanged.');
+  if (status === 400 && /API key not valid|API_KEY_INVALID/i.test(body)) return new AiError('key', tr('Google did not accept the key. Copy it again from Google AI Studio and paste it in Me → AI assistant.'));
+  if (status === 401 || status === 403) return new AiError('key', tr('Google refused the key. Check it in Me → AI assistant, or make a new key in Google AI Studio.'));
+  if (status === 429) return new AiError('quota', tr('The free limit for now is used up. Wait a minute and try again, or try again tomorrow.'));
+  if (status === 404) return new AiError('bad', tr('That AI model is not available to your key. In Me → AI assistant, tap "Test the key" to choose another.'));
+  if (status >= 500) return new AiError('server', tr('Google\'s AI is busy. Try again in a minute.'));
+  return new AiError('bad', tr('The AI request did not work. Try again; the built-in slides are unchanged.'));
 }
 
 /** The newest stable Flash model the key can use (names change over time, so it is discovered, not fixed). */
@@ -35,7 +36,7 @@ async function call(path: string, key: string, init: RequestInit = {}, f: typeof
   let r: Response;
   try {
     r = await f(`${API}/${path}`, { ...init, headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key, ...(init.headers ?? {}) }, referrerPolicy: 'no-referrer', credentials: 'omit' });
-  } catch { throw new AiError('offline', 'No internet connection, so the cloud AI cannot be reached. The built-in slides still work offline.'); }
+  } catch { throw new AiError('offline', tr('No internet connection, so the cloud AI cannot be reached. The built-in slides still work offline.')); }
   if (!r.ok) throw explain(r.status, await r.text().catch(() => ''));
   return r.json();
 }
@@ -49,16 +50,16 @@ export async function testKey(key: string, f: typeof fetch = fetch): Promise<{ m
 
 /** One request with the teacher's Gemini key. With a schema the answer is JSON in that shape. */
 export async function generate(s: { key: string; model: string }, prompt: string, schema?: object, f: typeof fetch = fetch): Promise<string> {
-  if (!s.key) throw new AiError('key', 'No Gemini key yet. Add one in Me → AI assistant.');
+  if (!s.key) throw new AiError('key', tr('No Gemini key yet. Add one in Me → AI assistant.'));
   const body = {
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: { temperature: 0.7, maxOutputTokens: 4096, ...(schema ? { responseMimeType: 'application/json', responseSchema: schema } : {}) }
   };
   const j = (await call(`models/${encodeURIComponent(s.model || FALLBACK_MODEL)}:generateContent`, s.key, { method: 'POST', body: JSON.stringify(body) }, f)) as
     { candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[]; promptFeedback?: { blockReason?: string } };
-  if (j.promptFeedback?.blockReason) throw new AiError('blocked', 'Google\'s safety filter stopped this request. Change the topic or words and try again.');
+  if (j.promptFeedback?.blockReason) throw new AiError('blocked', tr('Google\'s safety filter stopped this request. Change the topic or words and try again.'));
   const text = j.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
-  if (!text.trim()) throw new AiError('bad', 'The AI sent an empty answer. Try again.');
+  if (!text.trim()) throw new AiError('bad', tr('The AI sent an empty answer. Try again.'));
   return text;
 }
 

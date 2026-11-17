@@ -3,6 +3,7 @@
  * It is a planning engine, not a chatbot: every choice comes from the KSSR data, the framework rules, the activity
  * library and the BBM guide, and every choice is explained in the planning log. Runs on the device, offline.
  */
+import { tr } from '../i18n/index.svelte';
 import { FRAMEWORKS, defaultMinutes, recommend } from '../lesson/frameworks';
 import { newActivity, newObjective, uid, type Activity, type FrameworkId, type Lesson, type Objective, type Pattern } from '../lesson/model';
 import { fillPlanB } from '../lesson/planb';
@@ -85,28 +86,28 @@ interface Ctx { b: Brief; p: ClassProfile; skill: string; stageKey: string; stag
 function score(r: Recipe, c: Ctx): { s: number; why: string[] } {
   const why: string[] = []; let s = 0;
   const g = new Set(c.b.goals), t = new Set(c.p.traits);
-  if (r.skill === c.skill) { s += 3; why.push(c.skill === 'Pre-lesson' ? 'a quick, active start' : c.skill === 'Post-lesson' ? 'pupils review their own learning' : `practises ${c.skill.toLowerCase()}`); }
+  if (r.skill === c.skill) { s += 3; why.push(c.skill === 'Pre-lesson' ? tr('a quick, active start') : c.skill === 'Post-lesson' ? tr('pupils review their own learning') : `practises ${c.skill.toLowerCase()}`); }
   else if (r.skill === c.b.mainSkill || r.skill === c.b.compSkill) s += 1;
   const over = r.minutes - c.stageMin;
-  if (over > 3) s -= (over - 3) * 0.6; else why.push(`fits the ${c.stageMin} minutes`);
-  if (g.has('fun') && r.energy === 'active') { s += 1.5; why.push('lively and fun'); }
-  if (g.has('calm')) { if (r.energy === 'calm') { s += 1.5; why.push('keeps the class calm'); } else s -= 1; }
-  if (g.has('speaking') && SPEAK_OUT.includes(r.output) && r.pattern !== 'individual') { s += 1.5; why.push('gets every pupil talking'); }
-  if (g.has('observation') && r.wow) { s += 2; why.push('a memorable moment for your observer'); }
-  if (g.has('creative') && (r.wow || CREATIVE_OUT.includes(r.output))) { s += 1.5; why.push('lets pupils create'); }
-  if (g.has('assessment') && (r.bbm.some((x) => x === 'mini-whiteboards' || x === 'traffic-cards') || r.output === 'answers')) { s += 1; why.push('shows you who has learnt it'); }
-  if (g.has('tech') && r.digital.some((d) => { const x = digitalById(d); return x && fits(x, has(c.p)); })) { s += 1.5; why.push('uses a digital tool your class can run'); }
-  if (t.has('shy') && r.pattern === 'pairs') { s += 1; why.push('pairs first, so shy pupils speak safely'); }
+  if (over > 3) s -= (over - 3) * 0.6; else why.push(tr('fits the {stageMin} minutes', { stageMin: c.stageMin }));
+  if (g.has('fun') && r.energy === 'active') { s += 1.5; why.push(tr('lively and fun')); }
+  if (g.has('calm')) { if (r.energy === 'calm') { s += 1.5; why.push(tr('keeps the class calm')); } else s -= 1; }
+  if (g.has('speaking') && SPEAK_OUT.includes(r.output) && r.pattern !== 'individual') { s += 1.5; why.push(tr('gets every pupil talking')); }
+  if (g.has('observation') && r.wow) { s += 2; why.push(tr('a memorable moment for your observer')); }
+  if (g.has('creative') && (r.wow || CREATIVE_OUT.includes(r.output))) { s += 1.5; why.push(tr('lets pupils create')); }
+  if (g.has('assessment') && (r.bbm.some((x) => x === 'mini-whiteboards' || x === 'traffic-cards') || r.output === 'answers')) { s += 1; why.push(tr('shows you who has learnt it')); }
+  if (g.has('tech') && r.digital.some((d) => { const x = digitalById(d); return x && fits(x, has(c.p)); })) { s += 1.5; why.push(tr('uses a digital tool your class can run')); }
+  if (t.has('shy') && r.pattern === 'pairs') { s += 1; why.push(tr('pairs first, so shy pupils speak safely')); }
   if (t.has('shy') && (r.output === 'performance' || TURN_TAKING.has(r.id))) s -= 0.5;
-  if (t.has('energetic') && r.energy === 'active') { s += 1; why.push('channels energy into movement'); }
-  if ((t.has('weak-readers') || t.has('sen') || t.has('mixed-languages') || c.p.level === 'low') && r.bbm.some((x) => ['flashcards', 'realia', 'scene-poster', 'puppets'].includes(x))) { s += 1; why.push('picture support for weaker pupils'); }
+  if (t.has('energetic') && r.energy === 'active') { s += 1; why.push(tr('channels energy into movement')); }
+  if ((t.has('weak-readers') || t.has('sen') || t.has('mixed-languages') || c.p.level === 'low') && r.bbm.some((x) => ['flashcards', 'realia', 'scene-poster', 'puppets'].includes(x))) { s += 1; why.push(tr('picture support for weaker pupils')); }
   if (t.has('large-class') && TURN_TAKING.has(r.id)) s -= 1.5;
   if (t.has('large-class') && (r.pattern === 'pairs' || r.pattern === 'groups')) s += 0.5;
   if (c.p.level === 'high' && r.wow) s += 0.5;
   const prep = r.bbm.reduce((a, id) => a + (bbmById(id)?.minutes ?? 0), 0);
   if (c.b.prepMinutes <= 10) s -= 0.15 * Math.max(0, prep - 5);
   else if (c.b.prepMinutes <= 30) s -= 0.05 * Math.max(0, prep - 15);
-  if (prep <= 5) why.push('almost no preparation');
+  if (prep <= 5) why.push(tr('almost no preparation'));
   if (c.prev && c.prev.pattern === r.pattern) s -= 1;
   if (c.prev && c.prev.energy === r.energy && r.energy === 'active' && g.has('calm')) s -= 0.5;
   if (r.signature) s += 0.4;
@@ -179,11 +180,11 @@ export function planLesson(p: ClassProfile, b: Brief, o: Options = {}): Plan {
   const mins = defaultMinutes(rec.id, b.durationMin);
   const log: string[] = [];
   const g = b.goals.map((x) => LABEL[x]), t = p.traits.map((x) => LABEL[x]);
-  log.push(`Read the lesson: Year ${b.year}, ${b.mainSkill || 'skill not set'}${b.compSkill ? ` with ${b.compSkill.toLowerCase()} as the complementary skill` : ''}, "${b.topic || 'no topic yet'}", ${b.durationMin} minutes.`);
-  log.push(`Chose ${fw.short}: ${rec.reason}`);
-  log.push(`Class: ${b.pupils ? `${b.pupils} pupils, ` : ''}${p.level === 'mixed' ? 'mixed ability' : `mostly ${p.level === 'low' ? 'lower' : 'higher'} ability`}${t.length ? `; planning for ${t.join(', ')}` : ''}${g.length ? `; you want ${g.join(', ')}` : ''}.`);
+  log.push(tr('Read the lesson: Year {year}, {x}{x2}, "{x3}", {durationMin} minutes.', { year: b.year, x: b.mainSkill || 'skill not set', x2: b.compSkill ? ` with ${b.compSkill.toLowerCase()} as the complementary skill` : '', x3: b.topic || 'no topic yet', durationMin: b.durationMin }));
+  log.push(tr('Chose {short}: {reason}', { short: fw.short, reason: rec.reason }));
+  log.push(tr('Class: {x}{x2}{x3}{x4}.', { x: b.pupils ? `${b.pupils} pupils, ` : '', x2: p.level === 'mixed' ? 'mixed ability' : `mostly ${p.level === 'low' ? 'lower' : 'higher'} ability`, x3: t.length ? `; planning for ${t.join(', ')}` : '', x4: g.length ? `; you want ${g.join(', ')}` : '' }));
   const res = [p.projector ? 'a projector' : 'no projector', p.internet ? 'internet' : 'no internet', p.devices === 'none' ? 'no pupil devices' : p.devices === 'one-each' ? 'a device each' : p.devices === 'shared' ? 'shared devices' : 'only your phone'];
-  log.push(`Resources: ${res.join(', ')}. ${p.internet ? 'Online tools are allowed.' : 'Only activities that work offline are used.'}`);
+  log.push(tr('Resources: {x}. {x2}', { x: res.join(', '), x2: p.internet ? 'Online tools are allowed.' : 'Only activities that work offline are used.' }));
 
   const used = new Set<string>();
   const stages: StagePlan[] = [];
@@ -220,7 +221,7 @@ export function planLesson(p: ClassProfile, b: Brief, o: Options = {}): Plan {
     if (picks.length === 1) picks[0].minutes = mins[i];
     prev = picks[picks.length - 1].recipe;
     stages.push({ key: st.key, title: st.title, purpose: st.purpose, minutes: mins[i], picks });
-    log.push(`${st.title} (${mins[i]} min): ${picks.map((x) => x.recipe.title).join(' + ')}${picks[0].why.length ? ` — ${picks[0].why.slice(0, 3).join(', ')}` : ''}.`);
+    log.push(tr('{title} ({x} min): {x2}{x3}.', { title: st.title, x: mins[i], x2: picks.map((x) => x.recipe.title).join(' + '), x3: picks[0].why.length ? ` — ${picks[0].why.slice(0, 3).join(', ')}` : '' }));
   });
 
   // fit the preparation time: swap the stage with the heaviest new aids for a close, lighter alternative
@@ -240,7 +241,7 @@ export function planLesson(p: ClassProfile, b: Brief, o: Options = {}): Plan {
     used.delete(old.recipe.id); used.add(alt.r.id);
     const bbm = alt.r.bbm.map(bbmById).filter((y): y is Bbm => !!y); const dig = pickDigital(alt.r, p, b);
     stages[i].picks[j] = { recipe: alt.r, minutes: old.minutes, why: [...alt.why, 'less to prepare'], steps: stepsFor(alt.r, b, old.minutes, bbm, dig), teacher: fill(alt.r.teacher, b), pupils: fill(alt.r.pupils, b), tiers: { low: fill(alt.r.tiers.low, b), mod: fill(alt.r.tiers.mod, b), high: fill(alt.r.tiers.high, b) }, bbm, digital: dig, role: old.role };
-    log.push(`To fit your ${b.prepMinutes} minutes of preparation, swapped ${old.recipe.title} for ${alt.r.title} in ${stages[i].title}.`);
+    log.push(tr('To fit your {prepMinutes} minutes of preparation, swapped {title} for {title2} in {title3}.', { prepMinutes: b.prepMinutes, title: old.recipe.title, title2: alt.r.title, title3: stages[i].title }));
   }
 
   // framework requirements the checker looks for
@@ -264,8 +265,8 @@ export function planLesson(p: ClassProfile, b: Brief, o: Options = {}): Plan {
   const compAct = delivery.find((x) => x.role === 'comp' && x.recipe.skill === b.compSkill) ?? delivery.find((x) => x.role === 'comp');
   const main = objectiveFor(b.mainSkill || 'Speaking', mainAct?.recipe.skill === b.mainSkill ? mainAct.recipe.output : 'sentences', b, p.level, 'main');
   const comp = b.compSkill ? objectiveFor(b.compSkill, compAct?.recipe.skill === b.compSkill ? compAct.recipe.output : 'answers', b, p.level, 'comp') : null;
-  if (compStage > 0) log.push(`The complementary skill (${b.compSkill.toLowerCase()}) is practised in ${stages[compStage]?.title ?? 'the lesson'}, so it is not dropped.`);
-  log.push(`Wrote ${comp ? 'two objectives' : 'one objective'} in ABCD form with a number in every Degree, so each can be measured.`);
+  if (compStage > 0) log.push(tr('The complementary skill ({x}) is practised in {x2}, so it is not dropped.', { x: b.compSkill.toLowerCase(), x2: stages[compStage]?.title ?? 'the lesson' }));
+  log.push(tr('Wrote {x} in ABCD form with a number in every Degree, so each can be measured.', { x: comp ? 'two objectives' : 'one objective' }));
 
   // assessment, 21st-century skills, values
   const all = stages.flatMap((s) => s.picks);
@@ -282,7 +283,7 @@ export function planLesson(p: ClassProfile, b: Brief, o: Options = {}): Plan {
   for (const x of all) for (const bb of x.bbm) if (!seen.has(bb.id)) { seen.add(bb.id); items.push({ label: `Make: ${bb.name}`, minutes: bb.minutes, bbm: bb.id }); }
   for (const x of all) for (const d of x.digital.slice(0, 1)) if (!seen.has(d.id)) { seen.add(d.id); items.push({ label: d.kind === 'built-in' ? `Type your words into ${d.name}` : `Find and test: ${d.name}`, minutes: d.kind === 'built-in' ? 3 : 8, digital: d.id }); }
   const total = items.reduce((a, x) => a + x.minutes, 0);
-  log.push(`Preparation: ${items.length} item${items.length === 1 ? '' : 's'}, about ${total} minutes${total > b.prepMinutes ? ` (more than your ${b.prepMinutes} minutes: press "Another idea" on a stage to swap a heavy one, or reuse aids you already have)` : ` (within your ${b.prepMinutes} minutes)`}.`);
+  log.push(tr('Preparation: {length} item{x}, about {total} minutes{x2}.', { length: items.length, x: items.length === 1 ? '' : 's', total, x2: total > b.prepMinutes ? ` (more than your ${b.prepMinutes} minutes: press "Another idea" on a stage to swap a heavy one, or reuse aids you already have)` : ` (within your ${b.prepMinutes} minutes)` }));
 
   return {
     framework: rec.id, frameworkName: fw.name, frameworkReason: rec.reason, stages, objectives: { main, comp },

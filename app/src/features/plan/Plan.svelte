@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr, uiDate } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { listLessons, deleteLesson, duplicateLesson } from '../../lib/db/repo';
   import { FRAMEWORKS } from '../../lib/lesson/frameworks';
@@ -50,21 +51,21 @@
 
   async function dup(id: string) { const n = await duplicateLesson(id); if (n) go('plan', 'edit', n, 'setup'); }
   async function del(id: string) { await deleteLesson(id); confirm = ''; refresh(); }
-  const statusLabel = { draft: 'Draft', ready: 'Ready', taught: 'Taught' } as const;
+  const statusLabel = { draft: tr('Draft'), ready: tr('Ready'), taught: tr('Taught') } as const;
 </script>
 
 {#if route.parts[0] === 'new'}
   <NewRph />
 {:else if route.parts[0] === 'week'}
-  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+  <div class="stack"><div class="row top"><h1>{tr('Plan')}</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a></div>
     <PlanTabs current="week" />
     <Week /></div>
 {:else if route.parts[0] === 'day'}
-  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+  <div class="stack"><div class="row top"><h1>{tr('Plan')}</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a></div>
     <PlanTabs current="day" />
     {#key route.parts[1]}<Day />{/key}</div>
 {:else if route.parts[0] === 'year'}
-  <div class="stack"><div class="row top"><h1>Plan</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a></div>
+  <div class="stack"><div class="row top"><h1>{tr('Plan')}</h1><a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a></div>
     <PlanTabs current="year" />
     <YearPlan /></div>
 {:else if route.parts[0] === 'reflect' && route.parts[1]}
@@ -76,16 +77,16 @@
 {:else}
 <div class="stack">
   <div class="row top">
-    <h1>Plan</h1>
-    <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />New lesson plan</a>
+    <h1>{tr('Plan')}</h1>
+    <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a>
   </div>
   <PlanTabs current="lessons" />
-  <div class="row"><label class="btn btn-text">Import a shared lesson (.consilia)<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
+  <div class="row"><label class="btn btn-text">{tr('Import a shared lesson (.consilia)')}<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
   {#if lessons && !lessons.length}
     <section class="empty">
-      <h3>No lesson plans yet</h3>
-      <p>Start from a Scheme of Work lesson, keep its standards and write your own activities, or plan from scratch.</p>
-      <a class="btn btn-primary" href={href('plan', 'new')}>Plan your first lesson</a>
+      <h3>{tr('No lesson plans yet')}</h3>
+      <p>{tr('Start from a Scheme of Work lesson, keep its standards and write your own activities, or plan from scratch.')}</p>
+      <a class="btn btn-primary" href={href('plan', 'new')}>{tr('Plan your first lesson')}</a>
     </section>
   {:else if lessons}
     <ul class="list">
@@ -94,37 +95,37 @@
           <div class="row item">
           <ScoreRing score={runChecks(l).score} size={48} />
           <a class="main" href={href('plan', 'edit', l.id, 'setup')}>
-            <span class="eyebrow">{longDate(l.header.date)} · {l.header.className || `Year ${l.curriculum.year}`}</span>
-            <b>{l.topic || 'Untitled lesson'}</b>
+            <span class="eyebrow">{uiDate(l.header.date)} · {l.header.className || tr('Year {year}', { year: l.curriculum.year })}</span>
+            <b>{l.topic || tr('Untitled lesson')}</b>
             <span class="row chips">
-              <span class="chip">{l.mainSkill || 'No skill yet'}</span>
+              <span class="chip">{l.mainSkill || tr('No skill yet')}</span>
               <span class="chip">{FRAMEWORKS[l.framework].short}</span>
               <span class="chip status-{l.status}">{statusLabel[l.status]}</span>
             </span>
           </a>
           </div>
           <div class="row actions">
-            <a class="btn btn-text" href={href('teach', l.id)}>Teach</a>
-            <a class="btn btn-text" href={href('plan', 'slides', l.id)} data-slides={l.id}>Slides</a>
-            <a class="btn btn-text" href={href('plan', 'edit', l.id, 'review')}>Print</a>
-            {#if l.status === 'taught'}<a class="btn btn-text" href={href('plan', 'reflect', l.id)}>Reflect</a>{/if}
-            <button class="btn btn-text" type="button" onclick={() => share(l.id)} data-share={l.id}>Share</button>
-            <button class="btn btn-text" type="button" onclick={() => dup(l.id)}>Duplicate</button>
-            {#if classes.length}<button class="btn btn-text" type="button" onclick={() => { copying = copying === l.id ? '' : l.id; copyClass = classes.find((c) => c.id !== l.classId && c.year === l.curriculum.year)?.id ?? classes[0].id; copyDate = l.header.date; }}>Copy to class…</button>{/if}
+            <a class="btn btn-text" href={href('teach', l.id)}>{tr('Teach')}</a>
+            <a class="btn btn-text" href={href('plan', 'slides', l.id)} data-slides={l.id}>{tr('Slides')}</a>
+            <a class="btn btn-text" href={href('plan', 'edit', l.id, 'review')}>{tr('Print')}</a>
+            {#if l.status === 'taught'}<a class="btn btn-text" href={href('plan', 'reflect', l.id)}>{tr('Reflect')}</a>{/if}
+            <button class="btn btn-text" type="button" onclick={() => share(l.id)} data-share={l.id}>{tr('Share')}</button>
+            <button class="btn btn-text" type="button" onclick={() => dup(l.id)}>{tr('Duplicate')}</button>
+            {#if classes.length}<button class="btn btn-text" type="button" onclick={() => { copying = copying === l.id ? '' : l.id; copyClass = classes.find((c) => c.id !== l.classId && c.year === l.curriculum.year)?.id ?? classes[0].id; copyDate = l.header.date; }}>{tr('Copy to class…')}</button>{/if}
             {#if confirm === l.id}
-              <button class="btn btn-outline del" type="button" onclick={() => del(l.id)}>Delete</button>
-              <button class="btn btn-text" type="button" onclick={() => (confirm = '')}>Keep</button>
+              <button class="btn btn-outline del" type="button" onclick={() => del(l.id)}>{tr('Delete')}</button>
+              <button class="btn btn-text" type="button" onclick={() => (confirm = '')}>{tr('Keep')}</button>
             {:else}
-              <button class="btn btn-text del" type="button" onclick={() => (confirm = l.id)}>Delete…</button>
+              <button class="btn btn-text del" type="button" onclick={() => (confirm = l.id)}>{tr('Delete…')}</button>
             {/if}
           </div>
           {#if copying === l.id}
             <div class="row copy">
-              <select class="select" bind:value={copyClass} aria-label="Class">{#each classes as c}<option value={c.id}>{c.name} · Y{c.year}</option>{/each}</select>
-              <input class="input" type="date" bind:value={copyDate} aria-label="Date" />
-              <button class="btn btn-primary" type="button" onclick={() => copy(l.id)}>Copy</button>
+              <select class="select" bind:value={copyClass} aria-label={tr('Class')}>{#each classes as c}<option value={c.id}>{c.name} · Y{c.year}</option>{/each}</select>
+              <input class="input" type="date" bind:value={copyDate} aria-label={tr('Date')} />
+              <button class="btn btn-primary" type="button" onclick={() => copy(l.id)}>{tr('Copy')}</button>
             </div>
-            <p class="muted small">The copy keeps the plan and resets the class details. Re-check the tiers for the new class.</p>
+            <p class="muted small">{tr('The copy keeps the plan and resets the class details. Re-check the tiers for the new class.')}</p>
           {/if}
         </li>
       {/each}

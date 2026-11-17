@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { i18n } from '../../lib/i18n/index.svelte';
   import { PRIVACY } from '../../lib/content/privacy';
@@ -9,12 +10,12 @@
 </script>
 
 <article class="stack" lang={lang}>
-  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />Me</a>
+  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />{tr('Me')}</a>
   <div class="head">
     <h1>{p.title}</h1>
-    <div class="seg" role="group" aria-label="Language">
-      <button type="button" aria-pressed={lang === 'en'} onclick={() => (lang = 'en')}>English</button>
-      <button type="button" aria-pressed={lang === 'ms'} onclick={() => (lang = 'ms')}>Bahasa Melayu</button>
+    <div class="seg" role="group" aria-label={tr('Language')}>
+      <button type="button" aria-pressed={lang === 'en'} onclick={() => (lang = 'en')}>{tr('English')}</button>
+      <button type="button" aria-pressed={lang === 'ms'} onclick={() => (lang = 'ms')}>{tr('Bahasa Melayu')}</button>
     </div>
   </div>
   <p class="lead">{p.lead}</p>

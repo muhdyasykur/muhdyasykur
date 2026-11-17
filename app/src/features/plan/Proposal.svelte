@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import { planLesson, applyPlan, type Brief, type ClassProfile, type Plan } from '../../lib/recommend/engine';
   import { buildPrompt, planAsText } from '../../lib/recommend/prompts';
@@ -41,21 +42,21 @@
   function use() { const l = applyPlan(structuredClone($state.snapshot(base)) as Lesson, plan, brief); fromLesson(l); onuse(l); }
   const objs = $derived(preview.objectives);
   const prompt = $derived(buildPrompt('improve', { year: brief.year, topic: brief.topic, skill: brief.mainSkill, words: brief.words, sentence: brief.sentence, extra: planAsText(plan, brief, objs.length ? objs : [newObjective('main', brief.year)]) }));
-  const pat = (p: string) => ({ pairs: 'Pairs', groups: 'Groups', individual: 'Individual', 'whole-class': 'Whole class' } as Record<string, string>)[p] ?? p;
+  const pat = (p: string) => ({ pairs: tr('Pairs'), groups: tr('Groups'), individual: tr('Individual'), 'whole-class': tr('Whole class') } as Record<string, string>)[p] ?? p;
 </script>
 
 <section class="stack proposal" aria-labelledby="pr-title">
   <div class="head card">
     <div class="stack tight">
-      <p class="eyebrow">Consilia recommends</p>
-      <h2 id="pr-title">{brief.topic || 'Your lesson'} · Year {brief.year} · {brief.durationMin} min</h2>
+      <p class="eyebrow">{tr('Consilia recommends')}</p>
+      <h2 id="pr-title">{tr('{x} · Year {year} · {durationMin} min', { x: brief.topic || tr('Your lesson'), year: brief.year, durationMin: brief.durationMin })}</h2>
       <p><b>{plan.frameworkName}.</b> <span class="muted">{plan.frameworkReason}</span></p>
     </div>
-    <div class="score" title="Alignment score of this plan"><ScoreRing score={report.score} /><span class="small">{report.failing.length ? `${report.failing.length} to check` : 'Aligned'}</span></div>
+    <div class="score" title={tr('Alignment score of this plan')}><ScoreRing score={report.score} /><span class="small">{report.failing.length ? tr('{length} to check', { length: report.failing.length }) : tr('Aligned')}</span></div>
   </div>
 
   <details class="card log" open={thinking}>
-    <summary><b>{thinking ? 'Consilia is planning…' : 'How Consilia planned this lesson'}</b></summary>
+    <summary><b>{thinking ? tr('Consilia is planning…') : tr('How Consilia planned this lesson')}</b></summary>
     <ol class="steps" aria-live="polite">
       {#each plan.log.slice(0, shown) as line, i}<li class:new={i === shown - 1 && thinking}>{line}</li>{/each}
     </ol>
@@ -63,34 +64,34 @@
 
   {#if !thinking}
     <div class="row actions">
-      <button id="rc-use" class="btn btn-gold" type="button" onclick={use}>Use this plan</button>
-      <button class="btn btn-outline" type="button" onclick={onback}>Change my answers</button>
+      <button id="rc-use" class="btn btn-gold" type="button" onclick={use}>{tr('Use this plan')}</button>
+      <button class="btn btn-outline" type="button" onclick={onback}>{tr('Change my answers')}</button>
     </div>
     <section class="card stack tight">
-      <h3>Objectives and success criteria</h3>
-      {#each objs as o}<p><span class="chip">{o.role === 'main' ? 'Main' : 'Complementary'}</span> {compose(o)}</p>{/each}
-      <p class="muted small">Assessment: {plan.evidence} · {plan.method}. 21st-century skills: {plan.skills21}.</p>
+      <h3>{tr('Objectives and success criteria')}</h3>
+      {#each objs as o}<p><span class="chip">{o.role === 'main' ? tr('Main') : tr('Complementary')}</span> {compose(o)}</p>{/each}
+      <p class="muted small">{tr('Assessment: {evidence} · {method}. 21st-century skills: {skills21}.', { evidence: plan.evidence, method: plan.method, skills21: plan.skills21 })}</p>
     </section>
 
     {#each plan.stages as s (s.key)}
       <section class="card stage stack" data-stage={s.key}>
         <header class="row between">
-          <div><h3>{s.title} <span class="muted mins">{s.minutes} min</span></h3><p class="muted small">{s.purpose}</p></div>
-          <button class="btn btn-outline another" type="button" onclick={() => another(s.key)}>↻ Another idea</button>
+          <div><h3>{s.title} <span class="muted mins">{tr('{minutes} min', { minutes: s.minutes })}</span></h3><p class="muted small">{tr(s.purpose)}</p></div>
+          <button class="btn btn-outline another" type="button" onclick={() => another(s.key)}>{tr('↻ Another idea')}</button>
         </header>
         {#each s.picks as x (x.recipe.id)}
           <article class="pick stack tight" data-recipe={x.recipe.id}>
             <div class="row title"><h4>{x.recipe.title}{x.recipe.wow ? ' ★' : ''}</h4>
-              <span class="chip">{pat(x.recipe.pattern)}</span><span class="chip">{x.minutes} min</span><span class="chip">{x.recipe.energy === 'active' ? 'Active' : 'Calm'}</span>{#if x.role === 'comp'}<span class="chip comp">Complementary skill</span>{/if}</div>
-            {#if x.why.length}<p class="why small">Why: {x.why.join(' · ')}.</p>{/if}
+              <span class="chip">{pat(x.recipe.pattern)}</span><span class="chip">{tr('{minutes} min', { minutes: x.minutes })}</span><span class="chip">{x.recipe.energy === 'active' ? tr('Active') : tr('Calm')}</span>{#if x.role === 'comp'}<span class="chip comp">{tr('Complementary skill')}</span>{/if}</div>
+            {#if x.why.length}<p class="why small">{tr('Why: {x}.', { x: x.why.map((w) => tr(w)).join(' · ') })}</p>{/if}
             <ol class="script">{#each x.steps as st}<li>{st}</li>{/each}</ol>
-            <div class="tiers"><div><b>🌱 Low</b><p>{x.tiers.low}</p></div><div><b>🌿 Moderate</b><p>{x.tiers.mod}</p></div><div><b>🌳 High</b><p>{x.tiers.high}</p></div></div>
-            {#if x.bbm.length}<div class="stack tight"><h5>Teaching aids (BBM) — tap for how to make them</h5><div class="bbms">{#each x.bbm as b (b.id)}<BbmCard {b} compact />{/each}</div></div>{/if}
-            {#if x.digital.length}<div class="stack tight"><h5>Digital option</h5>
+            <div class="tiers"><div><b>{tr('🌱 Low')}</b><p>{x.tiers.low}</p></div><div><b>{tr('🌿 Moderate')}</b><p>{x.tiers.mod}</p></div><div><b>{tr('🌳 High')}</b><p>{x.tiers.high}</p></div></div>
+            {#if x.bbm.length}<div class="stack tight"><h5>{tr('Teaching aids (BBM) — tap for how to make them')}</h5><div class="bbms">{#each x.bbm as b (b.id)}<BbmCard {b} compact />{/each}</div></div>{/if}
+            {#if x.digital.length}<div class="stack tight"><h5>{tr('Digital option')}</h5>
               {#each x.digital as d (d.id)}<div class="dig">
-                <div><b>{d.name}</b> <span class="muted small">· {d.free}{d.needs.length ? ` · needs ${d.needs.join(', ')}` : ''}</span><p class="small">{d.what} Pupils: {d.pupils}</p>
-                  <ol class="small">{#each d.setup as st}<li>{st}</li>{/each}</ol></div>
-                {#if d.url}<a class="btn btn-outline" href={d.url(brief.topic || brief.mainSkill, brief.year)} target="_blank" rel="noopener">Open {d.name}</a>{:else if d.inApp}<a class="btn btn-outline" href={href('tools', 'games', d.inApp)}>Open {d.name}</a>{/if}
+                <div><b>{tr(d.name)}</b> <span class="muted small">· {tr(d.free)}{d.needs.length ? tr(' · needs {x}', { x: d.needs.map((n) => tr(n)).join(', ') }) : ''}</span><p class="small">{tr('{what} Pupils: {pupils}', { what: tr(d.what), pupils: tr(d.pupils) })}</p>
+                  <ol class="small">{#each d.setup as st}<li>{tr(st)}</li>{/each}</ol></div>
+                {#if d.url}<a class="btn btn-outline" href={d.url(brief.topic || brief.mainSkill, brief.year)} target="_blank" rel="noopener">{tr('Open {name}', { name: d.name })}</a>{:else if d.inApp}<a class="btn btn-outline" href={href('tools', 'games', d.inApp)}>{tr('Open {name}', { name: d.name })}</a>{/if}
               </div>{/each}</div>{/if}
           </article>
         {/each}
@@ -98,15 +99,15 @@
     {/each}
 
     <section class="card stack tight prep">
-      <h3>Preparation checklist <span class="muted mins">about {prepLeft} min{prepLeft > plan.prep.limit ? ` · more than your ${plan.prep.limit} min` : ''}</span></h3>
-      <p class="muted small">Tick what you already have; the time updates.</p>
-      {#each plan.prep.items as it}<label class="row tick"><input type="checkbox" bind:checked={have[it.label]} /><span>{it.label} <span class="muted">({it.minutes} min)</span></span></label>{/each}
-      {#if !plan.prep.items.length}<p class="muted">Nothing to make: this lesson needs only the board.</p>{/if}
+      <h3>{tr('Preparation checklist')} <span class="muted mins">{tr('about {prepLeft} min{x}', { prepLeft, x: prepLeft > plan.prep.limit ? tr(' · more than your {limit} min', { limit: plan.prep.limit }) : '' })}</span></h3>
+      <p class="muted small">{tr('Tick what you already have; the time updates.')}</p>
+      {#each plan.prep.items as it}<label class="row tick"><input type="checkbox" bind:checked={have[it.label]} /><span>{it.label} <span class="muted">{tr('({minutes} min)', { minutes: it.minutes })}</span></span></label>{/each}
+      {#if !plan.prep.items.length}<p class="muted">{tr('Nothing to make: this lesson needs only the board.')}</p>{/if}
     </section>
 
-    <section class="card stack tight"><h3>Want even more ideas?</h3><AiButtons {prompt} label="Improve with AI" /></section>
+    <section class="card stack tight"><h3>{tr('Want even more ideas?')}</h3><AiButtons {prompt} label={tr('Improve with AI')} /></section>
 
-    <p class="muted small">You can change everything in the builder afterwards. Consilia's plan is a starting point: check it with your mentor and your school's requirements.</p>
+    <p class="muted small">{tr('You can change everything in the builder afterwards. Consilia\'s plan is a starting point: check it with your mentor and your school\'s requirements.')}</p>
   {/if}
 </section>
 

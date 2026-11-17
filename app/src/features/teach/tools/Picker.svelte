@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import { pick, type PickerState } from '../../../lib/classroom/picker';
   import { tick, chime } from '../../../lib/audio/sfx';
   import type { TeachPupil } from '../types';
@@ -11,7 +12,7 @@
     if (!pupils.length || spinning) return;
     const r = pick(pupils.map((p) => p.id), picker);
     picker = r.state;
-    note = r.roundDone ? 'Everyone has had a turn. Starting a new round.' : '';
+    note = r.roundDone ? tr('Everyone has had a turn. Starting a new round.') : '';
     const winner = pupils.find((p) => p.id === r.id)!.name;
     if (reduce) { shown = winner; chime(); return; }
     spinning = true;
@@ -28,10 +29,10 @@
 
 <div class="tool">
   <p class="name pupil-font" class:spinning aria-live="polite">{shown || 'Who will it be?'}</p>
-  <button id="picker-go" class="btn btn-gold big" type="button" onclick={spin} disabled={spinning || !pupils.length}>{shown ? 'Pick again' : 'Pick a name'}</button>
-  <p class="muted small">{pupils.length ? `${left} of ${pupils.length} not picked yet this round · absent pupils are left out` : 'No pupils present. Add a pupil list to the class.'}</p>
+  <button id="picker-go" class="btn btn-gold big" type="button" onclick={spin} disabled={spinning || !pupils.length}>{shown ? tr('Pick again') : tr('Pick a name')}</button>
+  <p class="muted small">{pupils.length ? tr('{left} of {length} not picked yet this round · absent pupils are left out', { left, length: pupils.length }) : tr('No pupils present. Add a pupil list to the class.')}</p>
   {#if note}<p class="small">{note}</p>{/if}
-  {#if picker.picked.length}<button class="btn btn-text" type="button" onclick={() => { picker = { picked: [] }; shown = ''; }}>Start a new round</button>{/if}
+  {#if picker.picked.length}<button class="btn btn-text" type="button" onclick={() => { picker = { picked: [] }; shown = ''; }}>{tr('Start a new round')}</button>{/if}
 </div>
 
 <style>

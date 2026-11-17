@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr, dateLocale } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { db, type SchoolClass, type YearPlan as Plan, type PlanWeek } from '../../lib/db/schema';
   import { listClasses, listLessons, getSetting } from '../../lib/db/repo';
@@ -47,7 +48,7 @@
   async function build() {
     const sow = await loadSow(bYear, bSchool);
     const ls = sow.lessons.filter((l) => l.std.main.ls.length);
-    draft = newPlan({ name: `English Year ${bYear} ${bSchool} ${bStart.slice(0, 4)}`, calendarYear: Number(bStart.slice(0, 4)), year: bYear, school: bSchool, source: 'Built from the Scheme of Work',
+    draft = newPlan({ name: tr('English Year {bYear} {bSchool} {x}', { bYear, bSchool, x: bStart.slice(0, 4) }), calendarYear: Number(bStart.slice(0, 4)), year: bYear, school: bSchool, source: 'Built from the Scheme of Work',
       classIds: classes.filter((c) => c.year === bYear && c.schoolType === bSchool).map((c) => c.id),
       weeks: buildFromSow({ week1Monday: mondayOf(bStart), weeks: bWeeks, perWeek: bPer, holidays: holidayWeeks(bHol), lessonNos: ls.map((l) => l.no), topics: new Map(ls.map((l) => [l.no, l.topic || l.label])), ls: new Map(ls.map((l) => [l.no, l.std.main.ls])) }) });
     report = null; week1 = mondayOf(bStart); building = false;
@@ -73,7 +74,7 @@
   const wk = $derived(plan?.weeks.find((w) => w.week === weekNo));
   let month = $state(today.slice(0, 7));
   $effect(() => { if (view === 'month' && /^\d{4}-\d{2}$/.test(route.parts[3] ?? '')) month = route.parts[3]; });
-  const fmt = (d: string) => (d ? parseDate(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '');
+  const fmt = (d: string) => (d ? parseDate(d).toLocaleDateString(dateLocale(), { day: 'numeric', month: 'short' }) : '');
   // this week's periods for the linked classes, matched to the week's SoW lessons
   let lessons = $state<Lesson[]>([]); let slots = $state<Slot[]>([]); let cancelled = $state<Cancelled>({});
   $effect(() => { Promise.all([listLessons(), getSetting<Slot[]>('timetable', []), getSetting<Cancelled>('cancelled', {})]).then(([l, s, c]) => { lessons = l; slots = s; cancelled = c; }); });
@@ -86,7 +87,7 @@
     const { sheetsToBlob } = await import('../../lib/export/xlsx'); const { saveFile } = await import('../../lib/export/download');
     const head = ['Week', 'Start', 'End', 'Theme', 'Topic', 'Learning Standards', 'SoW lessons', 'Holiday', 'Notes'].map((v) => ({ value: v, bold: true, fill: '#E3E8F1' }));
     const rows = plan.weeks.map((w) => [w.week, w.start, w.end, w.theme, w.topic, w.ls.join(', '), w.lessons.join(', '), w.holiday, w.notes].map((v) => ({ value: v as string | number })));
-    await saveFile(await sheetsToBlob([{ name: 'Yearly plan', rows: [[{ value: plan.name, bold: true }], head, ...rows] }]), `${plan.name.replace(/[^\w-]+/g, '-')}.xlsx`);
+    await saveFile(await sheetsToBlob([{ name: tr('Yearly plan'), rows: [[{ value: plan.name, bold: true }], head, ...rows] }]), `${plan.name.replace(/[^\w-]+/g, '-')}.xlsx`);
   }
   function edit() { if (plan) { draft = structuredClone($state.snapshot(plan)) as Plan; report = null; week1 = plan.weeks.find((w) => w.week === 1)?.start ?? ''; } }
   // month grid: Mon–Fri rows for every week touching the month
@@ -95,121 +96,121 @@
 
 {#if draft}
   <section class="stack" aria-labelledby="yp-check">
-    <h2 id="yp-check">Check your yearly plan</h2>
-    {#if report}<p class="ok-box card" role="status">Found <b>{draft.weeks.length} weeks</b>: {report.dates} with dates, {report.holidays} holiday or exam weeks, {report.ls} Learning Standards and {report.lessons} SoW lesson numbers. Correct anything below, then save.</p>{/if}
+    <h2 id="yp-check">{tr('Check your yearly plan')}</h2>
+    {#if report}<p class="ok-box card" role="status">{tr('Found')} <b>{tr('{length} weeks', { length: draft.weeks.length })}</b>{tr(': {dates} with dates, {holidays} holiday or exam weeks, {ls} Learning Standards and {lessons} SoW lesson numbers. Correct anything below, then save.', { dates: report.dates, holidays: report.holidays, ls: report.ls, lessons: report.lessons })}</p>{/if}
     <div class="card grid">
-      <label class="field"><span>Name</span><input id="yp-name" class="input" bind:value={draft.name} /></label>
-      <label class="field"><span>Year</span><select class="select" bind:value={draft.year}>{#each [1, 2, 3, 4, 5, 6] as y}<option value={y}>Year {y}</option>{/each}</select></label>
-      <label class="field"><span>School type</span><select class="select" bind:value={draft.school}><option>SK</option><option>SJK</option></select></label>
-      <label class="field"><span>Monday of week 1{missingDates ? ` (${missingDates} weeks have no dates)` : ''}</span><input id="yp-week1" class="input" type="date" bind:value={week1} /></label>
+      <label class="field"><span>{tr('Name')}</span><input id="yp-name" class="input" bind:value={draft.name} /></label>
+      <label class="field"><span>{tr('Year')}</span><select class="select" bind:value={draft.year}>{#each [1, 2, 3, 4, 5, 6] as y}<option value={y}>{tr('Year {y}', { y })}</option>{/each}</select></label>
+      <label class="field"><span>{tr('School type')}</span><select class="select" bind:value={draft.school}><option>{tr('SK')}</option><option>{tr('SJK')}</option></select></label>
+      <label class="field"><span>{tr('Monday of week 1{x}', { x: missingDates ? tr(' ({missingDates} weeks have no dates)', { missingDates }) : '' })}</span><input id="yp-week1" class="input" type="date" bind:value={week1} /></label>
     </div>
-    {#if classes.length}<fieldset class="card"><legend>Classes that follow this plan</legend><div class="row">{#each classes as c}<label class="row small"><input type="checkbox" checked={draft.classIds.includes(c.id)} onchange={(e) => { if (!draft) return; draft.classIds = (e.currentTarget as HTMLInputElement).checked ? [...draft.classIds, c.id] : draft.classIds.filter((x) => x !== c.id); }} />{c.name}</label>{/each}</div></fieldset>{/if}
+    {#if classes.length}<fieldset class="card"><legend>{tr('Classes that follow this plan')}</legend><div class="row">{#each classes as c}<label class="row small"><input type="checkbox" checked={draft.classIds.includes(c.id)} onchange={(e) => { if (!draft) return; draft.classIds = (e.currentTarget as HTMLInputElement).checked ? [...draft.classIds, c.id] : draft.classIds.filter((x) => x !== c.id); }} />{c.name}</label>{/each}</div></fieldset>{/if}
     <div class="tablewrap card"><table class="weeks edit">
-      <thead><tr><th>Week</th><th>Starts</th><th>Topic or theme</th><th>SoW lessons</th><th>Holiday / exam</th></tr></thead>
+      <thead><tr><th>{tr('Week')}</th><th>{tr('Starts')}</th><th>{tr('Topic or theme')}</th><th>{tr('SoW lessons')}</th><th>{tr('Holiday / exam')}</th></tr></thead>
       <tbody>{#each draft.weeks as w, i (i)}<tr class:hol={!!w.holiday}>
-        <td><input class="input n" type="number" min="1" max="53" bind:value={w.week} aria-label="Week number" /></td>
-        <td><input class="input" type="date" bind:value={w.start} onchange={() => { if (w.start) w.end = addDaysIso(w.start, 4); }} aria-label="Week {w.week} start" /></td>
-        <td><input class="input" bind:value={w.topic} placeholder={w.theme} aria-label="Week {w.week} topic" /></td>
-        <td><input class="input" value={w.lessons.join(', ')} onchange={(e) => (w.lessons = (e.currentTarget as HTMLInputElement).value.split(/[,\s]+/).map(Number).filter((n) => n > 0))} aria-label="Week {w.week} SoW lessons" /></td>
-        <td><input class="input" bind:value={w.holiday} aria-label="Week {w.week} holiday" /></td>
+        <td><input class="input n" type="number" min="1" max="53" bind:value={w.week} aria-label={tr('Week number')} /></td>
+        <td><input class="input" type="date" bind:value={w.start} onchange={() => { if (w.start) w.end = addDaysIso(w.start, 4); }} aria-label={tr('Week {week} start', { week: w.week })} /></td>
+        <td><input class="input" bind:value={w.topic} placeholder={w.theme} aria-label={tr('Week {week} topic', { week: w.week })} /></td>
+        <td><input class="input" value={w.lessons.join(', ')} onchange={(e) => (w.lessons = (e.currentTarget as HTMLInputElement).value.split(/[,\s]+/).map(Number).filter((n) => n > 0))} aria-label={tr('Week {week} SoW lessons', { week: w.week })} /></td>
+        <td><input class="input" bind:value={w.holiday} aria-label={tr('Week {week} holiday', { week: w.week })} /></td>
       </tr>{/each}</tbody>
     </table></div>
-    <div class="row"><button class="btn btn-outline" type="button" onclick={() => { if (draft) draft.weeks = [...draft.weeks, { week: (draft.weeks.at(-1)?.week ?? 0) + 1, start: '', end: '', holiday: '', theme: '', topic: '', ls: [], lessons: [], notes: '' }]; }}>＋ Add a week</button></div>
-    <div class="row sticky"><button id="yp-save" class="btn btn-gold" type="button" onclick={saveDraft}>Save yearly plan</button><button class="btn btn-text" type="button" onclick={() => (draft = null)}>Cancel</button></div>
+    <div class="row"><button class="btn btn-outline" type="button" onclick={() => { if (draft) draft.weeks = [...draft.weeks, { week: (draft.weeks.at(-1)?.week ?? 0) + 1, start: '', end: '', holiday: '', theme: '', topic: '', ls: [], lessons: [], notes: '' }]; }}>{tr('＋ Add a week')}</button></div>
+    <div class="row sticky"><button id="yp-save" class="btn btn-gold" type="button" onclick={saveDraft}>{tr('Save yearly plan')}</button><button class="btn btn-text" type="button" onclick={() => (draft = null)}>{tr('Cancel')}</button></div>
   </section>
 
 {:else if !plan}
   <div class="stack">
-    <p class="muted">Your school's yearly plan (Rancangan Pengajaran Tahunan) shows what to teach each week. Consilia turns it into a monthly and weekly view, and links each week's lessons to your timetable.</p>
+    <p class="muted">{tr('Your school\'s yearly plan (Rancangan Pengajaran Tahunan) shows what to teach each week. Consilia turns it into a monthly and weekly view, and links each week\'s lessons to your timetable.')}</p>
     {#if err}<p class="err" role="alert">{err}</p>{/if}
     {#if busy}<p class="busy" role="status">{busy}</p>{/if}
     <div class="choices">
       <section class="card stack tight">
-        <h3>📤 Upload my yearly plan</h3>
-        <p class="muted small">Word (.docx), Excel (.xlsx), CSV or a PDF made from Word. Consilia reads the table on this device: weeks, dates, topics, Learning Standards, SoW lessons and holidays. Nothing is uploaded anywhere.</p>
-        <label class="btn btn-gold up">Choose file<input id="yp-file" type="file" accept=".docx,.xlsx,.csv,.pdf,.txt,.doc,.xls" class="sr-only" onchange={upload} /></label>
+        <h3>{tr('📤 Upload my yearly plan')}</h3>
+        <p class="muted small">{tr('Word (.docx), Excel (.xlsx), CSV or a PDF made from Word. Consilia reads the table on this device: weeks, dates, topics, Learning Standards, SoW lessons and holidays. Nothing is uploaded anywhere.')}</p>
+        <label class="btn btn-gold up">{tr('Choose file')}<input id="yp-file" type="file" accept=".docx,.xlsx,.csv,.pdf,.txt,.doc,.xls" class="sr-only" onchange={upload} /></label>
       </section>
       <section class="card stack tight">
-        <h3>🧩 Build it from the Scheme of Work</h3>
-        <p class="muted small">No file? Consilia lays out the SoW lessons week by week, skipping holiday and exam weeks.</p>
-        {#if !building}<button id="yp-build-open" class="btn btn-outline" type="button" onclick={() => (building = true)}>Build a plan</button>{:else}
+        <h3>{tr('🧩 Build it from the Scheme of Work')}</h3>
+        <p class="muted small">{tr('No file? Consilia lays out the SoW lessons week by week, skipping holiday and exam weeks.')}</p>
+        {#if !building}<button id="yp-build-open" class="btn btn-outline" type="button" onclick={() => (building = true)}>{tr('Build a plan')}</button>{:else}
           <div class="grid">
-            <label class="field"><span>Year</span><select class="select" bind:value={bYear}>{#each [1, 2, 3, 4, 5, 6] as y}<option value={y}>Year {y}</option>{/each}</select></label>
-            <label class="field"><span>School type</span><select class="select" bind:value={bSchool}><option>SK</option><option>SJK</option></select></label>
-            <label class="field"><span>Week 1 starts</span><input id="yp-start" class="input" type="date" bind:value={bStart} /></label>
-            <label class="field"><span>Teaching weeks</span><input class="input" type="number" min="4" max="52" bind:value={bWeeks} /></label>
-            <label class="field"><span>English lessons a week</span><input id="yp-per" class="input" type="number" min="1" max="8" bind:value={bPer} /></label>
-            <label class="field"><span>Holiday / exam weeks</span><input id="yp-hol" class="input" bind:value={bHol} placeholder="e.g. 10, 20-21, 30" /></label>
+            <label class="field"><span>{tr('Year')}</span><select class="select" bind:value={bYear}>{#each [1, 2, 3, 4, 5, 6] as y}<option value={y}>{tr('Year {y}', { y })}</option>{/each}</select></label>
+            <label class="field"><span>{tr('School type')}</span><select class="select" bind:value={bSchool}><option>{tr('SK')}</option><option>{tr('SJK')}</option></select></label>
+            <label class="field"><span>{tr('Week 1 starts')}</span><input id="yp-start" class="input" type="date" bind:value={bStart} /></label>
+            <label class="field"><span>{tr('Teaching weeks')}</span><input class="input" type="number" min="4" max="52" bind:value={bWeeks} /></label>
+            <label class="field"><span>{tr('English lessons a week')}</span><input id="yp-per" class="input" type="number" min="1" max="8" bind:value={bPer} /></label>
+            <label class="field"><span>{tr('Holiday / exam weeks')}</span><input id="yp-hol" class="input" bind:value={bHol} placeholder="e.g. 10, 20-21, 30" /></label>
           </div>
-          <button id="yp-build" class="btn btn-gold" type="button" onclick={build}>Build</button>
+          <button id="yp-build" class="btn btn-gold" type="button" onclick={build}>{tr('Build')}</button>
         {/if}
       </section>
     </div>
     {#if plans.length}
-      <h3>My yearly plans</h3>
-      <div class="choices">{#each plans as p}{@const cw = weekOf(p, today)}<a class="card raised planc" href={href('plan', 'year', p.id)} data-plan={p.name}><b>{p.name}</b><span class="muted small">Year {p.year} {p.school} · {p.weeks.length} weeks{cw ? ` · now week ${cw.week}` : ''}</span></a>{/each}</div>
+      <h3>{tr('My yearly plans')}</h3>
+      <div class="choices">{#each plans as p}{@const cw = weekOf(p, today)}<a class="card raised planc" href={href('plan', 'year', p.id)} data-plan={p.name}><b>{p.name}</b><span class="muted small">{tr('Year {year} {school} · {length} weeks{x}', { year: p.year, school: p.school, length: p.weeks.length, x: cw ? tr(' · now week {week}', { week: cw.week }) : '' })}</span></a>{/each}</div>
     {/if}
   </div>
 
 {:else}
   <div class="stack">
     <div class="row between">
-      <div><a class="btn btn-text back" href={href('plan', 'year')}><Icon name="back" size={18} />All yearly plans</a><h2 class="pn">{plan.name}</h2>
-        <p class="muted small">Year {plan.year} {plan.school} · {plan.weeks.length} weeks{current ? ` · this is week ${current.week}` : ''}{plan.classIds.length ? ` · ${plan.classIds.map(cname).join(', ')}` : ''}</p></div>
-      <div class="row"><button class="btn btn-outline" type="button" onclick={exportPlan}>Excel</button><button class="btn btn-outline" type="button" onclick={edit}>Edit</button><button class="btn btn-text del" type="button" onclick={remove}>Delete</button></div>
+      <div><a class="btn btn-text back" href={href('plan', 'year')}><Icon name="back" size={18} />{tr('All yearly plans')}</a><h2 class="pn">{plan.name}</h2>
+        <p class="muted small">{tr('Year {year} {school} · {length} weeks{x}{x2}', { year: plan.year, school: plan.school, length: plan.weeks.length, x: current ? tr(' · this is week {week}', { week: current.week }) : '', x2: plan.classIds.length ? ` · ${plan.classIds.map(cname).join(', ')}` : '' })}</p></div>
+      <div class="row"><button class="btn btn-outline" type="button" onclick={exportPlan}>{tr('Excel')}</button><button class="btn btn-outline" type="button" onclick={edit}>{tr('Edit')}</button><button class="btn btn-text del" type="button" onclick={remove}>{tr('Delete')}</button></div>
     </div>
-    <nav class="tabs" aria-label="Plan view">
-      <a href={href('plan', 'year', plan.id, 'year')} aria-current={view === 'year' ? 'page' : undefined} data-ypview="year">Yearly</a>
-      <a href={href('plan', 'year', plan.id, 'month', month)} aria-current={view === 'month' ? 'page' : undefined} data-ypview="month">Monthly</a>
-      <a href={href('plan', 'year', plan.id, 'week', weekNo)} aria-current={view === 'week' ? 'page' : undefined} data-ypview="week">Weekly</a>
+    <nav class="tabs" aria-label={tr('Plan view')}>
+      <a href={href('plan', 'year', plan.id, 'year')} aria-current={view === 'year' ? 'page' : undefined} data-ypview="year">{tr('Yearly')}</a>
+      <a href={href('plan', 'year', plan.id, 'month', month)} aria-current={view === 'month' ? 'page' : undefined} data-ypview="month">{tr('Monthly')}</a>
+      <a href={href('plan', 'year', plan.id, 'week', weekNo)} aria-current={view === 'week' ? 'page' : undefined} data-ypview="week">{tr('Weekly')}</a>
     </nav>
 
     {#if view === 'year'}
       <div class="tablewrap card"><table class="weeks">
-        <thead><tr><th>Week</th><th>Dates</th><th>Topic</th><th>SoW lessons</th></tr></thead>
+        <thead><tr><th>{tr('Week')}</th><th>{tr('Dates')}</th><th>{tr('Topic')}</th><th>{tr('SoW lessons')}</th></tr></thead>
         <tbody>{#each plan.weeks as w (w.week)}<tr class:now={current?.week === w.week} class:hol={!!w.holiday}>
           <td><a href={href('plan', 'year', plan.id, 'week', w.week)}>{w.week}</a></td><td class="nowrap">{fmt(w.start)}{w.end ? ` – ${fmt(w.end)}` : ''}</td>
-          <td>{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme}{w.ls.length ? ` · LS ${w.ls.slice(0, 4).join(', ')}${w.ls.length > 4 ? '…' : ''}` : ''}</td><td>{w.lessons.join(', ')}</td></tr>{/each}</tbody>
+          <td>{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme}{w.ls.length ? tr(' · LS {x}{x2}', { x: w.ls.slice(0, 4).join(', '), x2: w.ls.length > 4 ? '…' : '' }) : ''}</td><td>{w.lessons.join(', ')}</td></tr>{/each}</tbody>
       </table></div>
     {:else if view === 'month'}
-      <div class="row"><label class="field"><span>Month</span><input id="yp-month" class="input" type="month" bind:value={month} /></label></div>
-      {#if !grid.length}<p class="muted">No weeks of this plan fall in this month.</p>{/if}
+      <div class="row"><label class="field"><span>{tr('Month')}</span><input id="yp-month" class="input" type="month" bind:value={month} /></label></div>
+      {#if !grid.length}<p class="muted">{tr('No weeks of this plan fall in this month.')}</p>{/if}
       <div class="cal">
-        <div class="calh">Week</div>{#each ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] as d}<div class="calh">{d}</div>{/each}
+        <div class="calh">{tr('Week')}</div>{#each [tr('Mon'), tr('Tue'), tr('Wed'), tr('Thu'), tr('Fri')] as d}<div class="calh">{d}</div>{/each}
         {#each grid as w (w.week)}
           <a class="calw" href={href('plan', 'year', plan.id, 'week', w.week)} class:now={current?.week === w.week}><b>{w.week}</b></a>
           {#each [0, 1, 2, 3, 4] as d}{@const day = addDaysIso(w.start, d)}<div class="cald" class:out={day.slice(0, 7) !== month} class:today={day === today}><span class="dn">{Number(day.slice(8))}</span></div>{/each}
-          <div class="calt">{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme || '—'}{w.lessons.length ? ` · SoW ${w.lessons.join(', ')}` : ''}</div>
+          <div class="calt">{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme || '—'}{w.lessons.length ? tr(' · SoW {x}', { x: w.lessons.join(', ') }) : ''}</div>
         {/each}
       </div>
     {:else if wk}
       <div class="row between">
-        <a class="btn btn-outline" href={href('plan', 'year', plan.id, 'week', Math.max(1, weekNo - 1))} aria-label="Previous week"><Icon name="back" size={18} /></a>
-        <b class="wkh" id="yp-week-title">Week {wk.week}{wk.start ? ` · ${fmt(wk.start)} – ${fmt(wk.end)}` : ''}</b>
-        <a class="btn btn-outline" href={href('plan', 'year', plan.id, 'week', weekNo + 1)} aria-label="Next week"><Icon name="chevron" size={18} /></a>
+        <a class="btn btn-outline" href={href('plan', 'year', plan.id, 'week', Math.max(1, weekNo - 1))} aria-label={tr('Previous week')}><Icon name="back" size={18} /></a>
+        <b class="wkh" id="yp-week-title">{tr('Week {week}{x}', { week: wk.week, x: wk.start ? ` · ${fmt(wk.start)} – ${fmt(wk.end)}` : '' })}</b>
+        <a class="btn btn-outline" href={href('plan', 'year', plan.id, 'week', weekNo + 1)} aria-label={tr('Next week')}><Icon name="chevron" size={18} /></a>
       </div>
       {#if wk.holiday}<p class="card hol-box">🏖 {wk.holiday}</p>{/if}
       <section class="card stack tight">
-        <h3>{wk.topic || wk.theme || 'This week'}</h3>
-        {#if wk.ls.length}<p class="small"><b>Learning Standards:</b> {wk.ls.join(', ')}</p>{/if}
+        <h3>{wk.topic || wk.theme || tr('This week')}</h3>
+        {#if wk.ls.length}<p class="small"><b>{tr('Learning Standards:')}</b> {wk.ls.join(', ')}</p>{/if}
         {#if wk.notes}<p class="small muted">{wk.notes}</p>{/if}
         {#if wk.lessons.length}
-          <ul class="les">{#each wk.lessons as n}{@const l = sowOf(n)}<li><span><b>SoW lesson {n}</b>{l ? ` · ${l.topic || l.label} · ${l.label}` : ''}</span>
-            <a class="btn btn-outline" href={href('plan', 'new', 'sow', n, plan.year, plan.school)} data-plan-sow={n}>Plan it</a></li>{/each}</ul>
-        {:else if !wk.holiday}<p class="muted">No SoW lessons listed for this week. Edit the plan to add them.</p>{/if}
+          <ul class="les">{#each wk.lessons as n}{@const l = sowOf(n)}<li><span><b>{tr('SoW lesson {n}', { n })}</b>{l ? ` · ${l.topic || l.label} · ${l.label}` : ''}</span>
+            <a class="btn btn-outline" href={href('plan', 'new', 'sow', n, plan.year, plan.school)} data-plan-sow={n}>{tr('Plan it')}</a></li>{/each}</ul>
+        {:else if !wk.holiday}<p class="muted">{tr('No SoW lessons listed for this week. Edit the plan to add them.')}</p>{/if}
       </section>
       {#if plan.classIds.length}
         <section class="card stack tight">
-          <h3>Your periods this week</h3>
-          {#if !periods.length}<p class="muted small">No timetable periods for these classes. <a href={href('plan', 'week')}>Set up your timetable</a> to match each period with a lesson.</p>{/if}
+          <h3>{tr('Your periods this week')}</h3>
+          {#if !periods.length}<p class="muted small">{tr('No timetable periods for these classes.')} <a href={href('plan', 'week')}>{tr('Set up your timetable')}</a> {tr('to match each period with a lesson.')}</p>{/if}
           <ul class="les">{#each periods as p, i}{@const n = suggestion(i)}<li class:off={!!p.cancelled}>
-            <span>{parseDate(p.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' })} {p.slot.start} · <b>{cname(p.slot.classId)}</b>{p.lesson ? ` · ${p.lesson.topic}` : n ? ` · suggested SoW lesson ${n}` : ''}</span>
-            {#if p.cancelled}<span class="chip">No class</span>{:else if p.lesson}<a class="btn btn-outline" href={href('plan', 'edit', p.lesson.id, 'review')}>Open</a>
-            {:else}<a class="btn btn-gold" data-period-plan href={n ? href('plan', 'new', 'sow', n, plan.year, plan.school, p.slot.classId, p.date, p.slot.start, p.slot.durationMin) : href('plan', 'new', p.slot.classId, p.date, p.slot.start, p.slot.durationMin)}>Plan {n ? `lesson ${n}` : 'this lesson'}</a>{/if}
+            <span>{parseDate(p.date).toLocaleDateString(dateLocale(), { weekday: 'short', day: 'numeric' })} {p.slot.start} · <b>{cname(p.slot.classId)}</b>{p.lesson ? ` · ${p.lesson.topic}` : n ? tr(' · suggested SoW lesson {n}', { n }) : ''}</span>
+            {#if p.cancelled}<span class="chip">{tr('No class')}</span>{:else if p.lesson}<a class="btn btn-outline" href={href('plan', 'edit', p.lesson.id, 'review')}>{tr('Open')}</a>
+            {:else}<a class="btn btn-gold" data-period-plan href={n ? href('plan', 'new', 'sow', n, plan.year, plan.school, p.slot.classId, p.date, p.slot.start, p.slot.durationMin) : href('plan', 'new', p.slot.classId, p.date, p.slot.start, p.slot.durationMin)}>{tr('Plan {x}', { x: n ? tr('lesson {n}', { n }) : tr('this lesson') })}</a>{/if}
           </li>{/each}</ul>
         </section>
       {/if}
-    {:else}<p class="muted">This plan has no week {weekNo}.</p>{/if}
+    {:else}<p class="muted">{tr('This plan has no week {weekNo}.', { weekNo })}</p>{/if}
   </div>
 {/if}
 

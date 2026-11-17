@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { t, i18n, setLocale } from '../../lib/i18n/index.svelte';
   import { theme, setTheme, type Theme } from '../../lib/theme.svelte';
   import { requestPersistence } from '../../lib/db/schema';
@@ -34,23 +35,23 @@
 <div class="stack">
   <h1>{t('me.title')}</h1>
   <div class="links">
-    <a class="card raised mentor" href={href('me', 'mentor')}><b>Mentor and lecturer feedback</b><span class="muted">Log observation comments and see what keeps coming up.</span></a>
-    <a class="card raised mentor" href={href('me', 'ai')} id="me-ai"><b>AI assistant {ai.on ? `· ${aiName()} on` : '· off'}</b><span class="muted">Optional: let Claude (or Gemini) write texts, dialogues and questions for your lessons, with your own key.</span></a>
-    <a class="card raised mentor" href={href('me', 'help')}><b>Help</b><span class="muted">How-tos and the guided tour.</span></a>
-    <a class="card raised mentor" href={href('me', 'about')}><b>About and Feedback Garden</b><span class="muted">The story behind Consilia. Plant your feedback.</span></a>
-    <a class="card raised mentor" href={href('me', 'privacy')}><b>Privacy</b><span class="muted">What stays on this device, and what never leaves it.</span></a>
-    <a class="card raised mentor" href={href('me', 'terms')}><b>Terms of use</b><span class="muted">Consilia is a tool; you are the teacher. What you agreed to.</span></a>
+    <a class="card raised mentor" href={href('me', 'mentor')}><b>{tr('Mentor and lecturer feedback')}</b><span class="muted">{tr('Log observation comments and see what keeps coming up.')}</span></a>
+    <a class="card raised mentor" href={href('me', 'ai')} id="me-ai"><b>{tr('AI assistant {x}', { x: ai.on ? tr('· {aiName} on', { aiName: aiName() }) : tr('· off') })}</b><span class="muted">{tr('Optional: let Claude (or Gemini) write texts, dialogues and questions for your lessons, with your own key.')}</span></a>
+    <a class="card raised mentor" href={href('me', 'help')}><b>{tr('Help')}</b><span class="muted">{tr('How-tos and the guided tour.')}</span></a>
+    <a class="card raised mentor" href={href('me', 'about')}><b>{tr('About and Feedback Garden')}</b><span class="muted">{tr('The story behind Consilia. Plant your feedback.')}</span></a>
+    <a class="card raised mentor" href={href('me', 'privacy')}><b>{tr('Privacy')}</b><span class="muted">{tr('What stays on this device, and what never leaves it.')}</span></a>
+    <a class="card raised mentor" href={href('me', 'terms')}><b>{tr('Terms of use')}</b><span class="muted">{tr('Consilia is a tool; you are the teacher. What you agreed to.')}</span></a>
   </div>
 
-  <section class="card"><h3>Backup</h3><BackupCard /></section>
-  <section class="card"><h3>Background music</h3><MusicCard /></section>
+  <section class="card"><h3>{tr('Backup')}</h3><BackupCard /></section>
+  <section class="card"><h3>{tr('Background music')}</h3><MusicCard /></section>
 
   <section class="card">
     <div class="setting">
       <span id="lang-l">{t('me.language')}</span>
       <div class="seg" role="group" aria-labelledby="lang-l">
-        <button type="button" aria-pressed={i18n.locale === 'en'} onclick={() => setLocale('en')}>English</button>
-        <button type="button" aria-pressed={i18n.locale === 'ms'} onclick={() => setLocale('ms')}>Bahasa Melayu</button>
+        <button type="button" aria-pressed={i18n.locale === 'en'} onclick={() => setLocale('en')}>{tr('English')}</button>
+        <button type="button" aria-pressed={i18n.locale === 'ms'} onclick={() => setLocale('ms')}>{tr('Bahasa Melayu')}</button>
       </div>
     </div>
     <div class="setting">
@@ -64,10 +65,10 @@
   </section>
 
   <section class="card">
-    <h3>Profile</h3>
+    <h3>{tr('Profile')}</h3>
     {#if profile.loaded}
       {#key profile.value?.createdAt}
-        <ProfileForm value={profile.value} saveLabel="Save profile" onsave={async (p) => { await updateProfile(p); savedNote = 'Saved.'; }}>
+        <ProfileForm value={profile.value} saveLabel={tr('Save profile')} onsave={async (p) => { await updateProfile(p); savedNote = tr('Saved.'); }}>
           {#if savedNote}<p class="muted" role="status">{savedNote}</p>{/if}
         </ProfileForm>
       {/key}
@@ -75,8 +76,8 @@
   </section>
 
   <section class="card">
-    <h3>PIN lock for pupil data</h3>
-    {#if lock.configured && !lock.unlocked}<Unlock why="Unlock to change your PIN." />{:else}<PinSettings />{/if}
+    <h3>{tr('PIN lock for pupil data')}</h3>
+    {#if lock.configured && !lock.unlocked}<Unlock why={tr('Unlock to change your PIN.')} />{:else}<PinSettings />{/if}
   </section>
 
   <section class="card">

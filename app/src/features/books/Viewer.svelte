@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import type { PDFDocumentProxy } from 'pdfjs-dist';
   import { db, type Book } from '../../lib/db/schema';
   import { getBookFile } from '../../lib/textbook/store';
@@ -29,8 +30,8 @@
       if (!b) { book = null; onmissing?.(); return; }
       book = b;
       const f = await getBookFile(b);
-      if (!f) { err = 'The PDF for this book is missing from this device. Add it again from the Textbook Shelf.'; return; }
-      try { doc = await openPdf(f); } catch { err = 'This PDF could not be opened.'; }
+      if (!f) { err = tr('The PDF for this book is missing from this device. Add it again from the Textbook Shelf.'); return; }
+      try { doc = await openPdf(f); } catch { err = tr('This PDF could not be opened.'); }
     })();
   });
   const pdfPage = $derived(book ? Math.min(Math.max(1, page + book.offset), book.pages) : 1);
@@ -42,7 +43,7 @@
     // "Fit" shows the whole page on screen (projector); 1.5× and 2× zoom from the full width
     const n = pdfPage, z = zoom, w = wrap.clientWidth, me = ++token;
     const maxH = z === 1 ? Math.max(320, window.innerHeight * (tools ? 0.72 : 0.8)) : Infinity;
-    renderPage(doc, n, canvas, Math.max(240, (w - 4) * (z === 1 ? 1 : z)), maxH).then((sz) => { if (me === token) { size = sz; clearInk(); } }).catch(() => (err = 'This page could not be drawn.'));
+    renderPage(doc, n, canvas, Math.max(240, (w - 4) * (z === 1 ? 1 : z)), maxH).then((sz) => { if (me === token) { size = sz; clearInk(); } }).catch(() => (err = tr('This page could not be drawn.')));
   });
   function clearInk() { if (ink) { ink.width = size.w; ink.height = size.h; } }
   function turn(d: number) { page = Math.min(lastPrinted, Math.max(firstPrinted, page + d)); }
@@ -85,31 +86,31 @@
 
 <div class="viewer">
   <div class="bar row">
-    <b class="ttl">{meta?.title ?? 'Book'}</b>
+    <b class="ttl">{meta?.title ?? tr('Book')}</b>
     <div class="row nav">
-      <button class="btn btn-outline" type="button" onclick={() => turn(-1)} aria-label="Previous page">‹</button>
-      <label class="pg">p. <input class="input" type="number" bind:value={page} min={firstPrinted} max={lastPrinted} aria-label="Page number printed in the book" data-page /></label>
-      <button class="btn btn-outline" type="button" onclick={() => turn(1)} aria-label="Next page">›</button>
+      <button class="btn btn-outline" type="button" onclick={() => turn(-1)} aria-label={tr('Previous page')}>‹</button>
+      <label class="pg">p. <input class="input" type="number" bind:value={page} min={firstPrinted} max={lastPrinted} aria-label={tr('Page number printed in the book')} data-page /></label>
+      <button class="btn btn-outline" type="button" onclick={() => turn(1)} aria-label={tr('Next page')}>›</button>
     </div>
-    <div class="seg" role="group" aria-label="Zoom">{#each [1, 1.5, 2] as z}<button type="button" aria-pressed={zoom === z} onclick={() => (zoom = z)}>{z === 1 ? 'Fit' : `${z}×`}</button>{/each}</div>
+    <div class="seg" role="group" aria-label={tr('Zoom')}>{#each [1, 1.5, 2] as z}<button type="button" aria-pressed={zoom === z} onclick={() => (zoom = z)}>{z === 1 ? tr('Fit') : `${z}×`}</button>{/each}</div>
     {#if tools}
-      <div class="seg" role="group" aria-label="Projector tools">
-        <button type="button" aria-pressed={mode === 'pen'} onclick={() => (mode = mode === 'pen' ? '' : 'pen')}>Pen</button>
-        <button type="button" aria-pressed={mode === 'hl'} onclick={() => (mode = mode === 'hl' ? '' : 'hl')}>Highlighter</button>
-        <button type="button" aria-pressed={mode === 'spot'} onclick={() => (mode = mode === 'spot' ? '' : 'spot')} data-tool="spot">Spotlight</button>
-        <button type="button" aria-pressed={mode === 'cover'} onclick={() => (mode = mode === 'cover' ? '' : 'cover')} data-tool="cover">Answer cover</button>
+      <div class="seg" role="group" aria-label={tr('Projector tools')}>
+        <button type="button" aria-pressed={mode === 'pen'} onclick={() => (mode = mode === 'pen' ? '' : 'pen')}>{tr('Pen')}</button>
+        <button type="button" aria-pressed={mode === 'hl'} onclick={() => (mode = mode === 'hl' ? '' : 'hl')}>{tr('Highlighter')}</button>
+        <button type="button" aria-pressed={mode === 'spot'} onclick={() => (mode = mode === 'spot' ? '' : 'spot')} data-tool="spot">{tr('Spotlight')}</button>
+        <button type="button" aria-pressed={mode === 'cover'} onclick={() => (mode = mode === 'cover' ? '' : 'cover')} data-tool="cover">{tr('Answer cover')}</button>
       </div>
-      <button class="btn btn-text" type="button" onclick={clearInk}>Clear ink</button>
+      <button class="btn btn-text" type="button" onclick={clearInk}>{tr('Clear ink')}</button>
     {/if}
   </div>
   {#if !book}
-    <p class="muted">This book is not on your shelf yet.</p>
+    <p class="muted">{tr('This book is not on your shelf yet.')}</p>
   {:else if err}
     <p class="err">{err}</p>
   {:else}
     <div class="page" bind:this={wrap}>
       <div class="sheet" style="width:{size.w}px;height:{size.h}px">
-        <canvas bind:this={canvas} aria-label="{meta?.title}, page {page}"></canvas>
+        <canvas bind:this={canvas} aria-label={tr('{x}, page {page}', { x: meta?.title, page })}></canvas>
         <canvas class="ink" class:active={mode === 'pen' || mode === 'hl'} bind:this={ink} width={size.w} height={size.h} onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up}></canvas>
         {#if mode === 'spot'}
           <div class="spot" style="left:{spot.x * 100}%;top:{spot.y * 100}%;width:{spot.w * 100}%;height:{spot.h * 100}%" onpointerdown={(e) => drag('spot', e)} role="presentation">
@@ -118,12 +119,12 @@
         {/if}
         {#if mode === 'cover'}
           <div class="cover" style="left:{cover.x * 100}%;top:{cover.y * 100}%;width:{cover.w * 100}%;height:{cover.h * 100}%" onpointerdown={(e) => drag('cover', e)} role="presentation">
-            <span>Drag to reveal</span><span class="grip" onpointerdown={(e) => resize('cover', e)} role="presentation"></span>
+            <span>{tr('Drag to reveal')}</span><span class="grip" onpointerdown={(e) => resize('cover', e)} role="presentation"></span>
           </div>
         {/if}
       </div>
     </div>
-    <p class="muted small">{KIND_NAME[meta?.kind ?? 'SB']} · printed page {page} (PDF page {pdfPage} of {book.pages})</p>
+    <p class="muted small">{tr('{x} · printed page {page} (PDF page {pdfPage} of {pages})', { x: KIND_NAME[meta?.kind ?? 'SB'], page, pdfPage, pages: book.pages })}</p>
   {/if}
 </div>
 

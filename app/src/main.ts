@@ -5,7 +5,7 @@ import { mount } from 'svelte';
 import App from './App.svelte';
 import { startRouter } from './router.svelte';
 import { startPwa } from './lib/pwa.svelte';
-import { i18n } from './lib/i18n/index.svelte';
+import { i18n, loadLocale } from './lib/i18n/index.svelte';
 import { loadProfile } from './lib/profile.svelte';
 import { loadLock, lockNow } from './lib/lock.svelte';
 import { startMusicGuards } from './lib/audio/player.svelte';
@@ -30,4 +30,5 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') hiddenAt = Date.now();
   else if (hiddenAt && Date.now() - hiddenAt > 5 * 60_000) lockNow();
 });
-mount(App, { target: document.getElementById('app')! });
+// Bahasa Melayu text loads before the first screen, so it never flashes in English
+loadLocale(i18n.locale).catch(() => {}).finally(() => mount(App, { target: document.getElementById('app')! }));

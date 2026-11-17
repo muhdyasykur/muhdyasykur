@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import type { Lesson } from '../../lib/lesson/model';
   import { mergeAi, type Deck } from '../../lib/slides/deck';
@@ -14,7 +15,7 @@
    * AI slides are marked "AI" so the teacher checks them, and can be removed in one tap.
    */
   let { lesson, deck = $bindable(), onchange }: { lesson: Lesson; deck: Deck; onchange: () => void } = $props();
-  const PARTS: [SlidePart, string][] = [['text', 'Reading or listening text'], ['dialogue', 'Dialogue'], ['questions', 'Questions with answers'], ['vocabulary', 'Word meanings'], ['examples', 'More example sentences']];
+  const PARTS: [SlidePart, string][] = [['text', tr('Reading or listening text')], ['dialogue', tr('Dialogue')], ['questions', tr('Questions with answers')], ['vocabulary', tr('Word meanings')], ['examples', tr('More example sentences')]];
   let parts = $state<SlidePart[]>(['text', 'dialogue', 'questions']);
   let busy = $state(false);
   let msg = $state('');
@@ -31,42 +32,42 @@
     const before = deck.slides.length - aiCount;
     deck = mergeAi(deck, c);
     const added = deck.slides.length - before;
-    if (!added) { err = 'The answer had nothing to add. Try again or tick other parts.'; return; }
-    msg = `Added ${added} AI slide${added === 1 ? '' : 's'}, marked "AI". Read them before the lesson: AI can make mistakes.`; err = '';
+    if (!added) { err = tr('The answer had nothing to add. Try again or tick other parts.'); return; }
+    msg = tr('Added {added} AI slide{x}, marked "AI". Read them before the lesson: AI can make mistakes.', { added, x: added === 1 ? '' : 's' }); err = '';
     onchange();
   }
   async function run() {
     busy = true; msg = ''; err = '';
     try { apply(await askSlides(prompt), [...parts]); }
-    catch (e) { err = e instanceof AiError ? e.message : 'The AI request did not work. Try again.'; }
+    catch (e) { err = e instanceof AiError ? e.message : tr('The AI request did not work. Try again.'); }
     busy = false;
   }
-  function usePasted() { try { apply(pasted); pasted = ''; } catch (e) { err = e instanceof AiError ? e.message : 'That answer could not be read.'; } }
-  function removeAi() { deck = { ...deck, slides: deck.slides.filter((s) => !s.ai), aiAt: undefined }; msg = 'AI slides removed.'; onchange(); }
+  function usePasted() { try { apply(pasted); pasted = ''; } catch (e) { err = e instanceof AiError ? e.message : tr('That answer could not be read.'); } }
+  function removeAi() { deck = { ...deck, slides: deck.slides.filter((s) => !s.ai), aiAt: undefined }; msg = tr('AI slides removed.'); onchange(); }
 </script>
 
 <section class="card stack aibox" aria-labelledby="ai-h">
-  <h2 id="ai-h">✨ Add more with AI <span class="chip">optional</span></h2>
-  <p class="muted small">Adds a short reading or listening text, a dialogue, questions and more at Year {lesson.curriculum.year} level, placed in the right part of the deck. Only the lesson's topic, key words, target sentence and objectives are used: never pupils' names.</p>
-  <fieldset class="row parts"><legend class="sr-only">What to add</legend>
+  <h2 id="ai-h">{tr('✨ Add more with AI')} <span class="chip">{tr('optional')}</span></h2>
+  <p class="muted small">{tr('Adds a short reading or listening text, a dialogue, questions and more at Year {year} level, placed in the right part of the deck. Only the lesson\'s topic, key words, target sentence and objectives are used: never pupils\' names.', { year: lesson.curriculum.year })}</p>
+  <fieldset class="row parts"><legend class="sr-only">{tr('What to add')}</legend>
     {#each PARTS as [k, label]}<label class="row tick"><input type="checkbox" value={k} bind:group={parts} />{label}</label>{/each}
   </fieldset>
   {#if aiReady()}
     <div class="row">
-      <button class="btn btn-gold" type="button" onclick={run} disabled={busy || !parts.length || !pwa.online} id="ai-run">{busy ? `Asking ${aiName()}…` : `Add with ${aiName()}`}</button>
-      {#if aiCount}<button class="btn btn-text" type="button" onclick={removeAi} id="ai-remove">Remove {aiCount} AI slide{aiCount === 1 ? '' : 's'}</button>{/if}
-      <a class="btn btn-text" href={href('me', 'ai')}>AI assistant settings</a>
+      <button class="btn btn-gold" type="button" onclick={run} disabled={busy || !parts.length || !pwa.online} id="ai-run">{busy ? tr('Asking {aiName}…', { aiName: aiName() }) : tr('Add with {aiName}', { aiName: aiName() })}</button>
+      {#if aiCount}<button class="btn btn-text" type="button" onclick={removeAi} id="ai-remove">{tr('Remove {aiCount} AI slide{x}', { aiCount, x: aiCount === 1 ? '' : 's' })}</button>{/if}
+      <a class="btn btn-text" href={href('me', 'ai')}>{tr('AI assistant settings')}</a>
     </div>
-    {#if !pwa.online}<p class="muted small">You are offline. The AI assistant needs the internet; everything else on this page works offline.</p>{/if}
-    <details><summary class="small">What is sent to {aiName() === 'Claude' ? 'Anthropic' : 'Google'}</summary><pre class="sent">{prompt}</pre></details>
+    {#if !pwa.online}<p class="muted small">{tr('You are offline. The AI assistant needs the internet; everything else on this page works offline.')}</p>{/if}
+    <details><summary class="small">{tr('What is sent to {x}', { x: aiName() === 'Claude' ? tr('Anthropic') : tr('Google') })}</summary><pre class="sent">{prompt}</pre></details>
   {:else}
-    <p class="small"><a href={href('me', 'ai')} id="ai-setup">Connect Claude</a> (or Gemini) with your own key to do this in one tap, or use any AI chat, such as the free Claude.ai:</p>
-    <AiButtons prompt={chatPrompt} label="Slide content" />
-    <label class="field">Paste the AI's answer here
-      <textarea class="input" rows="4" bind:value={pasted} id="ai-paste" placeholder={'{ "text": { "title": "…", "body": "…" }, "dialogue": ["A: …", "B: …"], … }'}></textarea></label>
+    <p class="small"><a href={href('me', 'ai')} id="ai-setup">{tr('Connect Claude')}</a> {tr('(or Gemini) with your own key to do this in one tap, or use any AI chat, such as the free Claude.ai:')}</p>
+    <AiButtons prompt={chatPrompt} label={tr('Slide content')} />
+    <label class="field">{tr('Paste the AI\'s answer here')}
+      <textarea class="input" rows="4" bind:value={pasted} id="ai-paste" placeholder={tr('{ "text": { "title": "…", "body": "…" }, "dialogue": ["A: …", "B: …"], … }')}></textarea></label>
     <div class="row">
-      <button class="btn btn-outline" type="button" onclick={usePasted} disabled={!pasted.trim()} id="ai-paste-use">Add to my slides</button>
-      {#if aiCount}<button class="btn btn-text" type="button" onclick={removeAi} id="ai-remove">Remove {aiCount} AI slide{aiCount === 1 ? '' : 's'}</button>{/if}
+      <button class="btn btn-outline" type="button" onclick={usePasted} disabled={!pasted.trim()} id="ai-paste-use">{tr('Add to my slides')}</button>
+      {#if aiCount}<button class="btn btn-text" type="button" onclick={removeAi} id="ai-remove">{tr('Remove {aiCount} AI slide{x}', { aiCount, x: aiCount === 1 ? '' : 's' })}</button>{/if}
     </div>
   {/if}
   {#if msg}<p class="small ok" role="status" id="ai-msg">{msg}</p>{/if}

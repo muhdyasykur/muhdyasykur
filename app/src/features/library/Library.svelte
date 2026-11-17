@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { t, type Key } from '../../lib/i18n/index.svelte';
   import { route, href } from '../../router.svelte';
   import { loadIndex, loadSow, loadStandards, loadPhonics, searchLessons } from '../../lib/curriculum/loader';
@@ -45,13 +46,13 @@
   const current = $derived(lessonNo ? lessons.find((l) => l.no === lessonNo) : undefined);
   const tabs = $derived<{ id: Tab; label: string }[]>([
     { id: 'sow', label: t('library.sow') },
-    ...(hasPhonics ? [{ id: 'phonics' as Tab, label: 'Phonics' }] : []),
+    ...(hasPhonics ? [{ id: 'phonics' as Tab, label: tr('Phonics') }] : []),
     { id: 'standards', label: t('library.standards') },
     { id: 'levels', label: t('library.levels') },
     { id: 'tasks', label: t('library.tasks') },
-    { id: 'books', label: 'Textbooks' },
-    { id: 'bank', label: 'Activity bank' },
-    { id: 'guide', label: 'Method Guide' }
+    { id: 'books', label: tr('Textbooks') },
+    { id: 'bank', label: tr('Activity bank') },
+    { id: 'guide', label: tr('Method Guide') }
   ]);
   // search everything in this year: lessons, standards, task bank, strategies, activity bank, Method Guide
   const found = $derived.by(() => {
@@ -93,7 +94,7 @@
   </header>
 
   <div class="controls">
-    <div class="seg" role="group" aria-label="Year">
+    <div class="seg" role="group" aria-label={tr('Year')}>
       {#each [1, 2, 3, 4, 5, 6] as y}<button type="button" aria-pressed={year === y} onclick={() => { query = ''; location.hash = link(y, school, tab); }}>{t('library.year', { n: y })}</button>{/each}
     </div>
     <div class="seg" role="group" aria-label={t('library.school')}>
@@ -101,18 +102,18 @@
     </div>
   </div>
 
-  <label class="search everything"><Icon name="search" size={18} /><span class="sr-only">Search everything</span>
-    <input id="lib-everything" class="input" type="search" bind:value={everything} placeholder="Search everything in Year {year}: lessons, standards, tasks, activities, Method Guide" /></label>
+  <label class="search everything"><Icon name="search" size={18} /><span class="sr-only">{tr('Search everything')}</span>
+    <input id="lib-everything" class="input" type="search" bind:value={everything} placeholder={tr('Search everything in Year {year}: lessons, standards, tasks, activities, Method Guide', { year })} /></label>
 
   {#if found}
-    <section class="stack found" aria-label="Search results">
-      {#if found.lessons.length}<h3>SoW lessons</h3><ul class="flat">{#each found.lessons as l}<li><a href={link(year, school, 'sow', l.no)}>Lesson {l.no}: {l.topic || l.label}</a> <span class="muted small">{l.label}</span></li>{/each}</ul>{/if}
-      {#if found.standards.length}<h3>Learning Standards</h3><ul class="flat">{#each found.standards as l}<li><a href={link(year, school, 'standards')}><span class="code">{l.code}</span></a> <span class="pre">{l.text}</span></li>{/each}</ul>{/if}
-      {#if found.tasks.length}<h3>SoW task bank</h3><ul class="flat">{#each found.tasks as x}<li><a href={link(year, school, 'tasks')}>{x.kind} task {x.no}: {x.title}</a> <span class="muted small">{x.aim}</span></li>{/each}</ul>{/if}
-      {#if found.strategies.length}<h3>Differentiation strategies</h3><ul class="flat">{#each found.strategies as x}<li><a href={link(year, school, 'tasks')}>Strategy {x.no}: {x.title}</a></li>{/each}</ul>{/if}
-      {#if found.bank.length}<h3>Activity bank</h3><ul class="flat">{#each found.bank as b}<li><a href={link(year, school, 'bank')}>{b.title}</a> <span class="muted small">{b.skill} · Years {b.years[0]}–{b.years[1]}</span></li>{/each}</ul>{/if}
-      {#if found.guide.length}<h3>Method Guide</h3><ul class="flat">{#each found.guide as g}<li><a href={link(year, school, 'guide')}>{g.title}</a></li>{/each}</ul>{/if}
-      {#if !Object.values(found).some((v) => v.length)}<p class="muted">Nothing in Year {year} matches "{everything}".</p>{/if}
+    <section class="stack found" aria-label={tr('Search results')}>
+      {#if found.lessons.length}<h3>{tr('SoW lessons')}</h3><ul class="flat">{#each found.lessons as l}<li><a href={link(year, school, 'sow', l.no)}>{tr('Lesson {no}: {x}', { no: l.no, x: l.topic || l.label })}</a> <span class="muted small">{l.label}</span></li>{/each}</ul>{/if}
+      {#if found.standards.length}<h3>{tr('Learning Standards')}</h3><ul class="flat">{#each found.standards as l}<li><a href={link(year, school, 'standards')}><span class="code">{l.code}</span></a> <span class="pre">{l.text}</span></li>{/each}</ul>{/if}
+      {#if found.tasks.length}<h3>{tr('SoW task bank')}</h3><ul class="flat">{#each found.tasks as x}<li><a href={link(year, school, 'tasks')}>{tr('{kind} task {no}: {title}', { kind: x.kind, no: x.no, title: x.title })}</a> <span class="muted small">{x.aim}</span></li>{/each}</ul>{/if}
+      {#if found.strategies.length}<h3>{tr('Differentiation strategies')}</h3><ul class="flat">{#each found.strategies as x}<li><a href={link(year, school, 'tasks')}>{tr('Strategy {no}: {title}', { no: x.no, title: x.title })}</a></li>{/each}</ul>{/if}
+      {#if found.bank.length}<h3>{tr('Activity bank')}</h3><ul class="flat">{#each found.bank as b}<li><a href={link(year, school, 'bank')}>{b.title}</a> <span class="muted small">{tr('{skill} · Years {x}–{x2}', { skill: b.skill, x: b.years[0], x2: b.years[1] })}</span></li>{/each}</ul>{/if}
+      {#if found.guide.length}<h3>{tr('Method Guide')}</h3><ul class="flat">{#each found.guide as g}<li><a href={link(year, school, 'guide')}>{g.title}</a></li>{/each}</ul>{/if}
+      {#if !Object.values(found).some((v) => v.length)}<p class="muted">{tr('Nothing in Year {year} matches "{everything}".', { year, everything })}</p>{/if}
     </section>
   {/if}
 
@@ -123,15 +124,15 @@
   {#if activeTab === 'books'}
     <Shelf {year} {school} />
   {:else if activeTab === 'bank'}
-    <div class="seg skills" role="group" aria-label="Skill">{#each bankSkills as k}<button type="button" aria-pressed={bankSkill === k} onclick={() => (bankSkill = k)}>{k}</button>{/each}</div>
-    <p class="muted small">{bankShown.length} activities for Year {year}. Insert them into a lesson from the Lesson flow step of the lesson plan builder.</p>
+    <div class="seg skills" role="group" aria-label={tr('Skill')}>{#each bankSkills as k}<button type="button" aria-pressed={bankSkill === k} onclick={() => (bankSkill = k)}>{k}</button>{/each}</div>
+    <p class="muted small">{tr('{length} activities for Year {year}. Insert them into a lesson from the Lesson flow step of the lesson plan builder.', { length: bankShown.length, year })}</p>
     <div class="bank">
       {#each bankShown as b (b.id)}
         <details class="card" data-bank={b.id}>
-          <summary><b>{b.title}</b><span class="muted small">{b.skill} · {b.minutes} min · {b.pattern} · Years {b.years[0]}–{b.years[1]}</span></summary>
-          <p><b>Teacher:</b> {b.teacher}</p><p><b>Pupils:</b> {b.pupils}</p>
-          <ul class="tiers"><li><b>🌱 Low</b> {b.tiers.low}</li><li><b>🌿 Moderate</b> {b.tiers.mod}</li><li><b>🌳 High</b> {b.tiers.high}</li></ul>
-          <p class="muted small">Materials: {b.materials} · Offline: {b.offline}</p>
+          <summary><b>{b.title}</b><span class="muted small">{tr('{skill} · {minutes} min · {pattern} · Years {x}–{x2}', { skill: b.skill, minutes: b.minutes, pattern: b.pattern, x: b.years[0], x2: b.years[1] })}</span></summary>
+          <p><b>{tr('Teacher:')}</b> {b.teacher}</p><p><b>{tr('Pupils:')}</b> {b.pupils}</p>
+          <ul class="tiers"><li><b>{tr('🌱 Low')}</b> {b.tiers.low}</li><li><b>{tr('🌿 Moderate')}</b> {b.tiers.mod}</li><li><b>{tr('🌳 High')}</b> {b.tiers.high}</li></ul>
+          <p class="muted small">{tr('Materials: {materials} · Offline: {offline}', { materials: b.materials, offline: b.offline })}</p>
         </details>
       {/each}
     </div>
@@ -139,10 +140,10 @@
     <div class="stack guide">
       {#each GUIDE as g (g.id)}
         <section class="card" id={'guide-' + g.id}><h3>{g.title}</h3>{#each g.body as para}<p>{para}</p>{/each}
-          {#if g.pitfalls}<p class="muted small"><b>Watch out for:</b></p><ul class="small">{#each g.pitfalls as p}<li>{p}</li>{/each}</ul>{/if}
+          {#if g.pitfalls}<p class="muted small"><b>{tr('Watch out for:')}</b></p><ul class="small">{#each g.pitfalls as p}<li>{p}</li>{/each}</ul>{/if}
         </section>
       {/each}
-      <section class="card"><h3>Sources</h3><p class="muted small">The skill-to-framework advice is mainstream TESL methodology from these sources, not an official KPM rule.</p><ol class="small">{#each SOURCES as src}<li>{src}</li>{/each}</ol></section>
+      <section class="card"><h3>{tr('Sources')}</h3><p class="muted small">{tr('The skill-to-framework advice is mainstream TESL methodology from these sources, not an official KPM rule.')}</p><ol class="small">{#each SOURCES as src}<li>{src}</li>{/each}</ol></section>
     </div>
   {:else if error}
     <p class="empty" role="alert">{error}</p>
@@ -174,16 +175,16 @@
         <h2>{g.skill}</h2>
         {#each g.cs as c}
           <div class="card">
-            <p><span class="code">CS {c.code}</span> <b>{c.text}</b></p>
+            <p><span class="code">{tr('CS {code}', { code: c.code })}</span> <b>{c.text}</b></p>
             <ul class="lslist">
-              {#each c.ls as l}<li><span class="code">{l.code}</span><span><span class="pre">{l.text}</span>{#if l.focus && !l.text.startsWith(l.focus.replace(/[: ]+$/, ''))}<br /><span class="muted small">Focus: {l.focus}</span>{/if}</span></li>{/each}
+              {#each c.ls as l}<li><span class="code">{l.code}</span><span><span class="pre">{l.text}</span>{#if l.focus && !l.text.startsWith(l.focus.replace(/[: ]+$/, ''))}<br /><span class="muted small">{tr('Focus: {focus}', { focus: l.focus })}</span>{/if}</span></li>{/each}
             </ul>
           </div>
         {/each}
       </section>
     {/each}
   {:else if activeTab === 'levels'}
-    <div class="seg" role="group" aria-label="Skill">
+    <div class="seg" role="group" aria-label={tr('Skill')}>
       {#each skills as s}<button type="button" aria-pressed={skill === s} onclick={() => (skill = s)}>{s}</button>{/each}
     </div>
     <div class="stack tight">

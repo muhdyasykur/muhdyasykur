@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href, route } from '../../router.svelte';
   import { startTour } from '../../lib/tour.svelte';
   import { i18n } from '../../lib/i18n/index.svelte';
-  import { MANUAL, searchManual } from '../../lib/content/manual';
+  import { searchManual, localManual } from '../../lib/content/manual';
   import { VIDEOS, videoUrl, captionUrl, keepForOffline, isKept } from '../../lib/content/videos';
   import { pwa } from '../../lib/pwa.svelte';
   import { music, pause } from '../../lib/audio/player.svelte';
@@ -10,7 +11,11 @@
 
   /** Help: guided tour, ten captioned videos and the searchable manual. #/me/help/<article id> opens one article. */
   let q = $state('');
-  const hits = $derived(searchManual(q));
+  // the Malay manual loads only when needed
+  let manualMs = $state<import('../../lib/content/manual').ManualTranslation | null>(null);
+  $effect(() => { if (i18n.locale === 'ms' && !manualMs) import('../../lib/content/manual.ms').then((m) => (manualMs = m.MANUAL_MS)); });
+  const MANUAL = $derived(localManual(i18n.locale === 'ms' ? manualMs : null));
+  const hits = $derived(searchManual(q, MANUAL));
   const openId = $derived(route.parts[1] ?? '');
   let playing = $state('');
   let kept = $state<Record<string, boolean>>({});
@@ -22,12 +27,12 @@
   });
   function play(id: string) {
     videoErr = '';
-    if (!kept[id] && !pwa.online) { videoErr = 'This video has not been saved yet. Connect to the internet once to watch it; after that it works offline.'; return; }
+    if (!kept[id] && !pwa.online) { videoErr = tr('This video has not been saved yet. Connect to the internet once to watch it; after that it works offline.'); return; }
     playing = id;
     if (music.playing) pause();
   }
   async function started(id: string) { if (!kept[id]) kept[id] = await keepForOffline(id); }
-  const titleOf = (id: string) => VIDEOS.find((v) => v.id === id)?.title ?? '';
+  const titleOf = (id: string) => { const v = VIDEOS.find((x) => x.id === id); return v ? (i18n.locale === 'ms' ? v.ms : v.title) : ''; };
   const hl = (text: string) => {
     const ws = q.trim().split(/\s+/).filter((w) => w.length > 1).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     if (!ws.length) return [{ t: text, m: false }];
@@ -36,21 +41,21 @@
 </script>
 
 <div class="stack">
-  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />Me</a>
-  <h1>Help</h1>
-  <div class="row"><button id="help-tour" class="btn btn-gold" type="button" onclick={startTour}>Replay the guided tour</button></div>
+  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />{tr('Me')}</a>
+  <h1>{tr('Help')}</h1>
+  <div class="row"><button id="help-tour" class="btn btn-gold" type="button" onclick={startTour}>{tr('Replay the guided tour')}</button></div>
 
   <section class="stack" aria-labelledby="vid-h">
-    <h2 id="vid-h">Video tutorials</h2>
-    <p class="muted small">Each video is 1 to 2 minutes with English and Bahasa Melayu captions. They are not part of the install, so they download when you first play them and then work offline.</p>
+    <h2 id="vid-h">{tr('Video tutorials')}</h2>
+    <p class="muted small">{tr('Each video is 1 to 2 minutes with English and Bahasa Melayu captions. They are not part of the install, so they download when you first play them and then work offline.')}</p>
     {#if playing}
       <div class="card player">
         <!-- svelte-ignore a11y_media_has_caption -->
-        <video id="help-video" controls autoplay playsinline preload="metadata" src={videoUrl(playing)} onplay={() => started(playing)} onerror={() => (videoErr = 'The video could not load. Check your connection and try again.')}>
-          <track kind="captions" srclang="en" label="English" src={captionUrl(playing, 'en')} default={i18n.locale !== 'ms'} />
-          <track kind="captions" srclang="ms" label="Bahasa Melayu" src={captionUrl(playing, 'ms')} default={i18n.locale === 'ms'} />
+        <video id="help-video" controls autoplay playsinline preload="metadata" src={videoUrl(playing)} onplay={() => started(playing)} onerror={() => (videoErr = tr('The video could not load. Check your connection and try again.'))}>
+          <track kind="captions" srclang="en" label={tr('English')} src={captionUrl(playing, 'en')} default={i18n.locale !== 'ms'} />
+          <track kind="captions" srclang="ms" label={tr('Bahasa Melayu')} src={captionUrl(playing, 'ms')} default={i18n.locale === 'ms'} />
         </video>
-        <div class="row between"><b>{titleOf(playing)}</b><button class="btn btn-text" type="button" onclick={() => (playing = '')}>Close video</button></div>
+        <div class="row between"><b>{titleOf(playing)}</b><button class="btn btn-text" type="button" onclick={() => (playing = '')}>{tr('Close video')}</button></div>
       </div>
     {/if}
     {#if videoErr}<p class="warn" role="alert">{videoErr}</p>{/if}
@@ -58,8 +63,8 @@
       {#each VIDEOS as v, i}
         <button type="button" class="card raised vid" data-video={v.id} aria-pressed={playing === v.id} onclick={() => play(v.id)}>
           <span class="num" aria-hidden="true">{i + 1}</span>
-          <span class="txt"><b>{v.title}</b><span class="muted small">{v.about}</span>
-            <span class="small {kept[v.id] ? 'ok' : 'muted'}">{kept[v.id] ? '✓ Saved for offline' : 'Downloads when played'}</span></span>
+          <span class="txt"><b>{i18n.locale === 'ms' ? v.ms : v.title}</b><span class="muted small">{tr(v.about)}</span>
+            <span class="small {kept[v.id] ? 'ok' : 'muted'}">{kept[v.id] ? tr('✓ Saved for offline') : tr('Downloads when played')}</span></span>
           <span class="playic" aria-hidden="true">▶</span>
         </button>
       {/each}
@@ -67,13 +72,13 @@
   </section>
 
   <section class="stack" aria-labelledby="man-h">
-    <h2 id="man-h">Manual</h2>
-    <label class="search"><Icon name="search" size={18} /><span class="sr-only">Search the manual</span>
-      <input id="manual-q" class="input" type="search" bind:value={q} placeholder="Search the manual: PBD, Canva, backup, objectives…" /></label>
+    <h2 id="man-h">{tr('Manual')}</h2>
+    <label class="search"><Icon name="search" size={18} /><span class="sr-only">{tr('Search the manual')}</span>
+      <input id="manual-q" class="input" type="search" bind:value={q} placeholder={tr('Search the manual: PBD, Canva, backup, objectives…')} /></label>
 
     {#if q.trim()}
       <div class="stack" aria-live="polite">
-        <p class="muted small">{hits.length ? `${hits.length} result${hits.length === 1 ? '' : 's'}` : `Nothing matches "${q}". Try one word, such as "PIN" or "print".`}</p>
+        <p class="muted small">{hits.length ? tr('{length} result{x}', { length: hits.length, x: hits.length === 1 ? '' : 's' }) : tr('Nothing matches "{q}". Try one word, such as "PIN" or "print".', { q })}</p>
         {#each hits as h (h.article.id)}
           <article class="card stack tight hit">
             <span class="muted small">{h.chapter.title}</span>
@@ -81,7 +86,7 @@
             {#each h.article.body as p}<p>{#each hl(p) as part}{#if part.m}<mark>{part.t}</mark>{:else}{part.t}{/if}{/each}</p>{/each}
             {#if h.article.steps}<ol>{#each h.article.steps as s}<li>{s}</li>{/each}</ol>{/if}
             {#if h.article.tips}<ul class="tips">{#each h.article.tips as s}<li>{s}</li>{/each}</ul>{/if}
-            {#if h.article.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(h.article.video!)}>▶ Watch: {titleOf(h.article.video)}</button>{/if}
+            {#if h.article.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(h.article.video!)}>{tr('▶ Watch: {x}', { x: titleOf(h.article.video) })}</button>{/if}
           </article>
         {/each}
       </div>
@@ -96,7 +101,7 @@
                 {#each a.body as p}<p>{p}</p>{/each}
                 {#if a.steps}<ol>{#each a.steps as s}<li>{s}</li>{/each}</ol>{/if}
                 {#if a.tips}<ul class="tips">{#each a.tips as s}<li>{s}</li>{/each}</ul>{/if}
-                {#if a.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(a.video!)}>▶ Watch: {titleOf(a.video)}</button>{/if}
+                {#if a.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(a.video!)}>{tr('▶ Watch: {x}', { x: titleOf(a.video) })}</button>{/if}
               </div>
             </details>
           {/each}
@@ -104,7 +109,7 @@
       {/each}
     {/if}
   </section>
-  <p class="muted small">Still stuck? Tell the developer in the <a href={href('me', 'about')}>Feedback Garden</a>. Read how your data is handled in <a href={href('me', 'privacy')}>Privacy</a>.</p>
+  <p class="muted small">{tr('Still stuck? Tell the developer in the')} <a href={href('me', 'about')}>{tr('Feedback Garden')}</a>{tr('. Read how your data is handled in')} <a href={href('me', 'privacy')}>{tr('Privacy')}</a>.</p>
 </div>
 
 <style>

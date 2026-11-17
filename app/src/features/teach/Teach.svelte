@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { iso } from '../../lib/dates';
   import { href, go as navigate } from '../../router.svelte';
   import { db, type TeachSession, type PbdRecord } from '../../lib/db/schema';
@@ -121,52 +122,52 @@
   const openable = $derived(pageRefs.map((r) => ({ r, slot: lesson ? slotFor(lesson.curriculum.year, r.kind)?.id : undefined })).filter((x) => x.slot && shelf.includes(x.slot)));
   const sbSlot = $derived(lesson ? slotFor(lesson.curriculum.year, 'SB')?.id : undefined);
   const tools = [
-    { id: 'book', label: 'Textbook', icon: '📖' },
-    { id: 'picker', label: 'Name picker', icon: '🎯' }, { id: 'groups', label: 'Groups', icon: '👥' }, { id: 'noise', label: 'Noise', icon: '🔊' },
-    { id: 'points', label: 'Points', icon: '⭐' }, { id: 'signal', label: 'Attention', icon: '👀' }, { id: 'timer', label: 'Timer', icon: '⏱' }, { id: 'games', label: 'Games', icon: '🎮' }, { id: 'slides', label: 'Slides', icon: '🖼' }
+    { id: 'book', label: tr('Textbook'), icon: '📖' },
+    { id: 'picker', label: tr('Name picker'), icon: '🎯' }, { id: 'groups', label: tr('Groups'), icon: '👥' }, { id: 'noise', label: tr('Noise'), icon: '🔊' },
+    { id: 'points', label: tr('Points'), icon: '⭐' }, { id: 'signal', label: tr('Attention'), icon: '👀' }, { id: 'timer', label: tr('Timer'), icon: '⏱' }, { id: 'games', label: tr('Games'), icon: '🎮' }, { id: 'slides', label: tr('Slides'), icon: '🖼' }
   ] as const;
 </script>
 
 <div class="teach" class:small-years={smallClass}>
   {#if missing}
-    <div class="center"><p>This lesson plan no longer exists.</p><a class="btn btn-primary" href={href('plan')}>Back to Plan</a></div>
+    <div class="center"><p>{tr('This lesson plan no longer exists.')}</p><a class="btn btn-primary" href={href('plan')}>{tr('Back to Plan')}</a></div>
   {:else if needsUnlock}
-    <Unlock why="This class list is protected. Enter your PIN to teach with pupil names." />
-    <div class="center"><a class="btn btn-text" href={href('plan', 'edit', id, 'review')}>Back</a></div>
+    <Unlock why={tr('This class list is protected. Enter your PIN to teach with pupil names.')} />
+    <div class="center"><a class="btn btn-text" href={href('plan', 'edit', id, 'review')}>{tr('Back')}</a></div>
   {:else if lesson && session}
     <header class="top">
-      <div class="title"><p class="eyebrow">{lesson.header.className || `Year ${lesson.curriculum.year}`} · {lesson.mainSkill}</p><h1>{lesson.topic || 'Lesson'}</h1></div>
+      <div class="title"><p class="eyebrow">{lesson.header.className || tr('Year {year}', { year: lesson.curriculum.year })} · {lesson.mainSkill}</p><h1>{lesson.topic || tr('Lesson')}</h1></div>
       <div class="row">
-        <button class="btn btn-text" type="button" aria-pressed={sound} onclick={() => { sound = !sound; setSound(sound); }}>{sound ? '🔔 Sound on' : '🔕 Sound off'}</button>
-        <button class="btn btn-outline exit" class:holding type="button" onpointerdown={holdStart} onpointerup={holdEnd} onpointerleave={holdEnd} onkeydown={(e) => { if (e.key === 'Enter') exit(); }} aria-label="Exit Teach mode (press and hold)">Hold to exit</button>
+        <button class="btn btn-text" type="button" aria-pressed={sound} onclick={() => { sound = !sound; setSound(sound); }}>{sound ? tr('🔔 Sound on') : tr('🔕 Sound off')}</button>
+        <button class="btn btn-outline exit" class:holding type="button" onpointerdown={holdStart} onpointerup={holdEnd} onpointerleave={holdEnd} onkeydown={(e) => { if (e.key === 'Enter') exit(); }} aria-label={tr('Exit Teach mode (press and hold)')}>{tr('Hold to exit')}</button>
       </div>
     </header>
 
     {#if phase === 'start'}
       <main class="startscreen">
-        <section class="card stack">
+        <section class="card stack" lang="en">
           <h2>Today we will…</h2>
           <ul class="sc pupil-font">{#each sc as c}<li>{c.text || '…'}</li>{/each}</ul>
         </section>
         {#if pupils.length}
-          <section class="card stack" aria-label="Attendance">
-            <div class="row between"><h2>Attendance</h2><span class="muted">{present.length} of {pupils.length} present · tap a name to mark absent</span></div>
+          <section class="card stack" aria-label={tr('Attendance')}>
+            <div class="row between"><h2>{tr('Attendance')}</h2><span class="muted">{tr('{length} of {length2} present · tap a name to mark absent', { length: present.length, length2: pupils.length })}</span></div>
             <div class="att">
               {#each pupils as p (p.id)}<button type="button" class="pp" class:absent={session.absent.includes(p.id)} aria-pressed={!session.absent.includes(p.id)} onclick={() => toggleAbsent(p.id)} data-pupil={p.name}>{p.name}</button>{/each}
             </div>
           </section>
         {:else}
-          <p class="muted">No pupil list for this lesson. Link the lesson to a class with pupils to use attendance, the name picker and groups.</p>
+          <p class="muted">{tr('No pupil list for this lesson. Link the lesson to a class with pupils to use attendance, the name picker and groups.')}</p>
         {/if}
-        <button id="teach-start" class="btn btn-gold huge" type="button" onclick={start}>Start the lesson</button>
+        <button id="teach-start" class="btn btn-gold huge" type="button" onclick={start}>{tr('Start the lesson')}</button>
       </main>
     {:else if phase === 'live' && clock && stage}
       <main class="live">
         <section class="stagebox">
-          <p class="eyebrow">Stage {clock.stageIndex + 1} of {plan.length} · {stage.minutes} min planned</p>
+          <p class="eyebrow">{tr('Stage {x} of {length} · {minutes} min planned', { x: clock.stageIndex + 1, length: plan.length, minutes: stage.minutes })}</p>
           <h2 class="stagename">{stage.title}</h2>
-          <p class="clock" class:warn={left <= 120 && left > 0} class:over={left <= 0} aria-live="off" data-left={left}>{clock.pausedAt ? 'Paused' : fmt(left)}</p>
-          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax={stage.minutes * 60} aria-valuenow={Math.max(0, stage.minutes * 60 - left)} aria-label="Time used in this stage">
+          <p class="clock" class:warn={left <= 120 && left > 0} class:over={left <= 0} aria-live="off" data-left={left}>{clock.pausedAt ? tr('Paused') : fmt(left)}</p>
+          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax={stage.minutes * 60} aria-valuenow={Math.max(0, stage.minutes * 60 - left)} aria-label={tr('Time used in this stage')}>
             <div style="width:{Math.min(100, (1 - left / (stage.minutes * 60)) * 100)}%"></div>
           </div>
           <div class="ribbon">{#each plan as p, i}<span class:done={i < clock.stageIndex} class:now={i === clock.stageIndex} style="flex:{p.minutes}" title={p.title}></span>{/each}</div>
@@ -174,7 +175,7 @@
 
         {#if coach && backup}
           <aside class="coach {coach.kind}" role="status">
-            <b>{coach.kind === 'behind' ? `You are ${coach.minutes} min behind.` : `You are ${coach.minutes} min ahead.`}</b>
+            <b>{coach.kind === 'behind' ? tr('You are {minutes} min behind.', { minutes: coach.minutes }) : tr('You are {minutes} min ahead.', { minutes: coach.minutes })}</b>
             <span>{coach.kind === 'behind' ? backup.late : backup.early}</span>
           </aside>
         {/if}
@@ -186,34 +187,34 @@
               {#if notes || !a.pupils.trim()}<p class="mine">{a.teacher}</p>{/if}
             </div>
           {/each}
-          <button class="btn btn-text" type="button" onclick={() => (notes = !notes)}>{notes ? 'Hide my notes' : 'Show my notes'}</button>
+          <button class="btn btn-text" type="button" onclick={() => (notes = !notes)}>{notes ? tr('Hide my notes') : tr('Show my notes')}</button>
           {#if lesson.links.length}<div class="row">{#each lesson.links as l}<a class="btn btn-outline" href={l.url} target="_blank" rel="noopener">{l.label}</a>{/each}</div>{/if}
         </section>
 
-        <nav class="controls" aria-label="Stage controls">
-          <button class="btn btn-outline" type="button" onclick={() => step(-1)} disabled={clock.stageIndex === 0}>‹ Back</button>
-          <button class="btn btn-outline" type="button" onclick={togglePause}>{clock.pausedAt ? 'Resume' : 'Pause'}</button>
-          <button id="teach-next" class="btn btn-gold" type="button" onclick={() => step(1)}>{clock.stageIndex === plan.length - 1 ? 'Finish lesson' : `Next: ${plan[clock.stageIndex + 1].title} ›`}</button>
+        <nav class="controls" aria-label={tr('Stage controls')}>
+          <button class="btn btn-outline" type="button" onclick={() => step(-1)} disabled={clock.stageIndex === 0}>{tr('‹ Back')}</button>
+          <button class="btn btn-outline" type="button" onclick={togglePause}>{clock.pausedAt ? tr('Resume') : tr('Pause')}</button>
+          <button id="teach-next" class="btn btn-gold" type="button" onclick={() => step(1)}>{clock.stageIndex === plan.length - 1 ? tr('Finish lesson') : `Next: ${plan[clock.stageIndex + 1].title} ›`}</button>
         </nav>
       </main>
     {:else if phase === 'end' && clock}
       <main class="endscreen stack">
-        <h2>Lesson finished</h2>
+        <h2>{tr('Lesson finished')}</h2>
         <table class="sum">
-          <thead><tr><th>Stage</th><th>Planned</th><th>Actual</th></tr></thead>
-          <tbody>{#each plan as p}{@const a = clock.log.find((x) => x.key === p.key)}<tr><td>{p.title}</td><td>{p.minutes} min</td><td class:over={a && a.actualSec > p.minutes * 60 + 60}>{a ? Math.round(a.actualSec / 60) : 0} min</td></tr>{/each}</tbody>
+          <thead><tr><th>{tr('Stage')}</th><th>{tr('Planned')}</th><th>{tr('Actual')}</th></tr></thead>
+          <tbody>{#each plan as p}{@const a = clock.log.find((x) => x.key === p.key)}<tr><td>{p.title}</td><td>{tr('{minutes} min', { minutes: p.minutes })}</td><td class:over={a && a.actualSec > p.minutes * 60 + 60}>{tr('{x} min', { x: a ? Math.round(a.actualSec / 60) : 0 })}</td></tr>{/each}</tbody>
         </table>
-        <p class="muted">These times will appear in your reflection. Attendance has been saved.</p>
+        <p class="muted">{tr('These times will appear in your reflection. Attendance has been saved.')}</p>
         <div class="row">
-          {#if lesson.classId}<a id="teach-pbd" class="btn btn-gold" href={href('classes', lesson.classId, 'pbd', lesson.id)}>Record PBD for this lesson</a>{/if}
-          <a class="btn btn-outline" href={href('plan', 'reflect', lesson.id)}>Write my reflection</a>
-          <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'review')}>Back to the lesson plan</a>
+          {#if lesson.classId}<a id="teach-pbd" class="btn btn-gold" href={href('classes', lesson.classId, 'pbd', lesson.id)}>{tr('Record PBD for this lesson')}</a>{/if}
+          <a class="btn btn-outline" href={href('plan', 'reflect', lesson.id)}>{tr('Write my reflection')}</a>
+          <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'review')}>{tr('Back to the lesson plan')}</a>
         </div>
       </main>
     {/if}
 
     {#if phase !== 'end'}
-      <nav class="dock" aria-label="Classroom tools">
+      <nav class="dock" aria-label={tr('Classroom tools')}>
         {#each tools as t}<button type="button" class:on={tool === t.id} onclick={() => (tool = tool === t.id ? '' : t.id)} data-tool={t.id}><span aria-hidden="true">{t.icon}</span>{t.label}</button>{/each}
       </nav>
     {/if}
@@ -221,7 +222,7 @@
     {#if tool}
       <div class="sheet" role="dialog" aria-modal="true" aria-label={tools.find((t) => t.id === tool)?.label} use:trapFocus>
         <div class="sheet-in">
-          <div class="row between"><h2>{tools.find((t) => t.id === tool)?.label}</h2><button class="btn btn-outline" type="button" onclick={() => (tool = '')}>Close</button></div>
+          <div class="row between"><h2>{tools.find((t) => t.id === tool)?.label}</h2><button class="btn btn-outline" type="button" onclick={() => (tool = '')}>{tr('Close')}</button></div>
           {#if tool === 'picker'}<Picker pupils={present} bind:picker={session.picker} />
           {:else if tool === 'groups'}<Groups pupils={present} bind:groups={session.groups} onsave={saveGroups} />
           {:else if tool === 'noise'}<Noise />
@@ -229,7 +230,7 @@
           {:else if tool === 'signal'}<Signal />
           {:else if tool === 'book'}
             {#if !shelf.length || !sbSlot || !shelf.includes(sbSlot)}
-              <p class="muted">Add the Year {lesson.curriculum.year} Student's Book on the <a href={href('library', lesson.curriculum.year, lesson.curriculum.school.toLowerCase(), 'books')}>Textbook Shelf</a> to show its pages here.</p>
+              <p class="muted">{tr('Add the Year {year} Student\'s Book on the', { year: lesson.curriculum.year })} <a href={href('library', lesson.curriculum.year, lesson.curriculum.school.toLowerCase(), 'books')}>{tr('Textbook Shelf')}</a> {tr('to show its pages here.')}</p>
             {/if}
             {#if openable.length}<div class="row">{#each openable as o}<button class="btn btn-outline" type="button" onclick={() => (bookRef = { slot: o.slot!, page: o.r.page })}>{o.r.label}</button>{/each}</div>{/if}
             {#if bookRef || (sbSlot && shelf.includes(sbSlot))}
@@ -239,14 +240,14 @@
           {:else if tool === 'slides'}
             {@const deck = lesson.slides ?? buildDeck($state.snapshot(lesson) as Lesson)}
             {@const at = stage ? deck.slides.findIndex((x) => x.stage === stage.title) : -1}
-            {#if !lesson.slides}<p class="muted small">These slides are made from your plan now. <a href={href('plan', 'slides', lesson.id)}>Edit them or download PowerPoint</a> after the lesson.</p>{/if}
+            {#if !lesson.slides}<p class="muted small">{tr('These slides are made from your plan now.')} <a href={href('plan', 'slides', lesson.id)}>{tr('Edit them or download PowerPoint')}</a> {tr('after the lesson.')}</p>{/if}
             <SlideShow {deck} start={at < 0 ? 0 : at} embedded />
           {:else}<Timer />{/if}
         </div>
       </div>
     {/if}
   {:else}
-    <p class="center muted">Loading…</p>
+    <p class="center muted">{tr('Loading…')}</p>
   {/if}
 </div>
 

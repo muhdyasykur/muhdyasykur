@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { getLesson, saveLesson } from '../../lib/db/repo';
   import { loadStandards, loadSow } from '../../lib/curriculum/loader';
@@ -19,8 +20,8 @@
 
   let { id, step }: { id: string; step: string } = $props();
   const STEPS = [
-    { key: 'setup', label: 'Setup' }, { key: 'standards', label: 'Standards' }, { key: 'objectives', label: 'Objectives' },
-    { key: 'flow', label: 'Lesson flow' }, { key: 'materials', label: 'Materials' }, { key: 'planb', label: 'Plan B' }, { key: 'review', label: 'Review & print' }
+    { key: 'setup', label: tr('Setup') }, { key: 'standards', label: tr('Standards') }, { key: 'objectives', label: tr('Objectives') },
+    { key: 'flow', label: tr('Lesson flow') }, { key: 'materials', label: tr('Materials') }, { key: 'planb', label: tr('Plan B') }, { key: 'review', label: tr('Review & print') }
   ];
   let lesson = $state<Lesson | null>(null);
   let standards = $state<Standards | null>(null);
@@ -79,22 +80,22 @@
 </script>
 
 {#if missing}
-  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />Plan</a><p class="empty">This lesson plan no longer exists.</p></div>
+  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><p class="empty">{tr('This lesson plan no longer exists.')}</p></div>
 {:else if lesson && standards && sow}
 <div class="stack builder">
   <div class="no-print bar">
-    <a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />Plan</a>
-    <a class="btn btn-gold teachbtn" href={href('teach', lesson.id)}>▶ Teach</a>
-    <span class="save" role="status">{saved === 'saving' ? 'Saving…' : saved === 'error' ? 'Not saved. Check storage space.' : 'Saved on this device'}</span>
+    <a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a>
+    <a class="btn btn-gold teachbtn" href={href('teach', lesson.id)}>{tr('▶ Teach')}</a>
+    <span class="save" role="status">{saved === 'saving' ? tr('Saving…') : saved === 'error' ? tr('Not saved. Check storage space.') : tr('Saved on this device')}</span>
   </div>
   <header class="no-print head">
     <div>
-    <p class="eyebrow">Year {lesson.curriculum.year} {lesson.curriculum.school}{lesson.curriculum.sowLesson ? ` · SoW lesson ${lesson.curriculum.sowLesson}` : ''}{lesson.header.className ? ` · ${lesson.header.className}` : ''}</p>
-    <h1>{lesson.topic || 'Untitled lesson'}</h1>
+    <p class="eyebrow">{tr('Year {year} {school}{x}{x2}', { year: lesson.curriculum.year, school: lesson.curriculum.school, x: lesson.curriculum.sowLesson ? tr(' · SoW lesson {sowLesson}', { sowLesson: lesson.curriculum.sowLesson }) : '', x2: lesson.header.className ? ` · ${lesson.header.className}` : '' })}</p>
+    <h1>{lesson.topic || tr('Untitled lesson')}</h1>
     </div>
-    <a class="score" href={href('plan', 'edit', lesson.id, 'review')} title="See what to fix"><ScoreRing score={report.score} /><span>{report.failing.length ? `${report.failing.length} to fix` : 'Aligned'}</span></a>
+    <a class="score" href={href('plan', 'edit', lesson.id, 'review')} title={tr('See what to fix')}><ScoreRing score={report.score} /><span>{report.failing.length ? tr('{length} to fix', { length: report.failing.length }) : tr('Aligned')}</span></a>
   </header>
-  <nav class="steps no-print" aria-label="Builder steps">
+  <nav class="steps no-print" aria-label={tr('Builder steps')}>
     <ol>
       {#each STEPS as s, i}
         <li><a href={href('plan', 'edit', lesson.id, s.key)} aria-current={i === idx ? 'step' : undefined}><span class="n">{i + 1}</span>{s.label}</a></li>
@@ -120,7 +121,7 @@
   </div>
 </div>
 {:else}
-  <p class="muted">Loading…</p>
+  <p class="muted">{tr('Loading…')}</p>
 {/if}
 
 <style>

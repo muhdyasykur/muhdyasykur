@@ -3,6 +3,7 @@
  * device to Anthropic with the official SDK: Consilia has no server. The SDK is loaded only when Claude is used.
  * See common.ts for what is sent (lesson content only, never pupils' names).
  */
+import { tr } from '../i18n/index.svelte';
 import { z } from 'zod';
 import type Anthropic from '@anthropic-ai/sdk';
 import { AiError } from './common';
@@ -21,16 +22,16 @@ async function client(key: string): Promise<Anthropic> {
 async function explain(e: unknown): Promise<AiError> {
   const { default: A } = await import('@anthropic-ai/sdk');
   if (e instanceof AiError) return e;
-  if (e instanceof A.AuthenticationError) return new AiError('key', 'Anthropic did not accept the key. Copy it again from the Claude Console and paste it in Me → AI assistant.');
-  if (e instanceof A.PermissionDeniedError) return new AiError('key', 'This key is not allowed to use Claude. Check the key and your Console workspace.');
-  if (e instanceof A.NotFoundError) return new AiError('bad', 'That Claude model is not available to your key. Choose another model in Me → AI assistant.');
-  if (e instanceof A.RateLimitError) return new AiError('quota', 'Too many requests for now. Wait a minute and try again.');
+  if (e instanceof A.AuthenticationError) return new AiError('key', tr('Anthropic did not accept the key. Copy it again from the Claude Console and paste it in Me → AI assistant.'));
+  if (e instanceof A.PermissionDeniedError) return new AiError('key', tr('This key is not allowed to use Claude. Check the key and your Console workspace.'));
+  if (e instanceof A.NotFoundError) return new AiError('bad', tr('That Claude model is not available to your key. Choose another model in Me → AI assistant.'));
+  if (e instanceof A.RateLimitError) return new AiError('quota', tr('Too many requests for now. Wait a minute and try again.'));
   if (e instanceof A.BadRequestError) return /credit|billing|balance/i.test(e.message)
-    ? new AiError('quota', 'Your Anthropic account has no credit left. Add credit in the Claude Console (Billing), then try again.')
-    : new AiError('bad', 'Claude could not take this request. Try again; the built-in slides are unchanged.');
-  if (e instanceof A.APIConnectionError) return new AiError('offline', 'Claude cannot be reached: check the internet connection. The built-in slides still work offline.');
-  if (e instanceof A.APIError) return new AiError('server', 'Claude is busy. Try again in a minute.');
-  return new AiError('bad', 'The AI request did not work. Try again.');
+    ? new AiError('quota', tr('Your Anthropic account has no credit left. Add credit in the Claude Console (Billing), then try again.'))
+    : new AiError('bad', tr('Claude could not take this request. Try again; the built-in slides are unchanged.'));
+  if (e instanceof A.APIConnectionError) return new AiError('offline', tr('Claude cannot be reached: check the internet connection. The built-in slides still work offline.'));
+  if (e instanceof A.APIError) return new AiError('server', tr('Claude is busy. Try again in a minute.'));
+  return new AiError('bad', tr('The AI request did not work. Try again.'));
 }
 
 /** Checks the key; returns the Claude models it can use. */
@@ -52,8 +53,8 @@ const common = (model: string) => ({
   fallbacks: 'default' as const
 });
 function refused(stop: string | null) {
-  if (stop === 'refusal') throw new AiError('blocked', 'Claude declined this request. Change the topic or words and try again.');
-  if (stop === 'max_tokens') throw new AiError('bad', 'The answer was too long and was cut off. Ask for less and try again.');
+  if (stop === 'refusal') throw new AiError('blocked', tr('Claude declined this request. Change the topic or words and try again.'));
+  if (stop === 'max_tokens') throw new AiError('bad', tr('The answer was too long and was cut off. Ask for less and try again.'));
 }
 
 /** A text answer to any prompt (the AI prompt builder, Improve with AI). */
@@ -63,7 +64,7 @@ export async function askText(s: { key: string; model: string }, prompt: string)
     const r = await c.beta.messages.create({ ...common(s.model || DEFAULT_MODEL), output_config: { effort: 'low' }, messages: [{ role: 'user', content: prompt }] });
     refused(r.stop_reason);
     const text = r.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
-    if (!text) throw new AiError('bad', 'Claude sent an empty answer. Try again.');
+    if (!text) throw new AiError('bad', tr('Claude sent an empty answer. Try again.'));
     return text;
   } catch (e) { throw await explain(e); }
 }
@@ -84,7 +85,7 @@ export async function askSlides(s: { key: string; model: string }, prompt: strin
     const c = await client(s.key);
     const r = await c.beta.messages.parse({ ...common(s.model || DEFAULT_MODEL), output_config: { effort: 'low', format: betaZodOutputFormat(SlideContent) }, messages: [{ role: 'user', content: prompt }] });
     refused(r.stop_reason);
-    if (!r.parsed_output) throw new AiError('bad', 'Claude\'s answer could not be read. Try again.');
+    if (!r.parsed_output) throw new AiError('bad', tr('Claude\'s answer could not be read. Try again.'));
     return JSON.stringify(r.parsed_output);
   } catch (e) { throw await explain(e); }
 }

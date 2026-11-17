@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import type { Deck } from '../../lib/slides/deck';
   import SlideView from './SlideView.svelte';
@@ -39,25 +40,25 @@
 </script>
 
 <svelte:window onkeydown={key} />
-<div class="show" class:embedded bind:this={el} tabindex="-1" role={embedded ? 'region' : 'dialog'} aria-modal={embedded ? undefined : 'true'} aria-label="Lesson slides" aria-roledescription="slide show" use:trapFocus={{ enabled: !embedded }}>
+<div class="show" class:embedded bind:this={el} tabindex="-1" role={embedded ? 'region' : 'dialog'} aria-modal={embedded ? undefined : 'true'} aria-label={tr('Lesson slides')} aria-roledescription={tr('slide show')} use:trapFocus={{ enabled: !embedded }}>
   <FullExit {el} />
   {#if slide}
-    <button class="stage" type="button" onclick={tap} aria-label="Next slide (tap the left side to go back)">
+    <button class="stage" type="button" onclick={tap} aria-label={tr('Next slide (tap the left side to go back)')}>
       <SlideView {slide} theme={deck.theme} n={i} total={deck.slides.length} {reveal} />
     </button>
-    <p class="sr-only" aria-live="polite">Slide {i + 1} of {deck.slides.length}: {slide.title}. {slide.lines.join('. ')}{reveal && slide.answer ? ` Answer: ${slide.answer}` : ''}</p>
-    {#if notes}<div class="notes"><b>Notes{slide.stage ? ` · ${slide.stage}` : ''}</b>{#each slide.notes.split('\n') as n}<p>{n}</p>{/each}{#if slide.answer}<p>Answer: {slide.answer}</p>{/if}</div>{/if}
+    <p class="sr-only" aria-live="polite">{tr('Slide {x} of {length}: {title}. {x2}{x3}', { x: i + 1, length: deck.slides.length, title: slide.title, x2: slide.lines.join('. '), x3: reveal && slide.answer ? tr(' Answer: {answer}', { answer: slide.answer }) : '' })}</p>
+    {#if notes}<div class="notes"><b>{tr('Notes{x}', { x: slide.stage ? ` · ${slide.stage}` : '' })}</b>{#each slide.notes.split('\n') as n}<p>{n}</p>{/each}{#if slide.answer}<p>{tr('Answer: {answer}', { answer: slide.answer })}</p>{/if}</div>{/if}
     <div class="ctrl">
-      <button class="btn btn-text" type="button" onclick={prev} disabled={i === 0 && !reveal} aria-label="Previous slide">◀</button>
-      <label class="jump"><span class="sr-only">Go to slide</span>
+      <button class="btn btn-text" type="button" onclick={prev} disabled={i === 0 && !reveal} aria-label={tr('Previous slide')}>◀</button>
+      <label class="jump"><span class="sr-only">{tr('Go to slide')}</span>
         <select class="select" value={i} onchange={(e) => goTo(+e.currentTarget.value)} data-slide-jump>
           {#each deck.slides as s, k}<option value={k}>{k + 1}. {s.title}</option>{/each}
         </select>
       </label>
-      <button class="btn btn-text" type="button" onclick={next} disabled={i === deck.slides.length - 1 && (!slide.answer || reveal)} aria-label="Next slide" data-next>▶</button>
-      <button class="btn btn-text" type="button" aria-pressed={notes} onclick={() => (notes = !notes)} data-notes>Notes</button>
-      <button class="btn btn-text" type="button" onclick={full}>⛶ Full screen</button>
-      {#if onclose}<button class="btn btn-outline" type="button" onclick={onclose} data-close>Close</button>{/if}
+      <button class="btn btn-text" type="button" onclick={next} disabled={i === deck.slides.length - 1 && (!slide.answer || reveal)} aria-label={tr('Next slide')} data-next>▶</button>
+      <button class="btn btn-text" type="button" aria-pressed={notes} onclick={() => (notes = !notes)} data-notes>{tr('Notes')}</button>
+      <button class="btn btn-text" type="button" onclick={full}>{tr('⛶ Full screen')}</button>
+      {#if onclose}<button class="btn btn-outline" type="button" onclick={onclose} data-close>{tr('Close')}</button>{/if}
     </div>
   {/if}
 </div>

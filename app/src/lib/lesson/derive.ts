@@ -1,3 +1,4 @@
+import { tr } from '../i18n/index.svelte';
 import type { Lesson, Objective } from './model';
 import { compose, successCriterion, checkSmart, skillOfLs } from './objectives';
 
@@ -29,7 +30,7 @@ export function alignment(l: Lesson): AlignmentRow[] {
       const stages = l.stages.filter((s) => s.activities.some((a) => a.objectiveIds.some((id) => ids.has(id))));
       const minutes = stages.reduce((a, s) => a + s.minutes, 0);
       const assessed = !!(l.assessment.evidence || l.assessment.method);
-      const problem = !objs.length ? 'No objective for this standard' : !stages.length ? 'No activity linked to its objective' : !assessed ? 'No assessment planned' : '';
+      const problem = !objs.length ? tr('No objective for this standard') : !stages.length ? tr('No activity linked to its objective') : !assessed ? tr('No assessment planned') : '';
       rows.push({ role, ls: ls.code, objectives: objs.map((o) => labels.get(o.id)!), stages: stages.map((s) => s.title), minutes, assessed, ok: !problem, problem });
     }
   }

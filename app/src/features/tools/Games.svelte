@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import { route, href } from '../../router.svelte';
   import { ctx } from '../../lib/tools/context.svelte';
@@ -8,7 +9,7 @@
   /** Projector games made from the teacher's own words. Offline; the words are remembered on this device. */
   let { initialWords = '', embedded = false }: { initialWords?: string; embedded?: boolean } = $props();
   type Game = 'wheel' | 'unjumble' | 'mystery' | 'quiz';
-  const GAMES: [Game, string, string][] = [['wheel', '🎡 Spin wheel', 'Words or questions'], ['unjumble', '🔀 Unjumble', 'Sentences'], ['mystery', '🔍 Mystery word', 'Words'], ['quiz', '🏆 Quiz show', 'Questions | answers']];
+  const GAMES: [Game, string, string][] = [['wheel', tr('🎡 Spin wheel'), tr('Words or questions')], ['unjumble', tr('🔀 Unjumble'), tr('Sentences')], ['mystery', tr('🔍 Mystery word'), tr('Words')], ['quiz', tr('🏆 Quiz show'), tr('Questions | answers')]];
   const saved = (() => { try { return JSON.parse(localStorage.getItem('consilia.games') || '{}'); } catch { return {}; } })();
   let game = $state<Game>((['wheel', 'unjumble', 'mystery', 'quiz'] as Game[]).includes(route.parts[1] as Game) ? (route.parts[1] as Game) : 'wheel');
   let words = $state<string>(untrack(() => initialWords) || saved.words || '');
@@ -72,20 +73,20 @@
 
 <svelte:window onkeydown={key} />
 <div class="stack games">
-  <div class="tabs" role="tablist" aria-label="Games">
+  <div class="tabs" role="tablist" aria-label={tr('Games')}>
     {#each GAMES as [id, label]}<a role="tab" aria-selected={game === id} href={embedded ? undefined : href('tools', 'games', id)} onclick={(e) => { if (embedded) e.preventDefault(); game = id; }} data-game={id}>{label}</a>{/each}
   </div>
 
   <details class="card" open={(game === 'wheel' || game === 'mystery') ? W.length < 2 : game === 'unjumble' ? !S.length : !Q.length}>
-    <summary><b>Your words</b> <span class="muted small">(saved on this device)</span></summary>
+    <summary><b>{tr('Your words')}</b> <span class="muted small">{tr('(saved on this device)')}</span></summary>
     <div class="grid">
-      {#if game === 'wheel' || game === 'mystery'}<label class="field"><span>Words or questions (comma or one per line)</span>{#if embedded}<textarea id="g-words" class="input ta" rows="3" bind:value={words} placeholder="Malaysia, Japan, China, India"></textarea>{:else}<textarea id="g-words" class="input ta" rows="3" bind:value={ctx.words} placeholder="Malaysia, Japan, China, India"></textarea>{/if}</label>{/if}
-      {#if game === 'unjumble'}<label class="field"><span>Sentences (one per line)</span><textarea id="g-sent" class="input ta" rows="4" bind:value={sentences} placeholder={'He is from Japan.\nShe lives in Kota Kinabalu.'}></textarea></label>{/if}
-      {#if game === 'quiz'}<label class="field"><span>Question | answer (one per line)</span><textarea id="g-quiz" class="input ta" rows="4" bind:value={quiz} placeholder={'Where is Mount Kinabalu? | Sabah\nWhat is the capital of Japan? | Tokyo'}></textarea></label>{/if}
+      {#if game === 'wheel' || game === 'mystery'}<label class="field"><span>{tr('Words or questions (comma or one per line)')}</span>{#if embedded}<textarea id="g-words" class="input ta" rows="3" bind:value={words} placeholder="Malaysia, Japan, China, India"></textarea>{:else}<textarea id="g-words" class="input ta" rows="3" bind:value={ctx.words} placeholder="Malaysia, Japan, China, India"></textarea>{/if}</label>{/if}
+      {#if game === 'unjumble'}<label class="field"><span>{tr('Sentences (one per line)')}</span><textarea id="g-sent" class="input ta" rows="4" bind:value={sentences} placeholder={tr('He is from Japan.\nShe lives in Kota Kinabalu.')}></textarea></label>{/if}
+      {#if game === 'quiz'}<label class="field"><span>{tr('Question | answer (one per line)')}</span><textarea id="g-quiz" class="input ta" rows="4" bind:value={quiz} placeholder={tr('Where is Mount Kinabalu? | Sabah\nWhat is the capital of Japan? | Tokyo')}></textarea></label>{/if}
     </div>
   </details>
 
-  <section class="stage" bind:this={stageEl} aria-live="polite"><FullExit el={stageEl} />
+  <section class="stage" bind:this={stageEl} aria-live="polite" lang="en"><FullExit el={stageEl} />
     {#if game === 'wheel'}
       {#if W.length < 2}<p class="empty">Type at least two words to make a wheel.</p>{:else}
         <div class="wheelbox">
@@ -124,7 +125,7 @@
       {/if}
     {/if}
   </section>
-  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}>⛶ Full screen for the projector</button><span class="muted small">Keyboard or clicker: Space = {game === 'wheel' ? 'spin' : game === 'mystery' ? 'next letter' : 'show the answer'}, → = next.</span></div>{/if}
+  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}>{tr('⛶ Full screen for the projector')}</button><span class="muted small">{tr('Keyboard or clicker: Space = {x}, → = next.', { x: game === 'wheel' ? 'spin' : game === 'mystery' ? tr('next letter') : tr('show the answer') })}</span></div>{/if}
 </div>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href, go } from '../../router.svelte';
   import { getClass, saveClass, deleteClass, listPupils, addPupils, parseNames, renamePupil, removePupil } from '../../lib/db/repo';
   import type { SchoolClass, Pupil } from '../../lib/db/schema';
@@ -34,23 +35,23 @@
 </script>
 
 <div class="stack">
-  <a class="btn btn-text back" href={href('classes')}><Icon name="back" size={18} />Classes</a>
+  <a class="btn btn-text back" href={href('classes')}><Icon name="back" size={18} />{tr('Classes')}</a>
   {#if missing}
-    <p class="empty">This class no longer exists.</p>
+    <p class="empty">{tr('This class no longer exists.')}</p>
   {:else if cls}
     <header>
-      <p class="eyebrow">Year {cls.year} · {cls.schoolType}</p>
+      <p class="eyebrow">{tr('Year {year} · {schoolType}', { year: cls.year, schoolType: cls.schoolType })}</p>
       <h1>{cls.name}</h1>
     </header>
     <div class="row">
-      <a id="cd-attendance" class="btn btn-gold" href={href('classes', id, 'attendance')}>✓ Take attendance</a>
-      <a class="btn btn-primary" href={href('classes', id, 'pbd')}>PBD progress</a>
-      <a class="btn btn-outline" href={href('classes', id, 'pbd', 'new')}>Record TP levels</a>
+      <a id="cd-attendance" class="btn btn-gold" href={href('classes', id, 'attendance')}>{tr('✓ Take attendance')}</a>
+      <a class="btn btn-primary" href={href('classes', id, 'pbd')}>{tr('PBD progress')}</a>
+      <a class="btn btn-outline" href={href('classes', id, 'pbd', 'new')}>{tr('Record TP levels')}</a>
     </div>
     <section class="card grid">
-      <label class="field"><span>Class name</span><input id="cd-name" class="input" bind:value={cls.name} onchange={saveMeta} /></label>
-      <label class="field"><span>Level</span><input id="cd-level" class="input" bind:value={cls.levelLabel} onchange={saveMeta} placeholder="e.g. Average" /></label>
-      <div class="field"><span id="cd-type">School type</span>
+      <label class="field"><span>{tr('Class name')}</span><input id="cd-name" class="input" bind:value={cls.name} onchange={saveMeta} /></label>
+      <label class="field"><span>{tr('Level')}</span><input id="cd-level" class="input" bind:value={cls.levelLabel} onchange={saveMeta} placeholder={tr('e.g. Average')} /></label>
+      <div class="field"><span id="cd-type">{tr('School type')}</span>
         <div class="seg" role="group" aria-labelledby="cd-type">
           {#each ['SK', 'SJK'] as s}<button type="button" aria-pressed={cls.schoolType === s} onclick={() => { cls!.schoolType = s as 'SK' | 'SJK'; saveMeta(); }}>{s}</button>{/each}
         </div>
@@ -58,19 +59,19 @@
     </section>
 
     <section class="card stack">
-      <h3>Pupils <span class="muted">({pupils.length})</span></h3>
+      <h3>{tr('Pupils')} <span class="muted">({pupils.length})</span></h3>
       <label class="field">
-        <span>Paste names, one per line</span>
-        <textarea id="cd-paste" class="input ta" rows="5" bind:value={paste} placeholder={'Copy the name column from Excel, Google Sheets or WhatsApp.\nNumbers and bullets are removed automatically.'}></textarea>
+        <span>{tr('Paste names, one per line')}</span>
+        <textarea id="cd-paste" class="input ta" rows="5" bind:value={paste} placeholder={tr('Copy the name column from Excel, Google Sheets or WhatsApp.\nNumbers and bullets are removed automatically.')}></textarea>
       </label>
       <div class="row">
-        <button class="btn btn-primary" type="button" disabled={!preview.length} onclick={addAll}>Add {preview.length || ''} {preview.length === 1 ? 'pupil' : 'pupils'}</button>
+        <button class="btn btn-primary" type="button" disabled={!preview.length} onclick={addAll}>{tr('Add {x} {x2}', { x: preview.length || '', x2: preview.length === 1 ? 'pupil' : 'pupils' })}</button>
         {#if notice}<span class="muted small" role="status">{notice}</span>{/if}
       </div>
       {#if pupils.length}
         <ol class="pupils">
           {#each pupils as p (p.id)}
-            <li><input class="input" aria-label="Pupil name" value={p.name} onchange={(e) => rename(p, e.currentTarget.value)} /><a class="btn btn-text" href={href('classes', id, 'pupil', p.id)}>Profile</a><button class="btn btn-text" type="button" onclick={() => remove(p)}>Remove</button></li>
+            <li><input class="input" aria-label={tr('Pupil name')} value={p.name} onchange={(e) => rename(p, e.currentTarget.value)} /><a class="btn btn-text" href={href('classes', id, 'pupil', p.id)}>{tr('Profile')}</a><button class="btn btn-text" type="button" onclick={() => remove(p)}>{tr('Remove')}</button></li>
           {/each}
         </ol>
       {/if}
@@ -78,11 +79,11 @@
 
     <section class="danger row">
       {#if confirmDelete}
-        <span>Delete {cls.name} and its pupil list?</span>
-        <button class="btn btn-outline del" type="button" onclick={del}>Delete class</button>
-        <button class="btn btn-text" type="button" onclick={() => (confirmDelete = false)}>Keep it</button>
+        <span>{tr('Delete {name} and its pupil list?', { name: cls.name })}</span>
+        <button class="btn btn-outline del" type="button" onclick={del}>{tr('Delete class')}</button>
+        <button class="btn btn-text" type="button" onclick={() => (confirmDelete = false)}>{tr('Keep it')}</button>
       {:else}
-        <button class="btn btn-text del" type="button" onclick={() => (confirmDelete = true)}>Delete this class…</button>
+        <button class="btn btn-text del" type="button" onclick={() => (confirmDelete = true)}>{tr('Delete this class…')}</button>
       {/if}
     </section>
   {/if}

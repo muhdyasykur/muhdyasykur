@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import { ding } from '../../../lib/audio/sfx';
   /** Team points for agreed behaviours: always groups, never individual rankings (blueprint F18). */
   let { teams, points = $bindable([]) }: { teams: string[]; points?: number[] } = $props();
@@ -11,11 +12,11 @@
     <div class="team" style="--c:{colours[i % colours.length]}">
       <b>{t}</b>
       <span class="n" aria-live="polite">{points[i] ?? 0}</span>
-      <div class="row"><button class="btn btn-text" type="button" aria-label="Remove a point from {t}" onclick={() => add(i, -1)}>−</button><button class="btn plus" type="button" onclick={() => add(i, 1)}>+1</button></div>
+      <div class="row"><button class="btn btn-text" type="button" aria-label={tr('Remove a point from {t}', { t })} onclick={() => add(i, -1)}>−</button><button class="btn plus" type="button" onclick={() => add(i, 1)}>+1</button></div>
     </div>
   {/each}
 </div>
-<p class="muted small">Points go to teams for the behaviours you agreed with the class. Make groups first to use them as teams.</p>
+<p class="muted small">{tr('Points go to teams for the behaviours you agreed with the class. Make groups first to use them as teams.')}</p>
 <style>
   .teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: var(--s-3); }
   .team { display: grid; justify-items: center; gap: var(--s-1); padding: var(--s-3); border-radius: var(--r-card); border: 2px solid var(--c); background: var(--card); }

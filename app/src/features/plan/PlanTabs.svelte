@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   let { current }: { current: 'lessons' | 'day' | 'week' | 'year' } = $props();
-  const TABS: [typeof current, string, string][] = [['lessons', 'Lessons', href('plan')], ['day', 'My day', href('plan', 'day')], ['week', 'This week', href('plan', 'week')], ['year', 'Yearly plan', href('plan', 'year')]];
+  const TABS: [typeof current, string, string][] = [['lessons', tr('Lessons'), href('plan')], ['day', tr('My day'), href('plan', 'day')], ['week', tr('This week'), href('plan', 'week')], ['year', tr('Yearly plan'), href('plan', 'year')]];
 </script>
-<nav class="tabs" aria-label="Plan views">{#each TABS as [id, label, url]}<a href={url} aria-current={current === id ? 'page' : undefined} data-plantab={id}>{label}</a>{/each}</nav>
+<nav class="tabs" aria-label={tr('Plan views')}>{#each TABS as [id, label, url]}<a href={url} aria-current={current === id ? 'page' : undefined} data-plantab={id}>{label}</a>{/each}</nav>
 <style>
   /* also styles the Yearly / Monthly / Weekly switch inside the yearly plan */
   :global(nav.tabs) { display: flex; gap: var(--s-1); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }

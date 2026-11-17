@@ -1,3 +1,4 @@
+import { tr } from './i18n/index.svelte';
 import type { Lesson } from './lesson/model';
 import { uid } from './lesson/model';
 import { FRAMEWORKS } from './lesson/frameworks';
@@ -24,11 +25,11 @@ const isStr = (x: unknown) => typeof x === 'string';
 const isArr = Array.isArray;
 export function importLesson(text: string): { ok: true; lesson: Lesson } | { ok: false; error: string } {
   let data: Partial<Envelope>;
-  try { data = JSON.parse(text); } catch { return { ok: false, error: 'This file is not a Consilia lesson (it is not valid JSON).' }; }
-  if (data?.format !== FORMAT) return { ok: false, error: 'This file is not a Consilia lesson.' };
-  if (data.version !== 1) return { ok: false, error: 'This lesson was made by a newer Consilia. Update the app to open it.' };
+  try { data = JSON.parse(text); } catch { return { ok: false, error: tr('This file is not a Consilia lesson (it is not valid JSON).') }; }
+  if (data?.format !== FORMAT) return { ok: false, error: tr('This file is not a Consilia lesson.') };
+  if (data.version !== 1) return { ok: false, error: tr('This lesson was made by a newer Consilia. Update the app to open it.') };
   const l = data.lesson as Lesson | undefined;
-  const bad = (what: string) => ({ ok: false as const, error: `The lesson file is damaged (${what}).` });
+  const bad = (what: string) => ({ ok: false as const, error: tr('The lesson file is damaged ({what}).', { what }) });
   if (!l || typeof l !== 'object') return bad('no lesson');
   if (!l.header || !isStr(l.header.date) || !isStr(l.header.start) || typeof l.header.durationMin !== 'number') return bad('header');
   if (!l.curriculum || typeof l.curriculum.year !== 'number' || !['SK', 'SJK'].includes(l.curriculum.school)) return bad('curriculum');

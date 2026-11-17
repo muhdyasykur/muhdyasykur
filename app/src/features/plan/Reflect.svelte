@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { db, type Reflection } from '../../lib/db/schema';
   import { getLesson, countPupils } from '../../lib/db/repo';
@@ -29,21 +30,21 @@
     })();
   });
   const words = $derived([r.worked, r.didnt, r.next].join(' ').trim().split(/\s+/).filter(Boolean).length);
-  async function save() { await db.reflections.put({ ...$state.snapshot(r), createdAt: r.createdAt || Date.now() }); saved = words < 30 ? 'Saved. A few more words would make it more useful next time.' : 'Saved. Your "next time" note will appear when you plan for this class or these standards again.'; }
+  async function save() { await db.reflections.put({ ...$state.snapshot(r), createdAt: r.createdAt || Date.now() }); saved = words < 30 ? tr('Saved. A few more words would make it more useful next time.') : tr('Saved. Your "next time" note will appear when you plan for this class or these standards again.'); }
 </script>
 
 <div class="stack">
-  <a class="btn btn-text back" href={href('plan')}><Icon name="back" size={18} />Plan</a>
+  <a class="btn btn-text back" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a>
   {#if lesson}
-    <header><p class="eyebrow">Reflection · {lesson.header.className || `Year ${lesson.curriculum.year}`} · {lesson.header.date}</p><h1>{lesson.topic || 'Lesson'}</h1></header>
-    <section class="card stack"><h3>What happened</h3><ul class="facts">{#each facts as f}<li>{f}</li>{/each}</ul></section>
+    <header><p class="eyebrow">{tr('Reflection · {x} · {date}', { x: lesson.header.className || tr('Year {year}', { year: lesson.curriculum.year }), date: lesson.header.date })}</p><h1>{lesson.topic || tr('Lesson')}</h1></header>
+    <section class="card stack"><h3>{tr('What happened')}</h3><ul class="facts">{#each facts as f}<li>{f}</li>{/each}</ul></section>
     <section class="card stack">
-      <label class="field"><span>What worked well, and how do you know?</span><textarea id="rf-worked" class="input ta" rows="3" bind:value={r.worked}></textarea></label>
-      <label class="field"><span>What did not go as planned, and why?</span><textarea id="rf-didnt" class="input ta" rows="3" bind:value={r.didnt}></textarea></label>
-      <label class="field"><span>What will you change next time?</span><textarea id="rf-next" class="input ta" rows="3" bind:value={r.next}></textarea></label>
-      <div class="row"><button id="rf-save" class="btn btn-gold" type="button" onclick={save}>Save reflection</button><span class="muted small">{words} words</span>{#if saved}<span class="ok small" role="status">{saved}</span>{/if}</div>
+      <label class="field"><span>{tr('What worked well, and how do you know?')}</span><textarea id="rf-worked" class="input ta" rows="3" bind:value={r.worked}></textarea></label>
+      <label class="field"><span>{tr('What did not go as planned, and why?')}</span><textarea id="rf-didnt" class="input ta" rows="3" bind:value={r.didnt}></textarea></label>
+      <label class="field"><span>{tr('What will you change next time?')}</span><textarea id="rf-next" class="input ta" rows="3" bind:value={r.next}></textarea></label>
+      <div class="row"><button id="rf-save" class="btn btn-gold" type="button" onclick={save}>{tr('Save reflection')}</button><span class="muted small">{tr('{words} words', { words })}</span>{#if saved}<span class="ok small" role="status">{saved}</span>{/if}</div>
     </section>
-    <p class="muted small">The reflection prints in section 9 of the Consilia Lesson Blueprint.</p>
+    <p class="muted small">{tr('The reflection prints in section 9 of the Consilia Lesson Blueprint.')}</p>
   {/if}
 </div>
 <style>

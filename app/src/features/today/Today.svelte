@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr, dateLocale } from '../../lib/i18n/index.svelte';
   import { t } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { profile } from '../../lib/profile.svelte';
@@ -34,7 +35,7 @@
   const needBackup = $derived(lessons.length > 0 && (backupAge === -1 || (backupAge ?? 0) > 7));
   const toReflect = $derived(lessons.filter((l) => l.status === 'taught' && !reflected.has(l.id)).slice(0, 3));
   const cname = (id: string) => classes.find((c) => c.id === id)?.name ?? '';
-  const when = (d: string) => (d === today ? 'Today' : parseDate(d).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }));
+  const when = (d: string) => (d === today ? tr('Today') : parseDate(d).toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'short' }));
   const first = $derived((profile.value?.name ?? '').split(/\s+/)[0]);
 </script>
 
@@ -42,67 +43,67 @@
   <header class="hello">
     <Logo size={56} animate />
     <div>
-      <p class="eyebrow">{DAYS[((now.getDay() + 6) % 7) + 1]} · {now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}</p>
-      <h1>{first ? `Hello, ${first}` : t('today.greeting')}</h1>
+      <p class="eyebrow">{now.toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+      <h1>{first ? tr('Hello, {first}', { first }) : t('today.greeting')}</h1>
       <p class="muted"><i>{t('app.tagline')}</i></p>
     </div>
   </header>
-  <nav class="quicklinks" aria-label="Shortcuts">
-    <a class="btn btn-outline" href={href('plan', 'day')} data-quick="day">📅 My day</a>
-    <a class="btn btn-outline" href={href('plan', 'year')}>🗓 Yearly plan</a>
-    <a class="btn btn-outline" href={href('classes')}>✓ Attendance</a>
-    <a class="btn btn-outline" href={href('tools')}>🧰 Tools</a>
+  <nav class="quicklinks" aria-label={tr('Shortcuts')}>
+    <a class="btn btn-outline" href={href('plan', 'day')} data-quick="day">{tr('📅 My day')}</a>
+    <a class="btn btn-outline" href={href('plan', 'year')}>{tr('🗓 Yearly plan')}</a>
+    <a class="btn btn-outline" href={href('classes')}>{tr('✓ Attendance')}</a>
+    <a class="btn btn-outline" href={href('tools')}>{tr('🧰 Tools')}</a>
   </nav>
 
   {#if loaded}
     {#if next}
-      <section class="card raised next" aria-label="Next lesson">
-        <p class="eyebrow">Next lesson · {when(next.date)} {next.slot.start}</p>
+      <section class="card raised next" aria-label={tr('Next lesson')}>
+        <p class="eyebrow">{tr('Next lesson · {x} {start}', { x: when(next.date), start: next.slot.start })}</p>
         {#if next.lesson}
           {@const s = runChecks(next.lesson).score}
-          <div class="row nl"><ScoreRing score={s} size={64} /><div><h2>{next.lesson.topic || 'Untitled lesson'}</h2><p class="muted">{cname(next.slot.classId)} · {next.lesson.mainSkill} · {next.lesson.status === 'ready' ? 'Ready' : 'Draft'}</p></div></div>
+          <div class="row nl"><ScoreRing score={s} size={64} /><div><h2>{next.lesson.topic || tr('Untitled lesson')}</h2><p class="muted">{cname(next.slot.classId)} · {next.lesson.mainSkill} · {next.lesson.status === 'ready' ? tr('Ready') : tr('Draft')}</p></div></div>
           <div class="row">
-            <a class="btn btn-gold" href={href('teach', next.lesson.id)}>▶ Teach</a>
-            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? 'See what to fix' : 'Open lesson plan'}</a>
+            <a class="btn btn-gold" href={href('teach', next.lesson.id)}>{tr('▶ Teach')}</a>
+            <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? tr('See what to fix') : tr('Open lesson plan')}</a>
           </div>
         {:else}
-          <h2>{cname(next.slot.classId)} has no lesson plan yet</h2>
-          <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />Plan this lesson</a>
-          <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}>✨ Let Consilia plan it</a>
+          <h2>{tr('{x} has no lesson plan yet', { x: cname(next.slot.classId) })}</h2>
+          <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />{tr('Plan this lesson')}</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}>{tr('✨ Let Consilia plan it')}</a>
         {/if}
       </section>
     {:else if !slots.length}
       <section class="empty">
-        <h3>{lessons.length ? 'Add your timetable' : t('today.empty.title')}</h3>
-        <p>{lessons.length ? 'With your English periods set once, Today shows your next lesson and what still needs planning.' : t('today.empty.body')}</p>
+        <h3>{lessons.length ? tr('Add your timetable') : t('today.empty.title')}</h3>
+        <p>{lessons.length ? tr('With your English periods set once, Today shows your next lesson and what still needs planning.') : t('today.empty.body')}</p>
         <div class="row">
           <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{t('today.newRph')}</a>
-          <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}>✨ Let Consilia plan it</a>
-          <a class="btn btn-outline" href={href('plan', 'week')}>Set up timetable</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}>{tr('✨ Let Consilia plan it')}</a>
+          <a class="btn btn-outline" href={href('plan', 'week')}>{tr('Set up timetable')}</a>
         </div>
       </section>
     {/if}
 
     {#if unplanned.length || weak.length || toReflect.length || needBackup}
-      <section class="stack tight" aria-label="To do">
-        <h3>To do</h3>
+      <section class="stack tight" aria-label={tr('To do')}>
+        <h3>{tr('To do')}</h3>
         <ul class="nudges">
-          {#each unplanned as u}<li><span class="dot warn"></span><span>{cname(u.slot.classId)}, {when(u.date)} {u.slot.start}: no lesson plan yet.</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>Plan</a></li>{/each}
-          {#if needBackup}<li><span class="dot warn"></span><span>{backupAge === -1 ? 'You have not backed up yet.' : `Your last backup was ${backupAge} days ago.`} One file keeps your lessons safe if this device is lost.</span><a class="btn btn-text" href={href('me')}>Back up</a></li>{/if}
-          {#each toReflect as r}<li><span class="dot ok"></span><span>You taught "{r.topic || 'a lesson'}". Write your reflection while it is fresh.</span><a class="btn btn-text" href={href('plan', 'reflect', r.id)}>Reflect</a></li>{/each}
-          {#each weak as w}<li><span class="dot bad"></span><span>"{w.l.topic || 'Untitled'}" ({when(w.l.header.date)}) scores {w.score}. Aim for 80 or more.</span><a class="btn btn-text" href={href('plan', 'edit', w.l.id, 'review')}>Fix</a></li>{/each}
+          {#each unplanned as u}<li><span class="dot warn"></span><span>{tr('{x}, {x2} {start}: no lesson plan yet.', { x: cname(u.slot.classId), x2: when(u.date), start: u.slot.start })}</span><a class="btn btn-text" href={href('plan', 'new', u.slot.classId, u.date, u.slot.start, u.slot.durationMin)}>{tr('Plan')}</a></li>{/each}
+          {#if needBackup}<li><span class="dot warn"></span><span>{tr('{x} One file keeps your lessons safe if this device is lost.', { x: backupAge === -1 ? tr('You have not backed up yet.') : tr('Your last backup was {backupAge} days ago.', { backupAge }) })}</span><a class="btn btn-text" href={href('me')}>{tr('Back up')}</a></li>{/if}
+          {#each toReflect as r}<li><span class="dot ok"></span><span>{tr('You taught "{x}". Write your reflection while it is fresh.', { x: r.topic || tr('a lesson') })}</span><a class="btn btn-text" href={href('plan', 'reflect', r.id)}>{tr('Reflect')}</a></li>{/each}
+          {#each weak as w}<li><span class="dot bad"></span><span>{tr('"{x}" ({x2}) scores {score}. Aim for 80 or more.', { x: w.l.topic || tr('Untitled'), x2: when(w.l.header.date), score: w.score })}</span><a class="btn btn-text" href={href('plan', 'edit', w.l.id, 'review')}>{tr('Fix')}</a></li>{/each}
         </ul>
       </section>
     {/if}
 
     {#if week.length}
-      <section class="stack tight" aria-label="This week">
-        <div class="row between"><h3>This week</h3><a class="btn btn-text" href={href('plan', 'week')}>Open planner</a></div>
+      <section class="stack tight" aria-label={tr('This week')}>
+        <div class="row between"><h3>{tr('This week')}</h3><a class="btn btn-text" href={href('plan', 'week')}>{tr('Open planner')}</a></div>
         <ul class="week">
           {#each week as w (w.slot.id + w.date)}
             <li class:past={w.date < today}>
               <span class="when">{when(w.date)}<br /><span class="muted">{w.slot.start}</span></span>
-              <span class="what"><b>{w.lesson?.topic || 'Not planned'}</b><span class="muted small">{cname(w.slot.classId)}</span></span>
+              <span class="what"><b>{w.lesson?.topic || tr('Not planned')}</b><span class="muted small">{cname(w.slot.classId)}</span></span>
               {#if w.lesson}<ScoreRing score={runChecks(w.lesson).score} size={36} />{/if}
             </li>
           {/each}

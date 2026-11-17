@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { slotById } from '../../lib/textbook/books';
   import Viewer from './Viewer.svelte';
@@ -11,7 +12,7 @@
   const year = $derived(s?.years[0] ?? 4);
 </script>
 <div class="stack">
-  <a class="btn btn-text back" href={href('library', year, 'sk', 'books')}><Icon name="back" size={18} />Textbook Shelf</a>
+  <a class="btn btn-text back" href={href('library', year, 'sk', 'books')}><Icon name="back" size={18} />{tr('Textbook Shelf')}</a>
   <div class="pair" class:two={!!slot2}>
     <Viewer {slot} bind:page={p1} />
     {#if slot2}<Viewer slot={slot2} bind:page={p2} tools={false} />{/if}

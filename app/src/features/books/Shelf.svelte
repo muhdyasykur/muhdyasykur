@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href, go } from '../../router.svelte';
   import { db, type Book } from '../../lib/db/schema';
   import { SLOTS, KIND_NAME, slotsForYear, recognise, guessSlot, slotFor, type Slot } from '../../lib/textbook/books';
@@ -24,7 +25,7 @@
   $effect(() => { refresh(); });
   $effect(() => { if (ocr.done || ocr.phase) refresh(); });
   async function startOcr(b: Book) {
-    if (!pwa.online && !(await ocrFilesKept())) { error = 'Connect to the internet once so Consilia can download text recognition (about 7 MB). After that it works offline.'; return; }
+    if (!pwa.online && !(await ocrFilesKept())) { error = tr('Connect to the internet once so Consilia can download text recognition (about 7 MB). After that it works offline.'); return; }
     error = ''; await makeSearchable(b); await refresh();
   }
   $effect(() => { const y = year, s = school; loadSow(y, s).then((f) => { if (y === year) { lessons = f.lessons; units = unitIndex(f.lessons); } }); });
@@ -35,8 +36,8 @@
     (e.currentTarget as HTMLInputElement).value = '';
     if (!file) return;
     error = '';
-    if (file.type && file.type !== 'application/pdf') { error = 'Choose a PDF file.'; return; }
-    if (disk && disk.quota && disk.used + file.size > disk.quota * 0.95) { error = `Not enough space on this device for ${mb(file.size)}. Remove a book you do not need first.`; return; }
+    if (file.type && file.type !== 'application/pdf') { error = tr('Choose a PDF file.'); return; }
+    if (disk && disk.quota && disk.used + file.size > disk.quota * 0.95) { error = tr('Not enough space on this device for {mb}. Remove a book you do not need first.', { mb: mb(file.size) }); return; }
     busy = `Reading ${file.name}…`;
     try {
       const doc = await openPdf(file);
@@ -47,7 +48,7 @@
         busy = ''; printed = null;
         queueMicrotask(async () => { if (calib) await renderPage(doc, Math.min(CAL_PAGE, doc.numPages), calib, 360); });
       }
-    } catch { error = 'This file could not be opened as a PDF.'; busy = ''; }
+    } catch { error = tr('This file could not be opened as a PDF.'); busy = ''; }
   }
   async function save(doc?: Awaited<ReturnType<typeof openPdf>>) {
     if (!pending) return;
@@ -92,35 +93,35 @@
 </script>
 
 <div class="stack">
-  <p class="muted">Add your own copies of the textbooks. They stay on this device only: they are never uploaded, shared or put in backup files.</p>
-  {#if disk}<p class="small muted">Storage used on this device: {mb(disk.used)}{disk.quota ? ` of about ${mb(disk.quota)}` : ''}.</p>{/if}
+  <p class="muted">{tr('Add your own copies of the textbooks. They stay on this device only: they are never uploaded, shared or put in backup files.')}</p>
+  {#if disk}<p class="small muted">{tr('Storage used on this device: {x}{x2}.', { x: mb(disk.used), x2: disk.quota ? tr(' of about {mb}', { mb: mb(disk.quota) }) : '' })}</p>{/if}
   {#if error}<p class="err" role="alert">{error}</p>{/if}
   {#if busy}<p class="busy" role="status">{busy}</p>{/if}
 
   {#if pending && !pending.known && !busy}
     <section class="card stack calib">
-      <h3>One quick check for this PDF</h3>
-      <p>This file is not one Consilia knows. Look at the page below and type the page number printed on it, so "page 18" in the Scheme of Work opens the right page.</p>
+      <h3>{tr('One quick check for this PDF')}</h3>
+      <p>{tr('This file is not one Consilia knows. Look at the page below and type the page number printed on it, so "page 18" in the Scheme of Work opens the right page.')}</p>
       <canvas bind:this={calib} class="cal"></canvas>
-      <div class="row"><label class="field"><span>Printed page number (leave empty if none is printed)</span><input id="cal-page" class="input" type="number" bind:value={printed} /></label></div>
-      <div class="row"><button id="cal-save" class="btn btn-gold" type="button" disabled={printed == null} onclick={confirmCalibration}>Save</button><button class="btn btn-text" type="button" onclick={() => { if (pending) { pending.offset = 0; save(); } }}>No number printed: save as is</button><button class="btn btn-text" type="button" onclick={() => (pending = null)}>Cancel</button></div>
+      <div class="row"><label class="field"><span>{tr('Printed page number (leave empty if none is printed)')}</span><input id="cal-page" class="input" type="number" bind:value={printed} /></label></div>
+      <div class="row"><button id="cal-save" class="btn btn-gold" type="button" disabled={printed == null} onclick={confirmCalibration}>{tr('Save')}</button><button class="btn btn-text" type="button" onclick={() => { if (pending) { pending.offset = 0; save(); } }}>{tr('No number printed: save as is')}</button><button class="btn btn-text" type="button" onclick={() => (pending = null)}>{tr('Cancel')}</button></div>
     </section>
   {/if}
 
-  <label class="search"><span class="sr-only">Search the books</span>
-    <input id="shelf-search" class="input" type="search" bind:value={q} placeholder="Page number (18), unit or topic (Where are you from?), or a word" /></label>
+  <label class="search"><span class="sr-only">{tr('Search the books')}</span>
+    <input id="shelf-search" class="input" type="search" bind:value={q} placeholder={tr('Page number (18), unit or topic (Where are you from?), or a word')} /></label>
   {#if results}
     <section class="card stack res">
       {#if results.page != null}
-        {#if sb && bookOf(sb.id)}<a class="btn btn-primary" href={read(sb.id, results.page)}>Open {sb.title}, page {results.page}</a>{/if}
-        {#each slotsForYear(year).filter((s) => s.kind !== 'SB' && bookOf(s.id)) as s}<a class="btn btn-outline" href={read(s.id, results.page)}>{s.title}, page {results.page}</a>{/each}
-        {#if !books.some((b) => slotsForYear(year).some((s) => s.id === b.slot))}<p class="muted">Add a Year {year} book first.</p>{/if}
+        {#if sb && bookOf(sb.id)}<a class="btn btn-primary" href={read(sb.id, results.page)}>{tr('Open {title}, page {page}', { title: sb.title, page: results.page })}</a>{/if}
+        {#each slotsForYear(year).filter((s) => s.kind !== 'SB' && bookOf(s.id)) as s}<a class="btn btn-outline" href={read(s.id, results.page)}>{tr('{title}, page {page}', { title: s.title, page: results.page })}</a>{/each}
+        {#if !books.some((b) => slotsForYear(year).some((s) => s.id === b.slot))}<p class="muted">{tr('Add a Year {year} book first.', { year })}</p>{/if}
       {:else}
-        {#each results.units as u}<div class="hit"><b>{u.unit}: {u.topic}</b>{#if u.sb != null && sb}<a class="btn btn-text" href={read(sb.id, u.sb)}>Student's Book p. {u.sb}</a>{/if}{#if u.tb != null && slotFor(year, 'TB')}<a class="btn btn-text" href={read(slotFor(year, 'TB')!.id, u.tb)}>Teacher's Book p. {u.tb}</a>{/if}</div>{/each}
-        {#each results.lessons as l}<div class="hit"><span>Lesson {l.no} · {l.topic} <span class="muted">({l.label})</span></span>{#each lessonRefs(l) as r}{@const s = slotFor(year, r.kind)}{#if s}<a class="btn btn-text" href={read(s.id, r.page)}>{r.label}</a>{/if}{/each}</div>{/each}
+        {#each results.units as u}<div class="hit"><b>{u.unit}: {u.topic}</b>{#if u.sb != null && sb}<a class="btn btn-text" href={read(sb.id, u.sb)}>{tr('Student\'s Book p. {sb}', { sb: u.sb })}</a>{/if}{#if u.tb != null && slotFor(year, 'TB')}<a class="btn btn-text" href={read(slotFor(year, 'TB')!.id, u.tb)}>{tr('Teacher\'s Book p. {tb}', { tb: u.tb })}</a>{/if}</div>{/each}
+        {#each results.lessons as l}<div class="hit"><span>{tr('Lesson {no} · {topic}', { no: l.no, topic: l.topic })} <span class="muted">({l.label})</span></span>{#each lessonRefs(l) as r}{@const s = slotFor(year, r.kind)}{#if s}<a class="btn btn-text" href={read(s.id, r.page)}>{r.label}</a>{/if}{/each}</div>{/each}
         {#each results.words as w}<div class="hit"><a href={read(w.slot, w.page)}>{SLOTS.find((s) => s.id === w.slot)?.title}, p. {w.page}</a><span class="muted small">{w.snippet}</span></div>{/each}
-        {#if !results.units.length && !results.lessons.length && !results.words.length}<p class="muted">Nothing found for "{q}".</p>{/if}
-        {#if scanned}<p class="muted small">{scanned} of your books {scanned === 1 ? 'is a scan' : 'are scans'} not yet fully searchable. Press Make searchable on {scanned === 1 ? 'it' : 'them'} below. Units, topics and page numbers already work for every book.</p>{/if}
+        {#if !results.units.length && !results.lessons.length && !results.words.length}<p class="muted">{tr('Nothing found for "{q}".', { q })}</p>{/if}
+        {#if scanned}<p class="muted small">{tr('{scanned} of your books {x} not yet fully searchable. Press Make searchable on {x2} below. Units, topics and page numbers already work for every book.', { scanned, x: scanned === 1 ? tr('is a scan') : tr('are scans'), x2: scanned === 1 ? 'it' : 'them' })}</p>{/if}
       {/if}
     </section>
   {/if}
@@ -132,30 +133,30 @@
         <p class="eyebrow">{KIND_NAME[s.kind]}</p>
         <h3>{s.series}</h3>
         {#if b}
-          <p class="small muted">{b.name} · {b.pages} pages · {mb(b.bytes)} · {b.recognised ? 'recognised edition' : `page offset ${b.offset}`}{!isScan(b) ? ' · searchable text' : (b.ocrDone ?? 0) >= b.pages ? ' · searchable (read on this device)' : ' · scanned'}</p>
+          <p class="small muted">{tr('{name} · {pages} pages · {x} · {x2}{x3}', { name: b.name, pages: b.pages, x: mb(b.bytes), x2: b.recognised ? tr('recognised edition') : tr('page offset {offset}', { offset: b.offset }), x3: !isScan(b) ? tr(' · searchable text') : (b.ocrDone ?? 0) >= b.pages ? tr(' · searchable (read on this device)') : tr(' · scanned') })}</p>
           {#if isScan(b) && (b.ocrDone ?? 0) < b.pages}
             {@const running = ocr.bookId === b.id && (ocr.phase === 'loading' || ocr.phase === 'reading')}
             {@const done = ocr.bookId === b.id ? ocr.done : (b.ocrDone ?? 0)}
             <div class="ocr" data-ocr={b.id}>
-              {#if done > 0 || running}<progress max={b.pages} value={done} aria-label="Pages read"></progress>{/if}
-              <p class="small" role="status">{ocr.bookId === b.id && ocr.message ? ocr.message : done ? `${done} of ${b.pages} pages searchable.` : 'This book is a scan, so its words cannot be searched yet.'}</p>
-              {#if running}<button class="btn btn-outline" type="button" onclick={pauseOcr}>Pause</button>
-              {:else}<button class="btn btn-gold ocr-go" type="button" disabled={ocr.phase === 'loading' || ocr.phase === 'reading'} onclick={() => startOcr(b)}>{done ? 'Continue' : 'Make searchable'}</button>{/if}
-              {#if !done && !running}<p class="muted small">Reads each page on this device; nothing is uploaded. About {Math.max(1, Math.round(b.pages * 4 / 60))} min; you can keep working.</p>{/if}
+              {#if done > 0 || running}<progress max={b.pages} value={done} aria-label={tr('Pages read')}></progress>{/if}
+              <p class="small" role="status">{ocr.bookId === b.id && ocr.message ? ocr.message : done ? tr('{done} of {pages} pages searchable.', { done, pages: b.pages }) : tr('This book is a scan, so its words cannot be searched yet.')}</p>
+              {#if running}<button class="btn btn-outline" type="button" onclick={pauseOcr}>{tr('Pause')}</button>
+              {:else}<button class="btn btn-gold ocr-go" type="button" disabled={ocr.phase === 'loading' || ocr.phase === 'reading'} onclick={() => startOcr(b)}>{done ? tr('Continue') : tr('Make searchable')}</button>{/if}
+              {#if !done && !running}<p class="muted small">{tr('Reads each page on this device; nothing is uploaded. About {x} min; you can keep working.', { x: Math.max(1, Math.round(b.pages * 4 / 60)) })}</p>{/if}
             </div>
           {/if}
           <div class="row">
-            <a class="btn btn-primary" href={read(s.id, 1 - b.offset > 0 ? 1 - b.offset : 1)}>Open</a>
-            {#if !b.recognised}<button class="btn btn-text" type="button" onclick={() => recalibrate(b)}>Check page numbers</button>{/if}
-            <button class="btn btn-text del" type="button" onclick={() => remove(b)}>Remove</button>
+            <a class="btn btn-primary" href={read(s.id, 1 - b.offset > 0 ? 1 - b.offset : 1)}>{tr('Open')}</a>
+            {#if !b.recognised}<button class="btn btn-text" type="button" onclick={() => recalibrate(b)}>{tr('Check page numbers')}</button>{/if}
+            <button class="btn btn-text del" type="button" onclick={() => remove(b)}>{tr('Remove')}</button>
           </div>
         {:else}
-          <label class="btn btn-outline add">Add PDF<input type="file" accept="application/pdf,.pdf" class="sr-only" onchange={(e) => choose(s, e)} data-add={s.id} /></label>
+          <label class="btn btn-outline add">{tr('Add PDF')}<input type="file" accept="application/pdf,.pdf" class="sr-only" onchange={(e) => choose(s, e)} data-add={s.id} /></label>
         {/if}
       </section>
     {/each}
   </div>
-  <p class="muted small">Books are left out of backups because they are large. On a new device, add them again here.</p>
+  <p class="muted small">{tr('Books are left out of backups because they are large. On a new device, add them again here.')}</p>
 </div>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { getLesson, saveLesson } from '../../lib/db/repo';
   import type { Lesson } from '../../lib/lesson/model';
@@ -21,6 +22,7 @@
   let sel = $state(0);
   let presenting = $state(false);
   let saved = $state('');
+  let pending = false; // a save is waiting (the message above is translated, so it is not compared)
   let fileMsg = $state('');
   let confirmRemake = $state(false);
   let addKind = $state<SlideKind>('text');
@@ -37,17 +39,17 @@
   function persist() {
     if (!lesson || !deck) return;
     deck.updatedAt = Date.now();
-    saved = 'Saving…';
+    saved = tr('Saving…'); pending = true;
     clearTimeout(timer);
     const snap = $state.snapshot(deck) as Deck;
     const lid = lesson.id; // kept: the save may finish after this page closes
     timer = setTimeout(async () => {
       const l = await getLesson(lid); if (!l) return;
-      l.slides = snap; await saveLesson(l); saved = 'Saved on this device';
+      l.slides = snap; await saveLesson(l); pending = false; saved = tr('Saved on this device');
     }, 400);
   }
   $effect(() => {
-    const flush = () => { if (saved === 'Saving…' && lesson && deck) { clearTimeout(timer); const snap = $state.snapshot(deck) as Deck, lid = lesson.id; getLesson(lid).then((l) => { if (l) { l.slides = snap; saveLesson(l); } }); } };
+    const flush = () => { if (pending && lesson && deck) { clearTimeout(timer); const snap = $state.snapshot(deck) as Deck, lid = lesson.id; getLesson(lid).then((l) => { if (l) { l.slides = snap; saveLesson(l); } }); } };
     addEventListener('pagehide', flush);
     return () => removeEventListener('pagehide', flush);
   });
@@ -63,12 +65,13 @@
   }
   function dup(k: number) { if (!deck) return; deck.slides.splice(k + 1, 0, { ...$state.snapshot(deck.slides[k]) as Slide, id: uid() }); sel = k + 1; persist(); }
   function remove(k: number) { if (!deck || deck.slides.length < 2) return; deck.slides.splice(k, 1); sel = Math.min(sel, deck.slides.length - 1); persist(); }
+  // label: the menu (translated); title, lines, notes: the new slide itself, in English like the rest of the deck
   const NEW: Record<string, { label: string; title: string; lines: string[]; notes: string; answer?: string }> = {
-    text: { label: 'Text', title: 'New slide', lines: ['Type here'], notes: '' },
-    question: { label: 'Question with answer', title: 'Quick check', lines: ['Type the question'], notes: 'Pupils answer, then reveal.', answer: 'Type the answer' },
-    words: { label: 'Word list', title: 'Key words', lines: ['word'], notes: 'Say each word; pupils repeat.' },
-    activity: { label: 'Activity steps', title: 'Activity', lines: ['First step', 'Second step'], notes: '' },
-    dialogue: { label: 'Dialogue', title: 'Dialogue', lines: ['A: …', 'B: …'], notes: 'Model with a pupil, then pairs practise.' }
+    text: { label: tr('Text'), title: 'New slide', lines: ['Type here'], notes: '' },
+    question: { label: tr('Question with answer'), title: 'Quick check', lines: ['Type the question'], notes: 'Pupils answer, then reveal.', answer: 'Type the answer' },
+    words: { label: tr('Word list'), title: 'Key words', lines: ['word'], notes: 'Say each word; pupils repeat.' },
+    activity: { label: tr('Activity steps'), title: 'Activity', lines: ['First step', 'Second step'], notes: '' },
+    dialogue: { label: tr('Dialogue'), title: 'Dialogue', lines: ['A: …', 'B: …'], notes: 'Model with a pupil, then pairs practise.' }
   };
   function add() {
     if (!deck) return; const n = NEW[addKind];
@@ -77,12 +80,12 @@
   }
   async function download() {
     if (!deck || !lesson) return;
-    fileMsg = 'Making the PowerPoint file…';
+    fileMsg = tr('Making the PowerPoint file…');
     try {
       const blob = await deckToPptx($state.snapshot(deck) as Deck, { title: lesson.topic || 'English lesson', author: profile.value?.name });
       const how = await saveFile(blob, slideFileName(lesson.topic, lesson.header.date));
-      fileMsg = how === 'shared' ? 'Shared. Choose Canva, Google Slides or PowerPoint to open it.' : `Downloaded ${slideFileName(lesson.topic, lesson.header.date)}.`;
-    } catch { fileMsg = 'Could not make the file. Try again; if it keeps failing, restart the app.'; }
+      fileMsg = how === 'shared' ? tr('Shared. Choose Canva, Google Slides or PowerPoint to open it.') : tr('Downloaded {slideFileName}.', { slideFileName: slideFileName(lesson.topic, lesson.header.date) });
+    } catch { fileMsg = tr('Could not make the file. Try again; if it keeps failing, restart the app.'); }
   }
   const linesText = (s: Slide) => s.lines.join('\n');
   function setLines(s: Slide, v: string) { s.lines = v.split('\n'); persist(); }
@@ -90,27 +93,27 @@
 </script>
 
 {#if missing}
-  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />Plan</a><p class="empty">This lesson plan no longer exists.</p></div>
+  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><p class="empty">{tr('This lesson plan no longer exists.')}</p></div>
 {:else if lesson}
 <div class="stack">
   <div class="row between">
-    <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'materials')}><Icon name="back" size={18} />Back to the lesson plan</a>
+    <a class="btn btn-text" href={href('plan', 'edit', lesson.id, 'materials')}><Icon name="back" size={18} />{tr('Back to the lesson plan')}</a>
     <span class="muted small" role="status">{saved}</span>
   </div>
   <header>
-    <p class="eyebrow">Lesson slides · Year {lesson.curriculum.year}{lesson.header.className ? ` · ${lesson.header.className}` : ''} · {longDate(lesson.header.date)}</p>
-    <h1>{lesson.topic || 'Untitled lesson'}</h1>
+    <p class="eyebrow">{tr('Lesson slides · Year {year}{x} · {x2}', { year: lesson.curriculum.year, x: lesson.header.className ? ` · ${lesson.header.className}` : '', x2: longDate(lesson.header.date) })}</p>
+    <h1>{lesson.topic || tr('Untitled lesson')}</h1>
   </header>
 
   {#if !deck}
     <section class="card stack intro">
-      <h2>Make slides from this lesson plan</h2>
-      <p>Consilia turns the plan into a full deck for the projector: the topic, "I can" goals, warm-up, key words, the target sentence with examples, each activity with pupil steps, quick-check questions with answers, a thumbs check and an exit ticket. Your teacher notes go with every slide. It is made on this device and works offline.</p>
-      <p class="muted small">Choose a look (you can change it later):</p>
-      <div class="themes" role="group" aria-label="Look">
+      <h2>{tr('Make slides from this lesson plan')}</h2>
+      <p>{tr('Consilia turns the plan into a full deck for the projector: the topic, "I can" goals, warm-up, key words, the target sentence with examples, each activity with pupil steps, quick-check questions with answers, a thumbs check and an exit ticket. Your teacher notes go with every slide. It is made on this device and works offline.')}</p>
+      <p class="muted small">{tr('Choose a look (you can change it later):')}</p>
+      <div class="themes" role="group" aria-label={tr('Look')}>
         {#each Object.entries(THEMES) as [k, th]}
           <button type="button" class="theme" onclick={() => make(k as Theme)} data-make={k} style="--bg:{th.bg};--ink:{th.ink};--accent:{th.accent}">
-            <span class="sw"><span></span></span>{th.name}
+            <span class="sw"><span></span></span>{tr(th.name)}
           </button>
         {/each}
       </div>
@@ -118,72 +121,72 @@
   {:else}
     <section class="card stack">
       <div class="row tools">
-        <button class="btn btn-gold" type="button" onclick={() => (presenting = true)} id="sl-present">▶ Present</button>
-        <button class="btn btn-primary" type="button" onclick={download} id="sl-pptx">Download PowerPoint (.pptx)</button>
-        <label class="row small">Look
+        <button class="btn btn-gold" type="button" onclick={() => (presenting = true)} id="sl-present">{tr('▶ Present')}</button>
+        <button class="btn btn-primary" type="button" onclick={download} id="sl-pptx">{tr('Download PowerPoint (.pptx)')}</button>
+        <label class="row small">{tr('Look')}
           <select class="select" value={deck.theme} onchange={(e) => setTheme(e.currentTarget.value as Theme)} id="sl-theme">
-            {#each Object.entries(THEMES) as [k, th]}<option value={k}>{th.name}</option>{/each}
+            {#each Object.entries(THEMES) as [k, th]}<option value={k}>{tr(th.name)}</option>{/each}
           </select>
         </label>
         {#if confirmRemake}
-          <span class="row small">Replace all {deck.slides.length} slides and your edits?
-            <button class="btn btn-outline" type="button" onclick={() => make()} id="sl-remake-yes">Make again</button>
-            <button class="btn btn-text" type="button" onclick={() => (confirmRemake = false)}>Keep</button></span>
+          <span class="row small">{tr('Replace all {length} slides and your edits?', { length: deck.slides.length })}
+            <button class="btn btn-outline" type="button" onclick={() => make()} id="sl-remake-yes">{tr('Make again')}</button>
+            <button class="btn btn-text" type="button" onclick={() => (confirmRemake = false)}>{tr('Keep')}</button></span>
         {:else}
-          <button class="btn btn-text" type="button" onclick={() => (confirmRemake = true)} id="sl-remake">Make again from the plan…</button>
+          <button class="btn btn-text" type="button" onclick={() => (confirmRemake = true)} id="sl-remake">{tr('Make again from the plan…')}</button>
         {/if}
       </div>
       {#if fileMsg}<p class="small" role="status" id="sl-filemsg">{fileMsg}</p>{/if}
       <details class="help">
-        <summary>Open in Canva, Google Slides or PowerPoint</summary>
+        <summary>{tr('Open in Canva, Google Slides or PowerPoint')}</summary>
         <ol>
-          <li>Tap <b>Download PowerPoint (.pptx)</b>. On a phone you can send it straight to the Canva or Google Slides app.</li>
-          <li><b>Canva:</b> on canva.com choose <b>Create a design → Import file</b> (or drag the file onto the Canva home page). Each slide becomes an editable Canva page; add pictures, Magic Design or animations there.</li>
-          <li><b>Google Slides:</b> upload the file to Google Drive and open it with Google Slides, or in a deck choose <b>File → Import slides</b>.</li>
-          <li><b>PowerPoint:</b> open the file. Your notes are in the speaker notes.</li>
+          <li>{tr('Tap')} <b>{tr('Download PowerPoint (.pptx)')}</b>{tr('. On a phone you can send it straight to the Canva or Google Slides app.')}</li>
+          <li><b>{tr('Canva:')}</b> {tr('on canva.com choose')} <b>{tr('Create a design → Import file')}</b> {tr('(or drag the file onto the Canva home page). Each slide becomes an editable Canva page; add pictures, Magic Design or animations there.')}</li>
+          <li><b>{tr('Google Slides:')}</b> {tr('upload the file to Google Drive and open it with Google Slides, or in a deck choose')} <b>{tr('File → Import slides')}</b>.</li>
+          <li><b>{tr('PowerPoint:')}</b> {tr('open the file. Your notes are in the speaker notes.')}</li>
         </ol>
         <p class="row">
-          <a class="btn btn-text" href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">Open Canva ↗</a>
-          <a class="btn btn-text" href="https://docs.google.com/presentation/" target="_blank" rel="noopener noreferrer">Open Google Slides ↗</a>
+          <a class="btn btn-text" href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">{tr('Open Canva ↗')}</a>
+          <a class="btn btn-text" href="https://docs.google.com/presentation/" target="_blank" rel="noopener noreferrer">{tr('Open Google Slides ↗')}</a>
         </p>
       </details>
     </section>
 
     <div class="editor">
-      <ol class="thumbs" aria-label="Slides">
+      <ol class="thumbs" aria-label={tr('Slides')}>
         {#each deck.slides as s, k (s.id)}
           <li>
-            <button type="button" class="thumb" aria-current={k === sel ? 'true' : undefined} onclick={() => (sel = k)} aria-label="Slide {k + 1}: {s.title}" data-thumb={k}>
+            <button type="button" class="thumb" aria-current={k === sel ? 'true' : undefined} onclick={() => (sel = k)} aria-label={tr('Slide {x}: {title}', { x: k + 1, title: s.title })} data-thumb={k}>
               <SlideView slide={s} theme={deck.theme} />
-              <span class="tn">{k + 1}{s.ai ? ' · AI' : ''}</span>
+              <span class="tn">{k + 1}{s.ai ? tr(' · AI') : ''}</span>
             </button>
           </li>
         {/each}
       </ol>
 
       {#if cur}
-        <section class="card stack edit" aria-label="Edit slide {sel + 1}">
+        <section class="card stack edit" aria-label={tr('Edit slide {x}', { x: sel + 1 })}>
           <SlideView slide={cur} theme={deck.theme} n={sel} total={deck.slides.length} reveal />
           <div class="row">
-            <button class="btn btn-text" type="button" onclick={() => move(sel, -1)} disabled={sel === 0} aria-label="Move slide earlier">↑ Earlier</button>
-            <button class="btn btn-text" type="button" onclick={() => move(sel, 1)} disabled={sel === deck.slides.length - 1} aria-label="Move slide later">↓ Later</button>
-            <button class="btn btn-text" type="button" onclick={() => dup(sel)}>Duplicate</button>
-            <button class="btn btn-text del" type="button" onclick={() => remove(sel)} disabled={deck.slides.length < 2} id="sl-delete">Delete slide</button>
+            <button class="btn btn-text" type="button" onclick={() => move(sel, -1)} disabled={sel === 0} aria-label={tr('Move slide earlier')}>{tr('↑ Earlier')}</button>
+            <button class="btn btn-text" type="button" onclick={() => move(sel, 1)} disabled={sel === deck.slides.length - 1} aria-label={tr('Move slide later')}>{tr('↓ Later')}</button>
+            <button class="btn btn-text" type="button" onclick={() => dup(sel)}>{tr('Duplicate')}</button>
+            <button class="btn btn-text del" type="button" onclick={() => remove(sel)} disabled={deck.slides.length < 2} id="sl-delete">{tr('Delete slide')}</button>
           </div>
-          <label class="field">Title<input class="input" id="sl-title" value={cur.title} oninput={(e) => { cur.title = e.currentTarget.value; persist(); }} /></label>
-          <label class="field">On the slide (one line each)<textarea class="input" id="sl-lines" rows="5" value={linesText(cur)} oninput={(e) => setLines(cur, e.currentTarget.value)} onblur={() => tidy(cur)}></textarea></label>
+          <label class="field">{tr('Title')}<input class="input" id="sl-title" value={cur.title} oninput={(e) => { cur.title = e.currentTarget.value; persist(); }} /></label>
+          <label class="field">{tr('On the slide (one line each)')}<textarea class="input" id="sl-lines" rows="5" value={linesText(cur)} oninput={(e) => setLines(cur, e.currentTarget.value)} onblur={() => tidy(cur)}></textarea></label>
           {#if cur.answer !== undefined || cur.kind === 'question'}
-            <label class="field">Answer (shown when you tap)<input class="input" id="sl-answer" value={cur.answer ?? ''} oninput={(e) => { cur.answer = e.currentTarget.value; persist(); }} /></label>
+            <label class="field">{tr('Answer (shown when you tap)')}<input class="input" id="sl-answer" value={cur.answer ?? ''} oninput={(e) => { cur.answer = e.currentTarget.value; persist(); }} /></label>
           {/if}
-          <label class="field">Teacher notes (not shown to pupils; in PowerPoint's speaker notes)<textarea class="input" id="sl-notes" rows="3" value={cur.notes} oninput={(e) => { cur.notes = e.currentTarget.value; persist(); }}></textarea></label>
+          <label class="field">{tr('Teacher notes (not shown to pupils; in PowerPoint\'s speaker notes)')}<textarea class="input" id="sl-notes" rows="3" value={cur.notes} oninput={(e) => { cur.notes = e.currentTarget.value; persist(); }}></textarea></label>
         </section>
       {/if}
     </div>
     <div class="row">
-      <label class="row small">Add after this slide
-        <select class="select" bind:value={addKind} id="sl-addkind">{#each Object.entries(NEW) as [k, n]}<option value={k}>{n.label}</option>{/each}</select>
+      <label class="row small">{tr('Add after this slide')}
+        <select class="select" bind:value={addKind} id="sl-addkind">{#each Object.entries(NEW) as [k, n]}<option value={k}>{tr(n.label)}</option>{/each}</select>
       </label>
-      <button class="btn btn-outline" type="button" onclick={add} id="sl-add"><Icon name="plus" size={18} />Add slide</button>
+      <button class="btn btn-outline" type="button" onclick={add} id="sl-add"><Icon name="plus" size={18} />{tr('Add slide')}</button>
     </div>
 
     <AiSlides {lesson} bind:deck onchange={persist} />

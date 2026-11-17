@@ -1,23 +1,24 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import type { Lesson } from '../../lib/lesson/model';
   import { fromLesson } from '../../lib/tools/context.svelte';
   import { href } from '../../router.svelte';
   /** The tools that help with this builder step, opened already filled with this lesson. */
   let { lesson, step }: { lesson: Lesson; step: string } = $props();
   const BY: Record<string, [string, string, string][]> = {
-    objectives: [['objectives', '🎯', 'Objective writer']],
-    flow: [['ideas', '💡', 'Activity ideas'], ['differentiate', '🪜', 'Differentiation helper'], ['games', '🎮', 'Classroom games']],
-    materials: [['bbm', '✂️', 'BBM guide'], ['games', '🎮', 'Classroom games'], ['chant', '🎵', 'Chant maker'], ['digital', '🌐', 'Digital tools'], ['ai', '🤖', 'AI prompts']],
-    planb: [['ideas', '💡', 'Activity ideas']],
-    review: [['ai', '🤖', 'Improve with AI']]
+    objectives: [['objectives', '🎯', tr('Objective writer')]],
+    flow: [['ideas', '💡', tr('Activity ideas')], ['differentiate', '🪜', tr('Differentiation helper')], ['games', '🎮', tr('Classroom games')]],
+    materials: [['bbm', '✂️', tr('BBM guide')], ['games', '🎮', tr('Classroom games')], ['chant', '🎵', tr('Chant maker')], ['digital', '🌐', tr('Digital tools')], ['ai', '🤖', tr('AI prompts')]],
+    planb: [['ideas', '💡', tr('Activity ideas')]],
+    review: [['ai', '🤖', tr('Improve with AI')]]
   };
   const list = $derived(BY[step] ?? []);
 </script>
 {#if list.length}
-  <aside class="steptools no-print" aria-label="Tools for this step">
-    <span class="lbl">🧰 Tools for this step</span>
+  <aside class="steptools no-print" aria-label={tr('Tools for this step')}>
+    <span class="lbl">{tr('🧰 Tools for this step')}</span>
     {#each list as [id, icon, name]}<a class="chip tool" href={href('tools', id)} data-steptool={id} onclick={() => fromLesson($state.snapshot(lesson) as Lesson)}>{icon} {name}</a>{/each}
-    <span class="muted small">They open with this lesson's year, topic and words filled in.</span>
+    <span class="muted small">{tr('They open with this lesson\'s year, topic and words filled in.')}</span>
   </aside>
 {/if}
 <style>

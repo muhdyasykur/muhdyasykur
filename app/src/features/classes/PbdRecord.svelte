@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
   import { db, type Pupil, type PbdRecord, type SchoolClass } from '../../lib/db/schema';
@@ -55,7 +56,7 @@
       else del.push(id);
     }
     await db.transaction('rw', db.pbd, async () => { await db.pbd.bulkDelete(del); await db.pbd.bulkPut(rows); });
-    saved = `${rows.length} record${rows.length === 1 ? '' : 's'} saved.`;
+    saved = tr('{length} record{x} saved.', { length: rows.length, x: rows.length === 1 ? '' : 's' });
   }
   const skillOf = (ls: string) => ({ '1': 'Listening', '2': 'Speaking', '3': 'Reading', '4': 'Writing', '5': 'Language Arts' } as Record<string, string>)[ls[0]];
   const desc = (ls: string, level: number) => std?.performance[skillOf(ls)]?.find((p) => p.level === level)?.descriptors ?? [];
@@ -64,39 +65,39 @@
 </script>
 
 <div class="stack">
-  <a class="btn btn-text back" href={href('classes', classId)}><Icon name="back" size={18} />{cls?.name ?? 'Class'}</a>
-  <header><p class="eyebrow">PBD · {cls?.name}</p><h1>{lesson ? lesson.topic || 'Lesson' : 'Record TP levels'}</h1></header>
+  <a class="btn btn-text back" href={href('classes', classId)}><Icon name="back" size={18} />{cls?.name ?? tr('Class')}</a>
+  <header><p class="eyebrow">{tr('PBD · {x}', { x: cls?.name })}</p><h1>{lesson ? lesson.topic || tr('Lesson') : tr('Record TP levels')}</h1></header>
 
   <section class="card grid">
-    <label class="field"><span>Date</span><input id="pbd-date" class="input" type="date" bind:value={date} /></label>
-    <label class="field"><span>Add a Learning Standard</span>
+    <label class="field"><span>{tr('Date')}</span><input id="pbd-date" class="input" type="date" bind:value={date} /></label>
+    <label class="field"><span>{tr('Add a Learning Standard')}</span>
       <select id="pbd-ls" class="select" bind:value={pickLs} onchange={() => { addCode(pickLs); pickLs = ''; }}>
-        <option value="">Choose…</option>
+        <option value="">{tr('Choose…')}</option>
         {#each std?.ls ?? [] as l}<option value={l.code}>{l.code} {l.text.slice(0, 60)}</option>{/each}
       </select>
     </label>
   </section>
 
   {#if !pupils.length}
-    <p class="empty">This class has no pupils yet. <a href={href('classes', classId)}>Add the pupil list</a> first.</p>
+    <p class="empty">{tr('This class has no pupils yet.')} <a href={href('classes', classId)}>{tr('Add the pupil list')}</a> {tr('first.')}</p>
   {:else if !codes.length}
-    <p class="empty">Choose the Learning Standard you assessed.</p>
+    <p class="empty">{tr('Choose the Learning Standard you assessed.')}</p>
   {:else}
     {#each codes as ls (ls)}
       <section class="card stack ls">
-        <div class="row between"><h3><span class="code">LS {ls}</span> {skillOf(ls)}</h3>
-          <div class="row"><span class="muted small">Set everyone to</span>{#each [1, 2, 3, 4, 5, 6] as v}<button class="btn btn-text mini" type="button" onclick={() => fillAll(ls, v)}>{v}</button>{/each}</div>
+        <div class="row between"><h3><span class="code">{tr('LS {ls}', { ls })}</span> {skillOf(ls)}</h3>
+          <div class="row"><span class="muted small">{tr('Set everyone to')}</span>{#each [1, 2, 3, 4, 5, 6] as v}<button class="btn btn-text mini" type="button" onclick={() => fillAll(ls, v)}>{v}</button>{/each}</div>
         </div>
         <p class="muted small pre">{lsText(ls)}</p>
-        <details><summary class="small">What each TP means for {skillOf(ls)}</summary>
-          <ol class="tpd">{#each [1, 2, 3, 4, 5, 6] as v}<li><b>TP{v}</b> {desc(ls, v).join(' ')}</li>{/each}</ol>
+        <details><summary class="small">{tr('What each TP means for {x}', { x: skillOf(ls) })}</summary>
+          <ol class="tpd">{#each [1, 2, 3, 4, 5, 6] as v}<li><b>{tr('TP{v}', { v })}</b> {desc(ls, v).join(' ')}</li>{/each}</ol>
         </details>
         <ul class="grid-tp">
           {#each pupils as p (p.id)}
             {@const off = absent.includes(p.id)}
             <li class:off>
-              <span class="nm">{p.name}{#if off} <span class="muted small">(absent)</span>{/if}</span>
-              <div class="tps" role="group" aria-label="TP for {p.name}">
+              <span class="nm">{p.name}{#if off} <span class="muted small">{tr('(absent)')}</span>{/if}</span>
+              <div class="tps" role="group" aria-label={tr('TP for {name}', { name: p.name })}>
                 {#each [1, 2, 3, 4, 5, 6] as v}<button type="button" class="tp t{v}" aria-pressed={tp[`${p.id}|${ls}`] === v} disabled={off} onclick={() => set(p.id, ls, v)} onfocus={() => (help = `TP${v}: ${desc(ls, v)[0] ?? ''}`)}>{v}</button>{/each}
               </div>
             </li>
@@ -105,10 +106,10 @@
       </section>
     {/each}
     {#if help}<p class="muted small">{help}</p>{/if}
-    <details class="card"><summary>Notes about pupils (optional)</summary>
-      <div class="notes">{#each pupils as p}<label class="field"><span>{p.name}</span><input class="input" bind:value={notes[p.id]} placeholder="e.g. needs phonics support" /></label>{/each}</div>
+    <details class="card"><summary>{tr('Notes about pupils (optional)')}</summary>
+      <div class="notes">{#each pupils as p}<label class="field"><span>{p.name}</span><input class="input" bind:value={notes[p.id]} placeholder={tr('e.g. needs phonics support')} /></label>{/each}</div>
     </details>
-    <div class="row"><button id="pbd-save" class="btn btn-gold" type="button" onclick={save}>Save TP levels</button>{#if saved}<span class="ok" role="status">{saved}</span><a class="btn btn-text" href={href('classes', classId, 'pbd')}>See class progress</a>{/if}</div>
+    <div class="row"><button id="pbd-save" class="btn btn-gold" type="button" onclick={save}>{tr('Save TP levels')}</button>{#if saved}<span class="ok" role="status">{saved}</span><a class="btn btn-text" href={href('classes', classId, 'pbd')}>{tr('See class progress')}</a>{/if}</div>
   {/if}
 </div>
 

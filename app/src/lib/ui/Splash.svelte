@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../i18n/index.svelte';
   /**
    * Launch animation (blueprint F26): the book opens, the gold C draws itself, the star twinkles and the
    * tagline fades in. About 2 seconds, at most once a day, skippable, never with reduced motion.
@@ -9,7 +10,7 @@
   $effect(() => { const t = setTimeout(done, 2300); return () => clearTimeout(t); });
 </script>
 
-<button class="splash" class:leaving type="button" onclick={done} aria-label="Skip the opening animation">
+<button class="splash" class:leaving type="button" onclick={done} aria-label={tr('Skip the opening animation')}>
   <svg viewBox="0 0 160 160" width="168" height="168" aria-hidden="true">
     <rect width="160" height="160" rx="36" class="bg" />
     <path class="c" d="M112 52 A44 44 0 1 0 112 108" pathLength="100" />
@@ -20,9 +21,9 @@
     </g>
     <path class="star" d="M112 20 l4.5 10 10 4.5 -10 4.5 -4.5 10 -4.5 -10 -10 -4.5 10 -4.5z" />
   </svg>
-  <span class="word">Consilia</span>
-  <span class="tag">Consilium: wise planning, meaningful learning.</span>
-  <span class="skip">Tap to skip</span>
+  <span class="word">{tr('Consilia')}</span>
+  <span class="tag">{tr('Consilium: wise planning, meaningful learning.')}</span>
+  <span class="skip">{tr('Tap to skip')}</span>
 </button>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../i18n/index.svelte';
   import type { Profile } from '../db/schema';
   import { fileToDataUrl } from './image';
   import { untrack } from 'svelte';
@@ -27,23 +28,23 @@
 
 <form class="stack" onsubmit={submit}>
   <div class="grid">
-    <label class="field"><span>Your name</span><input id="pf-name" class="input" bind:value={name} autocomplete="name" placeholder="e.g. Muhammad Yasykur" /></label>
-    <label class="field"><span>Practicum school</span><input id="pf-school" class="input" bind:value={school} placeholder="e.g. SK(C) Anglo Chinese Kota Kinabalu" /></label>
+    <label class="field"><span>{tr('Your name')}</span><input id="pf-name" class="input" bind:value={name} autocomplete="name" placeholder={tr('e.g. Muhammad Yasykur')} /></label>
+    <label class="field"><span>{tr('Practicum school')}</span><input id="pf-school" class="input" bind:value={school} placeholder={tr('e.g. SK(C) Anglo Chinese Kota Kinabalu')} /></label>
     <div class="field">
-      <span id="pf-type-l">School type</span>
+      <span id="pf-type-l">{tr('School type')}</span>
       <div class="seg" role="group" aria-labelledby="pf-type-l">
-        <button type="button" aria-pressed={schoolType === 'SK'} onclick={() => (schoolType = 'SK')}>SK (national)</button>
-        <button type="button" aria-pressed={schoolType === 'SJK'} onclick={() => (schoolType = 'SJK')}>SJK (national-type)</button>
+        <button type="button" aria-pressed={schoolType === 'SK'} onclick={() => (schoolType = 'SK')}>{tr('SK (national)')}</button>
+        <button type="button" aria-pressed={schoolType === 'SJK'} onclick={() => (schoolType = 'SJK')}>{tr('SJK (national-type)')}</button>
       </div>
-      <small class="muted">Decides which Scheme of Work opens by default. Each class can still be set separately.</small>
+      <small class="muted">{tr('Decides which Scheme of Work opens by default. Each class can still be set separately.')}</small>
     </div>
-    <label class="field"><span>Programme (optional)</span><input id="pf-prog" class="input" bind:value={programme} placeholder="e.g. PISMP TESL" /></label>
-    <label class="field"><span>Campus (optional)</span><input id="pf-campus" class="input" bind:value={campus} placeholder="e.g. IPG Kampus Gaya" /></label>
+    <label class="field"><span>{tr('Programme (optional)')}</span><input id="pf-prog" class="input" bind:value={programme} placeholder={tr('e.g. PISMP TESL')} /></label>
+    <label class="field"><span>{tr('Campus (optional)')}</span><input id="pf-campus" class="input" bind:value={campus} placeholder={tr('e.g. IPG Kampus Gaya')} /></label>
     <div class="field">
-      <span>School badge for the lesson plan header (optional)</span>
+      <span>{tr('School badge for the lesson plan header (optional)')}</span>
       <div class="row">
-        {#if logo}<img src={logo} alt="School badge" class="logo" /><button type="button" class="btn btn-text" onclick={() => (logo = '')}>Remove</button>{/if}
-        <label class="btn btn-outline">Choose image<input id="pf-logo" type="file" accept="image/*" class="sr-only" onchange={pick} /></label>
+        {#if logo}<img src={logo} alt={tr('School badge')} class="logo" /><button type="button" class="btn btn-text" onclick={() => (logo = '')}>{tr('Remove')}</button>{/if}
+        <label class="btn btn-outline">{tr('Choose image')}<input id="pf-logo" type="file" accept="image/*" class="sr-only" onchange={pick} /></label>
       </div>
       {#if logoError}<small class="err">{logoError}</small>{/if}
     </div>

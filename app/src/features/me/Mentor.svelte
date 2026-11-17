@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
   import { db, type MentorNote } from '../../lib/db/schema';
@@ -21,26 +22,26 @@
 </script>
 
 <div class="stack">
-  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />Me</a>
-  <h1>Mentor and lecturer feedback</h1>
+  <a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />{tr('Me')}</a>
+  <h1>{tr('Mentor and lecturer feedback')}</h1>
   {#if pats.length}
-    <section class="card stack"><h3>Patterns</h3>
-      <ul class="pat">{#each pats as p}<li><b>{p.tag}</b> mentioned {p.count}× in {p.observations} observation{p.observations === 1 ? '' : 's'}{#if GUIDE_FOR_TAG[p.tag]} · <a href={href('library', 4, 'sk', 'guide')}>Method Guide</a>{/if}</li>{/each}</ul>
+    <section class="card stack"><h3>{tr('Patterns')}</h3>
+      <ul class="pat">{#each pats as p}<li><b>{p.tag}</b> {tr('mentioned {count}× in {observations} observation{x}', { count: p.count, observations: p.observations, x: p.observations === 1 ? '' : 's' })}{#if GUIDE_FOR_TAG[p.tag]} · <a href={href('library', 4, 'sk', 'guide')}>{tr('Method Guide')}</a>{/if}</li>{/each}</ul>
     </section>
   {/if}
   <section class="card stack">
-    <h3>Add feedback</h3>
+    <h3>{tr('Add feedback')}</h3>
     <div class="grid">
-      <label class="field"><span>From</span><input id="mn-who" class="input" bind:value={draft.who} list="whos" /></label>
-      <label class="field"><span>Date</span><input id="mn-date" class="input" type="date" bind:value={draft.date} /></label>
-      <label class="field"><span>Lesson (optional)</span><select class="select" bind:value={draft.lessonId}><option value={null}>General</option>{#each lessons as l}<option value={l.id}>{l.header.date} · {l.topic || 'Untitled'}</option>{/each}</select></label>
+      <label class="field"><span>{tr('From')}</span><input id="mn-who" class="input" bind:value={draft.who} list="whos" /></label>
+      <label class="field"><span>{tr('Date')}</span><input id="mn-date" class="input" type="date" bind:value={draft.date} /></label>
+      <label class="field"><span>{tr('Lesson (optional)')}</span><select class="select" bind:value={draft.lessonId}><option value={null}>{tr('General')}</option>{#each lessons as l}<option value={l.id}>{l.header.date} · {l.topic || tr('Untitled')}</option>{/each}</select></label>
     </div>
-    <label class="field"><span>Comment</span><textarea id="mn-text" class="input ta" rows="3" bind:value={draft.text}></textarea></label>
+    <label class="field"><span>{tr('Comment')}</span><textarea id="mn-text" class="input ta" rows="3" bind:value={draft.text}></textarea></label>
     <div class="row tags">{#each MENTOR_TAGS as t}<button type="button" class="chip tag" aria-pressed={draft.tags.includes(t)} onclick={() => toggle(t)}>{t}</button>{/each}</div>
-    <button id="mn-add" class="btn btn-gold add" type="button" onclick={add} disabled={!draft.text.trim()}>Save feedback</button>
+    <button id="mn-add" class="btn btn-gold add" type="button" onclick={add} disabled={!draft.text.trim()}>{tr('Save feedback')}</button>
   </section>
   {#each notes as n (n.id)}
-    <article class="card"><p class="eyebrow">{n.date} · {n.who}{n.lessonId ? ` · ${topic(n.lessonId)}` : ''}</p><p>{n.text}</p><div class="row">{#each n.tags as t}<span class="chip">{t}</span>{/each}<button class="btn btn-text del" type="button" onclick={() => del(n.id)}>Delete</button></div></article>
+    <article class="card"><p class="eyebrow">{n.date} · {n.who}{n.lessonId ? ` · ${topic(n.lessonId)}` : ''}</p><p>{n.text}</p><div class="row">{#each n.tags as t}<span class="chip">{t}</span>{/each}<button class="btn btn-text del" type="button" onclick={() => del(n.id)}>{tr('Delete')}</button></div></article>
   {/each}
 </div>
 <datalist id="whos"><option value="Mentor teacher"></option><option value="IPG lecturer"></option><option value="Headteacher"></option></datalist>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { trapFocus } from '../../lib/ui/focus';
   import { i18n, setLocale } from '../../lib/i18n/index.svelte';
   import { theme, setTheme, type Theme } from '../../lib/theme.svelte';
@@ -16,24 +17,24 @@
     <header class="row head">
       <Logo size={56} animate />
       <div>
-        <h1 id="ob-title">Welcome to Consilia</h1>
-        <p class="muted"><i>Consilium: wise planning, meaningful learning.</i></p>
+        <h1 id="ob-title">{tr('Welcome to Consilia')}</h1>
+        <p class="muted"><i>{tr('Consilium: wise planning, meaningful learning.')}</i></p>
       </div>
     </header>
     <div class="row prefs">
-      <div class="seg" role="group" aria-label="Language">
-        <button type="button" aria-pressed={i18n.locale === 'en'} onclick={() => setLocale('en')}>English</button>
-        <button type="button" aria-pressed={i18n.locale === 'ms'} onclick={() => setLocale('ms')}>Bahasa Melayu</button>
+      <div class="seg" role="group" aria-label={tr('Language')}>
+        <button type="button" aria-pressed={i18n.locale === 'en'} onclick={() => setLocale('en')}>{tr('English')}</button>
+        <button type="button" aria-pressed={i18n.locale === 'ms'} onclick={() => setLocale('ms')}>{tr('Bahasa Melayu')}</button>
       </div>
-      <div class="seg" role="group" aria-label="Theme">
+      <div class="seg" role="group" aria-label={tr('Theme')}>
         {#each themes as th}<button type="button" aria-pressed={theme.value === th} onclick={() => setTheme(th)}>{th[0].toUpperCase() + th.slice(1)}</button>{/each}
       </div>
     </div>
-    <p>Tell Consilia a little about your practicum. These details fill the header of every lesson plan. Everything stays on this device.</p>
-    <ProfileForm value={profile.value} saveLabel="Start planning" onsave={save}>
-      <p class="muted small">You can change this later in Me.</p>
+    <p>{tr('Tell Consilia a little about your practicum. These details fill the header of every lesson plan. Everything stays on this device.')}</p>
+    <ProfileForm value={profile.value} saveLabel={tr('Start planning')} onsave={save}>
+      <p class="muted small">{tr('You can change this later in Me.')}</p>
     </ProfileForm>
-    <button class="btn btn-text skip" type="button" onclick={skip}>Skip for now</button>
+    <button class="btn btn-text skip" type="button" onclick={skip}>{tr('Skip for now')}</button>
   </div>
 </div>
 

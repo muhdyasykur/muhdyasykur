@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import { makeGroups, groupCount } from '../../../lib/classroom/groups';
   import { TIER_ICON, type TeachPupil } from '../types';
 
@@ -12,7 +13,7 @@
   function make() {
     const r = makeGroups(pupils.map((p) => ({ id: p.id, tier: p.tier, keepApart: p.keepApart, keepTogether: p.keepTogether })), mode === 'tier' ? Math.max(groupCount(pupils.length, size), 3) : groupCount(pupils.length, size), mode);
     groups = r.groups;
-    broken = r.broken.map((b) => `${name(b.a)?.name} and ${name(b.b)?.name} ${b.kind === 'apart' ? 'had to share a group' : 'could not be kept together'}`);
+    broken = r.broken.map((b) => `${name(b.a)?.name} and ${name(b.b)?.name} ${b.kind === 'apart' ? tr('had to share a group') : tr('could not be kept together')}`);
     onsave?.(groups);
   }
   const live = $derived(groups.map((g) => g.filter((id) => name(id))).filter((g) => g.length));
@@ -20,19 +21,19 @@
 
 <div class="stack">
   <div class="row controls">
-    <label class="field"><span>Group size: {size}</span><input id="grp-size" type="range" min="2" max="8" bind:value={size} /></label>
-    <div class="seg" role="group" aria-label="Grouping">
-      <button type="button" aria-pressed={mode === 'mixed'} onclick={() => (mode = 'mixed')}>Mixed ability</button>
-      <button type="button" aria-pressed={mode === 'tier'} onclick={() => (mode = 'tier')}>By level</button>
+    <label class="field"><span>{tr('Group size: {size}', { size })}</span><input id="grp-size" type="range" min="2" max="8" bind:value={size} /></label>
+    <div class="seg" role="group" aria-label={tr('Grouping')}>
+      <button type="button" aria-pressed={mode === 'mixed'} onclick={() => (mode = 'mixed')}>{tr('Mixed ability')}</button>
+      <button type="button" aria-pressed={mode === 'tier'} onclick={() => (mode = 'tier')}>{tr('By level')}</button>
     </div>
-    <button id="grp-make" class="btn btn-gold" type="button" onclick={make} disabled={pupils.length < 2}>{live.length ? 'Make new groups' : 'Make groups'}</button>
+    <button id="grp-make" class="btn btn-gold" type="button" onclick={make} disabled={pupils.length < 2}>{live.length ? tr('Make new groups') : tr('Make groups')}</button>
   </div>
-  <p class="muted small">Absent pupils are left out. Keep-apart and keep-together pairs from the class list are respected.</p>
-  {#each broken as b}<p class="warn" role="status">{b}. There were too many pairs for this number of groups.</p>{/each}
+  <p class="muted small">{tr('Absent pupils are left out. Keep-apart and keep-together pairs from the class list are respected.')}</p>
+  {#each broken as b}<p class="warn" role="status">{tr('{b}. There were too many pairs for this number of groups.', { b })}</p>{/each}
   <div class="groups">
     {#each live as g, i}
       <section class="g" style="--c:{colours[i % colours.length]}">
-        <h4>Group {i + 1}</h4>
+        <h4>{tr('Group {x}', { x: i + 1 })}</h4>
         <ul>{#each g as id}{@const p = name(id)}<li class="pupil-font"><span class="t" title={p?.tier}>{p ? TIER_ICON[p.tier] : ''}</span>{p?.name}</li>{/each}</ul>
       </section>
     {/each}

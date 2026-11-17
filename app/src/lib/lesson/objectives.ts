@@ -1,3 +1,4 @@
+import { tr } from '../i18n/index.svelte';
 import type { Objective, Role, StdRef } from './model';
 
 /**
@@ -56,37 +57,37 @@ export function checkSmart(o: Objective, skill: string, year: number): SmartResu
   const vague = VAGUE.find((v) => new RegExp(`(^|\\s)${v}(\\s|$)`, 'i').test(lower));
   const verb = startsWithVerb(lower, ALL_VERBS);
   const twoVerbs = verb ? new RegExp(`^${verb}\\b[^,.]*\\band (${ALL_VERBS.filter((v) => !v.includes(' ')).join('|')})\\b`, 'i').test(lower) && !['listen and identify', 'draw and label', 'act out'].includes(verb) : false;
-  if (!beh) res.push({ letter: 'S', ok: false, message: 'Choose an observable verb, such as write, identify or describe.' });
-  else if (vague) res.push({ letter: 'S', ok: false, message: `"${vague}" cannot be observed. Use a verb you can see or hear, such as identify, say or write.` });
-  else if (!verb) res.push({ letter: 'S', ok: false, message: 'Start the behaviour with an observable verb from the list.' });
-  else if (twoVerbs) res.push({ letter: 'S', ok: false, message: 'This objective has two behaviours. Split it into two objectives so each can be assessed.' });
-  else if (!free && o.content.trim().split(/\s+/).length < 2) res.push({ letter: 'S', ok: false, message: 'Say what pupils will ' + verb + ', for example "5 sentences about daily routines".' });
-  else res.push({ letter: 'S', ok: true, message: `Specific: one observable behaviour ("${verb}").` });
+  if (!beh) res.push({ letter: 'S', ok: false, message: tr('Choose an observable verb, such as write, identify or describe.') });
+  else if (vague) res.push({ letter: 'S', ok: false, message: tr('"{vague}" cannot be observed. Use a verb you can see or hear, such as identify, say or write.', { vague }) });
+  else if (!verb) res.push({ letter: 'S', ok: false, message: tr('Start the behaviour with an observable verb from the list.') });
+  else if (twoVerbs) res.push({ letter: 'S', ok: false, message: tr('This objective has two behaviours. Split it into two objectives so each can be assessed.') });
+  else if (!free && o.content.trim().split(/\s+/).length < 2) res.push({ letter: 'S', ok: false, message: tr('Say what pupils will ') + verb + tr(', for example "5 sentences about daily routines".') });
+  else res.push({ letter: 'S', ok: true, message: tr('Specific: one observable behaviour ("{verb}").', { verb }) });
 
   // M — measurable: the degree has a number or quantity
   if (!degree.trim() || !NUMBER.test(degree)) {
     const vd = VAGUE_DEGREE.exec(degree);
-    res.push({ letter: 'M', ok: false, message: vd ? `"${vd[0]}" cannot be measured. Add a number, e.g. "at least 4 out of 5 correctly".` : 'Add a degree with a number, e.g. "at least 4 out of 5 correctly".' });
-  } else res.push({ letter: 'M', ok: true, message: 'Measurable: the degree has a number.' });
+    res.push({ letter: 'M', ok: false, message: vd ? tr('"{x}" cannot be measured. Add a number, e.g. "at least 4 out of 5 correctly".', { x: vd[0] }) : tr('Add a degree with a number, e.g. "at least 4 out of 5 correctly".') });
+  } else res.push({ letter: 'M', ok: true, message: tr('Measurable: the degree has a number.') });
 
   // A — achievable: numbers are possible and sensible for the year
   const outOf = /(\d+|\w+)\s+out of\s+(\d+|\w+)/i.exec(degree);
   const n = (w: string) => (/^\d+$/.test(w) ? Number(w) : NUMWORD[w.toLowerCase()] ?? NaN);
   const nums = (beh + ' ' + degree).match(/\b\d+\b/g)?.map(Number) ?? [];
   const cap = year <= 2 ? 10 : year <= 4 ? 15 : 20;
-  if (outOf && n(outOf[1]) > n(outOf[2])) res.push({ letter: 'A', ok: false, message: `"${outOf[0]}" is not possible. The first number must be smaller.` });
-  else if (nums.some((x) => x > cap && x < 100)) res.push({ letter: 'A', ok: false, message: `${Math.max(...nums.filter((x) => x < 100))} items may be too many for Year ${year} in one lesson. Consider ${cap} or fewer.` });
-  else if (/\b(all|100 ?%|every)\b/i.test(degree)) res.push({ letter: 'A', ok: false, message: '"All" leaves no room for error. Most mixed-ability classes need a target like "at least 4 out of 5".' });
-  else res.push({ letter: 'A', ok: true, message: 'Achievable for the year.' });
+  if (outOf && n(outOf[1]) > n(outOf[2])) res.push({ letter: 'A', ok: false, message: tr('"{x}" is not possible. The first number must be smaller.', { x: outOf[0] }) });
+  else if (nums.some((x) => x > cap && x < 100)) res.push({ letter: 'A', ok: false, message: tr('{x} items may be too many for Year {year} in one lesson. Consider {cap} or fewer.', { x: Math.max(...nums.filter((x) => x < 100)), year, cap }) });
+  else if (/\b(all|100 ?%|every)\b/i.test(degree)) res.push({ letter: 'A', ok: false, message: tr('"All" leaves no room for error. Most mixed-ability classes need a target like "at least 4 out of 5".') });
+  else res.push({ letter: 'A', ok: true, message: tr('Achievable for the year.') });
 
   // R — relevant: the verb belongs to the skill of the linked standard
-  if (!skill) res.push({ letter: 'R', ok: false, message: 'Link this objective to a Learning Standard.' });
-  else if (verb && !(VERBS[skill] ?? []).includes(verb)) res.push({ letter: 'R', ok: false, message: `"${verb}" is not a ${skill.toLowerCase()} behaviour. Try: ${(VERBS[skill] ?? []).slice(0, 5).join(', ')}.` });
-  else res.push({ letter: 'R', ok: !!verb, message: verb ? `Relevant: a ${skill.toLowerCase()} behaviour.` : 'Choose a verb first.' });
+  if (!skill) res.push({ letter: 'R', ok: false, message: tr('Link this objective to a Learning Standard.') });
+  else if (verb && !(VERBS[skill] ?? []).includes(verb)) res.push({ letter: 'R', ok: false, message: tr('"{verb}" is not a {x} behaviour. Try: {x2}.', { verb, x: skill.toLowerCase(), x2: (VERBS[skill] ?? []).slice(0, 5).join(', ') }) });
+  else res.push({ letter: 'R', ok: !!verb, message: verb ? tr('Relevant: a {x} behaviour.', { x: skill.toLowerCase() }) : tr('Choose a verb first.') });
 
   // T — time-bound
-  if (/by the end of the lesson|by the end of (this|the) (lesson|session)|in this lesson/i.test(text)) res.push({ letter: 'T', ok: true, message: 'Time-bound: by the end of the lesson.' });
-  else res.push({ letter: 'T', ok: false, message: 'Start with "By the end of the lesson".' });
+  if (/by the end of the lesson|by the end of (this|the) (lesson|session)|in this lesson/i.test(text)) res.push({ letter: 'T', ok: true, message: tr('Time-bound: by the end of the lesson.') });
+  else res.push({ letter: 'T', ok: false, message: tr('Start with "By the end of the lesson".') });
   return res;
 }
 

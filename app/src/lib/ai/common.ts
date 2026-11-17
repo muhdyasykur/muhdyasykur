@@ -3,6 +3,7 @@
  * Only lesson content is ever sent: year, topic, theme, skill, key words, target sentence and objectives. Never pupils'
  * names, class names, school names, marks, attendance or the teacher's details.
  */
+import { tr } from '../i18n/index.svelte';
 import type { Lesson } from '../lesson/model';
 import type { AiContent } from '../slides/deck';
 import { cefr } from '../recommend/prompts';
@@ -56,7 +57,7 @@ const arr = (x: unknown) => (Array.isArray(x) ? x : []);
 /** Check and trim the AI's answer before it touches the deck. */
 export function parseSlideContent(raw: string): AiContent {
   let j: Record<string, unknown>;
-  try { j = JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g, '')); } catch { throw new AiError('bad', 'The AI answer could not be read. Try again.'); }
+  try { j = JSON.parse(raw.replace(/^```(?:json)?\s*|\s*```$/g, '')); } catch { throw new AiError('bad', tr('The AI answer could not be read. Try again.')); }
   const out: AiContent = {};
   const vocab = arr(j.vocabulary).map((v) => ({ word: str((v as { word?: unknown })?.word, 40), meaning: str((v as { meaning?: unknown })?.meaning, 120) })).filter((v) => v.word && v.meaning).slice(0, 8);
   if (vocab.length) out.vocabulary = vocab;

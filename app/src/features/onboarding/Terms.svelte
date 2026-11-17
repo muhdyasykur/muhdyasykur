@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { TERMS } from '../../lib/content/terms';
   import { acceptTerms, terms } from '../../lib/terms.svelte';
   import { i18n } from '../../lib/i18n/index.svelte';
@@ -17,10 +18,10 @@
 
 <div class={gate ? 'gate' : ''} role={gate ? 'dialog' : undefined} aria-modal={gate ? 'true' : undefined} aria-labelledby="terms-title" use:trapFocus={{ enabled: gate }}>
   <article class="stack terms" lang={lang}>
-    {#if gate}<div class="brand"><Logo size={40} /><span>Consilia</span></div>{:else}<a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />Me</a>{/if}
+    {#if gate}<div class="brand"><Logo size={40} /><span>Consilia</span></div>{:else}<a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />{tr('Me')}</a>{/if}
     <div class="head">
       <h1 id="terms-title">{gate ? t.title : lang === 'ms' ? 'Terma penggunaan' : 'Terms of use'}</h1>
-      <div class="seg" role="group" aria-label="Language">
+      <div class="seg" role="group" aria-label={tr('Language')}>
         <button type="button" aria-pressed={lang === 'en'} onclick={() => (lang = 'en')}>English</button>
         <button type="button" aria-pressed={lang === 'ms'} onclick={() => (lang = 'ms')}>Bahasa Melayu</button>
       </div>

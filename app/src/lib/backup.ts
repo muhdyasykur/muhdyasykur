@@ -1,3 +1,4 @@
+import { tr } from './i18n/index.svelte';
 import { today } from './dates';
 import { db } from './db/schema';
 
@@ -36,13 +37,13 @@ export async function makeBackup(app: string): Promise<string> {
 
 export function readBackup(text: string): { ok: true; file: BackupFile } | { ok: false; error: string } {
   let f: Partial<BackupFile>;
-  try { f = JSON.parse(text); } catch { return { ok: false, error: 'This is not a Consilia backup file.' }; }
-  if (f?.format !== BACKUP_FORMAT) return { ok: false, error: 'This is not a Consilia backup file.' };
-  if (f.version !== 1) return { ok: false, error: 'This backup was made by a newer Consilia. Update the app first.' };
-  if (!f.tables || typeof f.tables !== 'object') return { ok: false, error: 'The backup file is damaged.' };
+  try { f = JSON.parse(text); } catch { return { ok: false, error: tr('This is not a Consilia backup file.') }; }
+  if (f?.format !== BACKUP_FORMAT) return { ok: false, error: tr('This is not a Consilia backup file.') };
+  if (f.version !== 1) return { ok: false, error: tr('This backup was made by a newer Consilia. Update the app first.') };
+  if (!f.tables || typeof f.tables !== 'object') return { ok: false, error: tr('The backup file is damaged.') };
   for (const t of Object.keys(f.tables)) {
-    if (!(TABLES as readonly string[]).includes(t)) return { ok: false, error: `The backup file has an unknown section (${t}).` };
-    if (!Array.isArray(f.tables[t])) return { ok: false, error: `The backup file is damaged (${t}).` };
+    if (!(TABLES as readonly string[]).includes(t)) return { ok: false, error: tr('The backup file has an unknown section ({t}).', { t }) };
+    if (!Array.isArray(f.tables[t])) return { ok: false, error: tr('The backup file is damaged ({t}).', { t }) };
   }
   return { ok: true, file: f as BackupFile };
 }

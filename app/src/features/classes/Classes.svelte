@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { listClasses, saveClass, countPupils } from '../../lib/db/repo';
   import { profile } from '../../lib/profile.svelte';
@@ -31,7 +32,7 @@
 
   async function add(e: SubmitEvent) {
     e.preventDefault();
-    if (!name.trim()) { error = 'Give the class a name, for example "4 Zhong".'; return; }
+    if (!name.trim()) { error = tr('Give the class a name, for example "4 Zhong".'); return; }
     const id = await saveClass({ year: year as SchoolClass['year'], name: name.trim(), schoolType, levelLabel: level.trim() || undefined });
     name = ''; level = ''; adding = false; error = '';
     go('classes', id);
@@ -53,11 +54,11 @@
   <ClassDetail id={route.parts[0]} />
 {:else}
 <div class="stack">
-  <h1>Classes</h1>
-  <div class="seg years" role="group" aria-label="Year">
+  <h1>{tr('Classes')}</h1>
+  <div class="seg years" role="group" aria-label={tr('Year')}>
     {#each years as y}
       {@const n = classes.filter((c) => c.year === y).length}
-      <button type="button" aria-pressed={year === y} onclick={() => (year = y)}>Year {y}{#if n}<span class="count">{n}</span>{/if}</button>
+      <button type="button" aria-pressed={year === y} onclick={() => (year = y)}>{tr('Year {y}', { y })}{#if n}<span class="count">{n}</span>{/if}</button>
     {/each}
   </div>
 
@@ -66,36 +67,36 @@
       {#each inYear as c (c.id)}
         <li><a class="card raised" href={href('classes', c.id)}>
           <span class="nm">{c.name}</span>
-          <span class="muted small">{c.schoolType}{c.levelLabel ? ` · ${c.levelLabel}` : ''} · {counts[c.id] ?? 0} pupils</span>
+          <span class="muted small">{tr('{schoolType}{x} · {x2} pupils', { schoolType: c.schoolType, x: c.levelLabel ? ` · ${c.levelLabel}` : '', x2: counts[c.id] ?? 0 })}</span>
         </a></li>
       {/each}
     </ul>
   {:else if !adding}
     <section class="empty">
-      <h3>No Year {year} classes yet</h3>
-      <p>Add a class to put its name and pupil count on your lesson plan. Pupil lists also power attendance and PBD later.</p>
+      <h3>{tr('No Year {year} classes yet', { year })}</h3>
+      <p>{tr('Add a class to put its name and pupil count on your lesson plan. Pupil lists also power attendance and PBD later.')}</p>
     </section>
   {/if}
 
   {#if adding}
     <form class="card stack" onsubmit={add}>
-      <h3>New Year {year} class</h3>
+      <h3>{tr('New Year {year} class', { year })}</h3>
       <div class="grid">
-        <label class="field"><span>Class name</span><input id="cl-name" class="input" bind:value={name} placeholder="e.g. 4 Zhong" /></label>
-        <label class="field"><span>Level (optional)</span><input id="cl-level" class="input" bind:value={level} placeholder="e.g. Average" list="levels" /></label>
-        <div class="field"><span id="cl-type">School type</span>
+        <label class="field"><span>{tr('Class name')}</span><input id="cl-name" class="input" bind:value={name} placeholder={tr('e.g. 4 Zhong')} /></label>
+        <label class="field"><span>{tr('Level (optional)')}</span><input id="cl-level" class="input" bind:value={level} placeholder={tr('e.g. Average')} list="levels" /></label>
+        <div class="field"><span id="cl-type">{tr('School type')}</span>
           <div class="seg" role="group" aria-labelledby="cl-type">
-            <button type="button" aria-pressed={schoolType === 'SK'} onclick={() => (schoolType = 'SK')}>SK</button>
-            <button type="button" aria-pressed={schoolType === 'SJK'} onclick={() => (schoolType = 'SJK')}>SJK</button>
+            <button type="button" aria-pressed={schoolType === 'SK'} onclick={() => (schoolType = 'SK')}>{tr('SK')}</button>
+            <button type="button" aria-pressed={schoolType === 'SJK'} onclick={() => (schoolType = 'SJK')}>{tr('SJK')}</button>
           </div>
         </div>
       </div>
       <datalist id="levels"><option value="Low"></option><option value="Average"></option><option value="High"></option><option value="Mixed ability"></option></datalist>
       {#if error}<p class="err">{error}</p>{/if}
-      <div class="row"><button class="btn btn-gold" type="submit">Add class</button><button class="btn btn-text" type="button" onclick={() => (adding = false)}>Cancel</button></div>
+      <div class="row"><button class="btn btn-gold" type="submit">{tr('Add class')}</button><button class="btn btn-text" type="button" onclick={() => (adding = false)}>{tr('Cancel')}</button></div>
     </form>
   {:else}
-    <button class="btn btn-primary add" type="button" onclick={() => (adding = true)}><Icon name="plus" size={18} />Add a Year {year} class</button>
+    <button class="btn btn-primary add" type="button" onclick={() => (adding = true)}><Icon name="plus" size={18} />{tr('Add a Year {year} class', { year })}</button>
   {/if}
 </div>
 {/if}

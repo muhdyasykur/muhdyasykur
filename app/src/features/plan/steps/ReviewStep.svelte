@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   import type { Lesson } from '../../../lib/lesson/model';
   import { profile } from '../../../lib/profile.svelte';
   import { href } from '../../../router.svelte';
@@ -31,12 +32,12 @@
   }
   function unaccept(id: string) { const n = { ...(lesson.checkNotes ?? {}) }; delete n[id]; lesson.checkNotes = n; }
   async function word() {
-    wordState = 'Preparing the Word file…';
+    wordState = tr('Preparing the Word file…');
     try {
       const { toBlob, fileName } = await import('../../../lib/export/docx'); // loaded only when needed
       const how = await saveFile(await toBlob($state.snapshot(lesson) as Lesson, profile.value, layout), fileName(lesson, layout));
-      wordState = how === 'shared' ? 'Shared.' : 'Saved to your downloads.';
-    } catch (e) { wordState = 'The Word file could not be made: ' + (e as Error).message; }
+      wordState = how === 'shared' ? tr('Shared.') : tr('Saved to your downloads.');
+    } catch (e) { wordState = tr('The Word file could not be made: ') + (e as Error).message; }
   }
   const icon = { pass: '✔', accepted: '✔', fail: '✘', skip: '–' } as const;
 </script>
@@ -44,34 +45,34 @@
 <div class="stack">
   <section class="no-print card stack check" id="check">
     <div class="row between">
-      <div class="row"><ScoreRing score={report.score} size={72} /><div><h3>Alignment score</h3><p class="muted small">{report.failing.length ? `${report.failing.length} of ${report.results.filter((r) => r.status !== 'skip').length} checks need attention. Warnings never stop you saving or printing.` : 'Every check passes. This lesson is aligned.'}</p></div></div>
-      <label class="row small"><input id="rv-passed" type="checkbox" bind:checked={showPassed} />Show passed checks</label>
+      <div class="row"><ScoreRing score={report.score} size={72} /><div><h3>{tr('Alignment score')}</h3><p class="muted small">{report.failing.length ? tr('{length} of {length2} checks need attention. Warnings never stop you saving or printing.', { length: report.failing.length, length2: report.results.filter((r) => r.status !== 'skip').length }) : tr('Every check passes. This lesson is aligned.')}</p></div></div>
+      <label class="row small"><input id="rv-passed" type="checkbox" bind:checked={showPassed} />{tr('Show passed checks')}</label>
     </div>
     {#each GROUPS as g}
       {@const rows = report.results.filter((r) => r.rule.group === g && (showPassed ? r.status !== 'skip' : r.status === 'fail' || r.status === 'accepted'))}
       {#if rows.length}
         <div class="grp">
-          <h4>{g}</h4>
+          <h4>{tr(g)}</h4>
           <ul>
             {#each rows as r (r.rule.id)}
               <li class={r.status} data-rule={r.rule.id}>
                 <span class="ic" aria-hidden="true">{icon[r.status]}</span>
                 <div class="stack tight">
-                  <b>{r.rule.title}</b>
-                  <span class="muted small">{r.status === 'accepted' ? `Marked as fine: ${r.note}` : r.message}</span>
+                  <b>{tr(r.rule.title)}</b>
+                  <span class="muted small">{r.status === 'accepted' ? tr('Marked as fine: {note}', { note: r.note }) : r.message}</span>
                   {#if r.status === 'fail'}
                     <div class="row">
-                      <a class="btn btn-text" href={href('plan', 'edit', lesson.id, r.rule.step)}>Fix it</a>
+                      <a class="btn btn-text" href={href('plan', 'edit', lesson.id, r.rule.step)}>{tr('Fix it')}</a>
                       {#if noting === r.rule.id}
-                        <input class="input reason" bind:value={reason} placeholder="Why is this fine for this lesson?" aria-label="Reason" />
-                        <button class="btn btn-outline" type="button" disabled={!reason.trim()} onclick={() => accept(r)}>Save</button>
-                        <button class="btn btn-text" type="button" onclick={() => (noting = '')}>Cancel</button>
+                        <input class="input reason" bind:value={reason} placeholder={tr('Why is this fine for this lesson?')} aria-label={tr('Reason')} />
+                        <button class="btn btn-outline" type="button" disabled={!reason.trim()} onclick={() => accept(r)}>{tr('Save')}</button>
+                        <button class="btn btn-text" type="button" onclick={() => (noting = '')}>{tr('Cancel')}</button>
                       {:else}
-                        <button class="btn btn-text" type="button" onclick={() => { noting = r.rule.id; reason = ''; }}>Mark as fine</button>
+                        <button class="btn btn-text" type="button" onclick={() => { noting = r.rule.id; reason = ''; }}>{tr('Mark as fine')}</button>
                       {/if}
                     </div>
                   {:else if r.status === 'accepted'}
-                    <button class="btn btn-text undo" type="button" onclick={() => unaccept(r.rule.id)}>Undo</button>
+                    <button class="btn btn-text undo" type="button" onclick={() => unaccept(r.rule.id)}>{tr('Undo')}</button>
                   {/if}
                 </div>
               </li>
@@ -84,19 +85,19 @@
 
   <div class="no-print stack">
     <div class="row between">
-      <div class="seg" role="group" aria-label="Layout">
-        <button type="button" aria-pressed={layout === 'school'} onclick={() => (layout = 'school')}>School template</button>
-        <button type="button" aria-pressed={layout === 'blueprint'} onclick={() => (layout = 'blueprint')}>Consilia Lesson Blueprint</button>
+      <div class="seg" role="group" aria-label={tr('Layout')}>
+        <button type="button" aria-pressed={layout === 'school'} onclick={() => (layout = 'school')}>{tr('School template')}</button>
+        <button type="button" aria-pressed={layout === 'blueprint'} onclick={() => (layout = 'blueprint')}>{tr('Consilia Lesson Blueprint')}</button>
       </div>
-      <label class="row small"><input id="rv-ready" type="checkbox" checked={lesson.status !== 'draft'} onchange={(e) => (lesson.status = e.currentTarget.checked ? 'ready' : 'draft')} />Mark as ready</label>
+      <label class="row small"><input id="rv-ready" type="checkbox" checked={lesson.status !== 'draft'} onchange={(e) => (lesson.status = e.currentTarget.checked ? 'ready' : 'draft')} />{tr('Mark as ready')}</label>
     </div>
     <div class="row">
-      <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>Print or save as PDF</button>
-      <button id="rv-word" class="btn btn-primary" type="button" onclick={word}>Download Word (.docx)</button>
-      <a id="rv-slides" class="btn btn-outline" href={href('plan', 'slides', lesson.id)}>🖼 Lesson slides</a>
+      <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>{tr('Print or save as PDF')}</button>
+      <button id="rv-word" class="btn btn-primary" type="button" onclick={word}>{tr('Download Word (.docx)')}</button>
+      <a id="rv-slides" class="btn btn-outline" href={href('plan', 'slides', lesson.id)}>{tr('🖼 Lesson slides')}</a>
       {#if wordState}<span class="muted small" role="status">{wordState}</span>{/if}
     </div>
-    <p class="muted small">PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.</p>
+    <p class="muted small">{tr('PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.')}</p>
   </div>
   <div class="paper-wrap">
     {#if layout === 'school'}<RphSchool {lesson} profile={profile.value} />{:else}<RphBlueprint {lesson} profile={profile.value} {reflection} />{/if}

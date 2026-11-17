@@ -1,3 +1,4 @@
+import { tr } from '../i18n/index.svelte';
 import type { FrameworkId } from './model';
 
 /**
@@ -102,17 +103,17 @@ export function rescale(minutes: number[], total: number): number[] {
   return out;
 }
 
-export interface TimingIssue { level: 'error' | 'warning'; message: string }
+export interface TimingIssue { level: 'error' | 'warning'; code: 'total' | 'long' | 'empty' | 'short-post'; message: string }
 const longOk = new Set(['while', 'task-cycle', 'drafting']);
 export function checkTiming(stages: { key: string; title: string; minutes: number }[], total: number): TimingIssue[] {
   const issues: TimingIssue[] = [];
   const sum = stages.reduce((a, s) => a + (s.minutes || 0), 0);
-  if (sum !== total) issues.push({ level: 'error', message: `Stage times add up to ${sum} min but the lesson is ${total} min (${sum > total ? 'over' : 'under'} by ${Math.abs(sum - total)}).` });
+  if (sum !== total) issues.push({ level: 'error', code: 'total', message: sum > total ? tr('Stage times add up to {sum} min but the lesson is {total} min (over by {by}).', { sum, total, by: sum - total }) : tr('Stage times add up to {sum} min but the lesson is {total} min (under by {by}).', { sum, total, by: total - sum }) });
   for (const s of stages) {
-    if (!longOk.has(s.key) && s.minutes > total / 2) issues.push({ level: 'warning', message: `${s.title} takes more than half the lesson.` });
-    if (s.minutes <= 0) issues.push({ level: 'error', message: `${s.title} has no time.` });
+    if (!longOk.has(s.key) && s.minutes > total / 2) issues.push({ level: 'warning', code: 'long', message: tr('{stage} takes more than half the lesson.', { stage: tr(s.title) }) });
+    if (s.minutes <= 0) issues.push({ level: 'error', code: 'empty', message: tr('{stage} has no time.', { stage: tr(s.title) }) });
   }
   const postL = stages.find((s) => s.key === 'post-lesson');
-  if (postL && postL.minutes < 3 && total >= 30) issues.push({ level: 'warning', message: 'Post-lesson is under 3 minutes. Pupils need time to review their learning.' });
+  if (postL && postL.minutes < 3 && total >= 30) issues.push({ level: 'warning', code: 'short-post', message: tr('Post-lesson is under 3 minutes. Pupils need time to review their learning.') });
   return issues;
 }

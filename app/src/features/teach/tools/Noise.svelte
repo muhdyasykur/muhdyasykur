@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tr } from '../../../lib/i18n/index.svelte';
   /** Noise meter (blueprint F18): reads the microphone level only. Nothing is recorded or stored. */
   let level = $state(0); // 0–100
   let limit = $state(60);
@@ -33,19 +34,19 @@
   <div class="lamp {light}" role="img" aria-label={words[light]}></div>
   <p class="msg pupil-font" aria-live="polite">{words[light]}</p>
   {#if mic === 'idle'}
-    <button id="noise-start" class="btn btn-gold" type="button" onclick={start}>Use the microphone</button>
-    <p class="muted small">Only the loudness is measured. Nothing is recorded or saved.</p>
+    <button id="noise-start" class="btn btn-gold" type="button" onclick={start}>{tr('Use the microphone')}</button>
+    <p class="muted small">{tr('Only the loudness is measured. Nothing is recorded or saved.')}</p>
   {:else if mic === 'on'}
     <div class="meter" aria-hidden="true"><div style="width:{level}%"></div><span style="left:{limit}%"></span></div>
-    <label class="field lim"><span>Too-loud level: {limit}</span><input type="range" min="20" max="95" bind:value={limit} /></label>
+    <label class="field lim"><span>{tr('Too-loud level: {limit}', { limit })}</span><input type="range" min="20" max="95" bind:value={limit} /></label>
   {:else}
-    <p class="muted small">The microphone is not available, so use the lights by hand.</p>
+    <p class="muted small">{tr('The microphone is not available, so use the lights by hand.')}</p>
   {/if}
   {#if mic !== 'on'}
-    <div class="seg" role="group" aria-label="Traffic light">
-      <button type="button" aria-pressed={manual === 'green'} onclick={() => (manual = 'green')}>Green</button>
-      <button type="button" aria-pressed={manual === 'amber'} onclick={() => (manual = 'amber')}>Amber</button>
-      <button type="button" aria-pressed={manual === 'red'} onclick={() => (manual = 'red')}>Red</button>
+    <div class="seg" role="group" aria-label={tr('Traffic light')}>
+      <button type="button" aria-pressed={manual === 'green'} onclick={() => (manual = 'green')}>{tr('Green')}</button>
+      <button type="button" aria-pressed={manual === 'amber'} onclick={() => (manual = 'amber')}>{tr('Amber')}</button>
+      <button type="button" aria-pressed={manual === 'red'} onclick={() => (manual = 'red')}>{tr('Red')}</button>
     </div>
   {/if}
 </div>

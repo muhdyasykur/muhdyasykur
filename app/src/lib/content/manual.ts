@@ -138,11 +138,11 @@ export const MANUAL: Chapter[] = [
 export interface Hit { chapter: Chapter; article: Article; score: number }
 const norm = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[^\w\s]/g, ' ');
 /** Search titles, keywords and text. Every word must match somewhere; title and keyword matches rank first. */
-export function searchManual(q: string): Hit[] {
+export function searchManual(q: string, chapters: Chapter[] = MANUAL): Hit[] {
   const words = norm(q).split(/\s+/).filter((w) => w.length > 1);
   if (!words.length) return [];
   const hits: Hit[] = [];
-  for (const chapter of MANUAL) for (const article of chapter.articles) {
+  for (const chapter of chapters) for (const article of chapter.articles) {
     const title = norm(article.title), keys = norm(article.keywords ?? ''), text = norm([...article.body, ...(article.steps ?? []), ...(article.tips ?? [])].join(' '));
     let score = 0;
     for (const w of words) {
@@ -153,4 +153,15 @@ export function searchManual(q: string): Hit[] {
     if (score) hits.push({ chapter, article, score });
   }
   return hits.sort((a, b) => b.score - a.score);
+}
+
+/** Translations of the manual, by chapter and article id. Missing parts stay in English. */
+export interface ManualTranslation { chapters: Record<string, string>; articles: Record<string, Partial<Omit<Article, 'id' | 'video'>>> }
+/** The manual in a language: each article translated where a translation exists, keeping the English keywords too. */
+export function localManual(tr: ManualTranslation | null): Chapter[] {
+  if (!tr) return MANUAL;
+  return MANUAL.map((c) => ({ ...c, title: tr.chapters[c.id] ?? c.title, articles: c.articles.map((a) => {
+    const x = tr.articles[a.id];
+    return x ? { ...a, ...x, keywords: [x.keywords, a.keywords].filter(Boolean).join(' ') } : a;
+  }) }));
 }

@@ -110,7 +110,26 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   check((await page.locator('[data-recovery]').count()) === 0, 'once the damaged lesson is gone, Plan works again');
   errors.splice(0, errors.length, ...errors.filter((e) => !/Cannot read properties of null|null is not an object|is null/.test(e)));
 
-  // ---- an update in another tab
+  // ---- Bahasa Melayu: the whole interface, while lesson content stays in English
+  await page.goto(base + '#/me');
+  await page.click('.seg button:has-text("Bahasa Melayu")');
+  await page.waitForTimeout(300);
+  check((await page.locator('main h1').innerText()) === 'Saya' && (await page.locator('#bk-save').innerText()) === 'Buat sandaran sekarang', 'switching to Bahasa Melayu translates the screen at once');
+  await page.goto(base + '#/plan');
+  await page.waitForSelector('.list li');
+  const planText = await page.locator('main').innerText();
+  check(planText.includes('RPH baharu') && planText.includes('Buat salinan') && !/\bDuplicate\b|\bDelete…/.test(planText), 'Plan is in Malay (RPH baharu, Buat salinan)');
+  await page.goto(base + `#/plan/edit/${lessonId}/review`);
+  await page.waitForSelector('#rv-word');
+  check((await page.locator('#rv-word').innerText()).startsWith('Muat turun Word') && /SUBJECT|Subject/i.test(await page.locator('.paper-wrap').innerText()), 'the builder is in Malay but the printed lesson plan stays in English');
+  await page.goto(base + '#/today');
+  check(/^(Isnin|Selasa|Rabu|Khamis|Jumaat|Sabtu|Ahad)/i.test(await page.locator('main .eyebrow').first().innerText()), 'dates follow the language (Malay day names)');
+  await page.goto(base + '#/me');
+  await page.click('.seg button:has-text("English")');
+  await page.waitForTimeout(300);
+  check((await page.locator('main h1').innerText()) === 'Me', 'and back to English');
+
+
   const other = await ctx.newPage();
   await other.goto(base + '#/today');
   await page.goto(base + '#/today');
