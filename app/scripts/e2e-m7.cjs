@@ -43,7 +43,8 @@ function imagePdf(pages) {
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()); });
   await page.goto(base);
   await page.click('button:has-text("Skip for now")');
-  await page.waitForFunction(() => navigator.serviceWorker?.controller || new Promise((r) => setTimeout(r, 500)));
+  // wait until the service worker has installed and activated (precaching takes a few seconds), then reload
+  await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload(); // the service worker now controls the page, so first-use downloads can be kept offline
   await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 15000 });
 

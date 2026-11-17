@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
@@ -79,9 +80,9 @@
   </section>
 
   {#if !pupils.length}
-    <p class="empty">{tr('This class has no pupils yet.')} <a href={href('classes', classId)}>{tr('Add the pupil list')}</a> {tr('first.')}</p>
+    <EmptyState icon="classes" compact>{tr('This class has no pupils yet.')} <a href={href('classes', classId)}>{tr('Add the pupil list')}</a> {tr('first.')}</EmptyState>
   {:else if !codes.length}
-    <p class="empty">{tr('Choose the Learning Standard you assessed.')}</p>
+    <EmptyState compact>{tr('Choose the Learning Standard you assessed.')}</EmptyState>
   {:else}
     {#each codes as ls (ls)}
       <section class="card stack ls">
@@ -114,11 +115,8 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   .grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
-  .pre { white-space: pre-line; }
+
   .mini { min-height: 32px; padding: 0 8px; }
   .tpd { margin: var(--s-2) 0 0; padding-left: 0; list-style: none; display: grid; gap: 4px; font-size: var(--t-sm); }
   .grid-tp { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }

@@ -24,13 +24,12 @@
   // Music never plays during a lesson
   $effect(() => { if (route.name === 'teach' && music.playing) pauseMusic(); });
   import { profile } from './lib/profile.svelte';
-  import { appError, clearError } from './lib/errors.svelte';
   import { terms } from './lib/terms.svelte';
   import Terms from './features/onboarding/Terms.svelte';
   import Tools from './features/tools/Tools.svelte';
   import { afterNavigation } from './lib/ui/focus';
   import Recovery from './lib/ui/Recovery.svelte';
-  import { dbHealth } from './lib/db/health.svelte';
+  import Toaster from './lib/ui/Toaster.svelte';
   const logCrash = (e: unknown) => console.error('Screen failed to render:', e);
   // Page title and focus follow the screen (keyboard and screen-reader users land on the new heading)
   let firstScreen = true;
@@ -101,30 +100,7 @@
 {#if !terms.accepted && !splash}<Terms gate />{/if}
 {#if splash}<Splash ondone={splashDone} />{/if}
 
-{#if appError.message}
-  <div class="toast err" role="alert">
-    <span><b>{appError.message}</b> {appError.next}</span>
-    <button class="btn btn-outline" type="button" onclick={clearError}>{tr('OK')}</button>
-  </div>
-{/if}
-
-{#if dbHealth.stale}
-  <div class="toast err" role="alert" data-db-stale>
-    <span><b>{tr('Consilia was updated in another tab.')}</b> {tr('Reload this tab to keep working; your saved work is safe.')}</span>
-    <button class="btn btn-gold" type="button" onclick={() => location.reload()}>{tr('Reload')}</button>
-  </div>
-{:else if dbHealth.blocked}
-  <div class="toast" role="status" data-db-blocked>
-    <span><b>{tr('Finishing an update.')}</b> {tr('Close Consilia in your other tabs or windows to continue.')}</span>
-  </div>
-{/if}
-
-{#if pwa.needRefresh}
-  <div class="toast" role="status">
-    <span>{t('pwa.update')}</span>
-    <button class="btn btn-gold" type="button" onclick={() => pwa.refresh()}>{t('pwa.refresh')}</button>
-  </div>
-{/if}
+<Toaster />
 
 <style>
   .teach-crash { padding: var(--s-4); }
@@ -145,7 +121,6 @@
     @keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   }
   .banner { display: flex; gap: var(--s-2); align-items: center; max-width: 1040px; margin: 0 auto var(--s-4); background: var(--gold-soft); color: var(--ink); border-radius: var(--r-ctl); padding: var(--s-2) var(--s-3); font-size: var(--t-sm); font-weight: 600; }
-  .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--tabbar-h) + var(--s-4) + env(safe-area-inset-bottom, 0px)); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-overlay); border-radius: var(--r-card); padding: var(--s-3) var(--s-4); display: flex; gap: var(--s-4); align-items: center; z-index: 40; max-width: calc(100vw - 32px); }
 
   /* Phone: bottom tab bar */
   @media (max-width: 767px) {
@@ -157,10 +132,8 @@
     .nav a[aria-current='page'] { background: transparent; box-shadow: inset 0 3px 0 var(--gold-strong); }
     main { padding-top: calc(var(--s-6) + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--tabbar-h) + var(--s-8) + env(safe-area-inset-bottom, 0px)); }
   }
-  .toast.err { border-color: var(--bad); border-left-width: 4px; }
-  @media (min-width: 768px) { .toast { bottom: var(--s-6); } }
   @media print {
-    .nav, .toast, .banner, .skip { display: none !important; }
+    .nav, .banner, .skip { display: none !important; }
     .shell { display: block; min-height: 0; }
     main { padding: 0 !important; }
     .screen { max-width: none; animation: none; }

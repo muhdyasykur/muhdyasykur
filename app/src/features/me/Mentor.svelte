@@ -46,11 +46,9 @@
 </div>
 <datalist id="whos"><option value="Mentor teacher"></option><option value="IPG lecturer"></option><option value="Headteacher"></option></datalist>
 <style>
-  .back { justify-self: start; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
+
   .tag { cursor: pointer; } .tag[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
-  .add { justify-self: start; }
   .pat { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
   .del { color: var(--bad); margin-left: auto; }
 </style>

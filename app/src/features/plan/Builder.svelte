@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { getLesson, saveLesson } from '../../lib/db/repo';
@@ -80,7 +81,7 @@
 </script>
 
 {#if missing}
-  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><p class="empty">{tr('This lesson plan no longer exists.')}</p></div>
+  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><EmptyState icon="plan" compact>{tr('This lesson plan no longer exists.')}</EmptyState></div>
 {:else if lesson && standards && sow}
 <div class="stack builder">
   <div class="no-print bar">

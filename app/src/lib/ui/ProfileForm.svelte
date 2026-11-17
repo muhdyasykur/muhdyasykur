@@ -56,6 +56,6 @@
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--s-4); }
   .logo { width: 56px; height: 56px; object-fit: contain; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
-  .err { color: var(--bad); }
+
   small { font-size: var(--t-xs); }
 </style>

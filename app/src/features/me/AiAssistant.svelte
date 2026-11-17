@@ -135,7 +135,6 @@
 </div>
 
 <style>
-  .small { font-size: var(--t-sm); }
   .steps { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
   .field { display: grid; gap: 4px; font-weight: 600; font-size: var(--t-sm); }
   .keyrow { flex-wrap: nowrap; }
@@ -147,7 +146,7 @@
   .choice[aria-checked='true'] { border-color: var(--gold-strong); box-shadow: 0 0 0 2px var(--gold-strong); }
   .choice b { display: flex; gap: var(--s-2); align-items: center; }
   .state { font-weight: 700; margin: 0; }
-  .state[data-state='on'] { color: var(--ok, #2e7d4f); }
-  .ok { color: var(--ok, #2e7d4f); }
+  .state[data-state='on'] { color: var(--ok); }
+  .ok { color: var(--ok); }
   .bad, .del { color: var(--bad); }
 </style>

@@ -19,7 +19,6 @@
   </div>
 </div>
 <style>
-  .back { justify-self: start; }
   .pair { display: grid; gap: var(--s-4); }
   @media (min-width: 1100px) { .pair.two { grid-template-columns: 1fr 1fr; } }
 </style>

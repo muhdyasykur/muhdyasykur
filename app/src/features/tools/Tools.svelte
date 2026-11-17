@@ -81,11 +81,9 @@
 {/if}
 
 <style>
-  .back { justify-self: start; }
   h1 { margin: 0; }
   h2 { font-size: var(--t-lg); margin: var(--s-2) 0 0; }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .quick { display: flex; flex-wrap: wrap; gap: var(--s-2); }
   .search { display: flex; align-items: center; gap: var(--s-2); }
   .search .input { flex: 1; }

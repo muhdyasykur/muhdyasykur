@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
@@ -46,7 +47,7 @@
   {#if msg}<p class="muted small" role="status">{msg}</p>{/if}
 
   {#if !recs.length}
-    <section class="empty"><h3>{tr('No TP records yet')}</h3><p>{tr('After teaching, tap "Record PBD" at the end of Teach mode, or record TP levels here.')}</p></section>
+    <EmptyState icon="classes" title={tr('No TP records yet')}>{tr('After teaching, tap "Record PBD" at the end of Teach mode, or record TP levels here.')}</EmptyState>
   {:else}
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div class="scroll" role="region" aria-label={tr('Heatmap')} tabindex="0">
@@ -84,9 +85,7 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
+
   .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--card); }
   .heat { border-collapse: collapse; font-size: var(--t-sm); }
   .heat th, .heat td { padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; text-align: left; }

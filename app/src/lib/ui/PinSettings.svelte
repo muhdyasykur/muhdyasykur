@@ -51,7 +51,6 @@
 </div>
 
 <style>
-  .small { font-size: var(--t-sm); }
   .pin { font: 500 1.2rem var(--f-mono); letter-spacing: .3em; max-width: 160px; }
-  .ok { color: var(--ok); } .err { color: var(--bad); } .warn { color: var(--warn); }
+ .err { color: var(--bad); } .warn { color: var(--warn); }
 </style>

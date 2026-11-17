@@ -46,15 +46,15 @@
   .gate { position: fixed; inset: 0; z-index: 60; background: var(--paper); overflow-y: auto; padding: var(--s-6) var(--s-4) var(--s-12); }
   .gate .terms { max-width: 760px; margin: 0 auto; }
   .brand { display: flex; align-items: center; gap: var(--s-2); font: 800 var(--t-lg) var(--f-display); color: var(--navy); }
-  .back { justify-self: start; }
+
   .head { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
   .lead { font-size: var(--t-lg); max-width: 65ch; margin: 0; }
   h2 { font-size: var(--t-lg); margin: 0; }
   p { margin: 0; max-width: 70ch; }
-  .tight { gap: var(--s-2); }
+
   .agree { border: 2px solid var(--gold-strong); }
   .tick { display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); align-items: start; min-height: var(--tap); cursor: pointer; font-weight: 600; }
   .tick input { margin-top: 3px; }
   #terms-accept { justify-self: start; }
-  .small { font-size: var(--t-sm); }
+
 </style>

@@ -69,11 +69,11 @@
   .show:fullscreen, .show:global(.pseudo-full) { background: #0b1528; padding: 1vh 1vw; grid-template-rows: 1fr auto auto; align-items: center; justify-items: center; }
   .stage { all: unset; display: block; width: 100%; cursor: pointer; }
   .show:not(.embedded) .stage, .show:fullscreen .stage, .show:global(.pseudo-full) .stage { width: min(96vw, calc((100vh - 140px) * 16 / 9)); }
-  .stage:focus-visible { outline: 3px solid var(--gold, #E2BC4F); outline-offset: 3px; }
+  .stage:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
   .ctrl { display: flex; flex-wrap: wrap; gap: var(--s-1); align-items: center; justify-content: center; }
   .show:not(.embedded) .ctrl .btn, .show:fullscreen .ctrl .btn, .show:global(.pseudo-full) .ctrl .btn { color: #fff; }
   .show:not(.embedded) .btn-outline, .show:fullscreen .btn-outline, .show:global(.pseudo-full) .btn-outline { border-color: #fff; }
   .jump .select { width: auto; max-width: 16rem; }
-  .notes { width: min(96vw, 60rem); max-height: 22vh; overflow: auto; background: var(--paper, #fff); color: var(--ink, #1E2B40); border-radius: var(--r-2, 8px); padding: var(--s-2) var(--s-3); font-size: var(--t-sm); }
+  .notes { width: min(96vw, 60rem); max-height: 22vh; overflow: auto; background: var(--paper); color: var(--ink); border-radius: var(--r-ctl); padding: var(--s-2) var(--s-3); font-size: var(--t-sm); }
   .notes p { margin: 2px 0; }
 </style>

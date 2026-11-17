@@ -27,5 +27,5 @@
 <style>
   .list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
   .pick { display: grid; gap: 2px; text-decoration: none; color: var(--ink); }
-  .small { font-size: var(--t-sm); }
+
 </style>

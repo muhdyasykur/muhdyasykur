@@ -106,8 +106,7 @@
 </div>
 
 <style>
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
+
   .tight { gap: 2px; }
   .check h3 { margin-bottom: 2px; }
   .grp h4 { font-size: var(--t-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: var(--s-2) 0 var(--s-1); }

@@ -79,10 +79,10 @@
   .moods button { display: grid; justify-items: center; gap: 2px; min-width: 76px; padding: var(--s-2); border-radius: var(--r-card); border: 1px solid var(--line); background: var(--card); cursor: pointer; font: 600 var(--t-xs) var(--f-body); color: var(--ink-2); }
   .moods button span { font-size: 1.8rem; }
   .moods button[aria-checked='true'] { border-color: var(--gold-strong); box-shadow: 0 0 0 2px var(--gold-strong); color: var(--ink); }
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
+
   .tight { gap: 6px; }
   .lbl { font-weight: 600; font-size: var(--t-sm); }
   .vote { cursor: pointer; }
   .vote[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
-  .small { font-size: var(--t-sm); }
+
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { STAGE_COLOURS } from '../../../lib/ui/palette';
   import { tr } from '../../../lib/i18n/index.svelte';
   import type { Activity, Lesson, Stage, Tier, FrameworkId, Pattern } from '../../../lib/lesson/model';
   import { newActivity } from '../../../lib/lesson/model';
@@ -17,7 +18,7 @@
   const total = $derived(lesson.stages.reduce((a, s) => a + (s.minutes || 0), 0));
   const tierNames: { t: Tier; name: string; icon: string }[] = [{ t: 'low', name: tr('Low'), icon: '🌱' }, { t: 'mod', name: tr('Moderate'), icon: '🌿' }, { t: 'high', name: tr('High'), icon: '🌳' }];
   const patterns: Pattern[] = ['whole-class', 'T-P', 'P-P', 'pairs', 'groups', 'individual'];
-  const colours = ['#5B6B8C', '#13294B', '#2B4E86', '#8A6A12', '#1F6F63', '#6B4FB3'];
+  const colours = STAGE_COLOURS;
 
   function setFramework(id: FrameworkId) { if (id !== lesson.framework) changeFramework(lesson, id); }
   function resetTimes() { const m = defaultMinutes(lesson.framework, lesson.header.durationMin); lesson.stages.forEach((s, i) => (s.minutes = m[i] ?? s.minutes)); }
@@ -137,8 +138,7 @@
 </div>
 
 <style>
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
+
   .fws { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-2); }
   .fws button { display: grid; gap: 4px; text-align: left; padding: var(--s-3); border: 1px solid var(--line); border-radius: var(--r-ctl); background: var(--card); cursor: pointer; color: var(--ink); font-size: var(--t-sm); }
   .fws button span { color: var(--ink-2); }
@@ -154,7 +154,7 @@
   .bank { width: 100%; max-width: 440px; min-width: 0; }
   .act { gap: var(--s-3); }
   .tools { gap: 0; }
-  .del { color: var(--bad); }
+
   .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }
   .three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--s-3); }
   .ta { min-height: 72px; padding: var(--s-2) var(--s-3); resize: vertical; }
@@ -163,5 +163,5 @@
   .tiers { display: grid; gap: var(--s-2); }
   .tiers .seg { max-width: 100%; overflow-x: auto; }
   .tiers .seg button { white-space: nowrap; }
-  .add { justify-self: start; }
+
 </style>

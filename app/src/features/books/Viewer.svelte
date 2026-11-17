@@ -145,6 +145,5 @@
   .cover { position: absolute; background: #2B3A55; color: #fff; display: grid; place-items: center; border-radius: 6px; cursor: move; font: 700 1rem var(--f-body); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
   .grip { position: absolute; right: -8px; bottom: -8px; width: 20px; height: 20px; border-radius: 50%; background: var(--gold-strong); cursor: nwse-resize; }
   .sheet { overflow: hidden; }
-  .err { color: var(--bad); }
-  .small { font-size: var(--t-sm); }
+
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { listClasses, saveClass, countPupils } from '../../lib/db/repo';
@@ -72,10 +73,9 @@
       {/each}
     </ul>
   {:else if !adding}
-    <section class="empty">
-      <h3>{tr('No Year {year} classes yet', { year })}</h3>
-      <p>{tr('Add a class to put its name and pupil count on your lesson plan. Pupil lists also power attendance and PBD later.')}</p>
-    </section>
+    <EmptyState icon="classes" title={tr('No Year {year} classes yet', { year })}>
+      {tr('Add a class to put its name and pupil count on your lesson plan. Pupil lists also power attendance and PBD later.')}
+    </EmptyState>
   {/if}
 
   {#if adding}
@@ -108,8 +108,8 @@
   .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: var(--s-3); }
   .cards a { text-decoration: none; color: var(--ink); }
   .nm { font: 700 var(--t-lg) var(--f-display); }
-  .small { font-size: var(--t-sm); }
+
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
-  .add { justify-self: start; }
+
   .err { color: var(--bad); font-size: var(--t-sm); }
 </style>

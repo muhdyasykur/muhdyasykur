@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { getLesson, saveLesson } from '../../lib/db/repo';
@@ -93,7 +94,7 @@
 </script>
 
 {#if missing}
-  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><p class="empty">{tr('This lesson plan no longer exists.')}</p></div>
+  <div class="stack"><a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a><EmptyState icon="plan" compact>{tr('This lesson plan no longer exists.')}</EmptyState></div>
 {:else if lesson}
 <div class="stack">
   <div class="row between">
@@ -196,12 +197,11 @@
 {/if}
 
 <style>
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
+
   .tools { align-items: center; }
   .tools .select { width: auto; }
   .themes { display: flex; flex-wrap: wrap; gap: var(--s-2); }
-  .theme { display: grid; gap: 6px; justify-items: center; padding: var(--s-2); border: 1px solid var(--line); border-radius: var(--r-2); background: var(--paper); color: var(--ink); cursor: pointer; min-width: 9rem; font: inherit; }
+  .theme { display: grid; gap: 6px; justify-items: center; padding: var(--s-2); border: 1px solid var(--line); border-radius: var(--r-ctl); background: var(--paper); color: var(--ink); cursor: pointer; min-width: 9rem; font: inherit; }
   .theme:hover { border-color: var(--navy); }
   .sw { width: 8rem; aspect-ratio: 16/9; background: var(--bg); border-radius: 4px; display: grid; place-items: center; position: relative; overflow: hidden; }
   .sw span { width: 60%; height: 30%; background: var(--accent); border-radius: 3px; }
@@ -210,11 +210,11 @@
   .editor { display: grid; gap: var(--s-3); grid-template-columns: minmax(9rem, 13rem) 1fr; align-items: start; }
   .thumbs { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); max-height: 80vh; overflow: auto; }
   .thumb { all: unset; display: grid; gap: 2px; cursor: pointer; width: 100%; border-radius: 6px; padding: 3px; border: 2px solid transparent; box-sizing: border-box; }
-  .thumb[aria-current='true'] { border-color: var(--gold, #E2BC4F); }
+  .thumb[aria-current='true'] { border-color: var(--gold); }
   .thumb:focus-visible { outline: 3px solid var(--navy); }
-  .tn { font-size: var(--t-xs, 12px); color: var(--ink-2); }
+  .tn { font-size: var(--t-xs); color: var(--ink-2); }
   .field { display: grid; gap: 4px; font-weight: 600; font-size: var(--t-sm); }
-  .del { color: var(--bad); }
+
   @media (max-width: 720px) {
     .editor { grid-template-columns: 1fr; }
     .thumbs { grid-auto-flow: column; grid-auto-columns: 8.5rem; max-height: none; overflow-x: auto; padding-bottom: 4px; }

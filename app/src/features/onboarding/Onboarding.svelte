@@ -43,6 +43,6 @@
   .panel { max-width: 760px; margin: 0 auto; }
   .head { gap: var(--s-4); flex-wrap: nowrap; }
   .prefs { gap: var(--s-3); }
-  .small { font-size: var(--t-sm); }
+
   .skip { justify-self: start; }
 </style>

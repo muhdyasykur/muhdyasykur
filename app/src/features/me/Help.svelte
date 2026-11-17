@@ -113,7 +113,6 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   h2 { font-size: var(--t-xl); margin: 0; }
   .ch { margin-top: var(--s-2); }
   summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
@@ -122,21 +121,20 @@
   p { margin: 0; }
   ol, ul { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
   .tips li::marker { content: '💡 '; }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .vids { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }
   .vid { display: grid; grid-template-columns: auto 1fr auto; gap: var(--s-3); align-items: center; text-align: left; cursor: pointer; font: inherit; color: var(--ink); border: 1px solid var(--line); }
   .vid[aria-pressed='true'] { box-shadow: 0 0 0 2px var(--gold-strong); }
   .num { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--navy); color: var(--on-navy); font-weight: 700; }
   .txt { display: grid; gap: 2px; }
   .playic { color: var(--gold-strong); font-size: 1.2rem; }
-  .ok { color: var(--ok); }
+
   .player { display: grid; gap: var(--s-2); }
   video { width: 100%; max-height: 70vh; border-radius: var(--r-card); background: #000; }
-  .between { justify-content: space-between; }
+
   .search { display: flex; align-items: center; gap: var(--s-2); }
   .search .input { flex: 1; }
   mark { background: color-mix(in srgb, var(--gold) 45%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
   .vbtn { justify-self: start; }
-  .warn { color: var(--warn, #9a5b00); }
+  .warn { color: var(--warn); }
 </style>

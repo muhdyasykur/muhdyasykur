@@ -40,5 +40,5 @@
   .name { font: 700 clamp(2.2rem, 7vw, 4.5rem)/1.1 var(--f-pupil); min-height: 1.2em; color: var(--ink); }
   .name.spinning { color: var(--ink-3); }
   .big { min-height: 56px; font-size: var(--t-lg); padding: 0 var(--s-8); }
-  .small { font-size: var(--t-sm); }
+
 </style>

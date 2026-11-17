@@ -103,5 +103,5 @@
   .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
   .setting { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; font-weight: 600; }
   .ok { color: var(--ok); justify-self: start; }
-  .small { font-size: var(--t-sm); }
+
 </style>

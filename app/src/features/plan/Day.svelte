@@ -102,8 +102,7 @@
 <style>
   .between { justify-content: space-between; align-items: center; }
   .dt { font-size: var(--t-lg); }
-  .small { font-size: var(--t-sm); }
-  .tight { gap: var(--s-2); }
+
   .yp { margin: 0; padding: var(--s-2) var(--s-3); border-left: 4px solid var(--navy-2); }
   .items { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-2); }
   .it { display: grid; grid-template-columns: auto auto 1fr auto; gap: var(--s-2); align-items: start; padding: var(--s-3); }
@@ -122,6 +121,6 @@
   .grow { flex: 1; min-width: 180px; }
   .input.t { width: auto; }
   .ta { min-height: 60px; padding: var(--s-2) var(--s-3); }
-  .del { color: var(--bad); }
+
   .empty h3 { margin: 0; }
 </style>

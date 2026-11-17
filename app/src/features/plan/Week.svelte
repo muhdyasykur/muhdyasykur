@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr, dateLocale, dayName } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { listClasses, listLessons, getSetting, setSetting } from '../../lib/db/repo';
@@ -72,7 +73,7 @@
   {/if}
 
   {#if !slots.length && !editing}
-    <section class="empty"><h3>{tr('No timetable yet')}</h3><p>{tr('Add your English periods once. Each week then shows which lessons are planned and which still need a lesson plan.')}</p><button class="btn btn-primary" type="button" onclick={() => (editing = true)}>{tr('Set up timetable')}</button></section>
+    <EmptyState icon="plan" title={tr('No timetable yet')}>{tr('Add your English periods once. Each week then shows which lessons are planned and which still need a lesson plan.')}{#snippet actions()}<button class="btn btn-primary" type="button" onclick={() => (editing = true)}>{tr('Set up timetable')}</button>{/snippet}</EmptyState>
   {/if}
 
   <div class="days">
@@ -109,15 +110,14 @@
 </div>
 
 <style>
-  .between { justify-content: space-between; }
   .wk { font-family: var(--f-display); }
-  .small { font-size: var(--t-sm); }
+
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: var(--s-3); }
-  .add { justify-self: start; }
+
   .warn { color: var(--warn); font-weight: 600; font-size: var(--t-sm); }
   .slots { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
   .slots li { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); border-bottom: 1px solid var(--line); }
-  .del { color: var(--bad); }
+
   .days { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--s-3); }
   .day { display: grid; gap: var(--s-2); align-content: start; }
   .day h4 { font-size: var(--t-sm); }

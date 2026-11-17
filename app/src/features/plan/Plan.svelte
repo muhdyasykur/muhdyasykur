@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr, uiDate } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
   import { listLessons, deleteLesson, duplicateLesson } from '../../lib/db/repo';
@@ -83,11 +84,10 @@
   <PlanTabs current="lessons" />
   <div class="row"><label class="btn btn-text">{tr('Import a shared lesson (.consilia)')}<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
   {#if lessons && !lessons.length}
-    <section class="empty">
-      <h3>{tr('No lesson plans yet')}</h3>
-      <p>{tr('Start from a Scheme of Work lesson, keep its standards and write your own activities, or plan from scratch.')}</p>
-      <a class="btn btn-primary" href={href('plan', 'new')}>{tr('Plan your first lesson')}</a>
-    </section>
+    <EmptyState icon="plan" title={tr('No lesson plans yet')}>
+      {tr('Start from a Scheme of Work lesson, keep its standards and write your own activities, or plan from scratch.')}
+      {#snippet actions()}<a class="btn btn-primary" href={href('plan', 'new')}>{tr('Plan your first lesson')}</a>{/snippet}
+    </EmptyState>
   {:else if lessons}
     <ul class="list">
       {#each lessons as l (l.id)}
@@ -138,7 +138,7 @@
   .top { justify-content: space-between; }
   .item { flex-wrap: nowrap; align-items: center; gap: var(--s-3); }
   .copy .select, .copy .input { width: auto; }
-  .small { font-size: var(--t-sm); }
+
   .err { color: var(--bad); font-size: var(--t-sm); }
   .list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-3); }
   .main { display: grid; gap: 4px; text-decoration: none; color: var(--ink); }
@@ -146,5 +146,5 @@
   .chips { gap: 6px; }
   .status-ready { color: var(--ok); border-color: currentColor; }
   .actions { gap: 0; border-top: 1px solid var(--line); padding-top: var(--s-1); }
-  .del { color: var(--bad); }
+
 </style>

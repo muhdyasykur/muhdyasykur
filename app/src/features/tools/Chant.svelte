@@ -24,7 +24,6 @@
     <AiButtons prompt={buildPrompt('song', { year: ctx.year, topic: ctx.topic || W.join(', '), skill: 'Language Arts', words: W, sentence: ctx.sentence })} label={tr('Write a song with AI')} />
   </section>
 </div>
-<style>
-  .tight { gap: var(--s-2); } h3 { margin: 0; } .small { font-size: var(--t-sm); } p { margin: 0; }
+<style> h3 { margin: 0; } p { margin: 0; }
   .lines { font: 600 var(--t-lg) var(--f-pupil); white-space: pre-wrap; margin: 0; background: var(--sunken); border-radius: var(--r-ctl); padding: var(--s-3); }
 </style>

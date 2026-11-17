@@ -30,7 +30,7 @@
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--s-3); }
   .t { font: 700 var(--t-md) var(--f-display); }
   small { font-size: var(--t-xs); }
-  .small { font-size: var(--t-sm); }
+
   .sug { justify-self: start; }
   .ta { min-height: 80px; padding: var(--s-2) var(--s-3); resize: vertical; }
 </style>

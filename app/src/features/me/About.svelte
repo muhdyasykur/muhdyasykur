@@ -42,7 +42,6 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   .hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-6); align-items: center; }
   @media (max-width: 600px) { .hero { grid-template-columns: 1fr; justify-items: start; } }
   .photo { width: 200px; height: 250px; object-fit: cover; border-radius: var(--r-card); box-shadow: var(--shadow-raised); border: 3px solid var(--gold-strong); }
@@ -52,5 +51,5 @@
   .hi { font-weight: 700; }
   .sign { margin-top: var(--s-2); }
   .story p { max-width: 70ch; }
-  .small { font-size: var(--t-sm); }
+
 </style>

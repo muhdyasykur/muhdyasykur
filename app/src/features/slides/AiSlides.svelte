@@ -76,13 +76,13 @@
 
 <style>
   .aibox h2 { display: flex; gap: var(--s-2); align-items: center; font-size: var(--t-lg); }
-  .small { font-size: var(--t-sm); }
+
   .parts { border: 0; margin: 0; padding: 0; gap: var(--s-2) var(--s-3); }
   .tick { gap: 6px; min-height: 44px; font-size: var(--t-sm); }
   .tick input { width: 20px; height: 20px; }
   .field { display: grid; gap: 4px; font-weight: 600; font-size: var(--t-sm); }
-  .sent { white-space: pre-wrap; font-size: var(--t-xs, 12px); background: var(--paper-2, #f4f5f8); padding: var(--s-2); border-radius: var(--r-1, 6px); max-height: 14rem; overflow: auto; }
+  .sent { white-space: pre-wrap; font-size: var(--t-xs); background: var(--sunken); padding: var(--s-2); border-radius: var(--r-ctl); max-height: 14rem; overflow: auto; }
   summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
-  .ok { color: var(--ok, #2e7d4f); }
+  .ok { color: var(--ok); }
   .bad { color: var(--bad); }
 </style>

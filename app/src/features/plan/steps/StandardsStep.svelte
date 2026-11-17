@@ -69,7 +69,7 @@
 <style>
   .std { grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--s-3); }
   .tight { gap: var(--s-1); }
-  .pre { white-space: pre-line; }
+
   .note { border-style: dashed; color: var(--ink-2); }
   .skills { max-width: 100%; overflow-x: auto; }
   .skills button { white-space: nowrap; }

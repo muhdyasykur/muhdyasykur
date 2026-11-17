@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr, dateLocale } from '../../lib/i18n/index.svelte';
   import { t } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
@@ -73,15 +74,14 @@
         {/if}
       </section>
     {:else if !slots.length}
-      <section class="empty">
-        <h3>{lessons.length ? tr('Add your timetable') : t('today.empty.title')}</h3>
-        <p>{lessons.length ? tr('With your English periods set once, Today shows your next lesson and what still needs planning.') : t('today.empty.body')}</p>
-        <div class="row">
+      <EmptyState icon="today" title={lessons.length ? tr('Add your timetable') : t('today.empty.title')}>
+        {lessons.length ? tr('With your English periods set once, Today shows your next lesson and what still needs planning.') : t('today.empty.body')}
+        {#snippet actions()}
           <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{t('today.newRph')}</a>
           <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}>{tr('✨ Let Consilia plan it')}</a>
           <a class="btn btn-outline" href={href('plan', 'week')}>{tr('Set up timetable')}</a>
-        </div>
-      </section>
+        {/snippet}
+      </EmptyState>
     {/if}
 
     {#if unplanned.length || weak.length || toReflect.length || needBackup}
@@ -115,9 +115,7 @@
 
 <style>
   .hello { display: flex; gap: var(--s-4); align-items: center; flex-wrap: wrap; }
-  .small { font-size: var(--t-sm); }
-  .tight { gap: var(--s-2); }
-  .between { justify-content: space-between; }
+
   .next { gap: var(--s-3); border-left: 4px solid var(--gold-strong); }
   .nl { flex-wrap: nowrap; gap: var(--s-3); }
   .nudges, .week { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }

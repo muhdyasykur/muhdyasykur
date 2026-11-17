@@ -68,11 +68,9 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   .grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
   .wide { grid-column: span 2; }
   @media (max-width: 600px) { .wide { grid-column: auto; } }
-  .small { font-size: var(--t-sm); }
   .pairs { display: grid; gap: 4px; max-height: 360px; overflow-y: auto; }
   .pr { justify-content: space-between; border-bottom: 1px solid var(--line); padding: 2px 0; }
   .pr .seg button { min-height: 34px; font-size: var(--t-xs); }

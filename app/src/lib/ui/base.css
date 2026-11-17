@@ -53,3 +53,16 @@ input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:var(-
 html.has-pseudo-full,html.has-pseudo-full body{overflow:hidden}
 .fs-exit{position:fixed;top:max(8px,env(safe-area-inset-top,0px));right:max(8px,env(safe-area-inset-right,0px));z-index:91}
 .fs-note{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:91;max-width:min(560px,calc(100vw - 24px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-overlay);padding:var(--s-2) var(--s-3);font-size:var(--t-sm);display:flex;gap:var(--s-3);align-items:center}
+
+/* Shared utilities (design system). Components use these instead of redefining them. */
+.small{font-size:var(--t-sm)}
+.tight{gap:var(--s-2)}
+.between{justify-content:space-between}
+.back{justify-self:start}
+.add{justify-self:start}
+.auto{width:auto}
+.pre{white-space:pre-line}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.ok{color:var(--ok)}
+.err,.del{color:var(--bad)}
+textarea.ta,.ta{min-height:80px;padding:var(--s-2) var(--s-3)}

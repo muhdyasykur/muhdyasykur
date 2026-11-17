@@ -21,7 +21,7 @@
   import Timer from './tools/Timer.svelte';
   import Games from '../tools/Games.svelte';
   import SlideShow from '../slides/SlideShow.svelte';
-  import { trapFocus } from '../../lib/ui/focus';
+  import Sheet from '../../lib/ui/Sheet.svelte';
   import { buildDeck } from '../../lib/slides/deck';
   import { fromTeach } from '../../lib/attendance';
   import type { TeachPupil } from './types';
@@ -220,9 +220,7 @@
     {/if}
 
     {#if tool}
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={tools.find((t) => t.id === tool)?.label} use:trapFocus>
-        <div class="sheet-in">
-          <div class="row between"><h2>{tools.find((t) => t.id === tool)?.label}</h2><button class="btn btn-outline" type="button" onclick={() => (tool = '')}>{tr('Close')}</button></div>
+      <Sheet title={tools.find((t) => t.id === tool)?.label ?? ''} onclose={() => (tool = '')} wide>
           {#if tool === 'picker'}<Picker pupils={present} bind:picker={session.picker} />
           {:else if tool === 'groups'}<Groups pupils={present} bind:groups={session.groups} onsave={saveGroups} />
           {:else if tool === 'noise'}<Noise />
@@ -243,8 +241,7 @@
             {#if !lesson.slides}<p class="muted small">{tr('These slides are made from your plan now.')} <a href={href('plan', 'slides', lesson.id)}>{tr('Edit them or download PowerPoint')}</a> {tr('after the lesson.')}</p>{/if}
             <SlideShow {deck} start={at < 0 ? 0 : at} embedded />
           {:else}<Timer />{/if}
-        </div>
-      </div>
+      </Sheet>
     {/if}
   {:else}
     <p class="center muted">{tr('Loading…')}</p>
@@ -259,7 +256,6 @@
   .exit { position: relative; overflow: hidden; }
   .exit.holding::after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: var(--bad); animation: hold 0.9s linear forwards; }
   @keyframes hold { from { width: 0; } to { width: 100%; } }
-  .between { justify-content: space-between; }
   main { padding: var(--s-4) 0 var(--s-8); max-width: 1100px; width: 100%; margin: 0 auto; }
   .startscreen { display: grid; gap: var(--s-4); align-content: start; }
   .sc { margin: 0; padding-left: 1.2em; font-size: clamp(1.2rem, 2.6vw, 1.7rem); display: grid; gap: var(--s-2); }
@@ -293,7 +289,4 @@
   .dock button { display: grid; justify-items: center; gap: 2px; min-width: 72px; min-height: 56px; border: 0; border-radius: var(--r-ctl); background: transparent; font: 600 var(--t-xs) var(--f-body); color: var(--ink-2); cursor: pointer; }
   .dock button span { font-size: 1.4rem; }
   .dock button.on { background: var(--gold-soft); color: var(--ink); }
-  .sheet { position: fixed; inset: 0; z-index: 70; background: color-mix(in srgb, var(--ink) 40%, transparent); display: grid; align-items: end; }
-  .sheet-in { background: var(--paper); border-radius: var(--r-card) var(--r-card) 0 0; max-height: 92dvh; overflow-y: auto; padding: var(--s-4) max(var(--s-4), env(safe-area-inset-right, 0px)) max(var(--s-6), env(safe-area-inset-bottom, 0px)) max(var(--s-4), env(safe-area-inset-left, 0px)); display: grid; gap: var(--s-3); }
-  @media (min-width: 900px) { .sheet { align-items: center; justify-items: center; } .sheet-in { width: min(960px, 92vw); border-radius: var(--r-card); } }
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { STAGE_COLOURS } from '../../../lib/ui/palette';
   import './paper.css';
   import type { Lesson } from '../../../lib/lesson/model';
   import type { Profile, Reflection } from '../../../lib/db/schema';
@@ -9,7 +10,7 @@
 
   let { lesson, profile, reflection = null }: { lesson: Lesson; profile: Profile | null; reflection?: Reflection | null } = $props();
   const labels = $derived(objectiveLabels(lesson));
-  const colours = ['#5B6B8C', '#13294B', '#2B4E86', '#8A6A12', '#1F6F63', '#6B4FB3'];
+  const colours = STAGE_COLOURS;
   const rows = $derived(alignment(lesson));
   const tiered = $derived(lesson.stages.flatMap((s) => s.activities.filter((a) => a.tiers.low || a.tiers.mod || a.tiers.high).map((a) => ({ s, a }))));
   const planB = $derived([['Finished early', lesson.planB.early], ['Running late', lesson.planB.late], ['No internet / power', lesson.planB.offline], ['Class too noisy', lesson.planB.noisy], ['Many absent', lesson.planB.absent]].filter(([, v]) => v.trim()));

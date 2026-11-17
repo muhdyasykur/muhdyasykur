@@ -60,5 +60,5 @@
   .meter div { height: 100%; background: linear-gradient(90deg, #2E9E5B, #E5A83A 70%, #D2453D); }
   .meter span { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--ink); }
   .lim { width: min(100%, 420px); }
-  .small { font-size: var(--t-sm); }
+
 </style>

@@ -26,11 +26,10 @@
 </article>
 
 <style>
-  .back { justify-self: start; }
   .head { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
-  .lead { font-size: var(--t-lg, 1.125rem); max-width: 65ch; }
-  h2 { font-size: var(--t-lg, 1.125rem); margin: 0; }
-  .tight { gap: var(--s-2); }
+  .lead { font-size: var(--t-lg); max-width: 65ch; }
+  h2 { font-size: var(--t-lg); margin: 0; }
+
   p { max-width: 70ch; margin: 0; }
-  .small { font-size: var(--t-sm); }
+
 </style>

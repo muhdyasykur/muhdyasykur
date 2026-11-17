@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { t, type Key } from '../../lib/i18n/index.svelte';
   import { route, href } from '../../router.svelte';
@@ -146,7 +147,7 @@
       <section class="card"><h3>{tr('Sources')}</h3><p class="muted small">{tr('The skill-to-framework advice is mainstream TESL methodology from these sources, not an official KPM rule.')}</p><ol class="small">{#each SOURCES as src}<li>{src}</li>{/each}</ol></section>
     </div>
   {:else if error}
-    <p class="empty" role="alert">{error}</p>
+    <EmptyState icon="offline" compact alert>{error}</EmptyState>
   {:else if !sow || !standards}
     <p class="muted">{t('common.loading')}</p>
   {:else if activeTab === 'sow' || activeTab === 'phonics'}
@@ -156,7 +157,7 @@
       <input id="lesson-search" class="input" type="search" placeholder={t('library.searchLessons')} bind:value={query} />
     </label>
     <p class="muted small">{t('library.lessons', { n: shown.length })}</p>
-    {#if !shown.length}<p class="empty">{t('library.noResults')}</p>{/if}
+    {#if !shown.length}<EmptyState icon="search" compact>{t('library.noResults')}</EmptyState>{/if}
     <ul class="lessons">
       {#each shown as l (l.no)}
         <li>
@@ -229,9 +230,7 @@
 {/if}
 
 <style>
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
-  .pre { white-space: pre-line; }
+
   .controls { display: flex; flex-wrap: wrap; gap: var(--s-3); }
   .controls .seg { max-width: 100%; overflow-x: auto; }
   .seg button { white-space: nowrap; }

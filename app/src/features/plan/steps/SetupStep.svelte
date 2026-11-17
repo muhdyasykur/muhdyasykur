@@ -76,6 +76,6 @@
   .ro { min-height: var(--tap); display: flex; align-items: center; font-family: var(--f-mono); }
   .note { border-style: dashed; }
   .tips { border-left: 4px solid var(--ok); }
-  .small { font-size: var(--t-sm); }
+
   .pre { white-space: pre-line; color: var(--ink-2); }
 </style>

@@ -39,7 +39,7 @@
 <style>
   .recovery { max-width: 640px; margin: var(--s-8) auto; border-left: 4px solid var(--bad); }
   .recovery h1 { font-size: var(--t-xl); }
-  .small { font-size: var(--t-sm); }
+
   .mono { font-family: var(--f-mono); word-break: break-word; }
   summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
 </style>

@@ -83,6 +83,7 @@ const CKEY = 'sk-ant-api03-TEST-not-a-real-key-0123456789';
   await page.click('#rc-use');
   await page.waitForURL(/review$/);
   const lessonId = page.url().split('/').slice(-2)[0];
+  await page.waitForSelector('#rv-slides', { timeout: 5000 }).catch(() => {});
   check((await page.locator('#rv-slides').count()) === 1, 'the Review step has a Lesson slides button');
   await page.goto(base + `#/plan/edit/${lessonId}/materials`);
   await page.waitForSelector('#mt-slides');

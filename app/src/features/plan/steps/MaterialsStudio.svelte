@@ -75,13 +75,12 @@
 
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--s-3); }
-  .small { font-size: var(--t-sm); }
+
   .ta { min-height: 90px; padding: var(--s-2) var(--s-3); }
   .err { color: var(--bad); font-size: var(--t-sm); }
-  .add { justify-self: start; }
+
   .item { border-top: 1px solid var(--line); padding-top: var(--s-3); display: grid; gap: var(--s-2); }
-  .between { justify-content: space-between; }
-  .del { color: var(--bad); }
+
   .pics { display: flex; flex-wrap: wrap; gap: var(--s-2); }
   .pic { display: grid; justify-items: center; gap: 2px; width: 110px; padding: var(--s-2); border: 1px solid var(--line); border-radius: var(--r-ctl); cursor: pointer; font-size: var(--t-sm); }
   .pic img { width: 80px; height: 60px; object-fit: contain; }

@@ -37,5 +37,5 @@
   <details><summary class="small">{tr('See the prompt')}</summary><textarea class="input ta" rows="8" readonly value={prompt} aria-label="AI prompt"></textarea></details>
   <p class="muted small">{tr('AI answers can be wrong. Check them before using them with pupils, and never paste pupils\' names.')}{#if !aiReady()} {tr('Want answers inside Consilia?')} <a href={href('me', 'ai')}>{tr('Connect Claude')}</a> {tr('(optional, your own key).')}{/if}</p>
 </div>
-<style>.tight { gap: var(--s-2); } .small { font-size: var(--t-sm); } .ta { width: 100%; font-size: var(--t-sm); } summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+<style> .small { font-size: var(--t-sm); } .ta { width: 100%; font-size: var(--t-sm); } summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
   .answer { display: grid; gap: var(--s-2); } .out { white-space: pre-wrap; font-size: var(--t-sm); max-height: 24rem; overflow: auto; } .bad { color: var(--bad); }</style>

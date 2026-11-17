@@ -96,11 +96,9 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   .between { justify-content: space-between; align-items: center; }
   h1 { margin: 0; }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .datebar { align-items: center; }
   .dateinput { width: auto; }
   .counts { margin: 0; font-size: var(--t-lg); }

@@ -72,7 +72,6 @@
 </article>
 
 <style>
-  .back { justify-self: start; }
   .head { display: grid; gap: var(--s-2); }
   .facts { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--s-4); margin: 0; }
   .facts .wide { grid-column: 1 / -1; }
@@ -81,7 +80,7 @@
   .std { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-3); padding: var(--s-3) 0; border-top: 1px solid var(--line); }
   .tight { gap: var(--s-1); }
   .ls { white-space: pre-line; }
-  .small { font-size: var(--t-sm); }
+
   h4 { font-size: var(--t-sm); letter-spacing: .06em; text-transform: uppercase; color: var(--gold); margin-top: var(--s-2); }
   ol { margin: 0; padding-left: 1.4em; display: grid; gap: var(--s-2); }
   li { white-space: pre-line; }

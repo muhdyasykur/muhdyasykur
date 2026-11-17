@@ -80,8 +80,7 @@
 
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--s-3); }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .range { width: 100%; min-height: var(--tap); accent-color: var(--navy); }
   .idea summary { display: flex; justify-content: space-between; gap: var(--s-3); align-items: center; cursor: pointer; min-height: var(--tap); }
   .t { display: grid; gap: 2px; }
@@ -89,7 +88,7 @@
   .body { padding-top: var(--s-2); }
   ol { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
   p { margin: 0; }
-  .auto { width: auto; }
+
   .add { align-items: center; border-top: 1px solid var(--line); padding-top: var(--s-2); }
   .ok { color: var(--ok); font-weight: 600; }
 </style>

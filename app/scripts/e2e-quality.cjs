@@ -50,7 +50,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   const opener = page.locator('[data-tool="timer"]');
   await opener.focus();
   await page.keyboard.press('Enter');
-  await page.waitForSelector('.sheet[aria-modal="true"]');
+  await page.waitForSelector('.sheet [aria-modal="true"]');
   await page.waitForTimeout(100);
   check(await page.evaluate(() => !!document.activeElement.closest('.sheet')), 'opening a dialog moves focus into it');
   let inside = true;

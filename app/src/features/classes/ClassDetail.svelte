@@ -1,4 +1,5 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { href, go } from '../../router.svelte';
   import { getClass, saveClass, deleteClass, listPupils, addPupils, parseNames, renamePupil, removePupil } from '../../lib/db/repo';
@@ -37,7 +38,7 @@
 <div class="stack">
   <a class="btn btn-text back" href={href('classes')}><Icon name="back" size={18} />{tr('Classes')}</a>
   {#if missing}
-    <p class="empty">{tr('This class no longer exists.')}</p>
+    <EmptyState icon="classes" compact>{tr('This class no longer exists.')}</EmptyState>
   {:else if cls}
     <header>
       <p class="eyebrow">{tr('Year {year} · {schoolType}', { year: cls.year, schoolType: cls.schoolType })}</p>
@@ -90,13 +91,12 @@
 </div>
 
 <style>
-  .back { justify-self: start; }
   .grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
   .ta { min-height: 120px; padding: var(--s-2) var(--s-3); resize: vertical; }
-  .small { font-size: var(--t-sm); }
+
   .pupils { margin: 0; padding-left: 1.6em; display: grid; gap: var(--s-1); }
   .pupils li { padding-left: var(--s-1); }
   .pupils li > :global(*) { vertical-align: middle; }
   .pupils .input { width: min(100%, 360px); min-height: 38px; }
-  .del { color: var(--bad); }
+
 </style>

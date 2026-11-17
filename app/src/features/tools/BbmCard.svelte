@@ -28,7 +28,7 @@
   h4 { margin: 0 0 4px; font-size: var(--t-sm); text-transform: uppercase; letter-spacing: .06em; color: var(--gold); }
   ul, ol { margin: 0; padding-left: 1.3em; display: grid; gap: 3px; }
   .tight { gap: var(--s-3); }
-  .small { font-size: var(--t-sm); }
+
   .tip, .safe { margin: 0; }
   .safe { color: var(--warn); }
   .print { justify-self: start; }

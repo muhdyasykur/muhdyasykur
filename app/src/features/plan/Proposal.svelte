@@ -116,8 +116,7 @@
   .head h2 { margin: 0; font-size: var(--t-xl); }
   .head p { margin: 0; }
   .score { display: grid; justify-items: center; gap: 2px; }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .log summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
   .steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
   .steps li.new { animation: rise .25s ease-out; }

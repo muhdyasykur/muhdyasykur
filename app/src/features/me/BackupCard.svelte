@@ -51,4 +51,4 @@
   {#if err}<p class="err" role="alert">{err}</p>{/if}
   {#if msg}<p id="bk-msg" class="ok small" role="status">{msg}</p>{/if}
 </div>
-<style>.small { font-size: var(--t-sm); } .err { color: var(--bad); } .ok { color: var(--ok); } .warn { border-color: var(--warn); } .del { color: var(--bad); }</style>
+<style> .err { color: var(--bad); } .warn { border-color: var(--warn); }</style>

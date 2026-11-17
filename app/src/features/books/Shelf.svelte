@@ -160,15 +160,13 @@
 </div>
 
 <style>
-  .small { font-size: var(--t-sm); }
-  .err { color: var(--bad); }
+
   .busy { font-weight: 600; color: var(--navy-2); }
   .cal { max-width: 360px; border: 1px solid var(--line); border-radius: 6px; }
   .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }
   .slot { border-style: dashed; }
   .slot.filled { border-style: solid; }
-  .add { justify-self: start; }
-  .del { color: var(--bad); }
+
   .ocr { display: grid; gap: 6px; margin: var(--s-2) 0; justify-items: start; }
   .ocr progress { width: 100%; accent-color: var(--gold-strong); }
   .hit { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; border-bottom: 1px solid var(--line); padding: 4px 0; }

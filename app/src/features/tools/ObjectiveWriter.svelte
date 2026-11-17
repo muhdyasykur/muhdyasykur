@@ -65,7 +65,6 @@
   .smart li { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 8px; border: 2px solid var(--bad); color: var(--bad); }
   .smart li.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
   .fix { color: var(--bad); margin: 0; }
-  .small { font-size: var(--t-sm); }
-  .tight { gap: var(--s-2); }
+
   summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
 </style>

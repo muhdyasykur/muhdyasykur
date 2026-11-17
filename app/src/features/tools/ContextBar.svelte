@@ -64,8 +64,7 @@
 <style>
   .ctx { border-left: 4px solid var(--gold-strong); padding: var(--s-3) var(--s-4); }
   .ctx.empty { background: linear-gradient(135deg, var(--gold-soft), var(--card)); }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .between { justify-content: space-between; align-items: center; }
   .sum { display: flex; flex-wrap: wrap; gap: 4px var(--s-2); align-items: baseline; min-width: 0; }
   .lbl { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .1em; color: var(--gold); font-weight: 700; }

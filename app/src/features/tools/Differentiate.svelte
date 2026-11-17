@@ -20,8 +20,6 @@
   <section class="card stack tight"><h3>{tr('Need fully written versions?')}</h3><AiButtons prompt={buildPrompt('differentiate', { year: ctx.year, topic: ctx.topic, skill: ctx.skill, words: [], sentence: ctx.sentence, extra: activity })} label={tr('Differentiate with AI')} /></section>
 </div>
 <style>
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
   .tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
-  h3 { margin: 0 0 var(--s-2); } ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
-  .small { font-size: var(--t-sm); } .tight { gap: var(--s-2); }
+  h3 { margin: 0 0 var(--s-2); } ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; } .tight { gap: var(--s-2); }
 </style>

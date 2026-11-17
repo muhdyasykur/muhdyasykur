@@ -27,6 +27,6 @@
   .kinds { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: var(--s-2); }
   .kind { text-align: left; display: grid; gap: 2px; cursor: pointer; font: inherit; color: inherit; }
   .kind[aria-checked='true'] { border-color: var(--gold-strong); box-shadow: 0 0 0 2px var(--gold-strong); }
-  .small { font-size: var(--t-sm); }
+
   .ta { min-height: 90px; padding: var(--s-2) var(--s-3); }
 </style>

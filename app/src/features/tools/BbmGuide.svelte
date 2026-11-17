@@ -16,8 +16,7 @@
 </div>
 <style>
   .grow { flex: 1; min-width: 200px; }
-  .small { font-size: var(--t-sm); }
-  .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
   .pick { cursor: pointer; min-height: 36px; padding: 0 var(--s-3); border: 1px solid var(--line); background: var(--card); font: 600 var(--t-sm) var(--f-body); color: var(--ink-2); }
   .pick[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: var(--s-3); align-items: start; }

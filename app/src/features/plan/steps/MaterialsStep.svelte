@@ -105,10 +105,9 @@
   .ta { min-height: 72px; padding: var(--s-2) var(--s-3); resize: vertical; }
   .big { min-height: 160px; }
   .note { border-style: dashed; }
-  .small { font-size: var(--t-sm); }
+
   .url { overflow-wrap: anywhere; min-width: 0; }
   .bad { color: var(--bad); font-size: var(--t-sm); }
-  .add { justify-self: start; }
-  .auto { width: auto; }
+
   .offline-note { color: var(--warn); font-weight: 600; font-size: var(--t-sm); }
 </style>

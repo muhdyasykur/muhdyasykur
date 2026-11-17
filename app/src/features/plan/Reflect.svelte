@@ -48,9 +48,6 @@
   {/if}
 </div>
 <style>
-  .back { justify-self: start; }
   .facts { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
-  .small { font-size: var(--t-sm); }
-  .ok { color: var(--ok); }
+
 </style>

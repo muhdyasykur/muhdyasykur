@@ -215,12 +215,10 @@
 {/if}
 
 <style>
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: var(--s-3); }
   .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--s-3); }
-  h3 { margin: 0; } .up { justify-self: start; }
-  .err { color: var(--bad); } .busy { font-weight: 600; }
+  h3 { margin: 0; } .up { justify-self: start; } .busy { font-weight: 600; }
   .ok-box { margin: 0; border-left: 4px solid var(--ok); }
   .tablewrap { overflow-x: auto; padding: 0; }
   .weeks { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
@@ -233,7 +231,7 @@
   .between { justify-content: space-between; align-items: center; }
   .back { justify-self: start; padding-left: 0; } .pn { margin: 0; }
   .planc { display: grid; gap: 4px; text-decoration: none; color: var(--ink); }
-  .del { color: var(--bad); }
+
   .cal { display: grid; grid-template-columns: 56px repeat(5, minmax(0, 1fr)); gap: 4px; }
   .calh { font-size: var(--t-xs); font-weight: 700; color: var(--ink-2); text-transform: uppercase; padding: 4px; }
   .calw { display: grid; place-items: center; background: var(--sunken); border-radius: 8px; text-decoration: none; color: var(--ink); min-height: 44px; }

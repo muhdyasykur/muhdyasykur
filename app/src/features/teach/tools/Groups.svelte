@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { TEAM_COLOURS } from '../../../lib/ui/palette';
   import { tr } from '../../../lib/i18n/index.svelte';
   import { makeGroups, groupCount } from '../../../lib/classroom/groups';
   import { TIER_ICON, type TeachPupil } from '../types';
@@ -8,7 +9,7 @@
   let mode = $state<'mixed' | 'tier'>('mixed');
   let broken = $state<string[]>([]);
   const name = (id: string) => pupils.find((p) => p.id === id);
-  const colours = ['#13294B', '#1F6F63', '#8A6A12', '#6B4FB3', '#2B4E86', '#A23B3B', '#3E6B2E', '#5B6B8C'];
+  const colours = TEAM_COLOURS;
 
   function make() {
     const r = makeGroups(pupils.map((p) => ({ id: p.id, tier: p.tier, keepApart: p.keepApart, keepTogether: p.keepTogether })), mode === 'tier' ? Math.max(groupCount(pupils.length, size), 3) : groupCount(pupils.length, size), mode);
@@ -43,7 +44,7 @@
 <style>
   .controls { align-items: end; gap: var(--s-4); }
   .controls .field { min-width: 180px; }
-  .small { font-size: var(--t-sm); }
+
   .warn { color: var(--warn); font-weight: 600; font-size: var(--t-sm); }
   .groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
   .g { border-radius: var(--r-card); border: 2px solid var(--c); background: var(--card); overflow: hidden; }

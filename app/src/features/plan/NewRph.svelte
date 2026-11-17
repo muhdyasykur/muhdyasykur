@@ -202,14 +202,13 @@
 {/if}
 
 <style>
-  .back { justify-self: start; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--s-3); }
   small, .small { font-size: var(--t-sm); }
   .mins { width: 90px; }
   .modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
   .mode { text-align: left; cursor: pointer; font: inherit; color: inherit; }
   .mode[aria-checked='true'] { border-color: var(--gold-strong); box-shadow: 0 0 0 2px var(--gold-strong); }
-  .between { justify-content: space-between; }
+
   .pick { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; border: 1px solid var(--line); border-radius: var(--r-ctl); }
   .pick li + li { border-top: 1px solid var(--line); }
   .pick button { width: 100%; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: var(--s-3); text-align: left; padding: var(--s-2) var(--s-3); border: 0; background: transparent; cursor: pointer; min-height: var(--tap); }
@@ -217,9 +216,9 @@
   .no { font: 500 var(--t-sm) var(--f-mono); color: var(--gold); padding-top: 2px; }
   .what { display: grid; min-width: 0; }
   .what .muted { font-size: var(--t-sm); }
-  .err { color: var(--bad); }
+
   .rec { border: 2px solid var(--gold-strong); }
-  .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
   .pickable { cursor: pointer; min-height: var(--tap); padding: 0 var(--s-3); font: 600 var(--t-sm) var(--f-body); border: 1px solid var(--line); background: var(--card); color: var(--ink-2); }
   .pickable[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
   .pickable:disabled { opacity: .45; cursor: not-allowed; }

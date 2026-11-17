@@ -81,9 +81,7 @@
 <datalist id="degrees">{#each degrees as d}<option value={d}></option>{/each}</datalist>
 
 <style>
-  .between { justify-content: space-between; }
-  .small { font-size: var(--t-sm); }
-  .del { color: var(--bad); }
+
   .abcd { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s-3); }
   .abcd .a { grid-column: span 6; } .abcd .b { grid-column: span 2; } .abcd .b2 { grid-column: span 4; } .abcd .c, .abcd .d { grid-column: span 3; }
   @media (max-width: 640px) { .abcd > * { grid-column: 1 / -1 !important; } }
@@ -93,7 +91,7 @@
   .a-d { background: color-mix(in srgb, var(--high) 22%, transparent); border-radius: 5px; padding: 0 4px; }
   .sentence { line-height: 2; }
   .sentence span:empty { display: none; }
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
+
   .smart { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
   .smart li { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 8px; border: 2px solid var(--bad); color: var(--bad); font: 800 var(--t-sm) var(--f-display); }
   .smart li.ok { border-color: var(--ok); color: var(--on-navy); background: var(--ok); }

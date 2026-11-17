@@ -25,8 +25,7 @@
 </div>
 <style>
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: var(--s-3); }
-  .tight { gap: var(--s-2); }
-  .small { font-size: var(--t-sm); }
+
   p, ol { margin: 0; } ol { padding-left: 1.3em; }
   .warn { color: var(--warn); font-weight: 600; }
   .btn { justify-self: start; }

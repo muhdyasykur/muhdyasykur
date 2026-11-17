@@ -18,6 +18,12 @@
   follow the language. What pupils see and the lesson itself stay in English: lesson plans, slides, worksheets,
   projector games and Teach-mode pupil text. The Malay text loads only when chosen.
 
+**Design system**
+- One set of shared pieces instead of each screen drawing its own: empty states (`EmptyState`), modal panels
+  (`Sheet`), messages (`notify` and one `Toaster`), and common layout and text classes. 139 repeated style rules were
+  removed. Team, timing-stage and wheel colours come from one palette, so groups, points and games always match.
+  Every colour is a theme token (no hard-coded fallbacks). See `docs/design-system.md`.
+
 **Quality**
 - Every browser suite, the accessibility audit and the speed budget now run automatically on each push, in Malaysian
   time; the main journeys also run on Safari's engine (WebKit) and Firefox.

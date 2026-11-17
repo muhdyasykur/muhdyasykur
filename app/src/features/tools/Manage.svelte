@@ -14,8 +14,7 @@
   <p class="muted small">{tr('Teach every routine on day one, practise it twice, and praise it when you see it. In Teach mode, the Attention, Noise, Timer and Points tools support these routines.')}</p>
 </div>
 <style>
-  .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
   .pick { cursor: pointer; min-height: var(--tap); padding: 0 var(--s-3); border: 1px solid var(--line); background: var(--card); font: 600 var(--t-sm) var(--f-body); color: var(--ink-2); }
   .pick[aria-pressed='true'] { background: var(--navy); color: var(--on-navy); }
-  h3 { margin: 0; } ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; } .tight { gap: var(--s-2); } .small { font-size: var(--t-sm); }
+  h3 { margin: 0; } ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; } .small { font-size: var(--t-sm); }
 </style>

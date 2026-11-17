@@ -12,7 +12,6 @@
   <ul class="tracks">{#each TRACKS as t, i}<li><button type="button" class:on={music.track === i} onclick={() => play(i)}><b>{t.title}</b><span class="muted small">{tr('{mood} · {bpm} BPM', { mood: tr(t.mood), bpm: t.bpm })}</span></button></li>{/each}</ul>
 </div>
 <style>
-  .small { font-size: var(--t-sm); }
   .vol input { width: 140px; }
   .tracks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
   .tracks button { width: 100%; text-align: left; display: grid; gap: 2px; padding: var(--s-2) var(--s-3); border-radius: var(--r-ctl); border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; }

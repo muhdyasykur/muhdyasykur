@@ -1,4 +1,6 @@
 <script lang="ts">
+  import EmptyState from '../../lib/ui/EmptyState.svelte';
+  import { WHEEL_COLOURS, TEAM_COLOURS } from '../../lib/ui/palette';
   import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import { route, href } from '../../router.svelte';
@@ -20,7 +22,7 @@
   const S = $derived(sentences.split(/\n+/).map((w) => w.trim()).filter((x) => x.split(/\s+/).length >= 2));
   const Q = $derived(quiz.split(/\n+/).map((l) => l.split('|').map((x) => x.trim())).filter((x) => x[0] && x[1]).map(([q, a]) => ({ q, a })));
   const reduced = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const COLORS = ['#E2BC4F', '#9CC9F0', '#F6C9A8', '#A8DCC0', '#C9B8F0', '#F3A6A0', '#FFE08A', '#B7D7F5'];
+  const COLORS = WHEEL_COLOURS;
   const shuffle = <T,>(xs: T[]) => { const a = [...xs]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
   // ---- wheel
@@ -88,7 +90,7 @@
 
   <section class="stage" bind:this={stageEl} aria-live="polite" lang="en"><FullExit el={stageEl} />
     {#if game === 'wheel'}
-      {#if W.length < 2}<p class="empty">Type at least two words to make a wheel.</p>{:else}
+      {#if W.length < 2}<EmptyState compact>{tr('Type at least two words to make a wheel.')}</EmptyState>{:else}
         <div class="wheelbox">
           <svg class="wheel" viewBox="0 0 200 200" style="transform: rotate({angle}deg); transition: transform {reduced ? 0 : 4}s cubic-bezier(.12,.75,.15,1)" role="img" aria-label="Spin wheel with {W.length} words">
             {#each W as w, i}<path d={arc(i, W.length)} fill={COLORS[i % COLORS.length]} stroke="#1E2B40" stroke-width="1.5" />
@@ -101,7 +103,7 @@
         <div class="row center"><button id="g-spin" class="btn btn-gold huge" type="button" onclick={spin} disabled={spinning}>Spin</button></div>
       {/if}
     {:else if game === 'unjumble'}
-      {#if !S.length}<p class="empty">Type at least one sentence.</p>{:else}
+      {#if !S.length}<EmptyState compact>{tr('Type at least one sentence.')}</EmptyState>{:else}
         <p class="muted center">Sentence {si + 1} of {S.length}</p>
         <div class="tiles">{#each tiles as t, i (i + t)}<span class="tile">{t}</span>{/each}</div>
         {#if showAnswer}<p class="big answer">{S[si]}</p>{/if}
@@ -109,19 +111,19 @@
           <button class="btn btn-primary" type="button" onclick={() => { si = (si + 1) % S.length; deal(si); }}>Next sentence</button></div>
       {/if}
     {:else if game === 'mystery'}
-      {#if !W.length}<p class="empty">Type some words first.</p>{:else}
+      {#if !W.length}<EmptyState compact>{tr('Type some words first.')}</EmptyState>{:else}
         <div class="letters" aria-label="Mystery word">{#each [...mword] as c, i}{#if c === ' '}<span class="gap"></span>{:else}<span class="letter">{mysteryDone || shownLetters.includes(i) || !/[a-z]/i.test(c) ? c : ''}</span>{/if}{/each}</div>
         <p class="muted center">Guess now for {mysteryDone ? 0 : points} point{points === 1 ? '' : 's'}. Describe it with clues while letters appear.</p>
         <div class="row center"><button id="g-letter" class="btn btn-gold" type="button" onclick={nextLetter} disabled={mysteryDone}>Next letter</button><button class="btn btn-outline" type="button" onclick={() => (mysteryDone = true)}>Reveal</button><button class="btn btn-primary" type="button" onclick={nextWord}>Next word</button></div>
       {/if}
     {:else}
-      {#if !Q.length}<p class="empty">Type questions as "question | answer", one per line.</p>{:else}
+      {#if !Q.length}<EmptyState compact>{tr('Type questions as "question | answer", one per line.')}</EmptyState>{:else}
         <div class="row center"><label class="row small">Teams <select class="select auto" bind:value={teams}>{#each [2, 3, 4] as n}<option value={n}>{n}</option>{/each}</select></label></div>
         <p class="muted center">Question {qi + 1} of {Q.length}</p>
         <p class="big q">{Q[qi].q}</p>
         {#if reveal}<p class="big answer">{Q[qi].a}</p>{/if}
         <div class="row center"><button id="g-answer" class="btn btn-gold" type="button" onclick={() => (reveal = true)}>Show answer</button><button class="btn btn-primary" type="button" onclick={() => { qi = (qi + 1) % Q.length; reveal = false; }}>Next question</button></div>
-        <div class="scores">{#each Array(teams) as _, t}<div class="team" style="border-color:{COLORS[t]}"><b>Team {t + 1}</b><span class="n">{scores[t]}</span><div class="row"><button class="btn btn-outline" type="button" aria-label="Team {t + 1} minus one" onclick={() => (scores[t] = Math.max(0, scores[t] - 1))}>−</button><button class="btn btn-gold" type="button" aria-label="Team {t + 1} plus one" onclick={() => (scores[t] += 1)}>+1</button></div></div>{/each}</div>
+        <div class="scores">{#each Array(teams) as _, t}<div class="team" style="border-color:{TEAM_COLOURS[t % TEAM_COLOURS.length]}"><b>Team {t + 1}</b><span class="n">{scores[t]}</span><div class="row"><button class="btn btn-outline" type="button" aria-label="Team {t + 1} minus one" onclick={() => (scores[t] = Math.max(0, scores[t] - 1))}>−</button><button class="btn btn-gold" type="button" aria-label="Team {t + 1} plus one" onclick={() => (scores[t] += 1)}>+1</button></div></div>{/each}</div>
       {/if}
     {/if}
   </section>
@@ -133,12 +135,10 @@
   .tabs a { min-height: var(--tap); display: inline-flex; align-items: center; padding: 0 var(--s-4); border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; font-weight: 700; cursor: pointer; }
   .tabs a[aria-selected='true'] { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
   .grid { display: grid; gap: var(--s-3); padding-top: var(--s-2); }
-  .ta { min-height: 80px; padding: var(--s-2) var(--s-3); }
-  .small { font-size: var(--t-sm); }
+
   summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; gap: 6px; }
   .stage { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); padding: var(--s-6) var(--s-4); display: grid; gap: var(--s-4); min-height: 420px; align-content: center; }
   .stage:fullscreen, .stage:global(.pseudo-full) { background: var(--paper); padding: 4vh 4vw; }
-  .empty { text-align: center; color: var(--ink-2); font-weight: 600; }
   .center { justify-content: center; text-align: center; }
   .wheelbox { position: relative; width: min(80vw, 420px); margin: 0 auto; }
   .wheel { width: 100%; height: auto; display: block; }
@@ -155,5 +155,5 @@
   .scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--s-3); }
   .team { border: 3px solid; border-radius: var(--r-card); padding: var(--s-3); display: grid; justify-items: center; gap: 6px; background: var(--card); }
   .n { font: 800 2.4rem var(--f-display); }
-  .auto { width: auto; }
+
 </style>
