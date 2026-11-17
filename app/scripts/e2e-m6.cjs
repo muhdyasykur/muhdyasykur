@@ -1,11 +1,11 @@
 // End-to-end for milestone 6: splash, guided tour, Help, About (photo and message), Feedback Garden (online and
 // offline queue), music pausing in Teach mode, backup and restore. Jotform is intercepted, so nothing is really sent.
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const path = require('path');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 }, acceptDownloads: true });

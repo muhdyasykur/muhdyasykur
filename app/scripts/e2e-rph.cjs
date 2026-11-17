@@ -1,10 +1,10 @@
 // End-to-end: first-run profile, a class, then the "What's the Matter" RPH (Year 4 SJK, Writing) built in
 // From-scratch mode, printed in both layouts. Run against `vite preview`: node scripts/e2e-rph.cjs [out-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });

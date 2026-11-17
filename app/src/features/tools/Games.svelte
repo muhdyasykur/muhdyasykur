@@ -2,6 +2,8 @@
   import { untrack } from 'svelte';
   import { route, href } from '../../router.svelte';
   import { ctx } from '../../lib/tools/context.svelte';
+  import { toggleFull } from '../../lib/ui/fullscreen.svelte';
+  import FullExit from '../../lib/ui/FullExit.svelte';
 
   /** Projector games made from the teacher's own words. Offline; the words are remembered on this device. */
   let { initialWords = '', embedded = false }: { initialWords?: string; embedded?: boolean } = $props();
@@ -65,7 +67,7 @@
     else if (game === 'mystery') { if (main) nextLetter(); else nextWord(); }
     else if (Q.length) { if (main && !reveal) reveal = true; else { qi = (qi + 1) % Q.length; reveal = false; } }
   }
-  function full() { stageEl?.requestFullscreen?.().catch(() => {}); }
+  function full() { toggleFull(stageEl); }
 </script>
 
 <svelte:window onkeydown={key} />
@@ -83,7 +85,7 @@
     </div>
   </details>
 
-  <section class="stage" bind:this={stageEl} aria-live="polite">
+  <section class="stage" bind:this={stageEl} aria-live="polite"><FullExit el={stageEl} />
     {#if game === 'wheel'}
       {#if W.length < 2}<p class="empty">Type at least two words to make a wheel.</p>{:else}
         <div class="wheelbox">
@@ -134,7 +136,7 @@
   .small { font-size: var(--t-sm); }
   summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; gap: 6px; }
   .stage { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-card); padding: var(--s-6) var(--s-4); display: grid; gap: var(--s-4); min-height: 420px; align-content: center; }
-  .stage:fullscreen { background: var(--paper); padding: 4vh 4vw; }
+  .stage:fullscreen, .stage:global(.pseudo-full) { background: var(--paper); padding: 4vh 4vw; }
   .empty { text-align: center; color: var(--ink-2); font-weight: 600; }
   .center { justify-content: center; text-align: center; }
   .wheelbox { position: relative; width: min(80vw, 420px); margin: 0 auto; }

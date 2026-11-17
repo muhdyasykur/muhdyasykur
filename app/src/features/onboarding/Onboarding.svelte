@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { trapFocus } from '../../lib/ui/focus';
   import { i18n, setLocale } from '../../lib/i18n/index.svelte';
   import { theme, setTheme, type Theme } from '../../lib/theme.svelte';
   import { profile, updateProfile, skipOnboarding } from '../../lib/profile.svelte';
@@ -10,7 +11,7 @@
   const themes: Theme[] = ['system', 'light', 'dark'];
 </script>
 
-<div class="wrap" role="dialog" aria-modal="true" aria-labelledby="ob-title">
+<div class="wrap" role="dialog" aria-modal="true" aria-labelledby="ob-title" use:trapFocus={{ initial: '#pf-name' }}>
   <div class="panel stack">
     <header class="row head">
       <Logo size={56} animate />

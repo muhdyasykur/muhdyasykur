@@ -2,7 +2,7 @@
 // on-device text recognition of a scanned textbook (online, then offline for a second book).
 // The scanned book is made by this test (our own text drawn on a canvas and saved as an image-only PDF), so no
 // textbook is needed. Run against `vite preview`: node scripts/e2e-m7.cjs [out-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -33,7 +33,7 @@ function imagePdf(pages) {
 }
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 860 } });

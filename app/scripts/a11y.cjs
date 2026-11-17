@@ -1,6 +1,6 @@
 // Accessibility audit (blueprint test plan): axe-core (WCAG 2.1 A/AA) on every main screen in light and dark themes,
 // plus 44 px tap targets and 200% text on a phone. Run against `vite preview`: node scripts/a11y.cjs [--verbose]
-const { chromium } = require('playwright');
+const { chromium } = require('./browser.cjs'); // Chromium only (axe, DevTools throttling, video)
 const axe = require('axe-core');
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 const verbose = process.argv.includes('--verbose');

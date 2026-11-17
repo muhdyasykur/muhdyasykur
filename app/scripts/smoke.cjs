@@ -1,10 +1,10 @@
 // Smoke test of the built app: loads, navigates, switches language and theme, then works offline.
 // Run: npm run build && npx vite preview --port 4173 &  then  node scripts/smoke.cjs [screenshot-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   for (const [name, vp] of [['phone', { width: 390, height: 800 }], ['laptop', { width: 1366, height: 800 }]]) {

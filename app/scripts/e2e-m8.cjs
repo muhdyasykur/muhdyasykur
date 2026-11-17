@@ -1,12 +1,12 @@
 // End-to-end for milestone 8: Consilia Recommends (class profile, planning log, step-by-step stages, BBM, Another idea,
 // preparation checklist, Use this plan), the Tools hub and every tool, projector games, Games in Teach mode, terms page.
 // Run against `vite preview`: node scripts/e2e-m8.cjs [out-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, permissions: ['clipboard-read', 'clipboard-write'] });

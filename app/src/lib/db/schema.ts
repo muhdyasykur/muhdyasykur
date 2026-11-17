@@ -88,6 +88,16 @@ export class ConsiliaDB extends Dexie {
 
 export const db = new ConsiliaDB();
 
+/**
+ * Two tabs, one database. When a newer version of Consilia opens in another tab and needs to upgrade the database,
+ * this tab closes its connection (so the upgrade is not blocked) and asks the teacher to reload, instead of failing on
+ * the next save. When this tab is the one upgrading and an older tab will not let go, it says so.
+ */
+export function watchUpgrades(d: Dexie, on: { stale: () => void; blocked: () => void }) {
+  d.on('versionchange', () => { d.close(); on.stale(); return false; });
+  d.on('blocked', () => { on.blocked(); });
+}
+
 /** Ask the browser not to clear our data under storage pressure. Safe to call repeatedly. */
 export async function requestPersistence(): Promise<boolean> {
   try {

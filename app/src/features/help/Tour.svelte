@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tour, endTour } from '../../lib/tour.svelte';
   import { go } from '../../router.svelte';
+  import { trapFocus } from '../../lib/ui/focus';
 
   /** Nine short steps that highlight the real controls. Works on phone (bottom bar) and laptop (side rail). */
   const steps: { target?: string; route?: Parameters<typeof go>; title: string; body: string }[] = [
@@ -32,7 +33,7 @@
   const below = $derived(!rect || rect.top < innerHeight / 2);
 </script>
 
-<div class="tour" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+<div class="tour" role="dialog" aria-modal="true" aria-labelledby="tour-title" use:trapFocus>
   {#if rect}<div class="hole" style="left:{rect.left - 6}px;top:{rect.top - 6}px;width:{rect.width + 12}px;height:{rect.height + 12}px"></div>{:else}<div class="dim"></div>{/if}
   <div class="bubble" class:centre={!rect} style={rect ? (below ? `top:${Math.min(innerHeight - 220, rect.bottom + 14)}px;` : `bottom:${innerHeight - rect.top + 14}px;`) + `left:${Math.max(12, Math.min(innerWidth - 332, rect.left))}px` : ''}>
     <p class="eyebrow">Step {tour.step + 1} of {steps.length}</p>

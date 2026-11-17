@@ -20,6 +20,7 @@
   import Timer from './tools/Timer.svelte';
   import Games from '../tools/Games.svelte';
   import SlideShow from '../slides/SlideShow.svelte';
+  import { trapFocus } from '../../lib/ui/focus';
   import { buildDeck } from '../../lib/slides/deck';
   import { fromTeach } from '../../lib/attendance';
   import type { TeachPupil } from './types';
@@ -218,7 +219,7 @@
     {/if}
 
     {#if tool}
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={tools.find((t) => t.id === tool)?.label}>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label={tools.find((t) => t.id === tool)?.label} use:trapFocus>
         <div class="sheet-in">
           <div class="row between"><h2>{tools.find((t) => t.id === tool)?.label}</h2><button class="btn btn-outline" type="button" onclick={() => (tool = '')}>Close</button></div>
           {#if tool === 'picker'}<Picker pupils={present} bind:picker={session.picker} />

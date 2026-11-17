@@ -1,7 +1,7 @@
 // Records the Help videos from the real app (blueprint F25) with a visible cursor, a title card and captions in
 // English and Bahasa Melayu (WebVTT, timed from the recording itself). Output: public/videos/<id>.mp4 + .en.vtt + .ms.vtt
 // Needs ffmpeg and `vite preview --port 4173` running a fresh build.   Usage: npm run videos [-- id ...]
-const { chromium } = require('playwright');
+const { chromium } = require('./browser.cjs'); // Chromium only (axe, DevTools throttling, video)
 const { execFileSync } = require('child_process');
 const fs = require('fs');
 const os = require('os');

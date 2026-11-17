@@ -5,6 +5,7 @@
   import { href } from '../../router.svelte';
   import Logo from '../../lib/ui/Logo.svelte';
   import Icon from '../../lib/ui/Icon.svelte';
+  import { trapFocus } from '../../lib/ui/focus';
 
   /** `gate`: the full-screen agreement before first use. Otherwise: the read-only page in Me → Terms of use. */
   let { gate = false }: { gate?: boolean } = $props();
@@ -14,7 +15,7 @@
   const ready = $derived(ticks.every(Boolean));
 </script>
 
-<div class={gate ? 'gate' : ''} role={gate ? 'dialog' : undefined} aria-modal={gate ? 'true' : undefined} aria-labelledby="terms-title">
+<div class={gate ? 'gate' : ''} role={gate ? 'dialog' : undefined} aria-modal={gate ? 'true' : undefined} aria-labelledby="terms-title" use:trapFocus={{ enabled: gate }}>
   <article class="stack terms" lang={lang}>
     {#if gate}<div class="brand"><Logo size={40} /><span>Consilia</span></div>{:else}<a class="btn btn-text back" href={href('me')}><Icon name="back" size={18} />Me</a>{/if}
     <div class="head">

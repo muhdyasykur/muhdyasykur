@@ -1,6 +1,6 @@
 // Load-time budget check on an emulated mid-range phone (4× slower CPU, "fast 3G": 1.6 Mbps, 150 ms latency).
 // First visit (nothing cached) and a repeat visit (served by the service worker). Run against `vite preview`.
-const { chromium } = require('playwright');
+const { chromium } = require('./browser.cjs'); // Chromium only (axe, DevTools throttling, video)
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
   const browser = await chromium.launch();

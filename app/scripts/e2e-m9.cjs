@@ -2,7 +2,7 @@
 // My day (timetable periods, own items, reorder, ticks, saved), yearly plans uploaded as Word, Excel and CSV or built
 // from the SoW, with yearly, monthly and weekly views linked to the timetable and New lesson plan.
 // Run against `vite preview`: node scripts/e2e-m9.cjs [out-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -15,7 +15,7 @@ const addD = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); retu
 const dmy = (d) => `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, acceptDownloads: true });

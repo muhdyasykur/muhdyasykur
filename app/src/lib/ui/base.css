@@ -48,3 +48,8 @@ img,svg{display:block;max-width:100%}
 
 /* Bigger checkboxes and radios: easier to hit on a phone; the label around them extends the tap area. */
 input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:var(--navy);flex:none;cursor:pointer}
+/* Filled-window view where the browser has no full screen (fullscreen.svelte.ts) */
+.pseudo-full{position:fixed!important;inset:0!important;z-index:90!important;margin:0!important;max-width:none!important;width:100vw!important;height:100dvh!important;overflow:auto;background:var(--paper)}
+html.has-pseudo-full,html.has-pseudo-full body{overflow:hidden}
+.fs-exit{position:fixed;top:max(8px,env(safe-area-inset-top,0px));right:max(8px,env(safe-area-inset-right,0px));z-index:91}
+.fs-note{position:fixed;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:91;max-width:min(560px,calc(100vw - 24px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:var(--shadow-overlay);padding:var(--s-2) var(--s-3);font-size:var(--t-sm);display:flex;gap:var(--s-3);align-items:center}

@@ -1,13 +1,15 @@
 // End-to-end for milestone 5: Textbook Shelf (recognised and calibrated PDFs, search, viewer and projector tools),
 // materials studio, activity bank, Canva AI prompt, sharing and import, reflection, mentor notes and Library search.
 // Needs textbook PDFs in UPLOAD_DIR (never committed). Run against `vite preview`: node scripts/e2e-m5.cjs [out-dir]
-const { chromium } = require('playwright');
+const { launch } = require('./browser.cjs');
 const path = require('path');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 const up = process.env.UPLOAD_DIR || '/tmp/claude-0/-home-user-muhdyasykur/617b4bbb-4c5a-5548-9b45-3a392768285b/scratchpad/upload';
+// The KPM textbook PDFs are copyrighted and never committed: without them (e.g. in CI) this suite is skipped.
+if (!require('fs').existsSync(require('path').join(up, 'Y4- GET SMART PLUS4.pdf'))) { console.log(`SKIP e2e:m5: textbook PDFs not found in ${up} (set UPLOAD_DIR)`); process.exit(0); }
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, acceptDownloads: true, permissions: ['clipboard-read', 'clipboard-write'] });

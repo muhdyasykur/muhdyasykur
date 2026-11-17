@@ -27,6 +27,13 @@
   import { terms } from './lib/terms.svelte';
   import Terms from './features/onboarding/Terms.svelte';
   import Tools from './features/tools/Tools.svelte';
+  import { afterNavigation } from './lib/ui/focus';
+  import Recovery from './lib/ui/Recovery.svelte';
+  import { dbHealth } from './lib/db/health.svelte';
+  const logCrash = (e: unknown) => console.error('Screen failed to render:', e);
+  // Page title and focus follow the screen (keyboard and screen-reader users land on the new heading)
+  let firstScreen = true;
+  $effect(() => { void route.name; void route.parts.join('/'); afterNavigation('Consilia', firstScreen); firstScreen = false; });
 
   const tabs: { name: RouteName; icon: IconName; label: Key }[] = [
     { name: 'today', icon: 'today', label: 'nav.today' },
@@ -39,7 +46,12 @@
 </script>
 
 {#if route.name === 'teach' && route.parts[0]}
-  {#key route.parts[0]}<Teach id={route.parts[0]} />{/key}
+  {#key route.parts[0]}
+    <svelte:boundary onerror={logCrash}>
+      <Teach id={route.parts[0]} />
+      {#snippet failed(error, reset)}<main class="teach-crash"><Recovery {error} {reset} /></main>{/snippet}
+    </svelte:boundary>
+  {/key}
 {:else}
 <a class="skip" href="#main">Skip to content</a>
 <div class="shell">
@@ -63,12 +75,15 @@
     {#if !pwa.online}<p class="banner" role="status"><Icon name="offline" size={18} />{t('pwa.offline')}</p>{/if}
     {#key route.name}
       <div class="screen">
-        {#if route.name === 'today'}<Today />
-        {:else if route.name === 'plan'}<Plan />
-        {:else if route.name === 'classes'}<Classes />
-        {:else if route.name === 'library'}<Library />
-        {:else if route.name === 'tools'}<Tools />
-        {:else}<Me />{/if}
+        <svelte:boundary onerror={logCrash}>
+          {#if route.name === 'today'}<Today />
+          {:else if route.name === 'plan'}<Plan />
+          {:else if route.name === 'classes'}<Classes />
+          {:else if route.name === 'library'}<Library />
+          {:else if route.name === 'tools'}<Tools />
+          {:else}<Me />{/if}
+          {#snippet failed(error, reset)}<Recovery {error} {reset} />{/snippet}
+        </svelte:boundary>
       </div>
     {/key}
   </main>
@@ -88,6 +103,17 @@
   </div>
 {/if}
 
+{#if dbHealth.stale}
+  <div class="toast err" role="alert" data-db-stale>
+    <span><b>Consilia was updated in another tab.</b> Reload this tab to keep working; your saved work is safe.</span>
+    <button class="btn btn-gold" type="button" onclick={() => location.reload()}>Reload</button>
+  </div>
+{:else if dbHealth.blocked}
+  <div class="toast" role="status" data-db-blocked>
+    <span><b>Finishing an update.</b> Close Consilia in your other tabs or windows to continue.</span>
+  </div>
+{/if}
+
 {#if pwa.needRefresh}
   <div class="toast" role="status">
     <span>{t('pwa.update')}</span>
@@ -96,6 +122,7 @@
 {/if}
 
 <style>
+  .teach-crash { padding: var(--s-4); }
   .skip { position: absolute; left: -999px; top: 8px; background: var(--card); padding: 8px 12px; border-radius: 8px; z-index: 50; }
   .skip:focus { left: 8px; }
   .shell { min-height: 100dvh; display: grid; grid-template-columns: var(--rail-w) minmax(0, 1fr); }
