@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr, i18n } from '../../lib/i18n/index.svelte';
   import type { Bbm } from '../../lib/recommend/bbm';
   import BbmPic from '../../lib/ui/BbmPic.svelte';
@@ -15,8 +16,8 @@
     <div><h4>{tr('You need')}</h4><ul>{#each b.materials as m}<li>{tr(m)}</li>{/each}</ul></div>
     <div><h4>{tr('How to make it')}</h4><ol>{#each b.steps as s}<li>{tr(s)}</li>{/each}</ol></div>
     <div><h4>{tr('How to use it in class')}</h4><ul>{#each b.use as s}<li>{tr(s)}</li>{/each}</ul></div>
-    <p class="tip small">💡 {tr(b.tip)}</p>
-    {#if b.safety}<p class="safe small">⚠️ {tr(b.safety)}</p>{/if}
+    <p class="tip small"><Icon name="bulb" size={16} /> {tr(b.tip)}</p>
+    {#if b.safety}<p class="safe small"><Icon name="warning" size={16} /> {tr(b.safety)}</p>{/if}
     {#if b.printable}<a class="btn btn-outline print" href={href('tools', 'worksheets')}>{tr('Print a template in the Worksheet maker')}</a>{/if}
   </div>
 </details>

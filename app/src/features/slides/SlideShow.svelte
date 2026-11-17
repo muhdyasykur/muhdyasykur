@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import type { Deck } from '../../lib/slides/deck';
@@ -57,7 +58,7 @@
       </label>
       <button class="btn btn-text" type="button" onclick={next} disabled={i === deck.slides.length - 1 && (!slide.answer || reveal)} aria-label={tr('Next slide')} data-next>▶</button>
       <button class="btn btn-text" type="button" aria-pressed={notes} onclick={() => (notes = !notes)} data-notes>{tr('Notes')}</button>
-      <button class="btn btn-text" type="button" onclick={full}>{tr('⛶ Full screen')}</button>
+      <button class="btn btn-text" type="button" onclick={full}><Icon name="expand" size={18} />{tr('Full screen')}</button>
       {#if onclose}<button class="btn btn-outline" type="button" onclick={onclose} data-close>{tr('Close')}</button>{/if}
     </div>
   {/if}

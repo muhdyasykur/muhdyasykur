@@ -52,7 +52,7 @@
   });
   const shown = $derived(searchLessons(lessons, query));
   const modes: { id: Mode; title: string; body: string }[] = [
-    { id: 'recommend', title: tr('✨ Consilia recommends'), body: tr('Tell Consilia about your class. It plans the whole lesson: creative step-by-step activities, teaching aids with pictures and how to make them, and ready digital tools.') },
+    { id: 'recommend', title: tr('Consilia recommends'), body: tr('Tell Consilia about your class. It plans the whole lesson: creative step-by-step activities, teaching aids with pictures and how to make them, and ready digital tools.') },
     { id: 'follow-sow', title: tr('Follow the SoW'), body: tr('Everything from the SoW lesson is filled in: standards, outline steps and materials. Improve and expand it.') },
     { id: 'sow-standards', title: tr('SoW standards, my activities'), body: tr('The CS, LS, skills and theme come from the SoW. You design the activities.') },
     { id: 'scratch', title: tr('From scratch'), body: tr('Choose your own standards from the DSKP and plan everything yourself.') }
@@ -138,7 +138,7 @@
     <div class="modes" role="radiogroup" aria-label={tr('Planning mode')}>
       {#each modes as m}
         <button type="button" role="radio" aria-checked={mode === m.id} class="mode card" onclick={() => (mode = m.id)}>
-          <b>{m.title}</b><span class="muted">{m.body}</span>
+          <b>{#if m.id === 'recommend'}<Icon name="sparkle" size={18} /> {/if}{m.title}</b><span class="muted">{m.body}</span>
         </button>
       {/each}
     </div>
@@ -174,9 +174,9 @@
       </div>
       <div class="field"><span id="rc-res">{tr('In your classroom')}</span>
         <div class="chips" role="group" aria-labelledby="rc-res">
-          <button type="button" class="chip pickable" aria-pressed={prof.projector} data-res="projector" onclick={() => (prof.projector = !prof.projector)}>{tr('📽 Projector or TV')}</button>
-          <button type="button" class="chip pickable" aria-pressed={prof.speakers} onclick={() => (prof.speakers = !prof.speakers)}>{tr('🔈 Speakers')}</button>
-          <button type="button" class="chip pickable" aria-pressed={prof.internet} data-res="internet" onclick={() => (prof.internet = !prof.internet)}>{tr('📶 Internet')}</button>
+          <button type="button" class="chip pickable" aria-pressed={prof.projector} data-res="projector" onclick={() => (prof.projector = !prof.projector)}><Icon name="screen" size={16} />{tr('Projector or TV')}</button>
+          <button type="button" class="chip pickable" aria-pressed={prof.speakers} onclick={() => (prof.speakers = !prof.speakers)}><Icon name="speaker" size={16} />{tr('Speakers')}</button>
+          <button type="button" class="chip pickable" aria-pressed={prof.internet} data-res="internet" onclick={() => (prof.internet = !prof.internet)}><Icon name="wifi" size={16} />{tr('Internet')}</button>
         </div>
       </div>
       <div class="field"><span id="rc-dev">{tr('Devices for pupils')}</span>
@@ -197,7 +197,7 @@
   {/if}
 
   {#if error}<p class="err" role="alert">{error}</p>{/if}
-  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>{mode === 'recommend' ? tr('✨ Plan it with Consilia') : tr('Create lesson plan')}</button></div>
+  <div class="row"><button id="nr-create" class="btn btn-gold" type="button" disabled={busy} onclick={create}>{#if mode === 'recommend'}<Icon name="sparkle" size={18} />{tr('Plan it with Consilia')}{:else}{tr('Create lesson plan')}{/if}</button></div>
 </div>
 {/if}
 

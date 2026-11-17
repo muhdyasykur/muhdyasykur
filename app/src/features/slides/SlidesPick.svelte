@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr, uiDate } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import { listLessons } from '../../lib/db/repo';
@@ -11,14 +12,14 @@
 <div class="stack">
   <p class="muted">{tr('Slides are made from a lesson plan, so the goals, words, activities and questions match what you will teach. Choose a lesson plan:')}</p>
   {#if lessons && !lessons.length}
-    <section class="card stack"><p>{tr('You have no lesson plans yet.')}</p><div class="row"><a class="btn btn-gold" href={href('plan', 'new', 'recommend')}>{tr('✨ Let Consilia plan a lesson')}</a><a class="btn btn-outline" href={href('plan', 'new')}>{tr('New lesson plan')}</a></div></section>
+    <section class="card stack"><p>{tr('You have no lesson plans yet.')}</p><div class="row"><a class="btn btn-gold" href={href('plan', 'new', 'recommend')}><Icon name="sparkle" size={18} />{tr('Let Consilia plan a lesson')}</a><a class="btn btn-outline" href={href('plan', 'new')}>{tr('New lesson plan')}</a></div></section>
   {:else if lessons}
     <ul class="list">
       {#each lessons as l (l.id)}
         <li><a class="card raised pick" href={href('plan', 'slides', l.id)} data-pick={l.id}>
           <span class="eyebrow">{uiDate(l.header.date)} · {l.header.className || tr('Year {year}', { year: l.curriculum.year })}</span>
           <b>{l.topic || tr('Untitled lesson')}</b>
-          <span class="muted small">{l.slides ? tr('🖼 {length} slides', { length: l.slides.slides.length }) : tr('No slides yet: tap to make them')}</span>
+          <span class="muted small">{#if l.slides}<Icon name="slides" size={14} /> {/if}{l.slides ? tr('{length} slides', { length: l.slides.slides.length }) : tr('No slides yet: tap to make them')}</span>
         </a></li>
       {/each}
     </ul>

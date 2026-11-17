@@ -50,10 +50,10 @@
     </div>
   </header>
   <nav class="quicklinks" aria-label={tr('Shortcuts')}>
-    <a class="btn btn-outline" href={href('plan', 'day')} data-quick="day">{tr('📅 My day')}</a>
-    <a class="btn btn-outline" href={href('plan', 'year')}>{tr('🗓 Yearly plan')}</a>
-    <a class="btn btn-outline" href={href('classes')}>{tr('✓ Attendance')}</a>
-    <a class="btn btn-outline" href={href('tools')}>{tr('🧰 Tools')}</a>
+    <a class="btn btn-outline" href={href('plan', 'day')} data-quick="day"><Icon name="day" size={18} />{tr('My day')}</a>
+    <a class="btn btn-outline" href={href('plan', 'year')}><Icon name="year" size={18} />{tr('Yearly plan')}</a>
+    <a class="btn btn-outline" href={href('classes')}><Icon name="check" size={18} />{tr('Attendance')}</a>
+    <a class="btn btn-outline" href={href('tools')}><Icon name="tools" size={18} />{tr('Tools')}</a>
   </nav>
 
   {#if loaded}
@@ -64,13 +64,13 @@
           {@const s = runChecks(next.lesson).score}
           <div class="row nl"><ScoreRing score={s} size={64} /><div><h2>{next.lesson.topic || tr('Untitled lesson')}</h2><p class="muted">{cname(next.slot.classId)} · {next.lesson.mainSkill} · {next.lesson.status === 'ready' ? tr('Ready') : tr('Draft')}</p></div></div>
           <div class="row">
-            <a class="btn btn-gold" href={href('teach', next.lesson.id)}>{tr('▶ Teach')}</a>
+            <a class="btn btn-gold" href={href('teach', next.lesson.id)}><Icon name="play" size={18} />{tr('Teach')}</a>
             <a class="btn btn-outline" href={href('plan', 'edit', next.lesson.id, s < 100 ? 'review' : 'setup')}>{s < 100 ? tr('See what to fix') : tr('Open lesson plan')}</a>
           </div>
         {:else}
           <h2>{tr('{x} has no lesson plan yet', { x: cname(next.slot.classId) })}</h2>
           <a class="btn btn-gold" href={href('plan', 'new', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="plus" size={18} />{tr('Plan this lesson')}</a>
-          <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}>{tr('✨ Let Consilia plan it')}</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend', next.slot.classId, next.date, next.slot.start, next.slot.durationMin)}><Icon name="sparkle" size={18} />{tr('Let Consilia plan it')}</a>
         {/if}
       </section>
     {:else if !slots.length}
@@ -78,7 +78,7 @@
         {lessons.length ? tr('With your English periods set once, Today shows your next lesson and what still needs planning.') : t('today.empty.body')}
         {#snippet actions()}
           <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{t('today.newRph')}</a>
-          <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}>{tr('✨ Let Consilia plan it')}</a>
+          <a class="btn btn-outline" href={href('plan', 'new', 'recommend')}><Icon name="sparkle" size={18} />{tr('Let Consilia plan it')}</a>
           <a class="btn btn-outline" href={href('plan', 'week')}>{tr('Set up timetable')}</a>
         {/snippet}
       </EmptyState>

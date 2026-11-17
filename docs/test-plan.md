@@ -1,6 +1,6 @@
 # Consilia test plan and results
 
-Version tested: **1.0.0-beta.5** · 17 November 2026 · Chromium (Playwright 1.63) on Linux, against the production build
+Version tested: **1.0.0-beta.6** · 17 November 2026 · Chromium, WebKit and Firefox in CI (Playwright 1.63) on Linux, against the production build
 (`vite preview`). Commands are run from `app/`; see the README.
 
 ## Summary

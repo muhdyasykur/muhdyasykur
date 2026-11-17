@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon, { type IconName } from '../../lib/ui/Icon.svelte';
   import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { WHEEL_COLOURS, TEAM_COLOURS } from '../../lib/ui/palette';
   import { tr } from '../../lib/i18n/index.svelte';
@@ -11,7 +12,7 @@
   /** Projector games made from the teacher's own words. Offline; the words are remembered on this device. */
   let { initialWords = '', embedded = false }: { initialWords?: string; embedded?: boolean } = $props();
   type Game = 'wheel' | 'unjumble' | 'mystery' | 'quiz';
-  const GAMES: [Game, string, string][] = [['wheel', tr('🎡 Spin wheel'), tr('Words or questions')], ['unjumble', tr('🔀 Unjumble'), tr('Sentences')], ['mystery', tr('🔍 Mystery word'), tr('Words')], ['quiz', tr('🏆 Quiz show'), tr('Questions | answers')]];
+  const GAMES: [Game, IconName, string, string][] = [['wheel', 'wheel', tr('Spin wheel'), tr('Words or questions')], ['unjumble', 'shuffle', tr('Unjumble'), tr('Sentences')], ['mystery', 'search', tr('Mystery word'), tr('Words')], ['quiz', 'trophy', tr('Quiz show'), tr('Questions | answers')]];
   const saved = (() => { try { return JSON.parse(localStorage.getItem('consilia.games') || '{}'); } catch { return {}; } })();
   let game = $state<Game>((['wheel', 'unjumble', 'mystery', 'quiz'] as Game[]).includes(route.parts[1] as Game) ? (route.parts[1] as Game) : 'wheel');
   let words = $state<string>(untrack(() => initialWords) || saved.words || '');
@@ -76,7 +77,7 @@
 <svelte:window onkeydown={key} />
 <div class="stack games">
   <div class="tabs" role="tablist" aria-label={tr('Games')}>
-    {#each GAMES as [id, label]}<a role="tab" aria-selected={game === id} href={embedded ? undefined : href('tools', 'games', id)} onclick={(e) => { if (embedded) e.preventDefault(); game = id; }} data-game={id}>{label}</a>{/each}
+    {#each GAMES as [id, icon, label]}<a role="tab" aria-selected={game === id} href={embedded ? undefined : href('tools', 'games', id)} onclick={(e) => { if (embedded) e.preventDefault(); game = id; }} data-game={id}><Icon name={icon} size={18} /> {label}</a>{/each}
   </div>
 
   <details class="card" open={(game === 'wheel' || game === 'mystery') ? W.length < 2 : game === 'unjumble' ? !S.length : !Q.length}>
@@ -127,7 +128,7 @@
       {/if}
     {/if}
   </section>
-  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}>{tr('⛶ Full screen for the projector')}</button><span class="muted small">{tr('Keyboard or clicker: Space = {x}, → = next.', { x: game === 'wheel' ? 'spin' : game === 'mystery' ? tr('next letter') : tr('show the answer') })}</span></div>{/if}
+  {#if !embedded}<div class="row"><button class="btn btn-outline" type="button" onclick={full}><Icon name="expand" size={18} />{tr('Full screen for the projector')}</button><span class="muted small">{tr('Keyboard or clicker: Space = {x}, → = next.', { x: game === 'wheel' ? 'spin' : game === 'mystery' ? tr('next letter') : tr('show the answer') })}</span></div>{/if}
 </div>
 
 <style>

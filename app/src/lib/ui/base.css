@@ -66,3 +66,4 @@ html.has-pseudo-full,html.has-pseudo-full body{overflow:hidden}
 .ok{color:var(--ok)}
 .err,.del{color:var(--bad)}
 textarea.ta,.ta{min-height:80px;padding:var(--s-2) var(--s-3)}
+.icon{flex-shrink:0;vertical-align:-.2em}

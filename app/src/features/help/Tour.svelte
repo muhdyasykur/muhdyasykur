@@ -14,7 +14,7 @@
     { target: 'a[href="#/library"]', route: ['library'], title: tr('Library'), body: tr('The full KSSR Scheme of Work, DSKP standards, your textbooks, the activity bank and the Method Guide. All offline.') },
     { target: 'a[href="#/tools"]', route: ['tools'], title: tr('Tools'), body: tr('Let Consilia plan a whole lesson for your class, play projector games made from your words, find teaching aids with step-by-step making guides, and write prompts for AI.') },
     { target: 'a[href="#/me"]', route: ['me'], title: tr('Me'), body: tr('Your profile, PIN lock, background music, backups, help and the Feedback Garden.') },
-    { title: tr('You are ready'), body: tr('Plan your first lesson. When you teach, press ▶ Teach for the stage timer and classroom tools.') }
+    { title: tr('You are ready'), body: tr('Plan your first lesson. When you teach, press Teach for the stage timer and classroom tools.') }
   ];
   let rect = $state<DOMRect | null>(null);
   const cur = $derived(steps[tour.step]);

@@ -122,7 +122,7 @@
   {:else}
     <section class="card stack">
       <div class="row tools">
-        <button class="btn btn-gold" type="button" onclick={() => (presenting = true)} id="sl-present">{tr('▶ Present')}</button>
+        <button class="btn btn-gold" type="button" onclick={() => (presenting = true)} id="sl-present"><Icon name="play" size={18} />{tr('Present')}</button>
         <button class="btn btn-primary" type="button" onclick={download} id="sl-pptx">{tr('Download PowerPoint (.pptx)')}</button>
         <label class="row small">{tr('Look')}
           <select class="select" value={deck.theme} onchange={(e) => setTheme(e.currentTarget.value as Theme)} id="sl-theme">

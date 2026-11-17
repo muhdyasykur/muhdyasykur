@@ -64,8 +64,8 @@
         <button type="button" class="card raised vid" data-video={v.id} aria-pressed={playing === v.id} onclick={() => play(v.id)}>
           <span class="num" aria-hidden="true">{i + 1}</span>
           <span class="txt"><b>{i18n.locale === 'ms' ? v.ms : v.title}</b><span class="muted small">{tr(v.about)}</span>
-            <span class="small {kept[v.id] ? 'ok' : 'muted'}">{kept[v.id] ? tr('✓ Saved for offline') : tr('Downloads when played')}</span></span>
-          <span class="playic" aria-hidden="true">▶</span>
+            <span class="small {kept[v.id] ? 'ok' : 'muted'}">{#if kept[v.id]}<Icon name="check" size={14} /> {tr('Saved for offline')}{:else}{tr('Downloads when played')}{/if}</span></span>
+          <span class="playic" aria-hidden="true"><Icon name="play" size={20} /></span>
         </button>
       {/each}
     </div>
@@ -85,8 +85,8 @@
             <h3>{#each hl(h.article.title) as part}{#if part.m}<mark>{part.t}</mark>{:else}{part.t}{/if}{/each}</h3>
             {#each h.article.body as p}<p>{#each hl(p) as part}{#if part.m}<mark>{part.t}</mark>{:else}{part.t}{/if}{/each}</p>{/each}
             {#if h.article.steps}<ol>{#each h.article.steps as s}<li>{s}</li>{/each}</ol>{/if}
-            {#if h.article.tips}<ul class="tips">{#each h.article.tips as s}<li>{s}</li>{/each}</ul>{/if}
-            {#if h.article.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(h.article.video!)}>{tr('▶ Watch: {x}', { x: titleOf(h.article.video) })}</button>{/if}
+            {#if h.article.tips}<ul class="tips">{#each h.article.tips as s}<li><Icon name="bulb" size={18} /><span>{s}</span></li>{/each}</ul>{/if}
+            {#if h.article.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(h.article.video!)}><Icon name="play" size={18} />{tr('Watch: {x}', { x: titleOf(h.article.video) })}</button>{/if}
           </article>
         {/each}
       </div>
@@ -100,8 +100,8 @@
               <div class="stack tight body">
                 {#each a.body as p}<p>{p}</p>{/each}
                 {#if a.steps}<ol>{#each a.steps as s}<li>{s}</li>{/each}</ol>{/if}
-                {#if a.tips}<ul class="tips">{#each a.tips as s}<li>{s}</li>{/each}</ul>{/if}
-                {#if a.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(a.video!)}>{tr('▶ Watch: {x}', { x: titleOf(a.video) })}</button>{/if}
+                {#if a.tips}<ul class="tips">{#each a.tips as s}<li><Icon name="bulb" size={18} /><span>{s}</span></li>{/each}</ul>{/if}
+                {#if a.video}<button class="btn btn-outline vbtn" type="button" onclick={() => play(a.video!)}><Icon name="play" size={18} />{tr('Watch: {x}', { x: titleOf(a.video) })}</button>{/if}
               </div>
             </details>
           {/each}
@@ -120,7 +120,9 @@
   p, li { max-width: 70ch; }
   p { margin: 0; }
   ol, ul { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
-  .tips li::marker { content: '💡 '; }
+  .tips { list-style: none; padding-left: 0; }
+  .tips li { display: flex; gap: var(--s-2); align-items: flex-start; }
+  .tips :global(.icon) { color: var(--ink-2); margin-top: 1px; }
 
   .vids { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }
   .vid { display: grid; grid-template-columns: auto 1fr auto; gap: var(--s-3); align-items: center; text-align: left; cursor: pointer; font: inherit; color: var(--ink); border: 1px solid var(--line); }

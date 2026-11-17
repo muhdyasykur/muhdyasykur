@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { href } from '../../router.svelte';
   import type { Lesson } from '../../lib/lesson/model';
@@ -47,7 +48,7 @@
 </script>
 
 <section class="card stack aibox" aria-labelledby="ai-h">
-  <h2 id="ai-h">{tr('✨ Add more with AI')} <span class="chip">{tr('optional')}</span></h2>
+  <h2 id="ai-h"><Icon name="sparkle" size={20} />{tr('Add more with AI')} <span class="chip">{tr('optional')}</span></h2>
   <p class="muted small">{tr('Adds a short reading or listening text, a dialogue, questions and more at Year {year} level, placed in the right part of the deck. Only the lesson\'s topic, key words, target sentence and objectives are used: never pupils\' names.', { year: lesson.curriculum.year })}</p>
   <fieldset class="row parts"><legend class="sr-only">{tr('What to add')}</legend>
     {#each PARTS as [k, label]}<label class="row tick"><input type="checkbox" value={k} bind:group={parts} />{label}</label>{/each}

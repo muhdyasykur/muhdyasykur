@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { AI_SITES } from '../../lib/recommend/prompts';
   import { aiReady, aiName } from '../../lib/ai/settings.svelte';
@@ -23,7 +24,7 @@
 </script>
 <div class="ai stack tight">
   {#if aiReady()}
-    <div class="row"><button class="btn btn-gold ai-run" type="button" onclick={run} disabled={busy || !pwa.online}>{busy ? tr('Asking {aiName}…', { aiName: aiName() }) : tr('✨ {label}: ask {aiName} here', { label, aiName: aiName() })}</button>
+    <div class="row"><button class="btn btn-gold ai-run" type="button" onclick={run} disabled={busy || !pwa.online}>{#if !busy}<Icon name="sparkle" size={18} />{/if}{busy ? tr('Asking {aiName}…', { aiName: aiName() }) : tr('{label}: ask {aiName} here', { label, aiName: aiName() })}</button>
       {#if !pwa.online}<span class="muted small">{tr('Needs the internet.')}</span>{/if}</div>
     {#if err}<p class="small bad" role="alert">{err}</p>{/if}
     {#if answer}
@@ -31,7 +32,7 @@
         <div class="row"><button class="btn btn-outline" type="button" onclick={copyAnswer}>{tr('Copy the answer')}</button><button class="btn btn-text" type="button" onclick={run} disabled={busy}>{tr('Try again')}</button>{#if copiedAns}<span class="muted small" role="status">{copiedAns}</span>{/if}</div></div>
     {/if}
   {/if}
-  <div class="row"><button class="btn btn-primary ai-copy" type="button" onclick={copy}>{tr('🤖 {label}: copy prompt', { label })}</button>
+  <div class="row"><button class="btn btn-primary ai-copy" type="button" onclick={copy}><Icon name="prompt" size={18} />{tr('{label}: copy prompt', { label })}</button>
     {#each AI_SITES as s}<a class="btn btn-outline" href={s.url} target="_blank" rel="noopener">{s.name}</a>{/each}</div>
   {#if msg}<p class="muted small" role="status">{msg}</p>{/if}
   <details><summary class="small">{tr('See the prompt')}</summary><textarea class="input ta" rows="8" readonly value={prompt} aria-label="AI prompt"></textarea></details>

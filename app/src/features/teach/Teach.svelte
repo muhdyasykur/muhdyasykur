@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { iso } from '../../lib/dates';
   import { href, go as navigate } from '../../router.svelte';
@@ -122,9 +123,9 @@
   const openable = $derived(pageRefs.map((r) => ({ r, slot: lesson ? slotFor(lesson.curriculum.year, r.kind)?.id : undefined })).filter((x) => x.slot && shelf.includes(x.slot)));
   const sbSlot = $derived(lesson ? slotFor(lesson.curriculum.year, 'SB')?.id : undefined);
   const tools = [
-    { id: 'book', label: tr('Textbook'), icon: '📖' },
-    { id: 'picker', label: tr('Name picker'), icon: '🎯' }, { id: 'groups', label: tr('Groups'), icon: '👥' }, { id: 'noise', label: tr('Noise'), icon: '🔊' },
-    { id: 'points', label: tr('Points'), icon: '⭐' }, { id: 'signal', label: tr('Attention'), icon: '👀' }, { id: 'timer', label: tr('Timer'), icon: '⏱' }, { id: 'games', label: tr('Games'), icon: '🎮' }, { id: 'slides', label: tr('Slides'), icon: '🖼' }
+    { id: 'book', label: tr('Textbook'), icon: 'book' },
+    { id: 'picker', label: tr('Name picker'), icon: 'target' }, { id: 'groups', label: tr('Groups'), icon: 'classes' }, { id: 'noise', label: tr('Noise'), icon: 'volume' },
+    { id: 'points', label: tr('Points'), icon: 'star' }, { id: 'signal', label: tr('Attention'), icon: 'eye' }, { id: 'timer', label: tr('Timer'), icon: 'timer' }, { id: 'games', label: tr('Games'), icon: 'game' }, { id: 'slides', label: tr('Slides'), icon: 'slides' }
   ] as const;
 </script>
 
@@ -138,7 +139,7 @@
     <header class="top">
       <div class="title"><p class="eyebrow">{lesson.header.className || tr('Year {year}', { year: lesson.curriculum.year })} · {lesson.mainSkill}</p><h1>{lesson.topic || tr('Lesson')}</h1></div>
       <div class="row">
-        <button class="btn btn-text" type="button" aria-pressed={sound} onclick={() => { sound = !sound; setSound(sound); }}>{sound ? tr('🔔 Sound on') : tr('🔕 Sound off')}</button>
+        <button class="btn btn-text" type="button" aria-pressed={sound} onclick={() => { sound = !sound; setSound(sound); }}><Icon name={sound ? 'bell' : 'bell-off'} size={18} />{sound ? tr('Sound on') : tr('Sound off')}</button>
         <button class="btn btn-outline exit" class:holding type="button" onpointerdown={holdStart} onpointerup={holdEnd} onpointerleave={holdEnd} onkeydown={(e) => { if (e.key === 'Enter') exit(); }} aria-label={tr('Exit Teach mode (press and hold)')}>{tr('Hold to exit')}</button>
       </div>
     </header>
@@ -215,7 +216,7 @@
 
     {#if phase !== 'end'}
       <nav class="dock" aria-label={tr('Classroom tools')}>
-        {#each tools as t}<button type="button" class:on={tool === t.id} onclick={() => (tool = tool === t.id ? '' : t.id)} data-tool={t.id}><span aria-hidden="true">{t.icon}</span>{t.label}</button>{/each}
+        {#each tools as t}<button type="button" class:on={tool === t.id} onclick={() => (tool = tool === t.id ? '' : t.id)} data-tool={t.id}><Icon name={t.icon} size={24} />{t.label}</button>{/each}
       </nav>
     {/if}
 
@@ -287,6 +288,5 @@
   .sum td.over { color: var(--bad); font-weight: 700; }
   .dock { position: sticky; bottom: 0; display: flex; gap: var(--s-1); justify-content: center; flex-wrap: wrap; background: var(--card); border-top: 1px solid var(--line); padding: var(--s-2) 0 max(var(--s-2), env(safe-area-inset-bottom, 0px)); margin: 0 calc(-1 * max(var(--s-4), env(safe-area-inset-left, 0px))); }
   .dock button { display: grid; justify-items: center; gap: 2px; min-width: 72px; min-height: 56px; border: 0; border-radius: var(--r-ctl); background: transparent; font: 600 var(--t-xs) var(--f-body); color: var(--ink-2); cursor: pointer; }
-  .dock button span { font-size: 1.4rem; }
   .dock button.on { background: var(--gold-soft); color: var(--ink); }
 </style>

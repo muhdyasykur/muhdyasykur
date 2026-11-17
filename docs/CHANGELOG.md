@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (audit stage 1 and Bahasa Melayu)
+## 1.0.0-beta.6 · 17 November 2026 (audit stage 1, Bahasa Melayu, design system and icons)
 
 **Fixed**
 - Before 8 am in Malaysia, new lesson plans, PBD records, mentor notes, attendance and Teach mode attendance used
@@ -23,6 +23,11 @@
   (`Sheet`), messages (`notify` and one `Toaster`), and common layout and text classes. 139 repeated style rules were
   removed. Team, timing-stage and wheel colours come from one palette, so groups, points and games always match.
   Every colour is a theme token (no hard-coded fallbacks). See `docs/design-system.md`.
+- **One icon family.** 34 new line icons drawn for Consilia (47 in all) replace the emoji that served as icons in
+  menus, buttons, tool cards, the Teach mode tool bar, Today's shortcuts and headings. They look the same on every
+  phone (emoji differ between Android, iPhone and Windows), follow light and dark themes, and match the navigation bar.
+  Emoji stay where pupils see them (slides, printed sheets), for the 🌱 🌿 🌳 levels (so the screen matches printed
+  tiered worksheets), and as the feeling choices in the Feedback Garden.
 
 **Quality**
 - Every browser suite, the accessibility audit and the speed budget now run automatically on each push, in Malaysian

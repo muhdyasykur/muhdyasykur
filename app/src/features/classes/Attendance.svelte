@@ -63,7 +63,7 @@
         {#if date !== today}<button class="btn btn-text" type="button" onclick={() => (date = today)}>{tr('Today')}</button>{/if}
       </div>
       <p class="counts" aria-live="polite"><b>{counts.P + counts.L}</b> {tr('of {length} present · {L} late · {A} absent · {E} excused{x}', { length: pupils.length, L: counts.L, A: counts.A, E: counts.E, x: counts.unmarked ? tr(' · {unmarked} not marked', { unmarked: counts.unmarked }) : '' })}</p>
-      <div class="row"><button id="att-all" class="btn btn-gold" type="button" onclick={allPresent} disabled={!counts.unmarked}>{tr('✓ Everyone else present')}</button><button class="btn btn-outline" type="button" onclick={copyAbsent}>{tr('Copy summary')}</button></div>
+      <div class="row"><button id="att-all" class="btn btn-gold" type="button" onclick={allPresent} disabled={!counts.unmarked}><Icon name="check" size={18} />{tr('Everyone else present')}</button><button class="btn btn-outline" type="button" onclick={copyAbsent}>{tr('Copy summary')}</button></div>
     </section>
     <ul class="list">
       {#each pupils as p, i (p.id)}

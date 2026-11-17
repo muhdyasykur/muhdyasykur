@@ -45,7 +45,7 @@
       <h1>{cls.name}</h1>
     </header>
     <div class="row">
-      <a id="cd-attendance" class="btn btn-gold" href={href('classes', id, 'attendance')}>{tr('✓ Take attendance')}</a>
+      <a id="cd-attendance" class="btn btn-gold" href={href('classes', id, 'attendance')}><Icon name="check" size={18} />{tr('Take attendance')}</a>
       <a class="btn btn-primary" href={href('classes', id, 'pbd')}>{tr('PBD progress')}</a>
       <a class="btn btn-outline" href={href('classes', id, 'pbd', 'new')}>{tr('Record TP levels')}</a>
     </div>

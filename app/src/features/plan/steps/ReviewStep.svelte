@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon, { type IconName } from '../../../lib/ui/Icon.svelte';
   import { tr } from '../../../lib/i18n/index.svelte';
   import type { Lesson } from '../../../lib/lesson/model';
   import { profile } from '../../../lib/profile.svelte';
@@ -39,7 +40,7 @@
       wordState = how === 'shared' ? tr('Shared.') : tr('Saved to your downloads.');
     } catch (e) { wordState = tr('The Word file could not be made: ') + (e as Error).message; }
   }
-  const icon = { pass: '✔', accepted: '✔', fail: '✘', skip: '–' } as const;
+  const icon: Record<string, IconName | null> = { pass: 'check', accepted: 'check', fail: 'close', skip: null };
 </script>
 
 <div class="stack">
@@ -56,7 +57,7 @@
           <ul>
             {#each rows as r (r.rule.id)}
               <li class={r.status} data-rule={r.rule.id}>
-                <span class="ic" aria-hidden="true">{icon[r.status]}</span>
+                <span class="ic" aria-hidden="true">{#if icon[r.status]}<Icon name={icon[r.status]!} size={16} />{:else}–{/if}</span>
                 <div class="stack tight">
                   <b>{tr(r.rule.title)}</b>
                   <span class="muted small">{r.status === 'accepted' ? tr('Marked as fine: {note}', { note: r.note }) : r.message}</span>
@@ -94,7 +95,7 @@
     <div class="row">
       <button id="rv-print" class="btn btn-gold" type="button" onclick={() => window.print()}>{tr('Print or save as PDF')}</button>
       <button id="rv-word" class="btn btn-primary" type="button" onclick={word}>{tr('Download Word (.docx)')}</button>
-      <a id="rv-slides" class="btn btn-outline" href={href('plan', 'slides', lesson.id)}>{tr('🖼 Lesson slides')}</a>
+      <a id="rv-slides" class="btn btn-outline" href={href('plan', 'slides', lesson.id)}><Icon name="slides" size={18} />{tr('Lesson slides')}</a>
       {#if wordState}<span class="muted small" role="status">{wordState}</span>{/if}
     </div>
     <p class="muted small">{tr('PDF: in the print dialog choose A4, "Save as PDF" and turn on "Background graphics". Word: the file opens in Microsoft Word, Google Docs and WPS for last edits.')}</p>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../../lib/ui/Icon.svelte';
   import { tr } from '../../../lib/i18n/index.svelte';
   import type { Lesson } from '../../../lib/lesson/model';
   import { href } from '../../../router.svelte';
@@ -37,7 +38,7 @@
       <div class="row">
         {#each refs as r}
           {@const s = slotFor(lesson.curriculum.year, r.kind)}
-          {#if s && shelf.includes(s.id)}<a class="btn btn-outline" href={href('library', 'read', s.id, r.page)} data-ref={r.label}>📖 {r.label}</a>
+          {#if s && shelf.includes(s.id)}<a class="btn btn-outline" href={href('library', 'read', s.id, r.page)} data-ref={r.label}><Icon name="book" size={18} />{r.label}</a>
           {:else}<span class="chip" title={tr('Add this book on the Textbook Shelf to open it')}>{r.label}</span>{/if}
         {/each}
       </div>
@@ -56,7 +57,7 @@
   </section>
 
   <section class="card stack slides-card">
-    <h3>{tr('🖼 Lesson slides')}</h3>
+    <h3><Icon name="slides" size={20} /> {tr('Lesson slides')}</h3>
     <p class="muted small">{tr('{x} Present them here or in Teach mode, or download PowerPoint for Canva, Google Slides or PowerPoint. Works offline.', { x: lesson.slides ? tr('{length} slides made from this plan.', { length: lesson.slides.slides.length }) : tr('Turn this plan into a full slide deck for the projector, with your notes on every slide.') })}</p>
     <div class="row"><a id="mt-slides" class="btn btn-gold" href={href('plan', 'slides', lesson.id)}>{lesson.slides ? tr('Open lesson slides') : tr('Make lesson slides')}</a></div>
   </section>

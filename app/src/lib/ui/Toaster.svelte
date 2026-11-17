@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from './Icon.svelte';
   import { toasts, dismiss } from './toast.svelte';
   import { appError, clearError } from '../errors.svelte';
   import { dbHealth } from '../db/health.svelte';
@@ -34,7 +35,7 @@
     <div class="toast {x.kind}" role={x.kind === 'error' ? 'alert' : 'status'} data-toast>
       <span>{x.text}</span>
       {#if x.action}<button class="btn btn-gold" type="button" onclick={() => { x.action?.run(); dismiss(x.id); }}>{x.action.label}</button>{/if}
-      {#if x.sticky}<button class="btn btn-text" type="button" onclick={() => dismiss(x.id)} aria-label={tr('Close')}>✕</button>{/if}
+      {#if x.sticky}<button class="btn btn-text" type="button" onclick={() => dismiss(x.id)} aria-label={tr('Close')}><Icon name="close" size={18} /></button>{/if}
     </div>
   {/each}
 </div>

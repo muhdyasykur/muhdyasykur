@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from '../../lib/ui/Icon.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { untrack } from 'svelte';
   import { RECIPES, type Recipe } from '../../lib/recommend/activities';
@@ -68,7 +69,7 @@
           <div class="row add">
             <select class="select auto" aria-label={tr('Stage')} value={target[r.id] || defaultStage(r)} onchange={(e) => (target = { ...target, [r.id]: (e.currentTarget as HTMLSelectElement).value })}>{#each stages as s}<option value={s.key}>{s.title}</option>{/each}</select>
             <button class="btn btn-gold add-btn" type="button" onclick={() => add(r)}>{tr('＋ Add to my lesson')}</button>
-            {#if added[r.id]}<span class="ok small" role="status">✓ {added[r.id]} <a href={href('plan', 'edit', ctx.lessonId, 'flow')}>{tr('Open')}</a></span>{/if}
+            {#if added[r.id]}<span class="ok small" role="status"><Icon name="check" size={16} /> {added[r.id]} <a href={href('plan', 'edit', ctx.lessonId, 'flow')}>{tr('Open')}</a></span>{/if}
           </div>
         {/if}
       </div>

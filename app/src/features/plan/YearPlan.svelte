@@ -126,12 +126,12 @@
     {#if busy}<p class="busy" role="status">{busy}</p>{/if}
     <div class="choices">
       <section class="card stack tight">
-        <h3>{tr('📤 Upload my yearly plan')}</h3>
+        <h3><Icon name="upload" size={20} /> {tr('Upload my yearly plan')}</h3>
         <p class="muted small">{tr('Word (.docx), Excel (.xlsx), CSV or a PDF made from Word. Consilia reads the table on this device: weeks, dates, topics, Learning Standards, SoW lessons and holidays. Nothing is uploaded anywhere.')}</p>
         <label class="btn btn-gold up">{tr('Choose file')}<input id="yp-file" type="file" accept=".docx,.xlsx,.csv,.pdf,.txt,.doc,.xls" class="sr-only" onchange={upload} /></label>
       </section>
       <section class="card stack tight">
-        <h3>{tr('🧩 Build it from the Scheme of Work')}</h3>
+        <h3><Icon name="layers" size={20} /> {tr('Build it from the Scheme of Work')}</h3>
         <p class="muted small">{tr('No file? Consilia lays out the SoW lessons week by week, skipping holiday and exam weeks.')}</p>
         {#if !building}<button id="yp-build-open" class="btn btn-outline" type="button" onclick={() => (building = true)}>{tr('Build a plan')}</button>{:else}
           <div class="grid">
@@ -170,7 +170,7 @@
         <thead><tr><th>{tr('Week')}</th><th>{tr('Dates')}</th><th>{tr('Topic')}</th><th>{tr('SoW lessons')}</th></tr></thead>
         <tbody>{#each plan.weeks as w (w.week)}<tr class:now={current?.week === w.week} class:hol={!!w.holiday}>
           <td><a href={href('plan', 'year', plan.id, 'week', w.week)}>{w.week}</a></td><td class="nowrap">{fmt(w.start)}{w.end ? ` – ${fmt(w.end)}` : ''}</td>
-          <td>{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme}{w.ls.length ? tr(' · LS {x}{x2}', { x: w.ls.slice(0, 4).join(', '), x2: w.ls.length > 4 ? '…' : '' }) : ''}</td><td>{w.lessons.join(', ')}</td></tr>{/each}</tbody>
+          <td>{#if w.holiday}<Icon name="sun" size={16} /> {w.holiday}{:else}{w.topic || w.theme}{/if}{w.ls.length ? tr(' · LS {x}{x2}', { x: w.ls.slice(0, 4).join(', '), x2: w.ls.length > 4 ? '…' : '' }) : ''}</td><td>{w.lessons.join(', ')}</td></tr>{/each}</tbody>
       </table></div>
     {:else if view === 'month'}
       <div class="row"><label class="field"><span>{tr('Month')}</span><input id="yp-month" class="input" type="month" bind:value={month} /></label></div>
@@ -180,7 +180,7 @@
         {#each grid as w (w.week)}
           <a class="calw" href={href('plan', 'year', plan.id, 'week', w.week)} class:now={current?.week === w.week}><b>{w.week}</b></a>
           {#each [0, 1, 2, 3, 4] as d}{@const day = addDaysIso(w.start, d)}<div class="cald" class:out={day.slice(0, 7) !== month} class:today={day === today}><span class="dn">{Number(day.slice(8))}</span></div>{/each}
-          <div class="calt">{w.holiday ? `🏖 ${w.holiday}` : w.topic || w.theme || '—'}{w.lessons.length ? tr(' · SoW {x}', { x: w.lessons.join(', ') }) : ''}</div>
+          <div class="calt">{#if w.holiday}<Icon name="sun" size={14} /> {w.holiday}{:else}{w.topic || w.theme || '—'}{/if}{w.lessons.length ? tr(' · SoW {x}', { x: w.lessons.join(', ') }) : ''}</div>
         {/each}
       </div>
     {:else if wk}
@@ -189,7 +189,7 @@
         <b class="wkh" id="yp-week-title">{tr('Week {week}{x}', { week: wk.week, x: wk.start ? ` · ${fmt(wk.start)} – ${fmt(wk.end)}` : '' })}</b>
         <a class="btn btn-outline" href={href('plan', 'year', plan.id, 'week', weekNo + 1)} aria-label={tr('Next week')}><Icon name="chevron" size={18} /></a>
       </div>
-      {#if wk.holiday}<p class="card hol-box">🏖 {wk.holiday}</p>{/if}
+      {#if wk.holiday}<p class="card hol-box"><Icon name="sun" size={18} /> {wk.holiday}</p>{/if}
       <section class="card stack tight">
         <h3>{wk.topic || wk.theme || tr('This week')}</h3>
         {#if wk.ls.length}<p class="small"><b>{tr('Learning Standards:')}</b> {wk.ls.join(', ')}</p>{/if}

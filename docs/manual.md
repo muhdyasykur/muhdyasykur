@@ -128,9 +128,9 @@ For sports day or a holiday, choose "No class this day…" and Mark no class. Un
 
 ### My day: arrange your day
 
-Plan → My day (or 📅 My day on Today) shows one day: your English periods from the timetable, lesson plans dated that day, and anything you add yourself, such as a relief class, a meeting or marking.
+Plan → My day (or My day on Today) shows one day: your English periods from the timetable, lesson plans dated that day, and anything you add yourself, such as a relief class, a meeting or marking.
 
-Drag items, or use ↑ ↓, to put them in the order you want, and tick them off as you go. Each period has Plan this lesson, ▶ Teach and ✓ Attendance. Notes for the day are kept with it.
+Drag items, or use ↑ ↓, to put them in the order you want, and tick them off as you go. Each period has Plan this lesson, Teach and Attendance. Notes for the day are kept with it.
 
 > Tip: If you have a yearly plan, My day shows what it says for this week.
 
@@ -161,7 +161,7 @@ Share makes a .consilia file you can send on WhatsApp or Drive. It never include
 
 ### Let Consilia plan a lesson
 
-Plan → New lesson plan → ✨ Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
+Plan → New lesson plan → Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
 
 Consilia then plans the whole lesson on your device and shows how it decided: the framework and why, one or two activities for every stage with a step-by-step script, Low / Moderate / High versions, teaching aids (BBM) with pictures and making steps, a digital option that suits your classroom, SMART objectives, assessment and Plan B.
 
@@ -198,7 +198,7 @@ Video: Me → Help → Video tutorials.
 
 ### Classroom games on the projector
 
-Tools → Classroom games, or the 🎮 Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. The words come from the lesson bar. With a keyboard or a presentation clicker: Space spins the wheel, shows the answer or the next letter; → goes to the next item.
+Tools → Classroom games, or the Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. The words come from the lesson bar. With a keyboard or a presentation clicker: Space spins the wheel, shows the answer or the next letter; → goes to the next item.
 
 ### Teaching aids (BBM) step by step
 
@@ -210,7 +210,7 @@ Open a lesson plan's Materials step and tap Make lesson slides (also Slides in t
 
 Edit any slide (title, lines, answer, notes), move it, duplicate it, delete it or add a new one. Changes are saved with the lesson plan and in backups. "Make again from the plan" starts over after you change the plan.
 
-Present: ▶ Present, or the 🖼 Slides tool in Teach mode, which opens at the current stage. → or Space or a presentation clicker goes on (a question shows its answer first), ← goes back, F is full screen, N shows your notes, Esc stops.
+Present: Present, or the Slides tool in Teach mode, which opens at the current stage. → or Space or a presentation clicker goes on (a question shows its answer first), ← goes back, F is full screen, N shows your notes, Esc stops.
 
 Download PowerPoint (.pptx) works offline. Open it in PowerPoint, or import it into Canva (Create a design → Import file) or Google Slides (upload to Drive, or File → Import slides) to add pictures and animations. On a phone you can send the file straight to the Canva or Google Slides app.
 
@@ -241,7 +241,7 @@ Before first use, every teacher agrees that Consilia is a planning tool: you sta
 
 ### Teach mode
 
-Press ▶ Teach on any lesson. Teach mode is full screen and large enough to project.
+Press Teach on any lesson. Teach mode is full screen and large enough to project.
 
 1. Take attendance: tap the pupils who are absent.
 2. Start the lesson. "Today we will…" shows the success criteria for the class.
@@ -287,7 +287,7 @@ Video: Me → Help → Video tutorials.
 
 ### Take attendance
 
-Classes → your class → ✓ Take attendance (or ✓ Attendance in My day). Tap P (present), L (late), A (absent) or E (excused, such as MC or school duty) for each pupil, add a reason if you like, then "Everyone else present" marks the rest in one tap. It saves as you go, for any date.
+Classes → your class → Take attendance (or Attendance in My day). Tap P (present), L (late), A (absent) or E (excused, such as MC or school duty) for each pupil, add a reason if you like, then "Everyone else present" marks the rest in one tap. It saves as you go, for any date.
 
 Month shows every day recorded with each pupil's attendance rate (below 80% is highlighted) and exports to Excel. Copy summary gives a short text for the class teacher. Absences you mark in Teach mode are added too, without changing marks you set.
 

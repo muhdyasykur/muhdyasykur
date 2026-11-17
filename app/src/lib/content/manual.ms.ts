@@ -149,8 +149,8 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Hari saya: susun hari anda",
    "keywords": "hari saya rancangan harian susun hari ini jadual kelas ganti",
    "body": [
-    "Rancang → Hari saya (atau 📅 Hari saya di Hari Ini) menunjukkan satu hari: waktu Bahasa Inggeris anda daripada jadual waktu, RPH yang bertarikh hari itu, dan apa-apa yang anda tambah sendiri, seperti kelas ganti, mesyuarat atau menanda.",
-    "Seret item, atau gunakan ↑ ↓, untuk menyusunnya mengikut urutan yang anda mahu, dan tandakan apabila selesai. Setiap waktu ada Rancang pelajaran ini, ▶ Ajar dan ✓ Kehadiran. Catatan untuk hari itu disimpan bersamanya."
+    "Rancang → Hari saya (atau Hari saya di Hari Ini) menunjukkan satu hari: waktu Bahasa Inggeris anda daripada jadual waktu, RPH yang bertarikh hari itu, dan apa-apa yang anda tambah sendiri, seperti kelas ganti, mesyuarat atau menanda.",
+    "Seret item, atau gunakan ↑ ↓, untuk menyusunnya mengikut urutan yang anda mahu, dan tandakan apabila selesai. Setiap waktu ada Rancang pelajaran ini, Ajar dan Kehadiran. Catatan untuk hari itu disimpan bersamanya."
    ],
    "tips": [
     "Jika anda ada rancangan tahunan, Hari saya menunjukkan apa yang dinyatakannya untuk minggu ini."
@@ -181,7 +181,7 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Biar Consilia rancang pelajaran",
    "keywords": "cadangan rancang automatik aktiviti ai jana",
    "body": [
-    "Rancang → RPH baharu → ✨ Cadangan Consilia (atau \"Biar Consilia rancang\" di Hari Ini). Pilih kelas, tarikh dan pelajaran SoW, kemudian jawab beberapa soalan tentang kelas anda: kebolehan, sifat murid, kemudahan bilik darjah (projektor, pembesar suara, internet, peranti), perkataan utama dan ayat sasaran anda, perkara penting hari ini, dan berapa banyak masa anda untuk membuat persediaan.",
+    "Rancang → RPH baharu → Cadangan Consilia (atau \"Biar Consilia rancang\" di Hari Ini). Pilih kelas, tarikh dan pelajaran SoW, kemudian jawab beberapa soalan tentang kelas anda: kebolehan, sifat murid, kemudahan bilik darjah (projektor, pembesar suara, internet, peranti), perkataan utama dan ayat sasaran anda, perkara penting hari ini, dan berapa banyak masa anda untuk membuat persediaan.",
     "Consilia kemudian merancang seluruh pelajaran dalam peranti anda dan menunjukkan cara ia membuat keputusan: kerangka dan sebabnya, satu atau dua aktiviti untuk setiap peringkat dengan skrip langkah demi langkah, versi Rendah / Sederhana / Tinggi, BBM bergambar berserta langkah membuatnya, pilihan digital yang sesuai dengan bilik darjah anda, objektif SMART, pentaksiran dan Pelan B.",
     "Tiada apa yang dihantar ke mana-mana: enjin perancangan Consilia menggunakan data KSSR, peraturan kerangka dan lebih 80 aktiviti yang ditulis untuk Bahasa Inggeris sekolah rendah."
    ],
@@ -218,7 +218,7 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Permainan bilik darjah di projektor",
    "keywords": "permainan roda putar susun semula perkataan misteri kuiz projektor",
    "body": [
-    "Alat → Permainan bilik darjah, atau alat 🎮 Permainan dalam Mod Mengajar (diisi dengan perkataan utama pelajaran). Roda putar memilih perkataan atau soalan; Susun semula mencampurkan ayat anda; Perkataan misteri mendedahkan perkataan huruf demi huruf; Kuiz menyimpan skor pasukan. Tekan Skrin penuh untuk projektor. Perkataan diambil daripada bar pelajaran. Dengan papan kekunci atau pengklik persembahan: Space memutar roda, menunjukkan jawapan atau huruf seterusnya; → pergi ke item seterusnya."
+    "Alat → Permainan bilik darjah, atau alat Permainan dalam Mod Mengajar (diisi dengan perkataan utama pelajaran). Roda putar memilih perkataan atau soalan; Susun semula mencampurkan ayat anda; Perkataan misteri mendedahkan perkataan huruf demi huruf; Kuiz menyimpan skor pasukan. Tekan Skrin penuh untuk projektor. Perkataan diambil daripada bar pelajaran. Dengan papan kekunci atau pengklik persembahan: Space memutar roda, menunjukkan jawapan atau huruf seterusnya; → pergi ke item seterusnya."
    ]
   },
   "bbm": {
@@ -234,7 +234,7 @@ export const MANUAL_MS: ManualTranslation = {
    "body": [
     "Buka langkah Bahan dalam RPH dan ketik Buat slaid pelajaran (juga Slaid dalam senarai Rancang, Slaid pelajaran di langkah Semak, atau Alat → Slaid pelajaran). Pilih rupa. Consilia membuat set slaid lengkap daripada rancangan dalam peranti anda: topik, matlamat \"I can\", aktiviti permulaan, perkataan utama, ayat sasaran berserta contoh, satu slaid untuk setiap aktiviti dengan langkah murid, pola (berpasangan, berkumpulan) dan minit, soalan semakan pantas berserta jawapan, semakan ibu jari dan tiket keluar. Catatan guru anda ada pada setiap slaid. Langkah yang ditulis untuk guru sahaja (contohnya \"Follow the Teacher's Book\") kekal dalam catatan.",
     "Sunting mana-mana slaid (tajuk, baris, jawapan, catatan), alihkan, buat salinan, padam atau tambah yang baharu. Perubahan disimpan bersama RPH dan dalam sandaran. \"Buat semula daripada rancangan\" bermula semula selepas anda mengubah rancangan.",
-    "Persembahan: ▶ Persembahkan, atau alat 🖼 Slaid dalam Mod Mengajar, yang dibuka pada peringkat semasa. → atau Space atau pengklik persembahan untuk ke hadapan (soalan menunjukkan jawapannya dahulu), ← untuk kembali, F untuk skrin penuh, N menunjukkan catatan anda, Esc untuk berhenti.",
+    "Persembahan: Persembahkan, atau alat Slaid dalam Mod Mengajar, yang dibuka pada peringkat semasa. → atau Space atau pengklik persembahan untuk ke hadapan (soalan menunjukkan jawapannya dahulu), ← untuk kembali, F untuk skrin penuh, N menunjukkan catatan anda, Esc untuk berhenti.",
     "Muat turun PowerPoint (.pptx) berfungsi di luar talian. Buka dalam PowerPoint, atau import ke Canva (Create a design → Import file) atau Google Slides (muat naik ke Drive, atau File → Import slides) untuk menambah gambar dan animasi. Di telefon, anda boleh menghantar fail terus ke aplikasi Canva atau Google Slides."
    ]
   },
@@ -267,7 +267,7 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Mod Mengajar",
    "keywords": "mod mengajar projektor jam peringkat kehadiran skrin penuh",
    "body": [
-    "Tekan ▶ Ajar pada mana-mana pelajaran. Mod Mengajar memenuhi skrin dan cukup besar untuk ditayangkan."
+    "Tekan Ajar pada mana-mana pelajaran. Mod Mengajar memenuhi skrin dan cukup besar untuk ditayangkan."
    ],
    "steps": [
     "Ambil kehadiran: ketik murid yang tidak hadir.",
@@ -317,7 +317,7 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Ambil kehadiran",
    "keywords": "kehadiran daftar tidak hadir lewat mc hadir",
    "body": [
-    "Kelas → kelas anda → ✓ Ambil kehadiran (atau ✓ Kehadiran dalam Hari saya). Ketik H (hadir), L (lewat), T (tidak hadir) atau K (dikecualikan, seperti MC atau tugas sekolah) bagi setiap murid, tambah sebab jika mahu, kemudian \"Yang lain semua hadir\" menandakan selebihnya dengan satu ketikan. Ia disimpan semasa anda menanda, untuk sebarang tarikh.",
+    "Kelas → kelas anda → Ambil kehadiran (atau Kehadiran dalam Hari saya). Ketik H (hadir), L (lewat), T (tidak hadir) atau K (dikecualikan, seperti MC atau tugas sekolah) bagi setiap murid, tambah sebab jika mahu, kemudian \"Yang lain semua hadir\" menandakan selebihnya dengan satu ketikan. Ia disimpan semasa anda menanda, untuk sebarang tarikh.",
     "Bulan menunjukkan setiap hari yang direkodkan berserta kadar kehadiran setiap murid (di bawah 80% diserlahkan) dan boleh dieksport ke Excel. Salin ringkasan memberi teks pendek untuk guru kelas. Ketidakhadiran yang anda tanda dalam Mod Mengajar turut ditambah, tanpa mengubah tanda yang anda tetapkan."
    ]
   },

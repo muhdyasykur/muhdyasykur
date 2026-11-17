@@ -86,7 +86,7 @@
 <div class="stack builder">
   <div class="no-print bar">
     <a class="btn btn-text" href={href('plan')}><Icon name="back" size={18} />{tr('Plan')}</a>
-    <a class="btn btn-gold teachbtn" href={href('teach', lesson.id)}>{tr('▶ Teach')}</a>
+    <a class="btn btn-gold teachbtn" href={href('teach', lesson.id)}><Icon name="play" size={18} />{tr('Teach')}</a>
     <span class="save" role="status">{saved === 'saving' ? tr('Saving…') : saved === 'error' ? tr('Not saved. Check storage space.') : tr('Saved on this device')}</span>
   </div>
   <header class="no-print head">

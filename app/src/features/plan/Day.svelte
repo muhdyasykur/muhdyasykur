@@ -52,7 +52,7 @@
     {#if rows.length > 1}<button class="btn btn-text" type="button" onclick={sortTime}>{tr('Sort by time')}</button>{/if}
   </div>
 
-  {#each plans as p}<p class="yp card" data-yearplan><b>{tr('{name}, week {week}:', { name: p.name, week: p.week.week })}</b> {p.week.holiday ? `🏖 ${p.week.holiday}` : [p.week.topic || p.week.theme, p.week.lessons.length ? `SoW lessons ${p.week.lessons.join(', ')}` : ''].filter(Boolean).join(' · ')} <a href={href('plan', 'year')}>{tr('Yearly plan')}</a></p>{/each}
+  {#each plans as p}<p class="yp card" data-yearplan><b>{tr('{name}, week {week}:', { name: p.name, week: p.week.week })}</b> {#if p.week.holiday}<Icon name="sun" size={16} /> {p.week.holiday}{:else}{[p.week.topic || p.week.theme, p.week.lessons.length ? `SoW lessons ${p.week.lessons.join(', ')}` : ''].filter(Boolean).join(' · ')}{/if} <a href={href('plan', 'year')}>{tr('Yearly plan')}</a></p>{/each}
 
   {#if ready && !rows.length}
     <section class="empty card"><h3>{tr('Nothing on this day yet')}</h3><p class="muted">{tr('Your English periods appear here from your timetable, together with lesson plans dated this day. Add your own items below.')}</p>
@@ -73,12 +73,12 @@
             {#if r.item.kind !== 'extra' && !r.cancelled}
               {#if r.lesson}
                 <a class="btn btn-outline" href={href('plan', 'edit', r.lesson.id, (score ?? 100) < 100 ? 'review' : 'setup')}>{tr('Open')}</a>
-                <a class="btn btn-gold" href={href('teach', r.lesson.id)}>{tr('▶ Teach')}</a>
+                <a class="btn btn-gold" href={href('teach', r.lesson.id)}><Icon name="play" size={18} />{tr('Teach')}</a>
               {:else if r.slot}
                 <a class="btn btn-gold" href={href('plan', 'new', r.slot.classId, date, r.slot.start, r.slot.durationMin)}>{tr('Plan this lesson')}</a>
-                <a class="btn btn-outline" href={href('plan', 'new', 'recommend', r.slot.classId, date, r.slot.start, r.slot.durationMin)}>{tr('✨ Let Consilia plan it')}</a>
+                <a class="btn btn-outline" href={href('plan', 'new', 'recommend', r.slot.classId, date, r.slot.start, r.slot.durationMin)}><Icon name="sparkle" size={18} />{tr('Let Consilia plan it')}</a>
               {/if}
-              {#if r.slot || r.lesson?.classId}<a class="btn btn-outline" href={href('classes', (r.slot?.classId ?? r.lesson?.classId)!, 'attendance', date)}>{tr('✓ Attendance')}</a>{/if}
+              {#if r.slot || r.lesson?.classId}<a class="btn btn-outline" href={href('classes', (r.slot?.classId ?? r.lesson?.classId)!, 'attendance', date)}><Icon name="check" size={18} />{tr('Attendance')}</a>{/if}
             {/if}
             {#if r.item.kind === 'extra'}<button class="btn btn-text del" type="button" onclick={() => removeExtra(i)}>{tr('Remove')}</button>{/if}
           </div>
