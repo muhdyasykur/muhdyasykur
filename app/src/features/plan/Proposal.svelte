@@ -86,7 +86,7 @@
             {#if x.why.length}<p class="why small">{tr('Why: {x}.', { x: x.why.map((w) => tr(w)).join(' · ') })}</p>{/if}
             <ol class="script">{#each x.steps as st}<li>{st}</li>{/each}</ol>
             <div class="tiers"><div><b>{tr('🌱 Low')}</b><p>{x.tiers.low}</p></div><div><b>{tr('🌿 Moderate')}</b><p>{x.tiers.mod}</p></div><div><b>{tr('🌳 High')}</b><p>{x.tiers.high}</p></div></div>
-            {#if x.bbm.length}<div class="stack tight"><h5>{tr('Teaching aids (BBM) — tap for how to make them')}</h5><div class="bbms">{#each x.bbm as b (b.id)}<BbmCard {b} compact />{/each}</div></div>{/if}
+            {#if x.bbm.length}<div class="stack tight"><h5>{tr('Teaching aids — tap for how to make them')}</h5><div class="bbms">{#each x.bbm as b (b.id)}<BbmCard {b} compact />{/each}</div></div>{/if}
             {#if x.digital.length}<div class="stack tight"><h5>{tr('Digital option')}</h5>
               {#each x.digital as d (d.id)}<div class="dig">
                 <div><b>{tr(d.name)}</b> <span class="muted small">· {tr(d.free)}{d.needs.length ? tr(' · needs {x}', { x: d.needs.map((n) => tr(n)).join(', ') }) : ''}</span><p class="small">{tr('{what} Pupils: {pupils}', { what: tr(d.what), pupils: tr(d.pupils) })}</p>

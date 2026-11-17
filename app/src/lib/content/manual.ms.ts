@@ -115,7 +115,8 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Langkah 5 · Bahan, Canva AI dan pautan",
    "keywords": "bahan canva gesaan wordwall lembaran kerja pautan kosa kata",
    "body": [
-    "Senaraikan BBM, kosa kata utama dan lampiran. Tambah halaman buku teks supaya ia dibuka dalam Mod Mengajar.",
+    "Senaraikan BBM, kosa kata utama dan lampiran.",
+    "Buku teks: buku dan halaman untuk pelajaran, diisi daripada Skema Pelajaran. Tambah satu halaman atau julat (contohnya Student's Book m/s 56 hingga 57) atau buang satu. Ia dicetak dalam rancangan pelajaran dan fail Word (\"Textbook: Get Smart Plus 4 · Student's Book p. 56–57\") dan dibuka dalam Mod Mengajar. Jika buku itu ada di Rak Buku Teks anda, tandakan \"Cetak gambar halaman ini\" untuk mencetak halaman itu sendiri selepas rancangan, dan dalam fail Word.",
     "Reka dengan Canva AI: Consilia menulis gesaan daripada pelajaran anda. Tekan Salin gesaan, kemudian Buka Canva AI dan tampalkannya.",
     "Cari bahan sedia ada membuka carian di Wordwall, Liveworksheets, Quizizz, Kahoot dan YouTube. Tambah sebarang pautan yang anda gunakan ke dalam pelajaran; pautan itu mendapat kod QR pada RPH yang dicetak.",
     "Studio bahan membuat bahan cetak daripada pelajaran anda: kad imbas, lembaran kerja isi tempat kosong dan padanan, jalur ayat, tiket keluar, lembaran kerja beraras dan rubrik pentaksiran. Tandakan \"Dalam lampiran RPH\" untuk mencetaknya bersama rancangan."

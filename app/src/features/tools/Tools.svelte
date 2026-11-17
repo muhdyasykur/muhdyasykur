@@ -23,7 +23,7 @@
     { id: 'ideas', icon: 'bulb', title: tr('Activity ideas'), about: tr('86 tried activities. Filter by skill, stage, year, time and what your class has.'), group: 'Plan', keys: 'activity aktiviti warm-up warmer set induction set induksi penutup closure game permainan practice production' },
     { id: 'objectives', icon: 'target', title: tr('Objective writer'), about: tr('ABCD objectives that pass SMART, with success criteria for pupils.'), group: 'Plan', keys: 'objective objektif abcd smart success criteria kriteria kejayaan' },
     { id: 'differentiate', icon: 'stairs', title: tr('Differentiation helper'), about: tr('Low, moderate and high versions of any activity.'), group: 'Plan', keys: 'differentiation pembezaan low moderate high tier weak pupils lemah murid cerdas' },
-    { id: 'bbm', icon: 'scissors', title: tr('BBM guide'), about: tr('25 teaching aids with pictures, what you need and how to make them step by step.'), group: 'Make', keys: 'bbm bahan bantu mengajar teaching aids kad imbas flashcard puppet boneka dice dadu spinner make buat craft' },
+    { id: 'bbm', icon: 'scissors', title: tr('Teaching aids'), about: tr('25 teaching aids with pictures, what you need and how to make them step by step.'), group: 'Make', keys: 'bbm bahan bantu mengajar teaching aids kad imbas flashcard puppet boneka dice dadu spinner make buat craft' },
     { id: 'worksheets', icon: 'sheet', title: tr('Worksheet maker'), about: tr('Flashcards, gap-fill, matching, strips, tiered worksheets, rubrics. Print offline.'), group: 'Make', keys: 'worksheet lembaran kerja printable cetak flashcard gap fill matching rubric exit ticket' },
     { id: 'chant', icon: 'music', title: tr('Chant maker'), about: tr('Turn your key words into a catchy chant with actions.'), group: 'Make', keys: 'chant song lagu nyanyian rhyme poem sajak music' },
     { id: 'slides', icon: 'slides', title: tr('Lesson slides'), about: tr('Turn a lesson plan into a full slide deck. Present it, or download PowerPoint for Canva and Google Slides.'), group: 'Make', keys: 'slides slaid powerpoint pptx canva google slides presentation pembentangan projector deck tayangan' },
@@ -76,7 +76,7 @@
         </section>
       {/if}
     {/each}
-    {#if !shown.length}<p class="muted">{tr('No tool matches "{q}". Try a simpler word, such as game, BBM or objective.', { q })}</p>{/if}
+    {#if !shown.length}<p class="muted">{tr('No tool matches "{q}". Try a simpler word, such as game, teaching aid or objective.', { q })}</p>{/if}
   </div>
 {/if}
 

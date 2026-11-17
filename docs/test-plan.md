@@ -10,7 +10,7 @@ Version tested: **1.0.0-beta.6** · 17 November 2026 · Chromium, WebKit and Fir
 | Type safety | `npm run check` (svelte-check, 569 files) | 0 errors, 0 warnings | ✅ 0 / 0 |
 | Rules and logic | `npm test` (Vitest): objectives, alignment checker, frameworks, Plan B, PBD, timetable, backup, sharing, feedback, music, manual search, OCR clean-up, error messages, the Recommends engine (every SoW lesson planned and checked), attendance register, My day, yearly plan extraction (Malay/English dates, holidays, a real .docx), lesson slides and PowerPoint (opened and checked), AI assistant (Claude: Opus 5.5 by default, request shape, JSON schema, fallback, key only in a header, plain errors; Gemini: model choice, errors; nothing personal sent, answers checked) | All pass | ✅ 147 tests in 33 files |
 | Curriculum data | `npm run validate:curriculum` | Every SoW reference resolves | ✅ 1,489 lessons, all valid |
-| Core journeys | 10 browser suites, 332 checks (below), run in CI on every push in Malaysian time | All pass, no console errors | ✅ 332 / 332 |
+| Core journeys | 10 browser suites, 344 checks (below), run in CI on every push in Malaysian time | All pass, no console errors | ✅ 344 / 344 |
 | Accessibility | `npm run a11y`: axe-core WCAG 2.1 A/AA on 50 screens × light and dark | 0 critical or serious issues | ✅ 0 issues (after fixes, see below) |
 | Tap targets | Same script, 390 × 844 phone | Every control ≥ 44 px (or its label) | ✅ none smaller |
 | Text size | Same script, root font at 200% on a phone | No horizontal scrolling | ✅ none |
@@ -30,9 +30,9 @@ Version tested: **1.0.0-beta.6** · 17 November 2026 · Chromium, WebKit and Fir
 | Suite | Checks | Covers |
 |---|---|---|
 | `smoke` | 18 | On a phone and a laptop: Today, Library lesson detail and performance levels, no sideways scroll, Bahasa Melayu, dark theme, reload offline, curriculum offline |
-| `e2e` | 42 | Onboarding, class with pasted names, a full RPH from scratch (standards, ABCD/SMART objectives, PPP, tiers, timing errors, materials, Plan B, autosave), checker to 100, mark as fine, both print layouts, Word downloads, weekly planner |
+| `e2e` | 49 | Onboarding, class with pasted names, a full RPH from scratch (standards, ABCD/SMART objectives, PPP, tiers, timing errors, materials, textbook pages, Plan B, autosave), checker to 100, mark as fine, both print layouts and Word downloads (with the textbook line), weekly planner |
 | `e2e:teach` | 26 | Teach mode (attendance, clock, overrun and pacing coach, resume after reload), toolkit (name picker, groups with keep-apart, points, noise light without microphone, timer), PBD grid, heatmap, Excel export, PIN lock |
-| `e2e:m5` | 31 | Textbook Shelf with real PDFs (recognised editions, calibration, private file storage), search, viewer and projector tools, materials studio, activity bank, Canva AI prompt, sharing and import, reflection, mentor notes |
+| `e2e:m5` | 36 | Textbook Shelf with real PDFs (recognised editions, calibration, private file storage), search, viewer and projector tools, textbook pages in the lesson plan and printed as pictures (print and Word), materials studio, activity bank, Canva AI prompt, sharing and import, reflection, mentor notes |
 | `e2e:m6` | 23 | Terms of use gate (EN/BM, three ticks, remembered), splash once a day, 9-step tour, Help replay, About, Feedback Garden online and offline queue, music start and pause in Teach mode, backup and restore |
 | `e2e:m7` | 26 | Privacy page EN/BM, manual search and links, six videos (length, EN/BM captions, saved for offline, byte ranges offline, unsaved video offline message), text recognition of a scanned PDF (online, then offline), fault injection, offline tool notice, reduced motion |
 

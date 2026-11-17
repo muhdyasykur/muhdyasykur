@@ -106,7 +106,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.fill('#tools-q', 'chant');
   check((await page.locator('[data-tool-card]').count()) === 1, 'tools can be searched');
   await page.fill('#tools-q', 'kad imbas');
-  check((await page.locator('[data-tool-card="bbm"]').count()) === 1, 'search understands Malay words (kad imbas → BBM guide)');
+  check((await page.locator('[data-tool-card="bbm"]').count()) === 1, 'search understands Malay words (kad imbas → Teaching aids)');
   await page.fill('#tools-q', 'noisy class');
   check((await page.locator('[data-tool-card="manage"]').count()) === 1, 'search understands needs (noisy class → classroom management)');
   await page.fill('#tools-q', '');
@@ -138,7 +138,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
 
   // the other tools, filled from the lesson bar
   await page.goto(base + '#/tools/bbm');
-  check((await page.locator('[data-bbm]').count()) === 25, 'the BBM guide shows all 25 teaching aids');
+  check((await page.locator('[data-bbm]').count()) === 25, 'Teaching aids shows all 25 teaching aids');
   await page.click('button.pick:has-text("Phonics")');
   check((await page.locator('[data-bbm]').count()) < 25, 'teaching aids can be filtered by use');
   await page.goto(base + '#/tools/ideas');

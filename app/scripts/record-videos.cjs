@@ -345,7 +345,7 @@ const VIDEOS = {
     await d.click('nav a[href="#/tools"]', 1000);
     await d.say('Say your lesson once: "Use my latest lesson plan". Every tool fills itself in.', 'Sebut pelajaran anda sekali: "Use my latest lesson plan". Setiap alat terisi sendiri.');
     if (await page.locator('#ctx-latest').count()) await d.click('#ctx-latest', 1200); else { await d.click('#ctx-change', 600); await page.selectOption('#ctx-lesson', s.lessonId); await d.wait(800); }
-    await d.say('Search by what you need, in English or Malay: "kad imbas" finds the BBM guide.', 'Cari ikut keperluan, dalam BI atau BM: "kad imbas" menjumpai panduan BBM.');
+    await d.say('Search by what you need, in English or Malay: "kad imbas" finds Teaching aids.', 'Cari ikut keperluan, dalam BI atau BM: "kad imbas" menjumpai panduan BBM.');
     await d.type('#tools-q', 'kad imbas', 70); await d.wait(800); await page.fill('#tools-q', '');
     await d.say('Classroom games are made from your words, for the projector, even offline.', 'Permainan kelas dibuat daripada perkataan anda, untuk projektor, walaupun luar talian.');
     await d.click('[data-quick="games"]', 1200); await d.click('#g-spin', 4800);
@@ -353,7 +353,7 @@ const VIDEOS = {
     await page.goto(base + '#/tools/ideas'); await d.wait(900);
     await d.click('[data-idea] >> nth=0 >> summary', 1500);
     await d.click('[data-idea] >> nth=0 >> .add-btn', 1500);
-    await d.say('The BBM guide shows 25 teaching aids with pictures and how to make them.', 'Panduan BBM menunjukkan 25 BBM dengan gambar dan cara membuatnya.');
+    await d.say('Teaching aids shows 25 aids with pictures and how to make them.', 'Panduan BBM menunjukkan 25 BBM dengan gambar dan cara membuatnya.');
     await page.goto(base + '#/tools/bbm'); await d.wait(900);
     await d.click('[data-bbm="spinner"] summary', 2400);
     await d.say('And "Improve with AI" writes a careful prompt for ChatGPT, Gemini or Canva AI, with no pupil names.', 'Dan "Improve with AI" menulis gesaan yang teliti untuk ChatGPT, Gemini atau Canva AI, tanpa nama murid.');

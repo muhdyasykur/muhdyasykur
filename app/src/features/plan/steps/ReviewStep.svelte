@@ -9,6 +9,7 @@
   import ScoreRing from '../../../lib/ui/ScoreRing.svelte';
   import RphSchool from '../print/RphSchool.svelte';
   import RphBlueprint from '../print/RphBlueprint.svelte';
+  import TextbookPictures from '../print/TextbookPictures.svelte';
   import PrintableView from '../print/PrintableView.svelte';
   import { db, type Reflection } from '../../../lib/db/schema';
 
@@ -36,7 +37,9 @@
     wordState = tr('Preparing the Word file…');
     try {
       const { toBlob, fileName } = await import('../../../lib/export/docx'); // loaded only when needed
-      const how = await saveFile(await toBlob($state.snapshot(lesson) as Lesson, profile.value, layout), fileName(lesson, layout));
+      const plain = $state.snapshot(lesson) as Lesson;
+      const pictures = plain.textbook?.pictures ? (await (await import('../../../lib/textbook/pictures')).lessonPictures(plain).catch(() => ({ pictures: [] }))).pictures : [];
+      const how = await saveFile(await toBlob(plain, profile.value, layout, pictures), fileName(lesson, layout));
       wordState = how === 'shared' ? tr('Shared.') : tr('Saved to your downloads.');
     } catch (e) { wordState = tr('The Word file could not be made: ') + (e as Error).message; }
   }
@@ -103,6 +106,7 @@
   <div class="paper-wrap">
     {#if layout === 'school'}<RphSchool {lesson} profile={profile.value} />{:else}<RphBlueprint {lesson} profile={profile.value} {reflection} />{/if}
     {#each appendix as p (p.id)}<div class="apx"><PrintableView {p} {lesson} /></div>{/each}
+    <TextbookPictures {lesson} />
   </div>
 </div>
 

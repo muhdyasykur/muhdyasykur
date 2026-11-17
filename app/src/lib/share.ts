@@ -1,3 +1,4 @@
+import { validPage } from './textbook/lesson';
 import { tr } from './i18n/index.svelte';
 import type { Lesson } from './lesson/model';
 import { uid } from './lesson/model';
@@ -41,7 +42,8 @@ export function importLesson(text: string): { ok: true; lesson: Lesson } | { ok:
   const now = Date.now();
   const lesson: Lesson = { ...l, id: uid(), classId: null, status: 'draft', createdAt: now, updatedAt: now,
     links: (l.links ?? []).filter((x) => isStr(x.url) && /^https?:\/\//.test(x.url)), successCriteria: l.successCriteria ?? [], planB: l.planB ?? { early: '', late: '', offline: '', noisy: '', absent: '' },
-    assessment: l.assessment ?? { evidence: '', method: '' }, sowNotes: l.sowNotes ?? { differentiation: '', materials: '', note: '' } };
+    assessment: l.assessment ?? { evidence: '', method: '' }, sowNotes: l.sowNotes ?? { differentiation: '', materials: '', note: '' },
+    textbook: l.textbook && Array.isArray(l.textbook.pages) ? { pages: l.textbook.pages.filter(validPage), pictures: !!l.textbook.pictures } : undefined };
   return { ok: true, lesson };
 }
 export function shareName(l: Lesson) { return `${(l.topic || 'lesson').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-')}-Y${l.curriculum.year}.consilia`; }

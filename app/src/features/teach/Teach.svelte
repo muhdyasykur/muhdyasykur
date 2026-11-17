@@ -27,7 +27,7 @@
   import { fromTeach } from '../../lib/attendance';
   import type { TeachPupil } from './types';
   import Viewer from '../books/Viewer.svelte';
-  import { findRefs, type PageRef } from '../../lib/textbook/refs';
+  import { lessonPages, shortLabel } from '../../lib/textbook/lesson';
   import { slotFor } from '../../lib/textbook/books';
   import { listBooks } from '../../lib/textbook/store';
 
@@ -119,8 +119,8 @@
   let holdTimer: ReturnType<typeof setTimeout> | undefined; let holding = $state(false);
   const holdStart = () => { holding = true; holdTimer = setTimeout(exit, 900); };
   const holdEnd = () => { holding = false; clearTimeout(holdTimer); };
-  const pageRefs = $derived<PageRef[]>(lesson ? findRefs([lesson.sowNotes.materials, lesson.aids, ...lesson.stages.flatMap((s) => s.activities.map((a) => a.teacher))].join('\n')) : []);
-  const openable = $derived(pageRefs.map((r) => ({ r, slot: lesson ? slotFor(lesson.curriculum.year, r.kind)?.id : undefined })).filter((x) => x.slot && shelf.includes(x.slot)));
+  // the lesson plan's textbook pages (from the SoW unless the teacher changed them)
+  const openable = $derived(lesson ? lessonPages(lesson).map((p) => ({ r: { page: p.page, label: shortLabel(p) }, slot: slotFor(lesson!.curriculum.year, p.kind)?.id })).filter((x) => x.slot && shelf.includes(x.slot)) : []);
   const sbSlot = $derived(lesson ? slotFor(lesson.curriculum.year, 'SB')?.id : undefined);
   const tools = [
     { id: 'book', label: tr('Textbook'), icon: 'book' },

@@ -69,6 +69,8 @@ export interface Lesson {
   slides?: import('../slides/deck').Deck;
   /** Checker rules the teacher has marked as fine, with their reason (rule id → reason). */
   checkNotes?: Record<string, string>;
+  /** Textbook pages used in this lesson, printed on the plan. Missing: taken from the SoW page references. */
+  textbook?: import('../textbook/lesson').LessonTextbook;
   /** SoW guidance kept for reference while planning (differentiation note, materials, lesson note). */
   sowNotes: { differentiation: string; materials: string; note: string };
 }

@@ -4,8 +4,8 @@
   import type { Lesson } from '../../../lib/lesson/model';
   import { href } from '../../../router.svelte';
   import { pwa } from '../../../lib/pwa.svelte';
-  import { findRefs } from '../../../lib/textbook/refs';
-  import { slotFor } from '../../../lib/textbook/books';
+  import { slotFor, slotsForYear, type BookKind } from '../../../lib/textbook/books';
+  import { lessonTextbook, suggestedPages, validPage, pageRange, bookTitle, shortLabel, type TextbookPage } from '../../../lib/textbook/lesson';
   import { listBooks } from '../../../lib/textbook/store';
   import { toolLinks, canvaPrompt, CANVA_AI } from '../../../lib/materials';
   import MaterialsStudio from './MaterialsStudio.svelte';
@@ -22,7 +22,20 @@
     lesson.links.push({ label: label.trim() || u.replace(/^https?:\/\//, '').split('/')[0], url: u });
     label = ''; url = ''; err = '';
   }
-  const refs = $derived(findRefs([lesson.sowNotes.materials, lesson.aids, ...lesson.stages.flatMap((s) => s.activities.map((a) => a.teacher))].join('\n')));
+  // the lesson's textbook pages: from the SoW until the teacher changes them
+  const tb = $derived(lessonTextbook(lesson));
+  const books = $derived(slotsForYear(lesson.curriculum.year).map((s) => ({ kind: s.kind, title: s.title })));
+  let addKind = $state<BookKind>('SB'); let addFrom = $state<number | null>(null); let addTo = $state<number | null>(null); let tbErr = $state('');
+  const own = () => (lesson.textbook ??= { pages: suggestedPages(lesson), pictures: false });
+  function addPage() {
+    const p: TextbookPage = addTo && addFrom && addTo > addFrom ? { kind: addKind, page: addFrom, to: addTo } : { kind: addKind, page: addFrom ?? 0 };
+    if (!validPage(p)) { tbErr = tr('Type a page number (a range can be up to 20 pages).'); return; }
+    const t = own();
+    if (!t.pages.some((x) => x.kind === p.kind && x.page === p.page && x.to === p.to)) t.pages.push(p);
+    addFrom = null; addTo = null; tbErr = '';
+  }
+  function removePage(i: number) { own().pages.splice(i, 1); }
+  function setPictures(on: boolean) { own().pictures = on; }
   const prompt = $derived(canvaPrompt(lesson, cKind, cTier));
   async function copyPrompt() {
     try { await navigator.clipboard.writeText(prompt); copied = tr('Prompt copied. Paste it into Canva AI.'); }
@@ -32,19 +45,32 @@
 
 <div class="stack">
   {#if lesson.sowNotes.materials}<aside class="card note"><b>{tr('SoW materials and references')}</b><p class="small">{lesson.sowNotes.materials}</p></aside>{/if}
-  {#if refs.length}
-    <section class="card stack">
-      <h3>{tr('Textbook pages for this lesson')}</h3>
-      <div class="row">
-        {#each refs as r}
-          {@const s = slotFor(lesson.curriculum.year, r.kind)}
-          {#if s && shelf.includes(s.id)}<a class="btn btn-outline" href={href('library', 'read', s.id, r.page)} data-ref={r.label}><Icon name="book" size={18} />{r.label}</a>
-          {:else}<span class="chip" title={tr('Add this book on the Textbook Shelf to open it')}>{r.label}</span>{/if}
+  <section class="card stack" id="mt-textbook" aria-labelledby="tb-h">
+    <h3 id="tb-h"><Icon name="book" size={20} /> {tr('Textbook')}</h3>
+    <p class="muted small">{tr('These pages are printed on the lesson plan and open in Teach mode. They come from the Scheme of Work; change them if you use other pages.')}</p>
+    {#if tb.pages.length}
+      <ul class="tb-list">
+        {#each tb.pages as p, i (p.kind + p.page + '-' + (p.to ?? ''))}
+          {@const s = slotFor(lesson.curriculum.year, p.kind)}
+          <li data-tb-page={shortLabel(p)}>
+            <span class="tb-name"><b>{bookTitle(lesson.curriculum.year, p.kind)}</b> <span class="nw">{pageRange(p)}</span></span>
+            {#if s && shelf.includes(s.id)}<a class="btn btn-text" href={href('library', 'read', s.id, p.page)} data-ref={shortLabel(p)}>{tr('Open')}</a>
+            {:else}<span class="chip" title={tr('Add this book on the Textbook Shelf to open it')}>{tr('Not on your shelf')}</span>{/if}
+            <button class="btn btn-text del" type="button" onclick={() => removePage(i)} aria-label={tr('Remove {x}', { x: shortLabel(p) })}><Icon name="close" size={18} /></button>
+          </li>
         {/each}
-      </div>
-      {#if refs.some((r) => { const s = slotFor(lesson.curriculum.year, r.kind); return !s || !shelf.includes(s.id); })}<p class="muted small">{tr('Grey pages need the book on your')} <a href={href('library', lesson.curriculum.year, lesson.curriculum.school.toLowerCase(), 'books')}>{tr('Textbook Shelf')}</a>.</p>{/if}
-    </section>
-  {/if}
+      </ul>
+    {:else}<p class="small">{tr('No textbook pages in this lesson plan yet.')}</p>{/if}
+    <div class="row tb-add">
+      <label class="field"><span>{tr('Book')}</span><select id="tb-book" class="select" bind:value={addKind}>{#each books as b}<option value={b.kind}>{b.title}</option>{/each}</select></label>
+      <label class="field"><span>{tr('Page')}</span><input id="tb-from" class="input num" type="number" min="1" max="999" inputmode="numeric" bind:value={addFrom} /></label>
+      <label class="field"><span>{tr('to page (optional)')}</span><input id="tb-to" class="input num" type="number" min="1" max="999" inputmode="numeric" bind:value={addTo} /></label>
+      <button id="tb-add" class="btn btn-outline" type="button" onclick={addPage} disabled={!addFrom}><Icon name="plus" size={18} />{tr('Add page')}</button>
+    </div>
+    {#if tbErr}<p class="small err" role="alert">{tbErr}</p>{/if}
+    <label class="row tick"><input id="tb-pictures" type="checkbox" checked={tb.pictures} onchange={(e) => setPictures((e.currentTarget as HTMLInputElement).checked)} />{tr('Print pictures of these pages with the lesson plan (and in the Word file)')}</label>
+    {#if tb.pages.some((p) => { const s = slotFor(lesson.curriculum.year, p.kind); return !s || !shelf.includes(s.id); })}<p class="muted small">{tr('Pages marked "Not on your shelf" need the book on your')} <a href={href('library', lesson.curriculum.year, lesson.curriculum.school.toLowerCase(), 'books')}>{tr('Textbook Shelf')}</a> {tr('to open them or print their pictures. Your own copy stays on this device.')}</p>{/if}
+  </section>
   <section class="card grid">
     <label class="field wide"><span>{tr('Teaching aids and materials')}</span><textarea id="mt-aids" class="input ta" rows="3" bind:value={lesson.aids} placeholder="e.g. Picture flashcards, worksheet, writing paper"></textarea></label>
     <label class="field wide"><span>{tr('Key vocabulary')}</span><input id="mt-vocab" class="input" bind:value={lesson.vocabulary} placeholder={tr('e.g. healthy, unhealthy, brush, junk food')} /></label>
@@ -101,6 +127,15 @@
 </div>
 
 <style>
+  h3 { display: flex; align-items: center; gap: var(--s-2); margin: 0; }
+  .tb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-1); }
+  .tb-list li { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; padding: var(--s-1) var(--s-2); border-radius: var(--r-ctl); background: var(--sunken); }
+  .tb-name { flex: 1 1 14rem; }
+  .tb-add { align-items: flex-end; }
+  .num { width: 6.5rem; }
+  .tick { gap: var(--s-2); min-height: 44px; font-size: var(--t-sm); flex-wrap: nowrap; align-items: flex-start; }
+  .tick input { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+  .nw { white-space: nowrap; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--s-3); }
   .wide { grid-column: 1 / -1; }
   .ta { min-height: 72px; padding: var(--s-2) var(--s-3); resize: vertical; }

@@ -98,7 +98,9 @@ The timing bar adds up your minutes. "Reset to suggested times" shares the lesso
 
 ### Step 5 · Materials, Canva AI and links
 
-List the teaching aids, key vocabulary and appendices. Add textbook pages so they open in Teach mode.
+List the teaching aids, key vocabulary and appendices.
+
+Textbook: the book and pages for the lesson, filled in from the Scheme of Work. Add a page or a range (e.g. Student's Book p. 56 to 57) or remove one. They are printed on the lesson plan and in the Word file ("Textbook: Get Smart Plus 4 · Student's Book p. 56–57") and open in Teach mode. If the book is on your Textbook Shelf, tick "Print pictures of these pages" to print the pages themselves after the plan, and in the Word file.
 
 Design with Canva AI: Consilia writes a prompt from your lesson. Press Copy prompt, then Open Canva AI and paste it.
 
@@ -163,7 +165,7 @@ Share makes a .consilia file you can send on WhatsApp or Drive. It never include
 
 Plan → New lesson plan → Consilia recommends (or "Let Consilia plan it" on Today). Choose the class, date and SoW lesson, then answer a few questions about your class: ability, what the pupils are like, what your classroom has (projector, speakers, internet, devices), your key words and target sentence, what matters today, and how much time you have to prepare.
 
-Consilia then plans the whole lesson on your device and shows how it decided: the framework and why, one or two activities for every stage with a step-by-step script, Low / Moderate / High versions, teaching aids (BBM) with pictures and making steps, a digital option that suits your classroom, SMART objectives, assessment and Plan B.
+Consilia then plans the whole lesson on your device and shows how it decided: the framework and why, one or two activities for every stage with a step-by-step script, Low / Moderate / High versions, teaching aids with pictures and making steps, a digital option that suits your classroom, SMART objectives, assessment and Plan B.
 
 Nothing is sent anywhere: Consilia's planning engine uses the KSSR data, the framework rules and more than 80 activities written for primary English.
 
@@ -182,7 +184,7 @@ Video: Me → Help → Video tutorials.
 
 ### The Tools page
 
-Tools collects everything besides the lesson plan builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, BBM guide, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
+Tools collects everything besides the lesson plan builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, Teaching aids, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
 
 1. Tell the tools your lesson once: in the bar at the top press "Use my latest lesson plan", choose one of your lesson plans, or type the topic and key words. Every tool fills itself in from it.
 2. Use a tool. Results already use your year, topic, words and sentence.
@@ -200,9 +202,9 @@ Video: Me → Help → Video tutorials.
 
 Tools → Classroom games, or the Games tool in Teach mode (filled with the lesson's key words). Spin wheel picks a word or question; Unjumble mixes your sentences; Mystery word reveals a word letter by letter; Quiz show keeps team scores. Press Full screen for the projector. The words come from the lesson bar. With a keyboard or a presentation clicker: Space spins the wheel, shows the answer or the next letter; → goes to the next item.
 
-### Teaching aids (BBM) step by step
+### Teaching aids step by step
 
-Tools → BBM guide shows 25 cheap teaching aids with a picture, what you need, how to make them step by step, how to use them in class, a time and cost estimate, and safety notes. Filter by use (vocabulary, phonics, stories, assessment…) or "Ready in 10 minutes".
+Tools → Teaching aids shows 25 cheap teaching aids with a picture, what you need, how to make them step by step, how to use them in class, a time and cost estimate, and safety notes. Filter by use (vocabulary, phonics, stories, assessment…) or "Ready in 10 minutes".
 
 ### Lesson slides, PowerPoint, Canva and Google Slides
 

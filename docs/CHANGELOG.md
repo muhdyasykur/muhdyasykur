@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+**New**
+- **The textbook is part of the lesson plan.** Materials has a Textbook section: the book and pages for the lesson,
+  filled in from the Scheme of Work, which you can change (add a page or a range, remove one). They are printed on
+  both lesson plan layouts and in the Word file ("Textbook: Get Smart Plus 4 · Student's Book p. 56–57") and open in
+  Teach mode. With the book on your Textbook Shelf you can also print pictures of the pages after the plan, and they
+  go into the Word file too (up to 8 pages, drawn on the device from your own copy).
+- **"Teaching aids" instead of "BBM"** in the English interface (the tool, the builder and Consilia Recommends). The
+  Malay interface keeps BBM; searching for "BBM" still finds the tool.
+
 ## 1.0.0-beta.6 · 17 November 2026 (audit stage 1, Bahasa Melayu, design system and icons)
 
 **Fixed**

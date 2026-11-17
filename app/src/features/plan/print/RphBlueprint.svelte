@@ -4,6 +4,7 @@
   import type { Lesson } from '../../../lib/lesson/model';
   import type { Profile, Reflection } from '../../../lib/db/schema';
   import Qr from '../../../lib/ui/Qr.svelte';
+  import { textbookLine } from '../../../lib/textbook/lesson';
   import { endTime } from '../../../lib/lesson/model';
   import { FRAMEWORKS } from '../../../lib/lesson/frameworks';
   import { alignment, criteria, objectiveLabels, smartFor, longDate, weekday } from '../../../lib/lesson/derive';
@@ -106,7 +107,9 @@
         <p><b>Worked:</b> {reflection.worked || '–'}</p><p><b>Did not go as planned:</b> {reflection.didnt || '–'}</p><p><b>Next time:</b> {reflection.next || '–'}</p>
       {:else}<div class="lines"></div>{/if}
     </section>
-    <section class="blk keep"><h4>10 · Appendices and links</h4>
+    <section class="blk keep"><h4>10 · Materials, appendices and links</h4>
+      {#if lesson.aids}<p class="pre"><b>Teaching aids:</b> {lesson.aids}</p>{/if}
+      {#if textbookLine(lesson)}<p><b>Textbook:</b> <span data-textbook-line>{textbookLine(lesson)}</span></p>{/if}
       <p class="pre">{lesson.appendices || '–'}</p>
       {#each lesson.links as l}<p class="qrrow"><Qr url={l.url} size={52} /><span>{l.label}<br /><small>{l.url}</small></span></p>{/each}
     </section>

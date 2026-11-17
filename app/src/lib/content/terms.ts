@@ -11,7 +11,7 @@ export const TERMS: Record<'en' | 'ms', TermsText> = {
     lead: 'Consilia is a free planning tool made by a trainee teacher for trainee teachers. It helps you plan and teach; it does not replace your judgement, your mentor or the official KPM documents. Please read and agree to these points.',
     sections: [
       { h: '1. Consilia is a tool, you are the teacher', p: [
-        'Lesson plans, activities, objectives, teaching aids (BBM) and scores in Consilia are suggestions. You decide what is right for your pupils and your school.',
+        'Lesson plans, activities, objectives, teaching aids and scores in Consilia are suggestions. You decide what is right for your pupils and your school.',
         'Always check your lesson plan against the latest DSKP, Scheme of Work and your school\'s or institute\'s format, and follow your mentor\'s and lecturer\'s advice where it differs.',
         'The alignment score checks the plan on paper. It cannot tell how a lesson will go in your classroom.'
       ] },

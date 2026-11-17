@@ -5,6 +5,7 @@
   import { endTime } from '../../../lib/lesson/model';
   import { objectiveText, weekday, longDate } from '../../../lib/lesson/derive';
   import Qr from '../../../lib/ui/Qr.svelte';
+  import { textbookLine } from '../../../lib/textbook/lesson';
 
   /** Mirrors the SK(C) Anglo Chinese Kota Kinabalu daily lesson plan template supplied by the developer. */
   let { lesson, profile }: { lesson: Lesson; profile: Profile | null } = $props();
@@ -47,7 +48,7 @@
     <tbody>
       <tr><td><b>Subject:</b> {lesson.header.subject}</td><td><b>Class:</b> {cls || '–'}</td><td><b>Time:</b> {lesson.header.start} – {endTime(lesson.header.start, lesson.header.durationMin)}</td><td><b>Duration:</b> {lesson.header.durationMin >= 60 && lesson.header.durationMin % 60 === 0 ? `${lesson.header.durationMin / 60} hour${lesson.header.durationMin > 60 ? 's' : ''}` : `${lesson.header.durationMin} minutes`}</td></tr>
       <tr><td><b>Theme:</b> {lesson.theme || '–'}</td><td><b>Focus skill:</b> {lesson.mainSkill || '–'}</td><td><b>CCE:</b> {lesson.cce || '–'}</td><td><b>Date:</b> {longDate(lesson.header.date)} ({weekday(lesson.header.date)})</td></tr>
-      <tr><td colspan="2" class="pre"><b>Teaching Aids and Materials:</b> {lesson.aids || '–'}</td><td colspan="2"><b>21st Century Skills/Strategy/Activity:</b> {lesson.skills21 || '–'}</td></tr>
+      <tr><td colspan="2" class="pre"><b>Teaching Aids and Materials:</b> {lesson.aids || '–'}{#if textbookLine(lesson)}<br /><b>Textbook:</b> <span data-textbook-line>{textbookLine(lesson)}</span>{/if}</td><td colspan="2"><b>21st Century Skills/Strategy/Activity:</b> {lesson.skills21 || '–'}</td></tr>
       <tr><td colspan="4" class="band">Topic</td></tr>
       <tr><td colspan="4" class="center strong">{(lesson.topic || '–').toUpperCase()}</td></tr>
       <tr><td colspan="4" class="band">Current Pedagogical Practice</td></tr>

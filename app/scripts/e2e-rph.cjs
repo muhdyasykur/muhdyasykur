@@ -1,6 +1,8 @@
 // End-to-end: first-run profile, a class, then the "What's the Matter" RPH (Year 4 SJK, Writing) built in
 // From-scratch mode, printed in both layouts. Run against `vite preview`: node scripts/e2e-rph.cjs [out-dir]
 const { launch } = require('./browser.cjs');
+const fs = require('fs');
+const JSZip = require('jszip');
 const out = process.argv[2];
 const base = process.env.BASE_URL || 'http://localhost:4173/';
 (async () => {
@@ -127,6 +129,14 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   // 8. materials and Plan B
   await page.click('.steps a:has-text("Materials")');
   await page.fill('#mt-aids', 'Picture flashcards, smartboard, worksheet, writing paper');
+  // the textbook is part of the lesson plan: a from-scratch lesson has none until the teacher adds pages
+  check((await page.locator('#mt-textbook').innerText()).includes('No textbook pages'), 'Materials has a Textbook section (empty for a lesson from scratch)');
+  await page.selectOption('#tb-book', 'SB'); await page.fill('#tb-from', '56'); await page.fill('#tb-to', '57'); await page.click('#tb-add');
+  await page.selectOption('#tb-book', 'WB'); await page.fill('#tb-from', '40'); await page.click('#tb-add');
+  await page.selectOption('#tb-book', 'TB'); await page.fill('#tb-from', '99'); await page.click('#tb-add');
+  await page.click('[data-tb-page="Teacher\'s Book p. 99"] button[aria-label^="Remove"]');
+  check((await page.locator('[data-tb-page]').count()) === 2 && (await page.locator('[data-tb-page="Student\'s Book p. 56–57"]').count()) === 1, 'textbook pages added (a range and a workbook page) and one removed');
+  check((await page.locator('[data-tb-page="Workbook p. 40"] .chip').innerText()) === 'Not on your shelf', 'a book not on the Textbook Shelf is marked');
   await page.fill('#mt-evidence', 'Paragraph (M), conjunction count (C)');
   await page.fill('#mt-method', 'Checklist while monitoring; exit ticket');
   await page.fill('#mt-app', "Healthy or Not? Worksheet\nLook at the pictures. Write a sentence using should or shouldn't for each picture.");
@@ -171,6 +181,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.waitForSelector('article.paper');
   const school = await page.locator('article.paper').innerText();
   check(school.includes('SK(C) ANGLO CHINESE KOTA KINABALU') && school.includes('4 Zhong (Average Level, 6 Students)') && school.includes('09:10 – 10:10') && school.includes('Monday'), 'school template header filled from profile, class and time');
+  check(school.includes("Textbook: Get Smart Plus 4 · Student's Book p. 56–57; Get Smart Plus 4 · Workbook p. 40"), 'the printed lesson plan names the textbook and pages');
   check(school.includes('4.2.3 Describe basic everyday routines') && school.includes('Activity 3 (Production) (20 minutes)'), 'school template lists standards and PPP activities');
   if (out) {
     await page.screenshot({ path: `${out}/rph-review-school.png`, fullPage: false });
@@ -182,6 +193,7 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   const bp = await page.locator('article.paper').innerText();
   check(/alignment map/i.test(bp) && (bp.match(/✔ Aligned/g) || []).length === 2, 'blueprint alignment map shows both standards aligned');
   check(bp.includes('Sentence frame') && bp.includes('I can write 5 sentences'), 'blueprint shows differentiation and success criteria');
+  check(bp.includes("Textbook: Get Smart Plus 4 · Student's Book p. 56–57") && bp.includes('Teaching aids: Picture flashcards'), 'the blueprint lists the teaching aids and the textbook');
   if (out) {
     await page.emulateMedia({ media: 'print' });
     await page.pdf({ path: `${out}/rph-blueprint.pdf`, format: 'A4', printBackground: true, preferCSSPageSize: true });
@@ -194,6 +206,8 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
     const name = dl.suggestedFilename();
     if (out) await dl.saveAs(`${out}/${name}`);
     check(/^LessonPlan-2025-11-03-4-Zhong-Whats-the-Matter(-Blueprint)?\.docx$/.test(name), `Word download for ${layout}: ${name}`);
+    const xml = await (await JSZip.loadAsync(fs.readFileSync(await dl.path()))).file('word/document.xml').async('string');
+    check(xml.includes('Textbook: ') && /Student(&apos;|'|’)s Book p\. 56–57/.test(xml), `the Word file (${layout}) names the textbook pages`);
   }
 
   // 10b. weekly planner and Today

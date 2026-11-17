@@ -6,7 +6,7 @@ Consilia is a free planning tool made by a trainee teacher for trainee teachers.
 
 ## 1. Consilia is a tool, you are the teacher
 
-Lesson plans, activities, objectives, teaching aids (BBM) and scores in Consilia are suggestions. You decide what is right for your pupils and your school.
+Lesson plans, activities, objectives, teaching aids and scores in Consilia are suggestions. You decide what is right for your pupils and your school.
 
 Always check your lesson plan against the latest DSKP, Scheme of Work and your school's or institute's format, and follow your mentor's and lecturer's advice where it differs.
 

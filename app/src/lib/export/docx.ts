@@ -7,6 +7,8 @@ import { endTime } from '../lesson/model';
 import { FRAMEWORKS } from '../lesson/frameworks';
 import { alignment, criteria, longDate, objectiveLabels, objectiveText, weekday } from '../lesson/derive';
 import { runChecks } from '../lesson/checker';
+import { textbookLine } from '../textbook/lesson';
+import type { PagePicture } from '../textbook/pictures';
 
 /**
  * Word (.docx) versions of both RPH layouts, built on the device. Uses plain tables and cell shading only,
@@ -44,6 +46,17 @@ const table = (widths: number[], rows: TableRow[]) => new Table({ width: { size:
 const band = (text: string, cols: number) => new TableRow({ children: [cell([p(text.toUpperCase(), { align: 'center', bold: true })], { span: cols, fill: SOFT })] });
 const spacer = () => p('', { after: 120 });
 
+/** Textbook pages as pictures, one per page, after the plan (the teacher's own copy, drawn on the device). */
+function picturePages(pics: PagePicture[]): Paragraph[] {
+  return pics.flatMap((x, i) => {
+    const data = Uint8Array.from(atob(x.dataUrl.split(',')[1]), (c) => c.charCodeAt(0));
+    const w = 600, h = Math.round((w * x.h) / x.w), fit = Math.min(1, 860 / h);
+    return [
+      new Paragraph({ pageBreakBefore: true, spacing: { after: 80 }, children: [new TextRun({ text: `${i ? '' : 'Textbook pages · '}${x.title} p. ${x.page}`, bold: true, font: FONT, size: 20 })] }),
+      new Paragraph({ alignment: AlignmentType.CENTER, children: [new ImageRun({ type: 'jpg', data, transformation: { width: Math.round(w * fit), height: Math.round(h * fit) } })] })
+    ];
+  });
+}
 function logo(profile: Profile | null): Paragraph[] {
   if (!profile?.logo?.startsWith('data:image/png;base64,')) return [];
   const bin = atob(profile.logo.split(',')[1]);
@@ -75,13 +88,13 @@ function classLine(l: Lesson) {
 }
 
 /** The school's daily lesson plan template (SK(C) Anglo Chinese Kota Kinabalu layout). */
-export function schoolDoc(l: Lesson, profile: Profile | null): Document {
+export function schoolDoc(l: Lesson, profile: Profile | null, pictures: PagePicture[] = []): Document {
   const q = W / 4, mcW = 500, half = (W - 2 * mcW) / 2;
   const mid = l.stages.slice(1, -1), first = l.stages[0], last = l.stages[l.stages.length - 1];
   const head = table([q, q, q, q], [
     new TableRow({ children: [cell([p([{ t: 'Subject: ', b: true }, l.header.subject])]), cell([p([{ t: 'Class: ', b: true }, classLine(l)])]), cell([p([{ t: 'Time: ', b: true }, `${l.header.start} – ${endTime(l.header.start, l.header.durationMin)}`])]), cell([p([{ t: 'Duration: ', b: true }, duration(l.header.durationMin)])])] }),
     new TableRow({ children: [cell([p([{ t: 'Theme: ', b: true }, l.theme || '–'])]), cell([p([{ t: 'Focus skill: ', b: true }, l.mainSkill || '–'])]), cell([p([{ t: 'CCE: ', b: true }, l.cce || '–'])]), cell([p([{ t: 'Date: ', b: true }, `${longDate(l.header.date)} (${weekday(l.header.date)})`])])] }),
-    new TableRow({ children: [cell([p([{ t: 'Teaching Aids and Materials: ', b: true }, l.aids || '–'])], { span: 2 }), cell([p([{ t: '21st Century Skills/Strategy/Activity: ', b: true }, l.skills21 || '–'])], { span: 2 })] }),
+    new TableRow({ children: [cell([p([{ t: 'Teaching Aids and Materials: ', b: true }, l.aids || '–']), ...(textbookLine(l) ? [p([{ t: 'Textbook: ', b: true }, textbookLine(l)])] : [])], { span: 2 }), cell([p([{ t: '21st Century Skills/Strategy/Activity: ', b: true }, l.skills21 || '–'])], { span: 2 })] }),
     band('Topic', 4), new TableRow({ children: [cell((l.topic || '–').toUpperCase(), { span: 4, center: true, bold: true })] }),
     band('Current Pedagogical Practice', 4), new TableRow({ children: [cell((l.pedagogy || '–').toUpperCase(), { span: 4, center: true })] })
   ]);
@@ -113,13 +126,13 @@ export function schoolDoc(l: Lesson, profile: Profile | null): Document {
       p('DAILY LESSON PLAN', { align: 'center', bold: true, size: 22, after: 120 }),
       head, std, spacer(), flow,
       ...(l.frameworkReason ? [p([{ t: 'Framework note: ', b: true }, l.frameworkReason], { size: 18 })] : []),
-      spacer(), app
+      spacer(), app, ...picturePages(pictures)
     ] }]
   });
 }
 
 /** The Consilia Lesson Blueprint layout as an editable document. */
-export function blueprintDoc(l: Lesson, profile: Profile | null): Document {
+export function blueprintDoc(l: Lesson, profile: Profile | null, pictures: PagePicture[] = []): Document {
   const labels = objectiveLabels(l);
   const report = runChecks(l);
   const h = (t: string) => new Paragraph({ heading: HeadingLevel.HEADING_3, keepNext: true, keepLines: true, spacing: { before: 160, after: 60 }, shading: { type: ShadingType.CLEAR, color: 'auto', fill: NAVY }, children: [new TextRun({ text: ' ' + t.toUpperCase(), bold: true, color: 'FFFFFF', font: FONT, size: 18 })] });
@@ -154,8 +167,9 @@ export function blueprintDoc(l: Lesson, profile: Profile | null): Document {
       h('8 · Alignment map'),
       grid(['LS', 'Objective', 'Activities in', 'Time', 'Status'], alignment(l).map((r) => [`${r.ls} ${r.role === 'main' ? 'M' : 'C'}`, r.objectives.join(', '), r.stages.join(', '), `${r.minutes} min`, r.ok ? '✔ Aligned' : '⚠ ' + r.problem]), per([12, 14, 38, 12, 24])),
       h('9 · Reflection'), p(''), p('…………………………………………………………………………………………………………………'), p('…………………………………………………………………………………………………………………'), p('…………………………………………………………………………………………………………………'),
-      h('10 · Appendices and links'), p(l.appendices || '–'), ...l.links.map((x) => p(`${x.label}: ${x.url}`)),
-      p(`Prepared by ${profile?.name || '________________'}${profile?.programme ? `, ${profile.programme}` : ''}${profile?.campus ? `, ${profile.campus}` : ''} · Made with Consilia`, { size: 16, color: '555555' })
+      h('10 · Materials, appendices and links'), ...(l.aids ? [p([{ t: 'Teaching aids: ', b: true }, l.aids])] : []), ...(textbookLine(l) ? [p([{ t: 'Textbook: ', b: true }, textbookLine(l)])] : []), p(l.appendices || '–'), ...l.links.map((x) => p(`${x.label}: ${x.url}`)),
+      p(`Prepared by ${profile?.name || '________________'}${profile?.programme ? `, ${profile.programme}` : ''}${profile?.campus ? `, ${profile.campus}` : ''} · Made with Consilia`, { size: 16, color: '555555' }),
+      ...picturePages(pictures)
     ] }]
   });
 }
@@ -164,7 +178,7 @@ export function fileName(l: Lesson, layout: 'school' | 'blueprint') {
   const safe = (s: string) => s.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-');
   return `LessonPlan-${l.header.date}-${safe(l.header.className || 'Y' + l.curriculum.year)}-${safe(l.topic || 'lesson')}${layout === 'blueprint' ? '-Blueprint' : ''}.docx`;
 }
-export async function toBlob(l: Lesson, profile: Profile | null, layout: 'school' | 'blueprint'): Promise<Blob> {
-  return Packer.toBlob(layout === 'school' ? schoolDoc(l, profile) : blueprintDoc(l, profile));
+export async function toBlob(l: Lesson, profile: Profile | null, layout: 'school' | 'blueprint', pictures: PagePicture[] = []): Promise<Blob> {
+  return Packer.toBlob(layout === 'school' ? schoolDoc(l, profile, pictures) : blueprintDoc(l, profile, pictures));
 }
 export { Packer };

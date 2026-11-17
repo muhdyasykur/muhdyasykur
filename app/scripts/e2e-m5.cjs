@@ -73,7 +73,10 @@ if (!require('fs').existsSync(require('path').join(up, 'Y4- GET SMART PLUS4.pdf'
   check((await page.locator('section.stage').first().innerText()).includes('Activity bank: Mystery bag'), 'an activity bank item is inserted with its source');
   await page.click('.steps a:has-text("Materials")');
   await page.waitForSelector('#ms-type');
-  check((await page.locator('.chip:has-text("Teacher\'s Book p. 18")').count()) === 1, 'SoW page reference shown (Teacher\'s Book not on the shelf yet)');
+  check((await page.locator('[data-tb-page="Teacher\'s Book p. 18"] .chip').count()) === 1, 'SoW page reference is in the lesson plan\'s Textbook list (Teacher\'s Book not on the shelf yet)');
+  await page.selectOption('#tb-book', 'SB'); await page.fill('#tb-from', '5'); await page.fill('#tb-to', '6'); await page.click('#tb-add');
+  check((await page.locator('[data-tb-page="Student\'s Book p. 5–6"] a:has-text("Open")').count()) === 1, 'a Student\'s Book page on the shelf can be opened from the lesson plan');
+  await page.check('#tb-pictures');
   await page.fill('#mt-vocab', 'Malaysia, Japan, China, India, Australia, Britain');
   await page.selectOption('#ms-type', 'tiered');
   await page.fill('#ms-words', 'Malaysia, Japan, China, India, Australia, Britain');
@@ -92,7 +95,15 @@ if (!require('fs').existsSync(require('path').join(up, 'Y4- GET SMART PLUS4.pdf'
   check((await page.locator('a:has-text("YouTube")').getAttribute('href')).startsWith('https://www.youtube.com/results?search_query='), 'tool links open searches');
   await page.click('.steps a:has-text("Review")');
   await page.waitForSelector('.apx');
-  check((await page.locator('.apx').count()) === 2, 'both printables follow the RPH as appendices');
+  check((await page.locator('div.apx').count()) === 2, 'both printables follow the RPH as appendices');
+  await page.waitForSelector('[data-tb-picture="SB-6"] img', { timeout: 30000 }).catch(() => {});
+  const pics = await page.$$eval('[data-tb-picture] img', (im) => im.map((i) => i.naturalWidth));
+  check(pics.length === 2 && pics.every((w) => w > 300), `the Student's Book pages 5 and 6 are printed as pictures after the plan (${pics.length})`);
+  check((await page.locator('[data-textbook-line]').innerText()).includes("Student's Book p. 5–6"), 'and named in the printed plan');
+  check((await page.locator('[data-tb-missing]').innerText()).includes("Teacher's Book"), 'books not on the shelf are named, not silently skipped');
+  const [wdl] = await Promise.all([page.waitForEvent('download'), page.click('#rv-word')]);
+  const zip = await require('jszip').loadAsync(require('fs').readFileSync(await wdl.path()));
+  check(Object.keys(zip.files).filter((k) => k.startsWith('word/media/')).length >= 2, 'the Word file carries the page pictures too');
   if (out) await page.screenshot({ path: `${out}/m5-review.png`, fullPage: false });
 
   // ---- share and import
