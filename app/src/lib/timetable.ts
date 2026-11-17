@@ -5,13 +5,11 @@ export interface Slot { id: string; classId: string; day: number; start: string;
 export type Cancelled = Record<string, string>; // `${slotId}@${date}` → reason
 export const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-const pad = (n: number) => String(n).padStart(2, '0');
-export const iso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-export function parseDate(s: string): Date { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+import { iso, parseDate, addDays } from './dates';
+export { iso, parseDate, addDays };
 /** ISO weekday: Monday = 1 … Sunday = 7 */
 export const isoDay = (d: Date) => ((d.getDay() + 6) % 7) + 1;
 export function mondayOf(date: string): string { const d = parseDate(date); d.setDate(d.getDate() - isoDay(d) + 1); return iso(d); }
-export function addDays(date: string, n: number): string { const d = parseDate(date); d.setDate(d.getDate() + n); return iso(d); }
 const minutes = (t: string) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
 
 export interface WeekItem { date: string; slot: Slot; lesson: Lesson | null; cancelled: string | null }

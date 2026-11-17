@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
   import { db, type MentorNote } from '../../lib/db/schema';
   import { listLessons } from '../../lib/db/repo';
@@ -9,7 +10,7 @@
   /** Mentor and lecturer feedback, with the patterns it shows over time (blueprint F22). */
   let notes = $state<MentorNote[]>([]);
   let lessons = $state<Lesson[]>([]);
-  let draft = $state<MentorNote>({ id: '', lessonId: null, who: 'Mentor teacher', date: new Date().toISOString().slice(0, 10), text: '', tags: [] });
+  let draft = $state<MentorNote>({ id: '', lessonId: null, who: 'Mentor teacher', date: localToday(), text: '', tags: [] });
   async function load() { notes = (await db.mentorNotes.toArray()).sort((a, b) => b.date.localeCompare(a.date)); lessons = await listLessons(); }
   $effect(() => { load(); });
   function toggle(t: string) { draft.tags = draft.tags.includes(t) ? draft.tags.filter((x) => x !== t) : [...draft.tags, t]; }

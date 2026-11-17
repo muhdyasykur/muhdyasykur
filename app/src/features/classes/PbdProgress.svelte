@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
   import { db, type Pupil, type PbdRecord, type SchoolClass } from '../../lib/db/schema';
   import { getClass, listPupils, listLessons, updatePupil } from '../../lib/db/repo';
@@ -31,7 +32,7 @@
     if (!cls) return;
     msg = 'Preparing the Excel file…';
     const blob = await sheetsToBlob(pbdSheets([{ cls, pupils, records: recs }], (id) => (id ? topics.get(id) ?? '' : 'Recorded separately')));
-    await saveFile(blob, `PBD-${cls.name.replace(/[^\w-]+/g, '-')}-${new Date().toISOString().slice(0, 10)}.xlsx`);
+    await saveFile(blob, `PBD-${cls.name.replace(/[^\w-]+/g, '-')}-${localToday()}.xlsx`);
     msg = 'Excel file ready.';
   }
 </script>

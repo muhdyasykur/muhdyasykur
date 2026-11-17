@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { today as localToday, addDays } from '../../lib/dates';
   import { untrack } from 'svelte';
   import { href, go } from '../../router.svelte';
   import { getClass, listPupils } from '../../lib/db/repo';
@@ -10,7 +11,7 @@
 
   /** Take attendance for one class on any day; see the month and export it (milestone 9). */
   let { classId, initialDate = '' }: { classId: string; initialDate?: string } = $props();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localToday();
   let date = $state(untrack(() => (/^\d{4}-\d{2}-\d{2}$/.test(initialDate) ? initialDate : today)));
   let cls = $state<SchoolClass | undefined>(); let pupils = $state<Pupil[]>([]);
   let reg = $state<Register | null>(null);
@@ -22,7 +23,7 @@
   function mark(p: Pupil, m: Mark) { if (!reg) return; reg.marks[p.id] = m; if (m === 'P') delete reg.reasons[p.id]; persist(); }
   function allPresent() { if (!reg) return; for (const p of pupils) if (!reg.marks[p.id]) reg.marks[p.id] = 'P'; persist(); }
   const counts = $derived(dayCounts(reg ?? undefined, pupils));
-  const shift = (n: number) => { const d = new Date(date + 'T00:00:00'); d.setDate(d.getDate() + n); date = d.toISOString().slice(0, 10); };
+  const shift = (n: number) => { date = addDays(date, n); };
 
   // month view
   let month = $state(untrack(() => date.slice(0, 7)));

@@ -70,5 +70,6 @@ export default defineConfig({
       }
     })
   ],
-  test: { environment: 'node', include: ['src/**/*.test.ts'] }
+  // Tests run on Malaysian time (UTC+8), where a UTC date is yesterday before 8 am.
+  test: { environment: 'node', include: ['src/**/*.test.ts'], env: { TZ: 'Asia/Kuala_Lumpur' } }
 });

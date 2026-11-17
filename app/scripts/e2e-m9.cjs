@@ -175,6 +175,27 @@ const dmy = (d) => `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
   await page.waitForSelector('[data-att="Elena"]');
   check((await page.locator('[data-att="Elena"] [data-mark="P"]').getAttribute('aria-checked')) === 'true', 'Teach mode does not overwrite the teacher\'s own attendance marks');
 
+  // ---- dates before 8 am in Malaysia (UTC+8): the local date, never the UTC one
+  {
+    const kl = await browser.newContext({ timezoneId: 'Asia/Kuala_Lumpur', viewport: { width: 1280, height: 900 }, storageState: await ctx.storageState({ indexedDB: true }) });
+    await kl.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); } catch (e) {} });
+    const k = await kl.newPage();
+    await k.clock.install({ time: new Date('2026-11-17T23:30:00Z') }); // 07:30 on Wednesday 18 November in Kuala Lumpur
+    await k.goto(base + `#/classes/${classId}/attendance`);
+    await k.waitForSelector('[data-att="Aina"]');
+    const d = k.locator('input[type=date]').first();
+    const first = await d.inputValue();
+    await k.locator('button[aria-label="Next day"]').click(); const next = await d.inputValue();
+    await k.locator('button[aria-label="Previous day"]').click(); await k.locator('button[aria-label="Previous day"]').click(); const prev = await d.inputValue();
+    check(first === '2026-11-18' && next === '2026-11-19' && prev === '2026-11-17', `at 7:30 am in Kuala Lumpur, attendance opens on today and moves one day at a time (${first}, ${next}, ${prev})`);
+    await k.goto(base + '#/plan/new'); await k.waitForSelector('#nr-date');
+    await k.goto(base + `#/classes/${classId}/pbd/new`); await k.waitForSelector('#pbd-ls');
+    const pbd = await k.locator('input[type=date]').first().inputValue();
+    await k.goto(base + '#/plan/new'); await k.waitForSelector('#nr-date');
+    check((await k.inputValue('#nr-date')) === '2026-11-18' && pbd === '2026-11-18', 'new lesson plans and PBD records get today\'s local date before 8 am');
+    await kl.close();
+  }
+
   // phone
   const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, storageState: await ctx.storageState({ indexedDB: true }) });
   const p2 = await phone.newPage();

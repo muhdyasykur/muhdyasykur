@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { iso } from '../../lib/dates';
   import { href, go as navigate } from '../../router.svelte';
   import { db, type TeachSession, type PbdRecord } from '../../lib/db/schema';
   import { getLesson, saveLesson, listPupils, getSetting, setSetting } from '../../lib/db/repo';
@@ -103,7 +104,7 @@
     const s = $state.snapshot(session) as TeachSession;
     await db.sessions.put(s);
     await db.attendance.bulkPut(pupils.map((p) => ({ id: `${s.id}:${p.id}`, sessionId: s.id, pupilId: p.id, present: !s.absent.includes(p.id) })));
-    if (lesson.classId && pupils.length) await fromTeach(lesson.classId, new Date(s.startedAt).toISOString().slice(0, 10), pupils.map((p) => p.id), [...s.absent]);
+    if (lesson.classId && pupils.length) await fromTeach(lesson.classId, iso(new Date(s.startedAt)), pupils.map((p) => p.id), [...s.absent]);
     lesson.status = 'taught';
     await saveLesson($state.snapshot(lesson) as Lesson);
   }

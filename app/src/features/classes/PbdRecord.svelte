@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { today as localToday } from '../../lib/dates';
   import { href } from '../../router.svelte';
   import { db, type Pupil, type PbdRecord, type SchoolClass } from '../../lib/db/schema';
   import { getClass, listPupils, getLesson } from '../../lib/db/repo';
@@ -14,7 +15,7 @@
   let lesson = $state<Lesson | null>(null);
   let std = $state<Standards | null>(null);
   let codes = $state<string[]>([]);
-  let date = $state(new Date().toISOString().slice(0, 10));
+  let date = $state(localToday());
   let absent = $state<string[]>([]);
   let tp = $state<Record<string, number>>({}); // `${pupilId}|${ls}` → TP
   let notes = $state<Record<string, string>>({});

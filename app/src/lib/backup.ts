@@ -1,3 +1,4 @@
+import { today } from './dates';
 import { db } from './db/schema';
 
 /**
@@ -59,5 +60,5 @@ export async function restore(file: BackupFile, mode: 'merge' | 'replace'): Prom
   });
   return n;
 }
-export const backupName = () => `Consilia-backup-${new Date().toISOString().slice(0, 10)}.consilia-backup`;
+export const backupName = () => `Consilia-backup-${today()}.consilia-backup`;
 export async function lastBackup(): Promise<number | null> { return ((await db.settings.get('lastBackup'))?.value as number) ?? null; }

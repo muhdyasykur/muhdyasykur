@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { today as localToday } from '../../lib/dates';
   import { href, go, route } from '../../router.svelte';
   import { listClasses, countPupils, saveLesson } from '../../lib/db/repo';
   import { loadSow, loadStandards, loadPhonics, searchLessons, loadIndex } from '../../lib/curriculum/loader';
@@ -13,7 +14,7 @@
   import { getSetting, setSetting } from '../../lib/db/repo';
   import type { Lesson } from '../../lib/lesson/model';
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localToday();
   let classes = $state<SchoolClass[]>([]);
   let classId = $state('');
   let year = $state(4);
