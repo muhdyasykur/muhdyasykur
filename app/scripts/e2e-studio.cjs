@@ -76,6 +76,21 @@ function sse(text) {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_FAILED|aborted/i.test(m.text())) errors.push('console: ' + m.text()); });
+  // what the browser did with the AI requests, printed if a streamed answer never arrives
+  const trace = [];
+  page.on('console', (m) => trace.push(`console.${m.type()}: ${m.text().slice(0, 300)}`));
+  page.on('request', (r) => { if (/anthropic/.test(r.url())) trace.push(`request ${r.method()} ${r.url()}`); });
+  page.on('requestfailed', (r) => trace.push(`requestfailed ${r.method()} ${r.url()}: ${r.failure()?.errorText}`));
+  page.on('response', (r) => { if (/anthropic/.test(r.url())) trace.push(`response ${r.status()} ${r.url()}`); });
+  const waitForAnswer = async (sel) => {
+    try { await page.waitForSelector(sel, { timeout: 15000 }); }
+    catch (e) {
+      console.error(`\nNo answer (${sel}). Requests the stand-in received: ${sent.length}. Page error text: ${await page.locator('#st-err').innerText().catch(() => '(none)')}`);
+      console.error('Result area: ' + (await page.locator('#st-result').innerText().catch(() => '')).slice(0, 400));
+      console.error('Trace:\n  ' + trace.slice(-40).join('\n  '));
+      throw e;
+    }
+  };
   await page.goto(base);
   await page.click('button:has-text("Skip for now")');
 
@@ -155,7 +170,8 @@ function sse(text) {
   check((await page.locator('#st-go').innerText()).includes('Generate with Claude'), 'with Claude connected, the button generates right here');
   await page.click('#st-example');
   await page.click('#st-go');
-  await page.waitForSelector('#st-doc h3:has-text("Learning objectives")', { timeout: 15000 });
+  trace.length = 0;
+  await waitForAnswer('#st-doc h3:has-text("Learning objectives")');
   const lp = await page.locator('#st-doc').innerText();
   check(lp.includes('Friends Around the World') && lp.includes('Post-lesson (5 minutes)'), 'Claude\'s answer streams into a full lesson plan');
   const req = sent[sent.length - 1];
