@@ -40,7 +40,7 @@ export interface Book { id: string; slot: string; name: string; pages: number; b
   ocrDone?: number }
 export interface BookBlob { id: string; blob: Blob }
 /** A Studio result (milestone 11): the tool, what the teacher typed and every version, newest last. */
-export interface CreationVersion { text: string; at: number; how: 'first' | 'change' | 'edit' | 'paste' | 'stopped'; note?: string }
+export interface CreationVersion { text: string; at: number; how: 'first' | 'change' | 'edit' | 'paste' | 'stopped' | 'fix'; note?: string }
 export interface Creation { id: string; tool: string; title: string; inputs: Record<string, string>; versions: CreationVersion[]; createdAt: number; updatedAt: number }
 
 export class ConsiliaDB extends Dexie {

@@ -40,7 +40,7 @@ const lang = (def = 'English', options = ['English', 'Bahasa Melayu']): Field =>
 const NO_NAMES = 'Type or paste it without the pupil\'s name.';
 
 const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
-const textLength = (year: number, len: string) => {
+export const textLength = (year: number, len: string) => {
   const base = year <= 2 ? [40, 60, 90] : year <= 4 ? [60, 100, 140] : [80, 140, 200];
   return base[len === 'Long' ? 2 : len === 'Medium' ? 1 : 0];
 };
@@ -362,28 +362,47 @@ export const DEFS: ToolDef[] = [
   }
 ];
 export const defOf = (id: string) => DEFS.find((d) => d.id === id);
+/** Tools that can be based on a Scheme of Work lesson (not the ones that work on a text or a pupil's writing). */
+export const groundable = (d: ToolDef) => d.fields.some((f) => f.kind === 'year') && d.id !== 'level' && d.id !== 'feedback';
 
 const PUPILS = 'Anything pupils read or hear must use simple, correct British English at their level, Malaysian names, places, food and festivals that respect every culture and religion in Malaysia, and nothing unsuitable for children.';
+/** What English at each year's CEFR level looks like, so pupil texts are pitched right. */
+export const LEVEL: Record<number, string> = {
+  1: 'Pitch it at Pre-A1: single words, chunks and very short sentences (3 to 6 words), present simple, the most common everyday words, lots of repetition and things pupils can see or do.',
+  2: 'Pitch it at Pre-A1: very short sentences (up to 7 words), present simple, can and can\'t, the most common everyday words, lots of repetition.',
+  3: 'Pitch it at A1: short sentences (5 to 9 words), present simple and continuous, the simple past of common verbs, can and can\'t, there is and there are, everyday words.',
+  4: 'Pitch it at A1: short sentences (up to 10 words), present and past simple, can and can\'t, joined with and, but or because; explain any new word in context.',
+  5: 'Pitch it at A1 to A2: sentences up to 12 words, past, present and future forms, comparatives, linking words (and, but, because, so, then); new words explained in context.',
+  6: 'Pitch it at A2: sentences up to 14 words, a range of tenses, comparatives and superlatives, linking words (because, so, although, first, finally); new words explained in context.'
+};
 const TEACHER = 'Write for the teacher in clear, practical language that fits Malaysian primary classrooms (often large, mixed-ability classes with few resources).';
 const FORMAT = 'Format the answer in Markdown: ## for section headings, - for bullet points, 1. for numbered items, **bold** for key words, and a table only where asked. Start straight with the content: no introduction, no closing remarks and no questions back. Never include pupils\' real names or personal details.';
 
 const clean = (v: Values): Values => Object.fromEntries(Object.entries(v).map(([k, x]) => [k, String(x ?? '').trim()]));
-export function buildPrompt(d: ToolDef, values: Values): string {
+/**
+ * The prompt for a tool: who the pupils are, the curriculum facts when the teacher chose a Scheme of Work lesson
+ * (`grounding`, see grounding.ts), the task, the level, and the format. Only what the teacher typed is in it.
+ */
+export function buildPrompt(d: ToolDef, values: Values, grounding = ''): string {
   const v = clean(values);
   const y = Math.min(6, Math.max(1, Number(v.year) || 4));
+  const hasYear = d.fields.some((f) => f.kind === 'year');
   return [
     'You are helping a teacher of English in a Malaysian primary school (KSSR curriculum, aligned to CEFR).',
-    d.fields.some((f) => f.kind === 'year') && `The pupils are in Year ${y} (about ${y + 6} years old, CEFR ${cefr(y)}).`,
+    hasYear && `The pupils are in Year ${y} (about ${y + 6} years old, CEFR ${cefr(y)}).`,
+    grounding.trim(),
     ...d.task(v),
+    grounding.trim() && d.id === 'lesson-plan' && 'In the Learning standards section, give exactly the standards in the curriculum facts above.',
     v.extra && `Also: ${v.extra}`,
     d.audience === 'pupils' ? PUPILS : TEACHER,
+    hasYear && d.audience === 'pupils' && LEVEL[y],
     FORMAT
   ].filter((x): x is string => !!x).join('\n');
 }
 /** Ask for a changed version: the original request, the current version and the change. */
-export function refinePrompt(d: ToolDef, values: Values, current: string, change: string): string {
-  if (d.id === 'ask') return [buildPrompt(d, values), '', 'Your earlier answer:', '"""', current, '"""', `The teacher's follow-up: ${change.trim()}`, 'Answer the follow-up, building on your earlier answer, in the same format.'].join('\n');
-  return [buildPrompt(d, values), '', 'This is the current version:', '"""', current, '"""', `Change it: ${change.trim()}`, 'Keep the same sections and format. Return the complete new version only.'].join('\n');
+export function refinePrompt(d: ToolDef, values: Values, current: string, change: string, grounding = ''): string {
+  if (d.id === 'ask') return [buildPrompt(d, values, grounding), '', 'Your earlier answer:', '"""', current, '"""', `The teacher's follow-up: ${change.trim()}`, 'Answer the follow-up, building on your earlier answer, in the same format.'].join('\n');
+  return [buildPrompt(d, values, grounding), '', 'This is the current version:', '"""', current, '"""', `Change it: ${change.trim()}`, 'Keep the same sections and format. Return the complete new version only.'].join('\n');
 }
 /** Chips offered for changes, depending on who reads the result. */
 export function chipsFor(d: ToolDef): string[] {

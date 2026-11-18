@@ -37,9 +37,11 @@ An 8-step tour shows the main screens the first time you use Consilia. Replay it
 
 ### Find your way around
 
-Today: this week's lessons, shortcuts and your to-do list. Plan: every lesson plan, My day, the weekly timetable and your yearly plan. Classes: Year 1 to Year 6 classes, pupils and PBD. Library: the SoW, DSKP, Method Guide, activity bank and your textbooks. Me: settings, backup, help, privacy and feedback.
+Today: your next lesson, today's periods, the week as a route, what is coming up, your to-do list and your tools. Plan: every lesson plan, My day, the weekly timetable and your yearly plan. Classes: Year 1 to Year 6 classes, pupils and PBD. Library: the SoW, DSKP, Method Guide, activity bank and your textbooks. Tools: every tool, offline and AI. Me: settings, backup, help, privacy and feedback.
 
-The gold "+ New lesson plan" button starts a lesson plan from anywhere.
+Create (the gold tile on a laptop, the round + button on a phone) opens the ten things teachers start most often: a new lesson plan, Let Consilia plan it, the Lesson plan writer, a quiz, a reading text, a worksheet, a game for the projector, attendance, My day and a message to parents.
+
+Search (the magnifier, or Ctrl+K or / on a keyboard) finds tools, your lesson plans and classes, every lesson in the Scheme of Work for Years 1 to 6, and the help articles. Enter opens the first result; Esc closes Search.
 
 <a id="plan"></a>
 ## Planning a lesson
@@ -204,6 +206,10 @@ Video: Me → Help → Video tutorials.
 
 With Claude or Gemini connected in Me → AI assistant, the result appears as it is written. Without it, the main button copies the prompt: paste it into Claude.ai, ChatGPT, Gemini or Copilot, then paste the answer back. Only what you type in the form is sent, and only when you press the button; Consilia first checks the text for your pupils' names and offers to remove them.
 
+Base it on a KSSR lesson: under Year, open "Base it on a KSSR lesson" and choose a lesson from the Scheme of Work. The form fills itself from the lesson, and Consilia sends the AI that lesson's real learning standards (codes and wording), theme, language focus, textbook pages and the Scheme of Work's own steps, so the answer follows your RPT instead of guessing. A tool opened for a lesson plan that follows the Scheme of Work is based on the same lesson already.
+
+Every result gets a Quality check: the sections asked for, the numbers (8 questions, 5 ideas, stages that add up to the lesson's minutes, TP1 to TP6), measurable objectives and "I can" success criteria, learning standards that really exist for the year (or match the Scheme of Work lesson), sentences short enough for the year's CEFR level, British spelling, and blanks such as [Your name] to fill in. Press "Fix it" on a problem, or "Fix all", and the AI sends a corrected version.
+
 1. Open Tools and choose a tool. Use the groups, search, or the star to keep favourites at the top.
 2. Fill in the form, or press "Try an example". The year, topic and key words come from your lesson bar.
 3. Press "Generate with Claude" (or "Copy the prompt", then paste the answer back).
@@ -214,7 +220,7 @@ With Claude or Gemini connected in Me → AI assistant, the result appears as it
 >
 > Tip: The Lesson plan writer's "Open in the lesson plan builder" makes a real lesson plan. Only learning standards that exist in KSSR are kept, so check the Standards step.
 >
-> Tip: Check every AI result before pupils see it: AI can make mistakes.
+> Tip: Check every AI result before pupils see it: AI can make mistakes. The quality check catches missing parts and the wrong level, not every wrong fact.
 >
 > Tip: Never type pupils' names. If you do, Consilia stops and offers to replace them with "the pupil".
 

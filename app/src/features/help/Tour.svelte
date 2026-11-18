@@ -4,12 +4,13 @@
   import { go } from '../../router.svelte';
   import { trapFocus } from '../../lib/ui/focus';
 
-  /** Nine short steps that highlight the real controls. Works on phone (bottom bar) and laptop (side rail). */
+  /** Ten short steps that highlight the real controls. Works on phone (bottom bar) and laptop (side rail). */
   const steps: { target?: string; route?: Parameters<typeof go>; title: string; body: string }[] = [
     { title: tr('Welcome to Consilia'), body: tr('A quick tour of the six places you will use. It takes under a minute. You can replay it any time from Me → Help.') },
     { target: 'a[href="#/today"]', route: ['today'], title: tr('Today'), body: tr('Your next lesson, what still needs planning, and reminders to reflect and back up.') },
     { target: 'a[href="#/plan"]', route: ['plan'], title: tr('Plan'), body: tr('Every lesson plan you make, your weekly timetable, and sharing lessons with friends.') },
     { target: '.btn-gold[href="#/plan/new"]', route: ['plan'], title: tr('New lesson plan'), body: tr('Let Consilia recommend a whole lesson, follow a Scheme of Work lesson, keep its standards with your own activities, or plan from scratch. Consilia checks alignment as you go.') },
+    { target: '[data-open="create"]', title: tr('Create and Search'), body: tr('Create starts what you make most often: a lesson plan, a quiz, a reading text, a worksheet or a projector game. Search (Ctrl+K) finds any tool, lesson plan, class or Scheme of Work lesson.') },
     { target: 'a[href="#/classes"]', route: ['classes'], title: tr('Classes'), body: tr('Paste your pupil lists, record TP levels after teaching and see who needs support.') },
     { target: 'a[href="#/library"]', route: ['library'], title: tr('Library'), body: tr('The full KSSR Scheme of Work, DSKP standards, your textbooks, the activity bank and the Method Guide. All offline.') },
     { target: 'a[href="#/tools"]', route: ['tools'], title: tr('Tools'), body: tr('Let Consilia plan a whole lesson for your class, play projector games made from your words, find teaching aids with step-by-step making guides, and write prompts for AI.') },

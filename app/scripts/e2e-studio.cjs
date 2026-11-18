@@ -54,15 +54,16 @@ function sse(text) {
   const errors = [];
   const check = (ok, msg) => { console.log((ok ? 'PASS ' : 'FAIL ') + msg); if (!ok) errors.push(msg); };
   const chromium = browserName === 'chromium';
-  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, acceptDownloads: true, ...(chromium ? { permissions: ['clipboard-read', 'clipboard-write'] } : {}) });
+  // Service workers are blocked so the stand-in for Anthropic sees every request: in WebKit a request from a page
+  // with a service worker goes through it, out of reach of Playwright's interception (it reached the real API).
+  const ctx = await browser.newContext({ serviceWorkers: 'block', viewport: { width: 1280, height: 900 }, acceptDownloads: true, ...(chromium ? { permissions: ['clipboard-read', 'clipboard-write'] } : {}) });
   await ctx.addInitScript(() => { try { localStorage.setItem('consilia.tourDone', '1'); localStorage.setItem('consilia.splash', new Date().toDateString()); localStorage.setItem('consilia.terms', JSON.stringify({ v: 99, at: '2026-11-16T00:00:00Z' })); } catch (e) {} });
 
   // Anthropic, intercepted: streamed answers chosen by the prompt; every request kept for checks
   const sent = []; let slow = false;
   await ctx.route('https://api.anthropic.com/**', async (route) => {
     const req = route.request();
-    // like Anthropic's own API, the preflight names the headers it allows: a bare * never covers Authorization, and
-    // WebKit (unlike Playwright's Chromium and Firefox) sends the preflight here and holds the browser to that rule
+    // like Anthropic's own API, the preflight names the headers it allows (a bare * never covers Authorization)
     const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': req.headers()['access-control-request-headers'] || 'authorization, content-type', 'access-control-allow-methods': 'GET, POST', 'access-control-max-age': '600' };
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
     if (req.method() === 'GET') return route.fulfill({ status: 200, headers: { ...cors, 'content-type': 'application/json' }, body: JSON.stringify({ data: [{ id: 'claude-opus-5-5', type: 'model', display_name: 'Claude Opus 5.5', created_at: '2026-01-01T00:00:00Z' }], has_more: false, first_id: 'claude-opus-5-5', last_id: 'claude-opus-5-5' }) });

@@ -51,13 +51,13 @@ const base = process.env.BASE_URL || 'http://localhost:4173/';
   await page.waitForSelector('#tour-title');
   check((await page.locator('#tour-title').innerText()) === 'Welcome to Consilia', 'guided tour starts after onboarding');
   const titles = [];
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 10; i++) {
     titles.push(await page.locator('#tour-title').innerText());
     if (i === 3) { await page.waitForTimeout(400); check((await page.locator('.tour .hole').count()) === 1, 'tour highlights the New RPH button'); if (out) await page.screenshot({ path: `${out}/m6-tour.png` }); }
     await page.click('#tour-next');
     await page.waitForTimeout(300);
   }
-  check(titles.join('|') === 'Welcome to Consilia|Today|Plan|New lesson plan|Classes|Library|Tools|Me|You are ready' && (await page.locator('.tour').count()) === 0, 'tour walks through all nine steps and closes');
+  check(titles.join('|') === 'Welcome to Consilia|Today|Plan|New lesson plan|Create and Search|Classes|Library|Tools|Me|You are ready' && (await page.locator('.tour').count()) === 0, 'tour walks through all ten steps (with Create and Search) and closes');
   await page.goto(base + '#/me/help');
   await page.click('#help-tour');
   await page.waitForSelector('#tour-title');

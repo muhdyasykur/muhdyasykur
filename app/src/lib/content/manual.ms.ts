@@ -44,10 +44,11 @@ export const MANUAL_MS: ManualTranslation = {
   },
   "nav": {
    "title": "Mengenali aplikasi",
-   "keywords": "navigasi tab hari ini rancang kelas pustaka saya",
+   "keywords": "navigasi tab hari ini rancang kelas pustaka saya cipta cari ctrl k baharu",
    "body": [
-    "Hari Ini: pelajaran minggu ini, pintasan dan senarai tugasan anda. Rancang: setiap RPH, Hari saya, jadual waktu mingguan dan rancangan tahunan anda. Kelas: kelas Tahun 1 hingga Tahun 6, murid dan PBD. Pustaka: SoW, DSKP, Panduan Kaedah, bank aktiviti dan buku teks anda. Saya: tetapan, sandaran, bantuan, privasi dan maklum balas.",
-    "Butang emas \"+ RPH baharu\" memulakan RPH dari mana-mana."
+    "Hari ini: pelajaran seterusnya, waktu pelajaran hari ini, minggu anda sebagai satu laluan, perkara akan datang, senarai tugasan dan alat anda. Rancang: setiap RPH, Hari saya, jadual waktu mingguan dan rancangan tahunan anda. Kelas: kelas Tahun 1 hingga Tahun 6, murid dan PBD. Pustaka: SoW, DSKP, Panduan Kaedah, bank aktiviti dan buku teks anda. Alat: setiap alat, luar talian dan AI. Saya: tetapan, sandaran, bantuan, privasi dan maklum balas.",
+    "Cipta (jubin emas pada komputer riba, butang + bulat pada telefon) membuka sepuluh perkara yang paling kerap dimulakan oleh guru: RPH baharu, Biar Consilia rancang, Penulis rancangan pelajaran, kuiz, teks bacaan, lembaran kerja, permainan untuk projektor, kehadiran, Hari saya dan mesej kepada ibu bapa.",
+    "Cari (ikon kanta pembesar, atau Ctrl+K atau / pada papan kekunci) mencari alat, RPH dan kelas anda, setiap pelajaran dalam Skema Pelajaran Tahun 1 hingga 6, dan artikel bantuan. Enter membuka hasil pertama; Esc menutup Cari."
    ]
   },
   "new-rph": {
@@ -217,10 +218,12 @@ export const MANUAL_MS: ManualTranslation = {
   },
   "studio": {
    "title": "Alat AI: tuliskan untuk saya",
-   "keywords": "alat ai studio jana claude gemini chatgpt kuiz rubrik teks bacaan lagu cerita refleksi ibu bapa emel hasil saya",
+   "keywords": "alat ai studio jana claude gemini chatgpt kuiz rubrik teks bacaan lagu cerita refleksi ibu bapa emel hasil saya kssr skema pelajaran semakan kualiti baiki",
    "body": [
     "24 alat bertanda AI: Penulis rancangan pelajaran, Set induksi kreatif, Kaitan dengan kehidupan, Pereka aktiviti, Teks bacaan dan dengar, Penyelaras aras teks, Pembina kosa kata, Main peranan dan dialog, Pek fonik, Penerang tatabahasa, Pembina kuiz, Soalan pelbagai aras, Rubrik PBD, Tiket keluar, Maklum balas penulisan, Kerangka ayat dan bank kata, Bantuan untuk seorang murid, Penulis lagu dan rima, Cerita pilih jalan sendiri, Teka-teki dan jenaka, Mesej kepada ibu bapa, Refleksi pelajaran, E-mel profesional dan Tanya pembantu pengajaran. Setiap satu menulis untuk Bahasa Inggeris sekolah rendah Malaysia (KSSR, CEFR) mengikut tahun yang anda pilih.",
-    "Dengan Claude atau Gemini disambungkan di Me → AI assistant, hasilnya muncul semasa ditulis. Tanpanya, butang utama menyalin gesaan: tampal ke dalam Claude.ai, ChatGPT, Gemini atau Copilot, kemudian tampal jawapannya semula. Hanya apa yang anda taip dalam borang dihantar, dan hanya apabila anda menekan butang itu; Consilia terlebih dahulu menyemak teks itu untuk nama murid anda dan menawarkan untuk membuangnya."
+    "Dengan Claude atau Gemini disambungkan di Me → AI assistant, hasilnya muncul semasa ditulis. Tanpanya, butang utama menyalin gesaan: tampal ke dalam Claude.ai, ChatGPT, Gemini atau Copilot, kemudian tampal jawapannya semula. Hanya apa yang anda taip dalam borang dihantar, dan hanya apabila anda menekan butang itu; Consilia terlebih dahulu menyemak teks itu untuk nama murid anda dan menawarkan untuk membuangnya.",
+    "Asaskan pada pelajaran KSSR: di bawah Tahun, buka \"Asaskan pada pelajaran KSSR\" dan pilih pelajaran daripada Skema Pelajaran. Borang diisi sendiri daripada pelajaran itu, dan Consilia menghantar kepada AI standard pembelajaran sebenar pelajaran itu (kod dan huraiannya), tema, fokus bahasa, halaman buku teks dan langkah dalam Skema Pelajaran, supaya jawapan mengikut RPT anda dan bukan meneka. Alat yang dibuka untuk rancangan pelajaran yang mengikut Skema Pelajaran sudah pun berasaskan pelajaran yang sama.",
+    "Setiap hasil melalui Semakan kualiti: bahagian yang diminta, bilangan (8 soalan, 5 idea, peringkat yang jumlahnya sama dengan minit pelajaran, TP1 hingga TP6), objektif yang boleh diukur dan kriteria kejayaan \"I can\", standard pembelajaran yang benar-benar wujud bagi tahun itu (atau sepadan dengan pelajaran Skema Pelajaran), ayat yang cukup pendek untuk aras CEFR tahun itu, ejaan British, dan tempat kosong seperti [Your name] yang perlu diisi. Tekan \"Baiki\" pada satu masalah, atau \"Baiki kesemua\", dan AI menghantar versi yang telah dibetulkan."
    ],
    "steps": [
     "Buka Alat dan pilih alat. Gunakan kumpulan, carian, atau bintang untuk menyimpan kegemaran di bahagian atas.",
@@ -232,7 +235,7 @@ export const MANUAL_MS: ManualTranslation = {
    "tips": [
     "Setiap hasil disimpan dalam Alat → Hasil saya bersama semua versinya, dan dimasukkan dalam sandaran anda.",
     "\"Buka dalam pembina rancangan pelajaran\" daripada Penulis rancangan pelajaran membuat rancangan pelajaran sebenar. Hanya standard pembelajaran yang wujud dalam KSSR dikekalkan, jadi semak langkah Standard.",
-    "Semak setiap hasil AI sebelum murid melihatnya: AI boleh tersilap.",
+    "Semak setiap hasil AI sebelum murid melihatnya: AI boleh tersilap. Semakan kualiti mengesan bahagian yang tiada dan aras yang salah, bukan setiap fakta yang salah.",
     "Jangan sekali-kali taip nama murid. Jika tertaip, Consilia berhenti dan menawarkan untuk menggantikannya dengan \"the pupil\"."
    ]
   },

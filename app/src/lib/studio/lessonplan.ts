@@ -1,4 +1,4 @@
-import type { LearningStandard, School, Standards } from '../curriculum/types';
+import type { LearningStandard, School, SowLesson, Standards } from '../curriculum/types';
 import { buildLesson, buildStages } from '../lesson/create';
 import { newActivity, type Lesson } from '../lesson/model';
 import { today } from '../dates';
@@ -9,10 +9,11 @@ import type { PlanParts, StageKey } from './parse';
  * in the school template, turned into slides and taught. Learning standard codes are only kept when they exist in the
  * KSSR standards for that year, so an AI's guess never reaches the printed plan; the teacher confirms the rest.
  */
-export function lessonFromPlan(p: PlanParts, o: { year: number; school: School; minutes: number; skill: string; topic: string; words: string; sentence: string }, std: Standards): Lesson {
-  const l = buildLesson({ mode: 'scratch', year: o.year, school: o.school, date: today(), start: '08:00', durationMin: o.minutes }, std);
-  l.topic = (p.title || o.topic).replace(/[.:]$/, '').slice(0, 120);
-  l.mainSkill = o.skill;
+export function lessonFromPlan(p: PlanParts, o: { year: number; school: School; minutes: number; skill: string; topic: string; words: string; sentence: string; sow?: SowLesson | null }, std: Standards): Lesson {
+  // based on a Scheme of Work lesson: its own standards, theme and focus (exact), the AI's activities
+  const l = buildLesson({ mode: o.sow ? 'sow-standards' : 'scratch', sow: o.sow ?? null, year: o.year, school: o.school, date: today(), start: '08:00', durationMin: o.minutes }, std);
+  l.topic = (o.sow?.topic || p.title || o.topic).replace(/[.:]$/, '').slice(0, 120);
+  l.mainSkill = o.sow?.mainSkill || o.skill;
   l.framework = 'ppp';
   l.frameworkReason = '';
   // standards that really exist for this year
@@ -22,7 +23,7 @@ export function lessonFromPlan(p: PlanParts, o: { year: number; school: School; 
     const cs = std.cs.find((c) => c.code === x.cs) ?? std.cs.find((c) => x.code.startsWith(c.code + '.'));
     return { cs: cs ? [{ code: cs.code, text: cs.text }] : [], ls: [{ code: x.code, text: x.text }] };
   };
-  l.standards = { main: role(ls[0]), comp: role(ls[1]) };
+  if (!o.sow) l.standards = { main: role(ls[0]), comp: role(ls[1]) };
   // objectives (typed whole) and success criteria
   const [main, comp] = l.objectives;
   if (p.objectives[0]) main.free = p.objectives[0];
@@ -49,6 +50,6 @@ export function lessonFromPlan(p: PlanParts, o: { year: number; school: School; 
   l.sentence = p.sentence || o.sentence;
   l.aids = p.aids.join(', ');
   l.assessment = { evidence: '', method: p.assessment };
-  l.cce = p.cce; l.skills21 = p.skills21;
+  l.cce = o.sow?.cce || p.cce; l.skills21 = p.skills21;
   return l;
 }

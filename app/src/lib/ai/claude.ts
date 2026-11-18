@@ -6,11 +6,11 @@
 import { tr } from '../i18n/index.svelte';
 import { z } from 'zod';
 import type Anthropic from '@anthropic-ai/sdk';
-import { AiError } from './common';
+import { AiError, SYSTEM_PROMPT } from './common';
 
 import { DEFAULT_MODEL, CLAUDE_MODELS } from './claude-models';
 export { DEFAULT_MODEL, CLAUDE_MODELS, KEY_PAGE } from './claude-models';
-const SYSTEM = 'You help trainee English teachers in Malaysian primary schools (KSSR, CEFR-aligned) prepare lessons. Write simple, correct British English at the pupils\' level, with Malaysian names and settings that respect all cultures and religions, and nothing unsuitable for children. Never ask for or include personal data about pupils.';
+const SYSTEM = SYSTEM_PROMPT;
 // Consilia's Content-Security-Policy forbids eval, so Zod (used here and by the SDK) cannot compile its fast paths
 // anyway. Jitless mode skips its eval test, which Firefox otherwise reports as a blocked script.
 z.config({ jitless: true });
@@ -79,7 +79,7 @@ export async function askText(s: { key: string; model: string }, prompt: string)
 export async function streamText(s: { key: string; model: string }, prompt: string, onText: (soFar: string) => void, signal?: AbortSignal): Promise<string> {
   try {
     const c = await client(s.key);
-    const stream = c.beta.messages.stream({ ...common(s.model || DEFAULT_MODEL), output_config: { effort: 'low' }, messages: [{ role: 'user', content: prompt }] }, { signal });
+    const stream = c.beta.messages.stream({ ...common(s.model || DEFAULT_MODEL), output_config: { effort: 'medium' }, messages: [{ role: 'user', content: prompt }] }, { signal });
     stream.on('text', (_delta, soFar) => onText(soFar));
     const r = await stream.finalMessage();
     refused(r.stop_reason);

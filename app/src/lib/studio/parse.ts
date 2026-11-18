@@ -6,7 +6,7 @@ import { textOf, parseMarkdown } from './markdown';
  * wheel, and the parts of a lesson plan for the builder. All of it reads the Markdown the prompts asked for, and
  * copes with small differences when the answer came from another chat.
  */
-const strip = (s: string) => s.replace(/\*\*|__|`/g, '').replace(/(^|\s)[*_](\S[^*_]*?)[*_](?=\s|$|[.,;:!?])/g, '$1$2').replace(/\s+/g, ' ').trim();
+export const strip = (s: string) => s.replace(/\*\*|__|`/g, '').replace(/(^|\s)[*_](\S[^*_]*?)[*_](?=\s|$|[.,;:!?])/g, '$1$2').replace(/\s+/g, ' ').trim();
 
 export interface QuizItem { q: string; a: string }
 /** Numbered questions, their A) B) C) options and "Answer:" lines. */

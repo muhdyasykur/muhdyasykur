@@ -44,8 +44,11 @@
   $effect(() => { const s = q.trim(); if (s.length >= 2) { ensureSow(); ensureManual().then(() => { manual = manualSearch ? manualSearch(s).slice(0, 5).map((h) => ({ id: h.article.id, title: h.article.title, chapter: h.chapter.title })) : []; }); } else manual = []; });
   const words = $derived(q.trim().toLowerCase().split(/\s+/).filter(Boolean));
   const has = (text: string) => words.every((w) => text.toLowerCase().includes(w));
-  const tools = $derived<Hit[]>(!words.length ? [] : TOOLS.filter((t) => has([t.title, t.about, tr(t.title), tr(t.about), t.keys].join(' '))).slice(0, 6)
-    .map((t) => ({ icon: t.icon, title: tr(t.title), sub: tr(t.about), to: t.route === 'recommend' ? href('plan', 'new', 'recommend') : href('tools', t.id) })));
+  // tools whose name matches come first (so "rubric" + Enter opens the PBD rubric), then search words, then descriptions
+  const rank = (t: (typeof TOOLS)[number]) => (has(`${t.title} ${tr(t.title)}`) ? 0 : has(`${t.title} ${tr(t.title)} ${t.keys}`) ? 1 : 2);
+  const tools = $derived<Hit[]>(!words.length ? [] : TOOLS.filter((t) => has([t.title, t.about, tr(t.title), tr(t.about), t.keys].join(' ')))
+    .map((t, i) => ({ t, r: rank(t), i })).sort((a, b) => a.r - b.r || a.i - b.i).slice(0, 6)
+    .map(({ t }) => ({ icon: t.icon, title: tr(t.title), sub: tr(t.about), to: t.route === 'recommend' ? href('plan', 'new', 'recommend') : href('tools', t.id) })));
   const myLessons = $derived<Hit[]>(!words.length ? [] : lessons.filter((l) => has([l.topic, l.header.className, l.mainSkill, l.header.date, l.theme].join(' '))).slice(0, 6)
     .map((l) => ({ icon: 'plan', title: l.topic || tr('Untitled lesson'), sub: [l.header.className, l.header.date, l.mainSkill].filter(Boolean).join(' · '), to: href('plan', 'edit', l.id, 'review') })));
   const myClasses = $derived<Hit[]>(!words.length ? [] : classes.filter((c) => has(`${c.name} year ${c.year} tahun ${c.year}`)).slice(0, 4)

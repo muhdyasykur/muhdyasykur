@@ -3,7 +3,7 @@
  * from the device to Google: Consilia has no server. See common.ts for what is sent.
  */
 import { tr } from '../i18n/index.svelte';
-import { AiError } from './common';
+import { AiError, SYSTEM_PROMPT } from './common';
 export { AiError, slidePrompt, lessonBrief, parseSlideContent, SLIDE_SCHEMA, type SlidePart } from './common';
 
 export const API = 'https://generativelanguage.googleapis.com/v1beta';
@@ -52,6 +52,7 @@ export async function testKey(key: string, f: typeof fetch = fetch): Promise<{ m
 export async function generate(s: { key: string; model: string }, prompt: string, schema?: object, f: typeof fetch = fetch): Promise<string> {
   if (!s.key) throw new AiError('key', tr('No Gemini key yet. Add one in Me → AI assistant.'));
   const body = {
+    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: { temperature: 0.7, maxOutputTokens: 4096, ...(schema ? { responseMimeType: 'application/json', responseSchema: schema } : {}) }
   };

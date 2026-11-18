@@ -10,7 +10,11 @@
   import { notify } from '../../lib/ui/toast.svelte';
   import { toolMeta, CATS } from '../../lib/studio/catalogue';
   import Scene from '../../lib/ui/art/Scene.svelte';
-  import { defOf, buildPrompt, refinePrompt, chipsFor, startValues, missingFields, type Values } from '../../lib/studio/tools';
+  import { defOf, buildPrompt, refinePrompt, chipsFor, startValues, missingFields, groundable, type Values } from '../../lib/studio/tools';
+  import { checkResult, fixAll, type Check } from '../../lib/studio/quality';
+  import { sowBrief } from '../../lib/studio/grounding';
+  import { loadSow, loadStandards } from '../../lib/curriculum/loader';
+  import type { School, SowFile, SowLesson, Standards } from '../../lib/curriculum/types';
   import { parseMarkdown, toPlain, toHtml, titleOf, wordCount } from '../../lib/studio/markdown';
   import { quizItems, wordsFrom } from '../../lib/studio/parse';
   import { namesIn, withoutNames } from '../../lib/studio/privacy';
@@ -21,7 +25,7 @@
   import { AI_SITES } from '../../lib/recommend/prompts';
   import { pwa } from '../../lib/pwa.svelte';
   import { ctx, saveCtx, hasCtx, fromLesson } from '../../lib/tools/context.svelte';
-  import { saveCreation, getCreation, pupilNames, saveLesson } from '../../lib/db/repo';
+  import { saveCreation, getCreation, pupilNames, saveLesson, getLesson } from '../../lib/db/repo';
   import type { CreationVersion } from '../../lib/db/schema';
   import { appendAppendix } from '../../lib/tools/actions';
   import { uid } from '../../lib/lesson/model';
@@ -74,8 +78,88 @@
   const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
   const sites = AI_SITES.filter((s) => s.id !== 'canva');
 
+  // ---- based on a KSSR Scheme of Work lesson (values.sow = "year:school:lesson", kept with the creation)
+  const grounded = def ? groundable(def) : false;
+  const school = $derived<School>(profile.value?.schoolType === 'SJK' ? 'SJK' : 'SK');
+  const year = $derived(Math.min(6, Math.max(1, Number(values.year) || 4)));
+  let sowFile = $state<SowFile | null>(null);
+  let sowStd = $state<Standards | null>(null);
+  let sowOpen = $state(false);
+  let sowErr = $state('');
+  let yearCodes = $state<string[]>([]);
+  const sowRef = $derived.by(() => { const m = /^([1-6]):(SK|SJK):(\d+)$/.exec(values.sow ?? ''); return m ? { year: +m[1], school: m[2] as School, no: +m[3] } : null; });
+  const sowLesson = $derived(sowRef && sowRef.year === year && sowFile && sowFile.year === sowRef.year && sowFile.school === sowRef.school ? sowFile.lessons.find((l) => l.no === sowRef.no) ?? null : null);
+  const units = $derived.by(() => {
+    const out: { unit: string; lessons: SowLesson[] }[] = [];
+    for (const l of sowFile?.lessons ?? []) { const u = l.unit || tr('Other lessons'); const g = out.find((x) => x.unit === u); if (g) g.lessons.push(l); else out.push({ unit: u, lessons: [l] }); }
+    return out;
+  });
+  $effect(() => {
+    if (!grounded || !(sowOpen || values.sow)) return;
+    const y = year, sch = sowRef && sowRef.year === y ? sowRef.school : school;
+    if (sowFile && sowFile.year === y && sowFile.school === sch) return;
+    sowErr = '';
+    Promise.all([loadSow(y, sch), loadStandards(y, sch)])
+      .then(([f, st]) => { if (year === y) { sowFile = f; sowStd = st; } })
+      .catch(() => (sowErr = tr('The Scheme of Work could not be loaded. Open Consilia once while online so it is kept for offline use.')));
+  });
+  // every Year's real learning standards, to catch codes an AI made up
+  $effect(() => {
+    if (def?.id !== 'lesson-plan') return;
+    const y = year, sch = school;
+    loadStandards(y, sch).then((st) => { if (year === y) yearCodes = st.ls.map((x) => x.code); }).catch(() => (yearCodes = []));
+  });
+  const sowObjective = (l: SowLesson) => {
+    const code = l.std.main.ls[0];
+    const t = sowStd?.ls.find((x) => x.code === code)?.text ?? '';
+    return t ? `Pupils can ${t.charAt(0).toLowerCase()}${t.slice(1).replace(/[.\s]+$/, '')} (${code}).` : code;
+  };
+  function pickSow(no: string) {
+    if (!def) return;
+    const l = no ? sowFile?.lessons.find((x) => x.no === Number(no)) : null;
+    if (!l || !sowFile) { values.sow = ''; announce = tr('Not based on a KSSR lesson.'); return; }
+    values.sow = `${sowFile.year}:${sowFile.school}:${l.no}`;
+    // the form follows the lesson, so what is typed and the curriculum facts agree
+    for (const f of def.fields) {
+      if (f.from === 'topic') values[f.id] = l.topic;
+      else if (f.from === 'skill' && f.options?.includes(l.mainSkill)) values[f.id] = l.mainSkill;
+      else if (f.from === 'objectives' && l.std.main.ls.length) values[f.id] = sowObjective(l);
+      else if (f.id === 'standard' && l.std.main.ls.length) values[f.id] = l.std.main.ls.join(', ');
+      else if (f.id === 'point' && !values.point?.trim() && l.focus) values[f.id] = l.focus;
+    }
+    formErr = '';
+    announce = tr('Based on KSSR lesson {n}: {x}. The form was filled from it.', { n: l.no, x: l.topic });
+  }
+  /** The curriculum facts for the prompt, when the result is based on a Scheme of Work lesson. */
+  async function grounding(): Promise<string> {
+    if (!grounded || !sowRef || sowRef.year !== year) return '';
+    try {
+      const [f, st] = await Promise.all([loadSow(sowRef.year, sowRef.school), loadStandards(sowRef.year, sowRef.school)]);
+      const l = f.lessons.find((x) => x.no === sowRef.no);
+      return l ? sowBrief(l, st, sowRef.year, sowRef.school) : '';
+    } catch {
+      notify(tr('The Scheme of Work lesson could not be loaded, so it was not added.'), { kind: 'error' });
+      return '';
+    }
+  }
+
+  // ---- quality checks on the version shown
+  const checks = $derived(def && current && !busy ? checkResult(def.id, current, values, { sowCodes: sowLesson ? [...sowLesson.std.main.ls, ...sowLesson.std.comp.ls] : undefined, yearCodes }) : []);
+  const problems = $derived(checks.filter((c) => c.state === 'fix'));
+  const notes = $derived(checks.filter((c) => c.state === 'note'));
+  let qcEl = $state<HTMLDetailsElement>();
+  function toChecks() { if (!qcEl) return; qcEl.open = true; qcEl.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' }); qcEl.querySelector('summary')?.focus({ preventScroll: true }); }
+
   onMount(async () => {
-    if (!cid || !def) return;
+    if (!def) return;
+    if (!cid) {
+      // opened for a lesson plan that follows the Scheme of Work: base it on the same lesson
+      if (grounded && ctx.lessonId && !values.sow) {
+        const l = await getLesson(ctx.lessonId).catch(() => undefined);
+        if (l?.curriculum.sowLesson && l.curriculum.year === year) values.sow = `${l.curriculum.year}:${l.curriculum.school}:${l.curriculum.sowLesson}`;
+      }
+      return;
+    }
     const c = await getCreation(cid);
     if (!c || c.tool !== id) { notify(tr('That saved result was not found.'), { kind: 'error' }); return; }
     values = { ...startValues(def, ctx, i18n.locale), ...c.inputs };
@@ -107,7 +191,7 @@
     if (miss.length) { formErr = tr('Please fill in: {x}', { x: miss.map((f) => tr(f.label)).join(', ') }); document.getElementById('sf-' + miss[0].id)?.focus(); return; }
     if (!(await namesOk(Object.values(values)))) return;
     used(id);
-    const p = buildPrompt(def, values);
+    const p = buildPrompt(def, values, await grounding());
     if (aiReady()) await run(p, 'first'); else await startPaste(p, 'paste');
   }
   async function run(p: string, how: CreationVersion['how'], note?: string) {
@@ -154,17 +238,20 @@
   }
 
   // ---- changing a result
-  async function change(instruction: string) {
+  async function change(instruction: string, how: 'change' | 'fix' = 'change', note?: string) {
     const c = instruction.trim();
     if (!c || !current || !def) return;
     if (!(await namesOk([c]))) return;
-    const p = refinePrompt(def, values, current, c);
+    const p = refinePrompt(def, values, current, c, await grounding());
     changeText = '';
-    if (aiReady()) await run(p, 'change', c); else await startPaste(p, 'change', c);
+    const n = how === 'fix' ? note : c;
+    if (aiReady()) await run(p, how, n); else await startPaste(p, how, n);
   }
+  /** Ask the AI to fix what the quality check found (one problem, or all of them in one request). */
+  function fix(list: Check[]) { if (list.length) change(fixAll(list), 'fix', list.map((c) => c.id).join(', ')); }
   function startEdit() { editText = current; editing = true; tick().then(() => document.getElementById('st-edit')?.focus()); }
   function saveEdit() { if (editText.trim() && editText.trim() !== current.trim()) add(editText, 'edit'); editing = false; }
-  const versionLabel = (v?: CreationVersion) => !v ? '' : v.how === 'change' ? tr('Changed: {x}', { x: v.note ? tr(v.note) : '' }) : v.how === 'edit' ? tr('Edited by you') : v.how === 'paste' ? tr('Pasted from an AI chat') : v.how === 'stopped' ? tr('Stopped before the end') : tr('First version');
+  const versionLabel = (v?: CreationVersion) => !v ? '' : v.how === 'change' ? tr('Changed: {x}', { x: v.note ? tr(v.note) : '' }) : v.how === 'edit' ? tr('Edited by you') : v.how === 'paste' ? tr('Pasted from an AI chat') : v.how === 'stopped' ? tr('Stopped before the end') : v.how === 'fix' ? tr('Fixed after the quality check') : tr('First version');
 
   // ---- using a result
   async function copy() {
@@ -209,10 +296,11 @@
   function spinWheel() { ctx.words = wheelWords.join(', '); saveCtx(); go('tools', 'games', 'wheel'); }
   async function toBuilder() {
     try {
-      const [{ parsePlan }, { lessonFromPlan }, { loadStandards }] = await Promise.all([import('../../lib/studio/parse'), import('../../lib/studio/lessonplan'), import('../../lib/curriculum/loader')]);
-      const school = profile.value?.schoolType === 'SJK' ? 'SJK' : 'SK';
-      const year = Number(values.year) || 4;
-      const l = lessonFromPlan(parsePlan(current), { year, school, minutes: parseInt(values.minutes) || 60, skill: values.skill || 'Speaking', topic: values.topic ?? '', words: values.words ?? '', sentence: values.sentence ?? '' }, await loadStandards(year, school));
+      const [{ parsePlan }, { lessonFromPlan }] = await Promise.all([import('../../lib/studio/parse'), import('../../lib/studio/lessonplan')]);
+      const ref = sowRef && sowRef.year === year ? sowRef : null;
+      const sch: School = ref?.school ?? school;
+      const sow = ref ? (await loadSow(year, sch)).lessons.find((x) => x.no === ref.no) ?? null : null;
+      const l = lessonFromPlan(parsePlan(current), { year, school: sch, minutes: parseInt(values.minutes) || 60, skill: values.skill || 'Speaking', topic: values.topic ?? '', words: values.words ?? '', sentence: values.sentence ?? '', sow }, await loadStandards(year, sch));
       await saveLesson(JSON.parse(JSON.stringify(l)));
       fromLesson(l);
       notify(tr('Lesson plan created. Check the standards and objectives, then print it.'), { kind: 'ok' });
@@ -256,8 +344,34 @@
         {#each def.fields as f (f.id)}
           {#if f.kind === 'year'}
             <div class="field"><span id="sf-{f.id}-l">{tr('Year')}</span>
-              <div class="seg years" role="group" aria-labelledby="sf-{f.id}-l">{#each ['1', '2', '3', '4', '5', '6'] as y}<button type="button" aria-pressed={values[f.id] === y} onclick={() => (values[f.id] = y)}>{y}</button>{/each}</div>
+              <div class="seg years" role="group" aria-labelledby="sf-{f.id}-l">{#each ['1', '2', '3', '4', '5', '6'] as y}<button type="button" aria-pressed={values[f.id] === y} onclick={() => { values[f.id] = y; if (sowRef && sowRef.year !== Number(y)) values.sow = ''; }}>{y}</button>{/each}</div>
             </div>
+            {#if grounded}
+              <details class="sow" bind:open={sowOpen} id="st-sow">
+                <summary><Icon name="book" size={18} /><span class="grow" id="st-sow-sum">{sowLesson ? tr('Based on KSSR lesson {n}: {x}', { n: sowLesson.no, x: sowLesson.topic }) : sowRef && sowRef.year === year ? tr('Based on KSSR lesson {n}', { n: sowRef.no }) : tr('Base it on a KSSR lesson (optional)')}</span><span class="chev" aria-hidden="true"><Icon name="chevron" size={16} /></span></summary>
+                <div class="stack sowbody">
+                  <p class="small muted">{tr('Consilia adds the lesson\'s learning standards, theme, textbook pages and Scheme of Work steps to the request, so the answer follows your RPT.')}</p>
+                  {#if sowErr}<p class="small err" role="alert">{sowErr}</p>
+                  {:else if !sowFile || sowFile.year !== year}<p class="small muted">{tr('Loading the Scheme of Work…')}</p>
+                  {:else}
+                    <label class="field" for="st-sow-pick"><span>{tr('Year {y} lesson ({x})', { y: year, x: sowFile.textbook })}</span>
+                      <select id="st-sow-pick" class="select" value={sowLesson ? String(sowLesson.no) : ''} onchange={(e) => pickSow(e.currentTarget.value)}>
+                        <option value="">{tr('None: use only what I type')}</option>
+                        {#each units as u (u.unit)}<optgroup label={u.unit}>{#each u.lessons as l (l.no)}<option value={String(l.no)}>{l.no}. {tr(l.mainSkill)}: {l.topic}</option>{/each}</optgroup>{/each}
+                      </select>
+                    </label>
+                    {#if sowLesson}
+                      <div class="sowcard" id="st-sow-card">
+                        <p class="small"><b>{sowLesson.theme}</b> · {tr(sowLesson.mainSkill)}{#if sowLesson.focus}{' · '}{sowLesson.focus}{/if}</p>
+                        <p class="small">{tr('Learning standards')}: {[...sowLesson.std.main.ls, ...sowLesson.std.comp.ls].join(', ') || tr('chosen by the teacher')}</p>
+                        {#if sowLesson.materials}<p class="small muted">{sowLesson.materials.length > 180 ? sowLesson.materials.slice(0, 179).trimEnd() + '…' : sowLesson.materials}</p>{/if}
+                        <button class="btn btn-text" type="button" onclick={() => pickSow('')} id="st-sow-clear">{tr('Do not use a KSSR lesson')}</button>
+                      </div>
+                    {/if}
+                  {/if}
+                </div>
+              </details>
+            {/if}
           {:else}
             <label class="field" for="sf-{f.id}">
               <span>{tr(f.label)}{#if f.required}<span class="req" aria-hidden="true"> *</span>{/if}</span>
@@ -332,7 +446,7 @@
             {#if def.read}<button class="btn btn-text" type="button" onclick={present} id="st-present"><Icon name="expand" size={18} />{tr('Projector')}</button>{/if}
           {/if}
         </div>
-        {#if !busy && versions[vi]}<p class="muted small vnote no-print">{versionLabel(versions[vi])}{#if saved}{' · '}<a href={href('tools', 'creations')}>{tr('Saved in My creations')}</a>{/if}</p>{/if}
+        {#if !busy && versions[vi]}<p class="muted small vnote no-print">{versionLabel(versions[vi])}{#if saved}{' · '}<a href={href('tools', 'creations')}>{tr('Saved in My creations')}</a>{/if}{#if checks.length && !editing}{' · '}<button type="button" class="qc-jump {problems.length ? 'is-fix' : 'is-ok'}" onclick={toChecks} id="st-qc-jump"><Icon name={problems.length ? 'warning' : 'check'} size={14} />{problems.length ? tr('Quality check: {n} to fix', { n: problems.length }) : tr('Quality check passed')}</button>{/if}</p>{/if}
         {#if editing}
           <label class="sr-only" for="st-edit">{tr('Edit the result')}</label>
           <textarea id="st-edit" class="input ta edit no-print" rows="18" bind:value={editText}></textarea>
@@ -346,6 +460,22 @@
         {/if}
         {#if !busy && current && !editing}
           <p class="muted small ai-note no-print">{tr('{n} words. Check it before using it with pupils: AI can make mistakes.', { n: wordCount(current) })}</p>
+          {#if checks.length}
+            <details class="qc no-print" open={problems.length > 0 || notes.length > 0} id="st-qc" bind:this={qcEl}>
+              <summary><span class="qc-ic {problems.length ? 'is-fix' : 'is-ok'}" aria-hidden="true"><Icon name={problems.length ? 'warning' : 'check'} size={18} /></span><span class="grow"><b>{tr('Quality check')}</b> · <span id="st-qc-sum">{problems.length ? tr('{n} to fix', { n: problems.length }) : notes.length ? tr('{n} passed · {m} to look at', { n: checks.length - notes.length, m: notes.length }) : tr('All {n} checks passed', { n: checks.length })}</span></span><span class="chev" aria-hidden="true"><Icon name="chevron" size={16} /></span></summary>
+              <ul class="qc-list">
+                {#each checks as c (c.id)}
+                  <li class="qc-{c.state}" data-check={c.id} data-state={c.state}>
+                    <span class="qc-ic" aria-hidden="true"><Icon name={c.state === 'ok' ? 'check' : c.state === 'fix' ? 'warning' : 'bulb'} size={16} /></span>
+                    <span class="grow"><span class="sr-only">{c.state === 'ok' ? tr('Passed:') : c.state === 'fix' ? tr('To fix:') : tr('Note:')} </span>{c.text}</span>
+                    {#if c.fix}<button class="btn btn-outline qc-btn" type="button" onclick={() => fix([c])} data-fix={c.id}>{tr('Fix it')}</button>{/if}
+                  </li>
+                {/each}
+              </ul>
+              {#if problems.length > 1}<button class="btn btn-primary" type="button" onclick={() => fix(problems)} id="st-fix-all"><Icon name="sparkle" size={18} />{tr('Fix all {n}', { n: problems.length })}</button>{/if}
+              <p class="small muted qc-foot">{tr('Consilia checks the sections, numbers, length, level for the year and spelling. It cannot check every fact: read it before you use it.')}</p>
+            </details>
+          {/if}
           {#if quizCount || wheelWords.length || def.send?.includes('builder') || ctx.lessonId}
             <div class="sendto no-print" aria-label={tr('Use it')} role="group">
               {#if def.send?.includes('builder')}<button class="btn btn-gold" type="button" onclick={toBuilder} id="st-builder"><Icon name="plan" size={18} />{tr('Open in the lesson plan builder')}</button>{/if}
@@ -425,6 +555,31 @@
   .writing { justify-content: space-between; }
   .edit { min-height: 22rem; font-family: var(--f-mono); font-size: var(--t-sm); }
   .ai-note { margin: 0; }
+  .sow { border: 1px dashed var(--line); border-radius: var(--r-ctl); padding: 0 var(--s-3); background: var(--sky-2); }
+  .sow summary, .qc summary { display: flex; gap: var(--s-2); align-items: center; min-height: 48px; list-style: none; font-weight: 600; }
+  .sow summary::-webkit-details-marker, .qc summary::-webkit-details-marker { display: none; }
+  .sow summary :global(svg) { color: var(--blue); flex: none; }
+  .chev { display: inline-flex; transition: transform .15s; }
+  details[open] > summary .chev { transform: rotate(90deg); }
+  @media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+  .sowbody { padding-bottom: var(--s-3); }
+  .sowbody p { margin: 0; }
+  .sowcard { display: grid; gap: 4px; padding: var(--s-2) var(--s-3); border-radius: var(--r-ctl); background: var(--card); border: 1px solid var(--line); justify-items: start; }
+  .sowcard p { margin: 0; font-weight: 400; }
+  .qc-jump { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 0 2px; border: 0; background: none; font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .qc-jump.is-ok { color: var(--ok); }
+  .qc-jump.is-fix { color: var(--bad); }
+  .qc { border: 1px solid var(--line); border-radius: var(--r-ctl); background: var(--card); padding: 0 var(--s-3); }
+  .qc[open] { padding-bottom: var(--s-3); }
+  .qc-list { list-style: none; margin: 0 0 var(--s-2); padding: 0; display: grid; gap: 6px; }
+  .qc-list li { display: flex; gap: var(--s-2); align-items: center; padding: 6px var(--s-2); border-radius: var(--r-ctl); background: var(--sunken); font-size: var(--t-sm); }
+  .qc-list li.qc-fix { background: var(--coral-soft); }
+  .qc-ic { display: inline-flex; flex: none; }
+  .qc-ok .qc-ic, .qc-ic.is-ok { color: var(--ok); }
+  .qc-fix .qc-ic, .qc-ic.is-fix { color: var(--coral); }
+  .qc-note .qc-ic { color: var(--blue); }
+  .qc-btn { min-height: 44px; flex: none; background: var(--card); }
+  .qc p.qc-foot { margin: var(--s-2) 0 0; }
   .sendto { display: flex; flex-wrap: wrap; gap: var(--s-2); padding: var(--s-3); border-radius: var(--r-ctl); background: var(--sunken); }
   .refine { display: grid; gap: var(--s-2); border-top: 1px solid var(--line); padding-top: var(--s-3); }
   .refine h3 { margin: 0; font-size: var(--t-md); }

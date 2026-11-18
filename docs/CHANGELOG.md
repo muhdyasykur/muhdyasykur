@@ -1,5 +1,58 @@
 # Changelog
 
+## 1.0.0-beta.8 · 18 November 2026 (a new look, and AI tools that know the KSSR lesson)
+
+**New look**
+- One design language merged from the travel designs the teacher chose: navy and gold kept, with royal blue for
+  actions, teal widgets, coral handwritten accents (Caveat Brush, SIL Open Font License), sky gradients on a warm cream
+  page, rounder cards, pill buttons and softer shadows, in light and dark.
+- Original illustrations drawn for Consilia: a learning journey rising out of an open book on Today and Tools, and a
+  scene for each group of tools; clay icon tiles; a paper-plane trail beside section titles.
+- On a laptop, a rail of rounded tiles with a gold **Create** button and **Search**. On a phone, a top bar with search
+  and a tab bar with a raised round Create button. **Create** opens the ten things teachers start most often.
+  **Search** (Ctrl+K or /) finds tools, your lesson plans and classes, every Scheme of Work lesson (Years 1 to 6) and
+  the manual.
+- **Today** is a dashboard: your next lesson as a featured card, today's periods, the week as a route with five stops,
+  what is coming up, a to-do list and your tools. **Tools** opens with a Quick start that opens the right tool already
+  filled in, top picks, the full gallery and real numbers (36 tools, 1,489 Scheme of Work lessons). Plan, Classes,
+  Library and Me have new headers.
+- The guided tour has a step for Create and Search, and the manual's "Find your way around" describes them (English
+  and Malay).
+
+**Smarter AI tools**
+- **Base it on a KSSR lesson.** In 18 of the 24 AI tools, choose a lesson from the Scheme of Work under Year. The form
+  fills itself from the lesson, and the request carries that lesson's real learning standards (codes and wording),
+  theme, language focus, textbook pages and the Scheme of Work's own steps, so the answer follows your RPT instead of
+  guessing. A tool opened for a lesson plan that follows the Scheme of Work is based on the same lesson already. A
+  lesson plan written this way opens in the builder with that lesson's exact standards, theme and topic.
+- **An expert brief on every request** (Claude and Gemini): an IPG lecturer's knowledge of KSSR (Semakan 2017), CEFR
+  levels by year, the SoW textbooks, PBD (TP1 to TP6), KBAT and the cross-curricular elements, practical for large
+  mixed-ability classes, and never inventing standard codes, page numbers or facts.
+- **Language pitched at the year**: anything pupils read or hear is written to that year's CEFR level (for example
+  Pre-A1 for Year 1: sentences of 3 to 6 words; A2 for Year 6: up to 14 words, with linking words).
+- **A quality check on every result**, with or without an AI key: the sections asked for; the numbers (8 questions,
+  5 hooks, 12 to 16 phonics words, stages that add up to the lesson's minutes, TP1 to TP6, 3 criteria); measurable
+  objectives and "I can" success criteria; learning standards that really exist for the year, or match the Scheme of
+  Work lesson; answers and options in quizzes; the spelling pattern in every phonics word; text and story lengths;
+  sentences short enough for the year; British spelling; blanks such as [Your name] to fill in. **Fix it** on one
+  problem, or **Fix all**, sends the fix and gives a new version; without a key the fix is copied as a prompt.
+- Claude takes a little more care over Studio results (medium effort instead of low).
+
+**Fixed**
+- Firefox reported a blocked script each time the Claude assistant loaded: Zod, used by Anthropic's SDK, tests
+  whether `eval` works, and Consilia's Content-Security-Policy blocks it. Zod now runs without that test.
+
+**Testing**
+- A new browser suite, `e2e:ai`: all 24 AI tools generate a realistic answer that renders and passes its quality check;
+  a lesson plan based on Scheme of Work lesson 2 sends its real standards and textbook pages and opens in the builder
+  with them; Fix it and Fix all; the copy-and-paste route; Malay; a phone.
+- A new browser suite, `e2e:shell`: the Create panel (laptop and phone), Search (Ctrl+K and /, tools, lesson plans,
+  classes, the Scheme of Work, the manual, Enter and Esc), the Tools Quick start and the Today dashboard.
+- WebKit: the Studio suite never reached its stand-in for Anthropic. WebKit sends requests from a page with a service
+  worker through the worker, out of reach of Playwright's interception, so they went to the real API, which refused
+  the test key. The suites that stand in for Anthropic now block the service worker, as Playwright advises. The stand-in
+  also answers the CORS preflight as the real API does, and the Recently used check no longer depends on timing.
+
 ## 1.0.0-beta.7 · 18 November 2026 (milestone 11: Studio, the textbook in the lesson plan)
 
 **New**
