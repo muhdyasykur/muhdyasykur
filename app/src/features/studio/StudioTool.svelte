@@ -79,6 +79,9 @@
     if (!c || c.tool !== id) { notify(tr('That saved result was not found.'), { kind: 'error' }); return; }
     values = { ...startValues(def, ctx, i18n.locale), ...c.inputs };
     versions = c.versions; vi = c.versions.length - 1; createdAt = c.createdAt; saved = true;
+    // on a phone the result is below the form: go straight to it
+    await tick();
+    if (matchMedia('(max-width: 999px)').matches) resultEl?.scrollIntoView({ block: 'start' });
   });
   onDestroy(() => { ctrl?.abort(); if (speaking) speechSynthesis.cancel(); });
 
