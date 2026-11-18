@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHero from '../../lib/ui/PageHero.svelte';
   import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { t, type Key } from '../../lib/i18n/index.svelte';
@@ -89,10 +90,7 @@
     sourceLabel={`${activeTab === 'phonics' ? 'Phonics SoW' : 'SoW'} · ${t('library.year', { n: year })}${activeTab === 'phonics' ? '' : ' ' + school}`} />
 {:else}
 <div class="stack">
-  <header class="stack tight">
-    <h1>{t('library.title')}</h1>
-    <p class="muted">{t('library.sub', { v: index?.version ?? '…' })}{#if index} · {index.years[String(year)].textbook}{/if}</p>
-  </header>
+  <PageHero title={t('library.title')} eyebrow={tr('Scheme of Work · Standards · Textbooks')} script={tr('Every KSSR lesson, offline')} sub={`${t('library.sub', { v: index?.version ?? '…' })}${index ? ' · ' + index.years[String(year)].textbook : ''}`} scene="classroom" tone="lilac" />
 
   <div class="controls">
     <div class="seg" role="group" aria-label={tr('Year')}>

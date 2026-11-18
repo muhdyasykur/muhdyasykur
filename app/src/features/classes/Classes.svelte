@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHero from '../../lib/ui/PageHero.svelte';
   import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
@@ -55,7 +56,7 @@
   <ClassDetail id={route.parts[0]} />
 {:else}
 <div class="stack">
-  <h1>{tr('Classes')}</h1>
+  <PageHero title={tr('Classes')} eyebrow={tr('Attendance · PBD · Profiles')} script={tr('Know every pupil')} sub={tr('Your classes and pupils, attendance and PBD progress, kept on this device.')} scene="support" tone="mint" />
   <div class="seg years" role="group" aria-label={tr('Year')}>
     {#each years as y}
       {@const n = classes.filter((c) => c.year === y).length}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHero from '../../lib/ui/PageHero.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
   import { t, i18n, setLocale } from '../../lib/i18n/index.svelte';
   import { theme, setTheme, type Theme } from '../../lib/theme.svelte';
@@ -33,7 +34,7 @@
 </script>
 {#if route.parts[0] === 'mentor'}<Mentor />{:else if route.parts[0] === 'about'}<About />{:else if route.parts[0] === 'help'}<Help />{:else if route.parts[0] === 'privacy'}<Privacy />{:else if route.parts[0] === 'terms'}<Terms />{:else if route.parts[0] === 'ai'}<AiAssistant />{:else}
 <div class="stack">
-  <h1>{t('me.title')}</h1>
+  <PageHero title={t('me.title')} eyebrow={tr('Profile · Settings · Help')} script={tr('Make it yours')} sub={tr('Your profile, language, theme, AI assistant, backups and help.')} scene="write" tone="peach" />
   <div class="links">
     <a class="card raised mentor" href={href('me', 'mentor')}><b>{tr('Mentor and lecturer feedback')}</b><span class="muted">{tr('Log observation comments and see what keeps coming up.')}</span></a>
     <a class="card raised mentor" href={href('me', 'ai')} id="me-ai"><b>{tr('AI assistant {x}', { x: ai.on ? tr('· {aiName} on', { aiName: aiName() }) : tr('· off') })}</b><span class="muted">{tr('Optional: let Claude (or Gemini) write texts, dialogues and questions for your lessons, with your own key.')}</span></a>

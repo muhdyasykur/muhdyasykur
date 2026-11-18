@@ -11,3 +11,6 @@
   src:url("@fontsource/andika/files/andika-latin-400-normal.woff2") format("woff2")}
 @font-face{font-family:"Andika";font-style:normal;font-weight:700;font-display:swap;
   src:url("@fontsource/andika/files/andika-latin-700-normal.woff2") format("woff2")}
+/* Accent words in headings ("Teach with joy"): Caveat Brush (SIL OFL 1.1, see fonts/LICENSE-caveat-brush.txt), basic Latin only */
+@font-face{font-family:"Consilia Script";font-style:normal;font-weight:400;font-display:swap;
+  src:url("./fonts/script-subset.woff2") format("woff2")}

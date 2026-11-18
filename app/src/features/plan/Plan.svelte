@@ -1,4 +1,5 @@
 <script lang="ts">
+  import PageHero from '../../lib/ui/PageHero.svelte';
   import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr, uiDate } from '../../lib/i18n/index.svelte';
   import { route, href, go } from '../../router.svelte';
@@ -77,10 +78,9 @@
   <Builder id={route.parts[1]} step={route.parts[2] ?? 'setup'} />
 {:else}
 <div class="stack">
-  <div class="row top">
-    <h1>{tr('Plan')}</h1>
-    <a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a>
-  </div>
+  <PageHero title={tr('Plan')} eyebrow={tr('Lessons · Week · Day · Year')} script={tr('Plan with purpose')} sub={tr('Every lesson plan is checked against KSSR, and ready to print, teach or turn into slides.')} scene="plan" tone="sky">
+    {#snippet actions()}<a class="btn btn-gold" href={href('plan', 'new')}><Icon name="plus" size={18} />{tr('New lesson plan')}</a><a class="btn btn-outline" href={href('plan', 'new', 'recommend')}><Icon name="sparkle" size={18} />{tr('Let Consilia plan it')}</a>{/snippet}
+  </PageHero>
   <PlanTabs current="lessons" />
   <div class="row"><label class="btn btn-text">{tr('Import a shared lesson (.consilia)')}<input id="plan-import" type="file" accept=".consilia,application/json" class="sr-only" onchange={importFile} /></label>{#if importMsg}<span class="err" role="alert">{importMsg}</span>{/if}</div>
   {#if lessons && !lessons.length}

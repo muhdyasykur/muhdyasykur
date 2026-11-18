@@ -2,12 +2,16 @@
 :root{
   --navy:#13294B; --navy-2:#1E3A66; --on-navy:#FFFFFF;
   --gold:#86660F; --gold-strong:#E2BC4F; --gold-soft:#F3E7C2; --on-gold:#1A1405;
-  --paper:#F6F7FA; --card:#FFFFFF; --sunken:#ECEFF5;
-  --ink:#101A2E; --ink-2:#46526B; --ink-3:#5E6980; --line:#DFE3EC;
+  --paper:#F7F4EC; --card:#FFFFFF; --sunken:#EFEBE1;
+  --ink:#101A2E; --ink-2:#46526B; --ink-3:#5B6478; --line:#E4DED1;
   --main:#F6C9A8; --main-ink:#7A3B12; --comp:#CFE3F5; --comp-ink:#18476E;
   --low:#1F8574; --mod:#A66F08; --high:#5B43B8;
   --ok:#1A7F50; --warn:#9A6412; --bad:#B8362F;
   --brand-bg:#13294B;
+  /* journey palette (merged with the travel references): royal blue actions, teal widgets, coral script accents, sky */
+  --blue:#1D5BD8; --blue-2:#164BB5; --on-blue:#FFFFFF; --blue-soft:#E3ECFC;
+  --teal:#0F766E; --teal-2:#0B5F58; --on-teal:#FFFFFF; --teal-soft:#D9F0EC;
+  --coral:#D9512E; --coral-soft:#FCE3DA; --sky-1:#CFE2FF; --sky-2:#EEF4FF;
   /* tool categories (tiles behind icons): green, purple, rose; plan, create and assess use gold, main and comp */
   --tint-green:#D5EFE9; --tint-green-ink:#155E52; --tint-purple:#E4DEF8; --tint-purple-ink:#44309A; --tint-rose:#F8D9E2; --tint-rose-ink:#8A1F45;
 
@@ -15,16 +19,18 @@
   --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --f-pupil:"Andika","Plus Jakarta Sans",system-ui,sans-serif;
+  --f-script:"Consilia Script","Segoe Script","Bradley Hand",cursive;
 
   /* type scale, 1.25 ratio */
   --t-xs:.75rem; --t-sm:.875rem; --t-md:1rem; --t-lg:1.25rem; --t-xl:1.5625rem; --t-2xl:1.953rem; --t-3xl:2.441rem;
   /* 4-point spacing */
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px; --s-8:32px; --s-12:48px; --s-16:64px;
-  --r-card:14px; --r-ctl:10px; --r-pill:99px;
-  --shadow-raised:0 1px 0 rgba(19,41,75,.06),0 10px 28px -12px rgba(19,41,75,.22);
+  --r-card:20px; --r-ctl:12px; --r-pill:999px; --r-xl:28px;
+  --shadow-raised:0 1px 0 rgba(19,41,75,.04),0 14px 34px -16px rgba(19,41,75,.24);
+  --shadow-float:0 26px 60px -26px rgba(19,41,75,.42);
   --shadow-overlay:0 24px 60px -20px rgba(19,41,75,.45);
   --tap:44px;
-  --rail-w:232px; --tabbar-h:64px;
+  --rail-w:112px; --tabbar-h:64px;
   --dur-fast:150ms; --dur:180ms; --dur-slow:400ms;
   color-scheme:light;
 }
@@ -39,6 +45,10 @@
     --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
     --brand-bg:#16264A;
     --tint-green:#12352F; --tint-green-ink:#7FE0CB; --tint-purple:#2A2350; --tint-purple-ink:#C9BCFF; --tint-rose:#4A1A2B; --tint-rose-ink:#FFC2D4;
+    --blue:#8FB2FF; --blue-2:#AFC8FF; --on-blue:#0B1324; --blue-soft:#16264A;
+    --teal:#5AD6C9; --teal-2:#7FE0D5; --on-teal:#062A27; --teal-soft:#0F2F2C;
+    --coral:#FF9474; --coral-soft:#3A1E17; --sky-1:#16264A; --sky-2:#0E1A33;
+    --shadow-float:0 26px 60px -26px rgba(0,0,0,.75);
     --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
     --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
     color-scheme:dark;
@@ -54,6 +64,10 @@
   --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
   --brand-bg:#16264A;
   --tint-green:#12352F; --tint-green-ink:#7FE0CB; --tint-purple:#2A2350; --tint-purple-ink:#C9BCFF; --tint-rose:#4A1A2B; --tint-rose-ink:#FFC2D4;
+  --blue:#8FB2FF; --blue-2:#AFC8FF; --on-blue:#0B1324; --blue-soft:#16264A;
+  --teal:#5AD6C9; --teal-2:#7FE0D5; --on-teal:#062A27; --teal-soft:#0F2F2C;
+  --coral:#FF9474; --coral-soft:#3A1E17; --sky-1:#16264A; --sky-2:#0E1A33;
+  --shadow-float:0 26px 60px -26px rgba(0,0,0,.75);
   --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
   --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
   color-scheme:dark;

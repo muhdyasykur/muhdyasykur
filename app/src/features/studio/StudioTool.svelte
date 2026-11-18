@@ -8,7 +8,8 @@
   import { trapFocus } from '../../lib/ui/focus';
   import { toggleFull } from '../../lib/ui/fullscreen.svelte';
   import { notify } from '../../lib/ui/toast.svelte';
-  import { toolMeta } from '../../lib/studio/catalogue';
+  import { toolMeta, CATS } from '../../lib/studio/catalogue';
+  import Scene from '../../lib/ui/art/Scene.svelte';
   import { defOf, buildPrompt, refinePrompt, chipsFor, startValues, missingFields, type Values } from '../../lib/studio/tools';
   import { parseMarkdown, toPlain, toHtml, titleOf, wordCount } from '../../lib/studio/markdown';
   import { quizItems, wordsFrom } from '../../lib/studio/parse';
@@ -237,9 +238,16 @@
 <div class="studio cat-{meta.cat}">
   <a class="btn btn-text back no-print" href={href('tools')}><Icon name="back" size={18} />{tr('Tools')}</a>
   <header class="head">
-    <span class="tile" aria-hidden="true"><Icon name={meta.icon} size={30} /></span>
-    <div class="ht"><h1>{tr(meta.title)}</h1><p class="muted">{tr(meta.about)}</p></div>
-    <button class="btn btn-text fav no-print" type="button" aria-pressed={prefs.fav.includes(id)} onclick={() => toggleFav(id)} data-fav={id}><Icon name="star" size={20} />{prefs.fav.includes(id) ? tr('In favourites') : tr('Add to favourites')}</button>
+    <div class="ht">
+      <p class="pill no-print"><Icon name={meta.icon} size={16} />{tr(CATS.find((c) => c.id === meta.cat)?.name ?? '')} · {tr('AI')}</p>
+      <h1>{tr(meta.title)}</h1>
+      <p class="muted">{tr(meta.about)}</p>
+      <div class="row no-print">
+        <button class="btn btn-outline fav" type="button" aria-pressed={prefs.fav.includes(id)} onclick={() => toggleFav(id)} data-fav={id}><Icon name="star" size={18} />{prefs.fav.includes(id) ? tr('In favourites') : tr('Add to favourites')}</button>
+        <span class="aistate small">{#if aiReady()}<Icon name="check" size={14} />{tr('{x} connected', { x: aiName() })}{:else}{tr('No AI key: copy and paste works')}{/if}</span>
+      </div>
+    </div>
+    <div class="hart no-print"><Scene name={meta.cat} /></div>
   </header>
 
   <div class="layout">
@@ -377,15 +385,19 @@
 
 <style>
   .studio { display: grid; gap: var(--s-4); }
-  .head { display: grid; grid-template-columns: auto 1fr auto; gap: var(--s-3); align-items: center; }
-  .head h1 { margin: 0; }
-  .head p { margin: 2px 0 0; }
-  .tile { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--tile-bg); color: var(--tile-ink); }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(140px, 240px); gap: var(--s-4); align-items: center; padding: var(--s-6) var(--s-6) var(--s-4); border-radius: var(--r-xl); background: linear-gradient(135deg, var(--tile-bg), var(--card) 85%); --scene-blob: rgba(255, 255, 255, .55); }
+  .ht { display: grid; gap: var(--s-2); justify-items: start; min-width: 0; }
+  .head h1 { margin: 0; font-size: clamp(1.9rem, 4vw, 2.6rem); }
+  .head p { margin: 0; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font: 800 var(--t-xs) var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--card); padding: 4px 12px; border-radius: var(--r-pill); box-shadow: var(--shadow-raised); }
+  .aistate { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-2); font-weight: 600; }
+  .aistate :global(svg) { color: var(--ok); }
+  .fav { background: var(--card); }
   .fav[aria-pressed='true'] { color: var(--gold); }
   .fav[aria-pressed='true'] :global(svg path) { fill: currentColor; }
   .layout { display: grid; gap: var(--s-4); align-items: start; }
   @media (min-width: 1000px) { .layout { grid-template-columns: minmax(330px, 420px) minmax(0, 1fr); } .left { position: sticky; top: var(--s-4); } }
-  @media (max-width: 599px) { .head { grid-template-columns: auto 1fr; } .fav { grid-column: 1 / -1; justify-self: start; } }
+  @media (max-width: 599px) { .head { grid-template-columns: minmax(0, 1fr) 96px; padding: var(--s-4); } }
   .form .field { display: grid; gap: 6px; font-weight: 600; font-size: var(--t-sm); }
   .form .ta { min-height: 64px; padding: var(--s-2) var(--s-3); resize: vertical; font-weight: 400; }
   .form small { font-weight: 400; }
@@ -432,7 +444,6 @@
   .cat-write { --tile-bg: var(--tint-purple); --tile-ink: var(--tint-purple-ink); }
   @media print {
     .studio { display: block; }
-    .head .tile { display: none; }
     .head p { display: none; }
     .layout { display: block; }
     .result { border: 0; box-shadow: none; padding: 0; min-height: 0; }
