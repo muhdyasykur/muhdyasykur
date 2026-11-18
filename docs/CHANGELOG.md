@@ -8,6 +8,12 @@
   both lesson plan layouts and in the Word file ("Textbook: Get Smart Plus 4 · Student's Book p. 56–57") and open in
   Teach mode. With the book on your Textbook Shelf you can also print pictures of the pages after the plan, and they
   go into the Word file too (up to 8 pages, drawn on the device from your own copy).
+**Fixed**
+- The developer photo on About had a yellow-green fringe along the cheeks, jaw and ears (left by the background
+  edit). The colour of those edge pixels was rebuilt from the skin and background around them; brightness and detail
+  are unchanged.
+
+**New (continued)**
 - **"Teaching aids" instead of "BBM"** in the English interface (the tool, the builder and Consilia Recommends). The
   Malay interface keeps BBM; searching for "BBM" still finds the tool.
 
