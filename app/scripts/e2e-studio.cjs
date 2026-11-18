@@ -61,7 +61,9 @@ function sse(text) {
   const sent = []; let slow = false;
   await ctx.route('https://api.anthropic.com/**', async (route) => {
     const req = route.request();
-    const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET, POST' };
+    // like Anthropic's own API, the preflight names the headers it allows: a bare * never covers Authorization, and
+    // WebKit (unlike Playwright's Chromium and Firefox) sends the preflight here and holds the browser to that rule
+    const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': req.headers()['access-control-request-headers'] || 'authorization, content-type', 'access-control-allow-methods': 'GET, POST', 'access-control-max-age': '600' };
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
     if (req.method() === 'GET') return route.fulfill({ status: 200, headers: { ...cors, 'content-type': 'application/json' }, body: JSON.stringify({ data: [{ id: 'claude-opus-5-5', type: 'model', display_name: 'Claude Opus 5.5', created_at: '2026-01-01T00:00:00Z' }], has_more: false, first_id: 'claude-opus-5-5', last_id: 'claude-opus-5-5' }) });
     const body = JSON.parse(req.postData() || '{}');
@@ -234,12 +236,16 @@ function sse(text) {
   check((await page.locator('#st-doc th').count()) === 5 && (await page.locator('#st-doc').innerText()).includes('bilik tidur'), 'the vocabulary list is a table with Malay meanings');
   await page.click('#st-wheel');
   await page.waitForURL(/games\/wheel$/);
+  await page.waitForSelector('#g-spin');
   check((await page.evaluate(() => JSON.parse(localStorage.getItem('consilia.toolctx')).words)) === 'kitchen, bedroom, garden', 'Spin wheel takes the three words from the table');
+  // opening the wheel counts as using Classroom games
+  await page.waitForFunction(() => (JSON.parse(localStorage.getItem('consilia.toolrecent') || '[]')[0]) === 'games');
 
   // ---- recently used, My creations, Malay
   await page.goto(base + '#/tools');
   await page.waitForSelector('[data-recent]');
-  check((await page.locator('[data-recent]').first().getAttribute('data-recent')) === 'vocab', 'Recently used starts with the last tool');
+  const recentIds = await page.$$eval('[data-recent]', (els) => els.map((e) => e.dataset.recent));
+  check(recentIds[0] === 'games' && recentIds[1] === 'vocab', `Recently used starts with the last tools (${recentIds.slice(0, 2).join(', ')})`);
   await page.goto(base + '#/tools/creations');
   await page.waitForSelector('[data-creation]');
   check((await page.locator('[data-creation]').count()) === 5, `My creations lists every result (${await page.locator('[data-creation]').count()})`);

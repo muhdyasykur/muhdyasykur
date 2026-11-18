@@ -11,6 +11,9 @@ import { AiError } from './common';
 import { DEFAULT_MODEL, CLAUDE_MODELS } from './claude-models';
 export { DEFAULT_MODEL, CLAUDE_MODELS, KEY_PAGE } from './claude-models';
 const SYSTEM = 'You help trainee English teachers in Malaysian primary schools (KSSR, CEFR-aligned) prepare lessons. Write simple, correct British English at the pupils\' level, with Malaysian names and settings that respect all cultures and religions, and nothing unsuitable for children. Never ask for or include personal data about pupils.';
+// Consilia's Content-Security-Policy forbids eval, so Zod (used here and by the SDK) cannot compile its fast paths
+// anyway. Jitless mode skips its eval test, which Firefox otherwise reports as a blocked script.
+z.config({ jitless: true });
 
 async function client(key: string): Promise<Anthropic> {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
