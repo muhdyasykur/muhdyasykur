@@ -184,7 +184,7 @@ Video: Me → Help → Video tutorials.
 
 ### The Tools page
 
-Tools collects everything besides the lesson plan builder: Consilia recommends, Activity ideas (filter more than 80 activities), Objective writer, Differentiation helper, Teaching aids, Worksheet maker, Chant maker, AI prompt builder, Classroom games, Digital tools and Classroom management. All of them work offline except the outside sites you open.
+Tools collects everything besides the lesson plan builder, in seven groups: Plan, Create materials, Assess, Support every pupil, In the classroom, Fun and creative, and Write for me. Twelve tools work offline (Consilia recommends, Activity ideas, Objective writer, Differentiation helper, Teaching aids, Worksheet maker, Chant maker, Lesson slides, AI prompt builder, Classroom games, Digital tools and Classroom management); 24 more write with AI (see the next article). Tap the star on a tool to keep it in Favourites.
 
 1. Tell the tools your lesson once: in the bar at the top press "Use my latest lesson plan", choose one of your lesson plans, or type the topic and key words. Every tool fills itself in from it.
 2. Use a tool. Results already use your year, topic, words and sentence.
@@ -197,6 +197,26 @@ Tools collects everything besides the lesson plan builder: Consilia recommends, 
 > Tip: New to a tool? Press "Try an example" to see it working before you type anything.
 
 Video: Me → Help → Video tutorials.
+
+### AI tools: write it for me
+
+24 tools are marked AI: Lesson plan writer, Lesson hooks, Real-life connections, Activity designer, Reading and listening texts, Text leveller, Vocabulary builder, Role-play and dialogue, Phonics pack, Grammar explainer, Quiz maker, Questions at every level, PBD rubric, Exit tickets, Writing feedback, Sentence frames and word banks, Help for one pupil, Song and rhyme writer, Choose-your-path story, Riddles and jokes, Message to parents, Lesson reflection, Professional email and Ask the teaching assistant. Each writes for Malaysian primary English (KSSR, CEFR) at the year you choose.
+
+With Claude or Gemini connected in Me → AI assistant, the result appears as it is written. Without it, the main button copies the prompt: paste it into Claude.ai, ChatGPT, Gemini or Copilot, then paste the answer back. Only what you type in the form is sent, and only when you press the button; Consilia first checks the text for your pupils' names and offers to remove them.
+
+1. Open Tools and choose a tool. Use the groups, search, or the star to keep favourites at the top.
+2. Fill in the form, or press "Try an example". The year, topic and key words come from your lesson bar.
+3. Press "Generate with Claude" (or "Copy the prompt", then paste the answer back).
+4. Change it with one tap ("Make it simpler", "Add Malay meanings for the key words" …) or type what to change. Each change is a new version; go back with the arrows. You can also edit it by hand.
+5. Use it: Copy (headings and tables stay in Word, Google Docs or WhatsApp), Print, Word, Read aloud, Projector, Play as a Quiz show, Spin wheel, Open in the lesson plan builder or Add to my lesson plan.
+
+> Tip: Every result is kept in Tools → My creations with all its versions, and goes into your backups.
+>
+> Tip: The Lesson plan writer's "Open in the lesson plan builder" makes a real lesson plan. Only learning standards that exist in KSSR are kept, so check the Standards step.
+>
+> Tip: Check every AI result before pupils see it: AI can make mistakes.
+>
+> Tip: Never type pupils' names. If you do, Consilia stops and offers to replace them with "the pupil".
 
 ### Classroom games on the projector
 

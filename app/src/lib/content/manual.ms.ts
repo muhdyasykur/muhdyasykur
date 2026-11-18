@@ -202,7 +202,7 @@ export const MANUAL_MS: ManualTranslation = {
    "title": "Halaman Alat",
    "keywords": "alat bar pelajaran tambah ke pelajaran saya",
    "body": [
-    "Alat mengumpulkan semua selain pembina RPH: Cadangan Consilia, Idea aktiviti (tapis lebih 80 aktiviti), Penulis objektif, Pembantu pembezaan, Panduan BBM, Pembuat lembaran kerja, Pembuat chant, Pembina gesaan AI, Permainan bilik darjah, Alat digital dan Pengurusan bilik darjah. Semuanya berfungsi di luar talian kecuali laman luar yang anda buka."
+    "Alat mengumpulkan semua selain pembina rancangan pelajaran, dalam tujuh kumpulan: Rancang, Hasilkan bahan, Pentaksiran, Sokong setiap murid, Di bilik darjah, Seronok dan kreatif, dan Tuliskan untuk saya. Dua belas alat berfungsi di luar talian (Cadangan Consilia, Idea aktiviti, Penulis objektif, Pembantu pembezaan, BBM, Pembuat lembaran kerja, Pembuat chant, Slaid pelajaran, Pembina gesaan AI, Permainan bilik darjah, Alat digital dan Pengurusan bilik darjah); 24 lagi menulis dengan AI (lihat artikel seterusnya). Ketik bintang pada alat untuk menyimpannya dalam Kegemaran."
    ],
    "steps": [
     "Beritahu alat tentang pelajaran anda sekali: dalam bar di bahagian atas tekan \"Guna RPH terkini saya\", pilih salah satu RPH anda, atau taip topik dan perkataan utama. Setiap alat mengisi dirinya sendiri daripadanya.",
@@ -213,6 +213,27 @@ export const MANUAL_MS: ManualTranslation = {
     "Dalam pembina RPH, \"Alat untuk langkah ini\" membuka alat yang sesuai dengan pelajaran itu sudah diisi.",
     "Cari di halaman Alat mengikut keperluan anda, dalam Bahasa Inggeris atau Melayu: \"permulaan\", \"kad imbas\", \"kelas bising\", \"lagu\".",
     "Baru menggunakan sesuatu alat? Tekan \"Cuba contoh\" untuk melihatnya berfungsi sebelum anda menaip apa-apa."
+   ]
+  },
+  "studio": {
+   "title": "Alat AI: tuliskan untuk saya",
+   "keywords": "alat ai studio jana claude gemini chatgpt kuiz rubrik teks bacaan lagu cerita refleksi ibu bapa emel hasil saya",
+   "body": [
+    "24 alat bertanda AI: Penulis rancangan pelajaran, Set induksi kreatif, Kaitan dengan kehidupan, Pereka aktiviti, Teks bacaan dan dengar, Penyelaras aras teks, Pembina kosa kata, Main peranan dan dialog, Pek fonik, Penerang tatabahasa, Pembina kuiz, Soalan pelbagai aras, Rubrik PBD, Tiket keluar, Maklum balas penulisan, Kerangka ayat dan bank kata, Bantuan untuk seorang murid, Penulis lagu dan rima, Cerita pilih jalan sendiri, Teka-teki dan jenaka, Mesej kepada ibu bapa, Refleksi pelajaran, E-mel profesional dan Tanya pembantu pengajaran. Setiap satu menulis untuk Bahasa Inggeris sekolah rendah Malaysia (KSSR, CEFR) mengikut tahun yang anda pilih.",
+    "Dengan Claude atau Gemini disambungkan di Me → AI assistant, hasilnya muncul semasa ditulis. Tanpanya, butang utama menyalin gesaan: tampal ke dalam Claude.ai, ChatGPT, Gemini atau Copilot, kemudian tampal jawapannya semula. Hanya apa yang anda taip dalam borang dihantar, dan hanya apabila anda menekan butang itu; Consilia terlebih dahulu menyemak teks itu untuk nama murid anda dan menawarkan untuk membuangnya."
+   ],
+   "steps": [
+    "Buka Alat dan pilih alat. Gunakan kumpulan, carian, atau bintang untuk menyimpan kegemaran di bahagian atas.",
+    "Isi borang, atau tekan \"Cuba contoh\". Tahun, topik dan kata kunci diambil daripada bar pelajaran anda.",
+    "Tekan \"Jana dengan Claude\" (atau \"Salin gesaan\", kemudian tampal jawapannya semula).",
+    "Ubah dengan satu ketikan (\"Permudahkan\", \"Tambah maksud Bahasa Melayu untuk kata kunci\" …) atau taip apa yang perlu diubah. Setiap perubahan ialah versi baharu; kembali dengan anak panah. Anda juga boleh menyuntingnya sendiri.",
+    "Gunakannya: Salin (tajuk dan jadual kekal dalam Word, Google Docs atau WhatsApp), Cetak, Word, Baca dengan kuat, Projektor, Main sebagai Quiz show, Roda putar, Buka dalam pembina rancangan pelajaran atau Tambah ke rancangan pelajaran saya."
+   ],
+   "tips": [
+    "Setiap hasil disimpan dalam Alat → Hasil saya bersama semua versinya, dan dimasukkan dalam sandaran anda.",
+    "\"Buka dalam pembina rancangan pelajaran\" daripada Penulis rancangan pelajaran membuat rancangan pelajaran sebenar. Hanya standard pembelajaran yang wujud dalam KSSR dikekalkan, jadi semak langkah Standard.",
+    "Semak setiap hasil AI sebelum murid melihatnya: AI boleh tersilap.",
+    "Jangan sekali-kali taip nama murid. Jika tertaip, Consilia berhenti dan menawarkan untuk menggantikannya dengan \"the pupil\"."
    ]
   },
   "games": {

@@ -10,7 +10,7 @@ import { cefr } from '../recommend/prompts';
 import { compose } from '../lesson/objectives';
 
 export type Provider = 'claude' | 'gemini';
-export class AiError extends Error { constructor(public kind: 'key' | 'quota' | 'offline' | 'blocked' | 'bad' | 'server', msg: string) { super(msg); } }
+export class AiError extends Error { constructor(public kind: 'key' | 'quota' | 'offline' | 'blocked' | 'bad' | 'server' | 'stopped', msg: string) { super(msg); } }
 
 
 /** What is sent for the slides: lesson content only. Pupils, class and school are never included. */

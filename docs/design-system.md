@@ -11,6 +11,8 @@ pills), `--low`/`--mod`/`--high` (tiers). Type scale `--t-xs` … `--t-3xl`; spa
 radii `--r-card`, `--r-ctl`, `--r-pill`; `--tap` (44 px minimum target); durations `--dur-fast`, `--dur`,
 `--dur-slow`. Do not write a colour in a component; add a token if one is missing.
 
+Tool categories use tinted tiles: gold (plan), `--main` (create), `--comp` (assess) and `--tint-green`, `--tint-rose`, `--tint-purple` with their `-ink` colours, each defined for light and dark.
+
 Colours that must not follow the theme (paper, projector) live in `app/src/lib/ui/palette.ts`: `STAGE_COLOURS`
 (timing bar and printed ribbon), `TEAM_COLOURS` (groups, points and game teams share them), `WHEEL_COLOURS`.
 
@@ -35,7 +37,7 @@ Colours that must not follow the theme (paper, projector) live in `app/src/lib/u
 | `Toaster` + `notify(text, { kind, action })` | Short messages; errors and messages with an action stay until closed |
 | `Recovery` | Shown automatically when a screen fails to draw |
 | `FullExit` + `toggleFull()` | Full screen with a filled-window fallback |
-| `Icon` | The one icon family: 47 original line icons (24 px grid, 1.8 stroke, round ends), `<Icon name="slides" size={18} />` |
+| `Icon` | The one icon family: original line icons (24 px grid, 1.8 stroke, round ends) drawn in `icons.ts`, `<Icon name="slides" size={18} />` |
 | `ScoreRing`, `Logo`, `Qr`, `BbmPic`, `Unlock`, `ProfileForm`, `PinSettings` | As named |
 
 Behaviour helpers: `trapFocus` (dialogs), `afterNavigation` (page titles and focus), `tr()` and `uiDate()` (text and
@@ -56,3 +58,9 @@ level marks (they match printed tiered worksheets), and the Feedback Garden's fe
 
 To add an icon, draw it on the 24 px grid in `Icon.svelte` with one path, stroke only, and keep it simple enough to
 read at 16 px.
+
+## Showing AI text
+
+Results from an AI are drawn by `features/studio/Markdown.svelte` from the data that `lib/studio/markdown.ts` reads:
+text nodes only, never `{@html}`. Headings, lists, tables, bold and italics are supported; links show as text with their
+address. Use the same pair for any new place that shows AI text.

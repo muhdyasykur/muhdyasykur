@@ -31,7 +31,7 @@ describe('database upgrades', () => {
       await oldDb(name, v);
       const db = new ConsiliaDB(name);
       await db.open();
-      expect(db.verno).toBe(3);
+      expect(db.verno).toBe(4);
       expect((await db.profile.get('me'))?.name).toBe('Aina');
       expect(await db.pupils.where('classId').equals('c1').count()).toBe(2);
       expect((await db.lessons.get('l1') as unknown as { topic: string }).topic).toBe('Where are you from?');
@@ -40,6 +40,8 @@ describe('database upgrades', () => {
       // the stores added later work straight away
       await db.register.put({ id: 'r1', classId: 'c1', date: '2026-07-02', marks: {} } as never);
       expect(await db.register.where('[classId+date]').equals(['c1', '2026-07-02']).count()).toBe(1);
+      await db.creations.put({ id: 'k1', tool: 'quiz', title: 'Countries', inputs: {}, versions: [{ text: '## Quiz', at: 1, how: 'first' }], createdAt: 1, updatedAt: 1 });
+      expect(await db.creations.where('tool').equals('quiz').count()).toBe(1);
       db.close();
     });
   }
@@ -49,11 +51,11 @@ describe('database upgrades', () => {
     await oldTab.open();
     let stale = false;
     watchUpgrades(oldTab, { stale: () => (stale = true), blocked: () => {} });
-    // a newer Consilia opens the same database in another tab with a version 4
-    class Next extends ConsiliaDB { constructor() { super(name); this.version(4).stores({ extra: 'id' }); } }
+    // a newer Consilia opens the same database in another tab with a version 5
+    class Next extends ConsiliaDB { constructor() { super(name); this.version(5).stores({ extra: 'id' }); } }
     const newTab = new Next();
     await newTab.open();
-    expect(newTab.verno).toBe(4);
+    expect(newTab.verno).toBe(5);
     expect(stale).toBe(true);
     expect(oldTab.isOpen()).toBe(false);
     newTab.close();

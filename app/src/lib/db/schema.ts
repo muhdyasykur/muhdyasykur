@@ -39,6 +39,9 @@ export interface Book { id: string; slot: string; name: string; pages: number; b
   /** Scanned books: pages read so far by on-device text recognition (absent for books with a text layer). */
   ocrDone?: number }
 export interface BookBlob { id: string; blob: Blob }
+/** A Studio result (milestone 11): the tool, what the teacher typed and every version, newest last. */
+export interface CreationVersion { text: string; at: number; how: 'first' | 'change' | 'edit' | 'paste' | 'stopped'; note?: string }
+export interface Creation { id: string; tool: string; title: string; inputs: Record<string, string>; versions: CreationVersion[]; createdAt: number; updatedAt: number }
 
 export class ConsiliaDB extends Dexie {
   profile!: EntityTable<Profile, 'id'>;
@@ -60,6 +63,7 @@ export class ConsiliaDB extends Dexie {
   register!: EntityTable<Register, 'id'>;
   plans!: EntityTable<YearPlan, 'id'>;
   days!: EntityTable<DayPlan, 'date'>;
+  creations!: EntityTable<Creation, 'id'>;
 
   constructor(name = 'consilia') {
     super(name);
@@ -83,6 +87,8 @@ export class ConsiliaDB extends Dexie {
     this.version(2).stores({ books: 'id, slot', bookBlobs: 'id' });
     // v3 (milestone 9): class register, yearly plans, daily arrangement
     this.version(3).stores({ register: 'id, classId, date, [classId+date]', plans: 'id, year, calendarYear', days: 'date' });
+    // v4 (milestone 11): Studio results (My creations)
+    this.version(4).stores({ creations: 'id, tool, updatedAt' });
   }
 }
 

@@ -49,6 +49,7 @@ jobs:
       - run: npm run e2e:m9
       - run: npm run e2e:m10
       - run: npm run e2e:quality
+      - run: npm run e2e:studio
       - run: npm run a11y
       - run: npm run perf
 
@@ -76,3 +77,4 @@ jobs:
       - run: npm run smoke
       - run: npm run e2e
       - run: npm run e2e:quality
+      - run: npm run e2e:studio

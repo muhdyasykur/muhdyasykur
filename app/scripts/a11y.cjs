@@ -40,6 +40,16 @@ const verbose = process.argv.includes('--verbose');
   await page.click('#pbd-save');
   await page.waitForSelector('.ok');
 
+  // a saved Studio result, so a tool page with its result (headings, lists, a table, the toolbar) is audited too
+  await page.evaluate(() => new Promise((ok, no) => {
+    const r = indexedDB.open('consilia');
+    r.onsuccess = () => { const d = r.result; const tx = d.transaction('creations', 'readwrite');
+      tx.objectStore('creations').put({ id: 'a11y1', tool: 'quiz', title: 'Countries', inputs: { year: '4', topic: 'Countries', count: '8', qtype: 'Multiple choice', extra: '' },
+        versions: [{ text: '## Quiz: Countries\n\n1. Where is Kenji from?\nA) Japan\nB) India\nAnswer: A\n\n## Word help\n\n| Word | Meaning |\n|---|---|\n| country | a nation |\n\n- one\n- two', at: 1, how: 'first' },
+          { text: '## Quiz: Countries (short)\n\n1. Where is Kenji from?\nAnswer: Japan', at: 2, how: 'change', note: 'Make it shorter' }], createdAt: 1, updatedAt: 2 });
+      tx.oncomplete = () => { d.close(); ok(); }; tx.onerror = () => no(tx.error); };
+    r.onerror = () => no(r.error);
+  }));
   const routes = [
     ['Today', '#/today'], ['Plan', '#/plan'], ['Week planner', '#/plan/week'], ['My day', '#/plan/day'], ['Yearly plan', '#/plan/year'], ['New lesson plan', '#/plan/new'],
     ...['setup', 'standards', 'objectives', 'flow', 'materials', 'planb', 'review'].map((s) => [`Builder: ${s}`, `#/plan/edit/${lessonId}/${s}`]),
@@ -48,6 +58,7 @@ const verbose = process.argv.includes('--verbose');
     ['Library: SoW', '#/library/4/sk/sow'], ['Library: SoW lesson', '#/library/4/sk/sow/1'], ['Library: standards', '#/library/4/sk/standards'], ['Library: levels', '#/library/4/sk/levels'],
     ['Library: tasks', '#/library/4/sk/tasks'], ['Library: textbooks', '#/library/4/sk/books'], ['Library: activity bank', '#/library/4/sk/bank'], ['Library: Method Guide', '#/library/4/sk/guide'],
     ['New lesson plan: recommend', '#/plan/new/recommend'], ['Tools', '#/tools'], ...['ideas', 'bbm', 'digital', 'games', 'ai', 'objectives', 'chant', 'differentiate', 'worksheets', 'manage', 'slides'].map((t) => [`Tools: ${t}`, `#/tools/${t}`]),
+    ['My creations', '#/tools/creations'], ['Studio: a result', '#/tools/quiz/c/a11y1'], ...['lesson-plan', 'quiz', 'feedback', 'parents', 'song', 'ask'].map((t) => [`Studio: ${t}`, `#/tools/${t}`]),
     ['Me', '#/me'], ['AI assistant', '#/me/ai'], ['Terms', '#/me/terms'], ['Mentor', '#/me/mentor'], ['Help', '#/me/help'], ['About', '#/me/about'], ['Privacy', '#/me/privacy'],
     ['Teach', `#/teach/${lessonId}`]
   ];

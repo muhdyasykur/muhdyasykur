@@ -69,6 +69,26 @@ export async function askText(s: { key: string; model: string }, prompt: string)
   } catch (e) { throw await explain(e); }
 }
 
+/**
+ * A text answer that arrives as it is written (the Studio). `onText` gets the whole text so far. Stopping keeps
+ * what was written: the caller catches the abort and uses the last text it saw.
+ */
+export async function streamText(s: { key: string; model: string }, prompt: string, onText: (soFar: string) => void, signal?: AbortSignal): Promise<string> {
+  try {
+    const c = await client(s.key);
+    const stream = c.beta.messages.stream({ ...common(s.model || DEFAULT_MODEL), output_config: { effort: 'low' }, messages: [{ role: 'user', content: prompt }] }, { signal });
+    stream.on('text', (_delta, soFar) => onText(soFar));
+    const r = await stream.finalMessage();
+    refused(r.stop_reason);
+    const text = r.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
+    if (!text) throw new AiError('bad', tr('Claude sent an empty answer. Try again.'));
+    return text;
+  } catch (e) {
+    if (signal?.aborted) throw new AiError('stopped', tr('Stopped.'));
+    throw await explain(e);
+  }
+}
+
 /** The shape asked for slide content; checked again by parseSlideContent before it reaches the deck. */
 export const SlideContent = z.object({
   vocabulary: z.array(z.object({ word: z.string(), meaning: z.string() })),

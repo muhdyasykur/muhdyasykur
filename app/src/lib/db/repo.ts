@@ -1,4 +1,4 @@
-import { db, type Profile, type SchoolClass, type Pupil } from './schema';
+import { db, type Profile, type SchoolClass, type Pupil, type Creation } from './schema';
 import { isEncrypted } from '../crypto/pin';
 import type { Lesson } from '../lesson/model';
 import { uid } from '../lesson/model';
@@ -126,3 +126,14 @@ export async function copyLessonToClass(id: string, cls: { id: string; name: str
   await saveLesson(copy);
   return copy.id;
 }
+
+// ---- Studio (milestone 11)
+/** Every pupil's name that can be read on this device (locked names are skipped), for the Studio's name check. */
+export async function pupilNames(): Promise<string[]> {
+  const all = await Promise.all((await db.pupils.toArray()).map(readable));
+  return [...new Set(all.map((p) => p.name).filter((n) => n && n !== 'Locked'))];
+}
+export const saveCreation = (c: Creation) => db.creations.put(c);
+export const getCreation = (id: string) => db.creations.get(id);
+export const listCreations = () => db.creations.orderBy('updatedAt').reverse().toArray();
+export const deleteCreation = (id: string) => db.creations.delete(id);

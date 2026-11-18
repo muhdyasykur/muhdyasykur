@@ -1,8 +1,30 @@
 # Changelog
 
-## Unreleased
+## 1.0.0-beta.7 · 18 November 2026 (milestone 11: Studio, the textbook in the lesson plan)
 
 **New**
+- **Studio: 24 AI tools in Tools**, each a simple form with one button and a result you can work with. Plan: Lesson
+  plan writer, Lesson hooks, Real-life connections, Activity designer. Create materials: Reading and listening texts,
+  Text leveller, Vocabulary builder, Role-play and dialogue, Phonics pack, Grammar explainer. Assess: Quiz maker,
+  Questions at every level (KBAT marked), PBD rubric (TP1 to TP6), Exit tickets, Writing feedback. Support every
+  pupil: Sentence frames and word banks, Help for one pupil. Fun and creative: Song and rhyme writer, Choose-your-path
+  story, Riddles and jokes. Write for me: Message to parents (Malay, English or both), Lesson reflection (What? So what?
+  Now what?, Gibbs, Kolb), Professional email, Ask the teaching assistant. Every prompt is written for Malaysian
+  primary English (KSSR, CEFR, the year you choose, Malaysian names and settings).
+- **With Claude connected the answer appears as it is written**, with a Stop button. Without a key, the button copies
+  the prompt for Claude.ai, ChatGPT, Gemini or Copilot, and the answer is pasted back into the same tidy view.
+- **Change it in one tap** ("Make it simpler", "Add Malay meanings for the key words", "Make the questions harder" …)
+  or in your own words. Every change is a new version you can go back to; you can also edit by hand.
+- **Use the result**: copy with headings and tables kept (Word, Google Docs, WhatsApp), print, Word file, read aloud,
+  show it large on the projector, play a quiz or riddles as a **Quiz show**, put vocabulary or phonics words on the
+  **spin wheel**, add it to the lesson plan's appendix, or open a written lesson plan in the **lesson plan builder** as
+  a real Consilia lesson plan (PPP stages, objectives, success criteria; only learning standards that exist in KSSR
+  are kept).
+- **My creations** keeps every result with all its versions, on the device and in backups (database version 4).
+- **The Tools gallery** now has seven groups, search in English or Malay, favourites (the star), recently used tools,
+  and AI, Offline and New labels.
+- **Pupils' names stay on the device**: before a Studio request is sent, the text is checked against your class
+  lists, and Consilia offers to replace any name with "the pupil".
 - **The textbook is part of the lesson plan.** Materials has a Textbook section: the book and pages for the lesson,
   filled in from the Scheme of Work, which you can change (add a page or a range, remove one). They are printed on
   both lesson plan layouts and in the Word file ("Textbook: Get Smart Plus 4 · Student's Book p. 56–57") and open in

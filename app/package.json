@@ -1,7 +1,7 @@
 {
   "name": "consilia",
   "private": true,
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "type": "module",
   "scripts": {
     "predev": "node scripts/copy-ocr.mjs",
@@ -25,7 +25,8 @@
     "a11y": "node scripts/a11y.cjs",
     "perf": "node scripts/perf.cjs",
     "e2e:m10": "node scripts/e2e-m10.cjs",
-    "e2e:quality": "node scripts/e2e-quality.cjs"
+    "e2e:quality": "node scripts/e2e-quality.cjs",
+    "e2e:studio": "node scripts/e2e-studio.cjs"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.1.1",

@@ -261,7 +261,7 @@ const CKEY = 'sk-ant-api03-TEST-not-a-real-key-0123456789';
   // ---- Tools and Teach mode
   await page.goto(base + '#/tools');
   await page.waitForSelector('[data-tool-card]');
-  check((await page.locator('[data-tool-card]').count()) === 12 && (await page.locator('[data-tool-card="slides"]').count()) === 1, 'the Tools hub lists Lesson slides (12 tools)');
+  check((await page.locator('[data-tool-card]').count()) === 36 && (await page.locator('[data-tool-card="slides"]').count()) === 1, 'the Tools hub lists Lesson slides (36 tools)');
   await page.fill('#tools-q', 'powerpoint');
   check((await page.locator('[data-tool-card]').count()) === 1, 'searching "powerpoint" finds Lesson slides');
   await page.goto(base + '#/tools/slides');

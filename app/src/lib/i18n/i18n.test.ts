@@ -22,6 +22,8 @@ import { VIDEOS } from '../content/videos';
 import { CLAUDE_MODELS } from '../ai/claude-models';
 import { MANUAL } from '../content/manual';
 import { MANUAL_MS } from '../content/manual.ms';
+import { TOOLS, CATS } from '../studio/catalogue';
+import { DEFS, chipsFor } from '../studio/tools';
 
 const UI = ms as Record<string, string>;
 function sourceStrings(): Set<string> {
@@ -50,6 +52,8 @@ function dataStrings(): Set<string> {
   MOODS.forEach((m) => add(m.label)); KINDS.forEach((k) => add(k)); IDEAS.forEach((i) => add(typeof i === 'string' ? i : (i as { label: string }).label));
   VIDEOS.forEach((v) => add(v.about));
   CLAUDE_MODELS.forEach((m) => add(m.about));
+  TOOLS.forEach((t) => add(t.title, t.about)); CATS.forEach((c) => add(c.name));
+  for (const d of DEFS) { d.fields.forEach((f) => { add(f.label, f.placeholder, f.hint); (f.options ?? []).forEach((o) => add(o)); }); chipsFor(d).forEach((c) => add(c)); }
   return out;
 }
 const vars = (s: string) => [...s.replace(/\{\{|\}\}/g, '').matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();

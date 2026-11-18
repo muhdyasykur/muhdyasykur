@@ -8,7 +8,7 @@ import { db } from './db/schema';
  * opens them after a restore.
  */
 export const BACKUP_FORMAT = 'consilia-backup';
-const TABLES = ['profile', 'settings', 'classes', 'pupils', 'lessons', 'sessions', 'attendance', 'pbd', 'reflections', 'mentorNotes', 'bankCustom', 'media', 'feedbackQueue', 'meta', 'register', 'plans', 'days'] as const;
+const TABLES = ['profile', 'settings', 'classes', 'pupils', 'lessons', 'sessions', 'attendance', 'pbd', 'reflections', 'mentorNotes', 'bankCustom', 'media', 'feedbackQueue', 'meta', 'register', 'plans', 'days', 'creations'] as const;
 type TableName = (typeof TABLES)[number];
 export interface BackupFile { format: typeof BACKUP_FORMAT; version: 1; createdAt: string; app: string; counts: Record<string, number>; tables: Record<string, unknown[]> }
 

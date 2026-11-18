@@ -19,6 +19,7 @@ An offline-first web app (PWA) that helps TESL teachers in Malaysian primary sch
 | M8 Consilia Recommends (whole-lesson planning engine), Tools tab with 11 tools, projector games, BBM guide with pictures, AI prompt builder, terms of use | Done: 1.0.0-beta.2 |
 | M9 Yearly plan (upload RPT or build from SoW; yearly, monthly, weekly views), My day, attendance register, "lesson plan" wording, ten re-recorded videos | Done: 1.0.0-beta.4 |
 | M10 Lesson slides from any lesson plan (editor, three looks, presenter with clicker keys, in Teach mode, PowerPoint for Canva and Google Slides), optional AI assistant with the teacher's own key: Claude (Anthropic SDK, recommended) or Gemini (slide texts, dialogues, questions; "ask Claude here"), 11 videos | Done: 1.0.0-beta.5 |
+| M11 Studio: 24 AI tools in the Tools gallery (lesson plan writer, quiz maker, PBD rubric, reading texts, songs, stories, parent messages, reflections and more) with Claude streaming or copy-and-paste to any AI chat, versions, Word, projector, read aloud, My creations, pupil-name check; results become Quiz shows, spin wheels and real lesson plans | Done: 1.0.0-beta.7 |
 | Pilot: two weeks with trainee teachers (see `docs/pilot.md`), then 1.0.0 | Next |
 
 ## Run it

@@ -8,6 +8,8 @@
   --low:#1F8574; --mod:#A66F08; --high:#5B43B8;
   --ok:#1A7F50; --warn:#9A6412; --bad:#B8362F;
   --brand-bg:#13294B;
+  /* tool categories (tiles behind icons): green, purple, rose; plan, create and assess use gold, main and comp */
+  --tint-green:#D5EFE9; --tint-green-ink:#155E52; --tint-purple:#E4DEF8; --tint-purple-ink:#44309A; --tint-rose:#F8D9E2; --tint-rose-ink:#8A1F45;
 
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
@@ -36,6 +38,7 @@
     --low:#4CC4AE; --mod:#E5A83A; --high:#A996F5;
     --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
     --brand-bg:#16264A;
+    --tint-green:#12352F; --tint-green-ink:#7FE0CB; --tint-purple:#2A2350; --tint-purple-ink:#C9BCFF; --tint-rose:#4A1A2B; --tint-rose-ink:#FFC2D4;
     --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
     --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
     color-scheme:dark;
@@ -50,6 +53,7 @@
   --low:#4CC4AE; --mod:#E5A83A; --high:#A996F5;
   --ok:#45C285; --warn:#E5A83A; --bad:#EF7A73;
   --brand-bg:#16264A;
+  --tint-green:#12352F; --tint-green-ink:#7FE0CB; --tint-purple:#2A2350; --tint-purple-ink:#C9BCFF; --tint-rose:#4A1A2B; --tint-rose-ink:#FFC2D4;
   --shadow-raised:0 1px 0 rgba(0,0,0,.3),0 10px 28px -12px rgba(0,0,0,.6);
   --shadow-overlay:0 24px 60px -20px rgba(0,0,0,.8);
   color-scheme:dark;
