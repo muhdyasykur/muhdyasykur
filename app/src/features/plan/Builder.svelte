@@ -1,6 +1,7 @@
 <script lang="ts">
   import EmptyState from '../../lib/ui/EmptyState.svelte';
   import { tr } from '../../lib/i18n/index.svelte';
+  import { notify } from '../../lib/ui/toast.svelte';
   import { href } from '../../router.svelte';
   import { getLesson, saveLesson } from '../../lib/db/repo';
   import { loadStandards, loadSow } from '../../lib/curriculum/loader';
@@ -39,7 +40,8 @@
       if (!l) { missing = true; return; }
       l.checkNotes ??= {};
       lesson = l;
-      [standards, sow] = await Promise.all([loadStandards(l.curriculum.year, l.curriculum.school), loadSow(l.curriculum.year, l.curriculum.school)]);
+      try { [standards, sow] = await Promise.all([loadStandards(l.curriculum.year, l.curriculum.school), loadSow(l.curriculum.year, l.curriculum.school)]); }
+      catch { notify(tr('The Scheme of Work could not be loaded. Open Consilia once while online so it is kept for offline use.'), { kind: 'error' }); }
     });
   });
 

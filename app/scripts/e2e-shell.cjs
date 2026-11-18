@@ -52,6 +52,12 @@ const LESSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/studio-
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.querySelector('[data-create]'));
   check(true, 'Esc closes the Create panel');
+  await page.click('[data-open="create"]');
+  await page.waitForSelector('[data-create]');
+  await page.click('[role="dialog"] h2');
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.querySelector('[data-create]'));
+  check(true, '…even after a click on blank space in the panel');
 
   // ---- Search
   await page.goto(base + '#/today');

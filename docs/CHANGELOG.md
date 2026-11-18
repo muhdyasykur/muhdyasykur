@@ -39,6 +39,11 @@
 - Claude takes a little more care over Studio results (medium effort instead of low).
 
 **Fixed**
+- Esc closes a panel (Create, Search and the others) even when focus is not inside it, for example right after it
+  opens or after a click on blank space in it.
+- An AI tool or My creations that cannot be downloaded (offline before Consilia was saved for offline use, or after
+  an update) shows a message with Reload instead of a blank area. The lesson plan builder says when the Scheme of Work
+  cannot be loaded, and other screens no longer leave such a failure unhandled.
 - Firefox reported a blocked script each time the Claude assistant loaded: Zod, used by Anthropic's SDK, tests
   whether `eval` works, and Consilia's Content-Security-Policy blocks it. Zod now runs without that test.
 
@@ -46,8 +51,9 @@
 - A new browser suite, `e2e:ai`: all 24 AI tools generate a realistic answer that renders and passes its quality check;
   a lesson plan based on Scheme of Work lesson 2 sends its real standards and textbook pages and opens in the builder
   with them; Fix it and Fix all; the copy-and-paste route; Malay; a phone.
-- A new browser suite, `e2e:shell`: the Create panel (laptop and phone), Search (Ctrl+K and /, tools, lesson plans,
-  classes, the Scheme of Work, the manual, Enter and Esc), the Tools Quick start and the Today dashboard.
+- A new browser suite, `e2e:shell`: the Create panel (laptop and phone, Esc even after a click on blank space),
+  Search (Ctrl+K and /, tools, lesson plans, classes, the Scheme of Work, the manual, Enter and Esc), the Tools Quick
+  start and the Today dashboard.
 - WebKit: the Studio suite never reached its stand-in for Anthropic. WebKit sends requests from a page with a service
   worker through the worker, out of reach of Playwright's interception, so they went to the real API, which refused
   the test key. The suites that stand in for Anthropic now block the service worker, as Playwright advises. The stand-in

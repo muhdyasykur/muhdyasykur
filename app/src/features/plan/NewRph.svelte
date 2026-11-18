@@ -48,7 +48,7 @@
   $effect(() => {
     const y = year, s = school, ph = usePhonics && hasPhonics;
     picked = null;
-    (ph ? loadPhonics(y).then((p) => p?.lessons ?? []) : loadSow(y, s).then((f) => f.lessons)).then((l) => { if (y === year) { lessons = l; if (wantSow && l.some((x) => x.no === wantSow)) { picked = wantSow; wantSow = 0; queueMicrotask(() => document.querySelector(`[data-sow="${picked}"]`)?.scrollIntoView({ block: 'center' })); } } });
+    (ph ? loadPhonics(y).then((p) => p?.lessons ?? []) : loadSow(y, s).then((f) => f.lessons)).then((l) => { if (y === year) { lessons = l; if (wantSow && l.some((x) => x.no === wantSow)) { picked = wantSow; wantSow = 0; queueMicrotask(() => document.querySelector(`[data-sow="${picked}"]`)?.scrollIntoView({ block: 'center' })); } } }).catch(() => { if (y === year) lessons = []; });
   });
   const shown = $derived(searchLessons(lessons, query));
   const modes: { id: Mode; title: string; body: string }[] = [

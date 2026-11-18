@@ -77,6 +77,13 @@
   const scrollToAll = () => document.getElementById('all-tools')?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 </script>
 
+{#snippet notLoaded()}
+  <EmptyState icon="offline" title={tr('This could not be opened')}>
+    {tr('Check the internet connection and reload. Once Consilia has been opened online, it works offline too.')}
+    {#snippet actions()}<button class="btn btn-primary" type="button" onclick={() => location.reload()}>{tr('Reload')}</button>{/snippet}
+  </EmptyState>
+{/snippet}
+
 {#snippet card(t: ToolMeta)}
   <article class="tcard cat-{t.cat}" class:hero={t.id === 'recommend'} data-tool-card={t.id}>
     <span class="tile" aria-hidden="true"><Icon name={t.icon} size={26} /></span>
@@ -93,10 +100,10 @@
 {/snippet}
 
 {#if part === 'creations'}
-  {#await import('../studio/Creations.svelte') then M}<M.default />{/await}
+  {#await import('../studio/Creations.svelte') then M}<M.default />{:catch}{@render notLoaded()}{/await}
 {:else if studio}
   {#key route.parts.join('/')}
-    {#await import('../studio/StudioTool.svelte') then M}<M.default id={studio} cid={route.parts[1] === 'c' ? route.parts[2] ?? '' : ''} />{/await}
+    {#await import('../studio/StudioTool.svelte') then M}<M.default id={studio} cid={route.parts[1] === 'c' ? route.parts[2] ?? '' : ''} />{:catch}{@render notLoaded()}{/await}
   {/key}
 {:else if current}
   <div class="stack">

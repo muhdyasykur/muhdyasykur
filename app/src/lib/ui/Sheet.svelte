@@ -10,6 +10,9 @@
   function key(e: KeyboardEvent) { if (e.key === 'Escape') { e.stopPropagation(); onclose(); } }
 </script>
 
+<!-- Esc also closes it when focus is not inside (just opened, or after a click on blank space in the panel) -->
+<svelte:window onkeydown={(e) => { if (e.key === 'Escape' && !e.defaultPrevented) { e.preventDefault(); onclose(); } }} />
+
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 <div class="sheet" onclick={(e) => { if (e.target === e.currentTarget) onclose(); }} onkeydown={key}>
   <div class="sheet-in" class:wide role="dialog" aria-modal="true" aria-label={title} use:trapFocus>

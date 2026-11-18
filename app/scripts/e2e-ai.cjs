@@ -55,10 +55,12 @@ const BROKEN = {
   await page.evaluate(() => localStorage.setItem('consilia.ai', JSON.stringify({ on: true, provider: 'claude', agreed: Date.now(), claude: { key: 'sk-ant-e2e-key', model: 'claude-opus-5-5' }, gemini: { key: '', model: '' } })));
 
   const summary = () => page.locator('#st-qc-sum').innerText();
+  // a fresh page in one navigation (a reload right after a route change cuts off the loads the change started)
+  let nav = 0;
+  const fresh = (hash) => page.goto(`${base}?n=${++nav}${hash}`);
   async function generate(id, opts = {}) {
     tool = id; broken = !!opts.broken;
-    await page.goto(base + '#/tools/' + id);
-    await page.reload();
+    await fresh('#/tools/' + id);
     await page.waitForSelector('#st-go');
     await page.click('#st-example');
     if (opts.before) await opts.before();
@@ -105,8 +107,7 @@ const BROKEN = {
   check(paper.includes('2.1.5') && paper.includes('1.2.4') && /Where are you from\?/i.test(paper), 'the builder\'s lesson plan has the Scheme of Work lesson\'s standards and topic');
 
   // a tool opened for that lesson plan is based on the same lesson
-  await page.goto(base + '#/tools/quiz');
-  await page.reload();
+  await fresh('#/tools/quiz');
   await page.waitForSelector('#st-sow-sum');
   await page.waitForFunction(() => /lesson 2/.test(document.querySelector('#st-sow-sum')?.textContent || ''));
   check(true, 'a tool opened for a Scheme of Work lesson plan is based on the same lesson');
@@ -138,8 +139,7 @@ const BROKEN = {
 
   // ---- without the AI assistant: the same checks on a pasted answer, and Fix it copies the new prompt
   await page.evaluate(() => localStorage.removeItem('consilia.ai'));
-  await page.goto(base + '#/tools/quiz');
-  await page.reload();
+  await fresh('#/tools/quiz');
   await page.waitForSelector('#st-go');
   await page.click('#st-example');
   await page.click('#st-go');

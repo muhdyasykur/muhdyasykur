@@ -28,7 +28,7 @@
     if (!pwa.online && !(await ocrFilesKept())) { error = tr('Connect to the internet once so Consilia can download text recognition (about 7 MB). After that it works offline.'); return; }
     error = ''; await makeSearchable(b); await refresh();
   }
-  $effect(() => { const y = year, s = school; loadSow(y, s).then((f) => { if (y === year) { lessons = f.lessons; units = unitIndex(f.lessons); } }); });
+  $effect(() => { const y = year, s = school; loadSow(y, s).then((f) => { if (y === year) { lessons = f.lessons; units = unitIndex(f.lessons); } }).catch(() => { /* offline before the SoW was saved */ }); });
   const bookOf = (slot: string) => books.find((b) => b.slot === slot);
 
   async function choose(slot: Slot, e: Event) {

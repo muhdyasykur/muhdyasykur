@@ -67,7 +67,7 @@
 
   // ---------------------------------------------------------------- viewing a plan
   let sow = $state<SowLesson[]>([]);
-  $effect(() => { const p = plan; if (p) loadSow(p.year, p.school).then((f) => { if (p === plan) sow = f.lessons; }); });
+  $effect(() => { const p = plan; if (p) loadSow(p.year, p.school).then((f) => { if (p === plan) sow = f.lessons; }).catch(() => { /* shown without SoW titles */ }); });
   const sowOf = (n: number) => sow.find((l) => l.no === n);
   const current = $derived(plan ? weekOf(plan, today) : undefined);
   const weekNo = $derived(Number(route.parts[3]) || current?.week || plan?.weeks[0]?.week || 1);
