@@ -2,7 +2,8 @@
   import { tr } from '../../lib/i18n/index.svelte';
   import { href, go } from '../../router.svelte';
   import { db, type Book } from '../../lib/db/schema';
-  import { SLOTS, KIND_NAME, slotsForYear, recognise, guessSlot, slotFor, type Slot } from '../../lib/textbook/books';
+  import { SLOTS, KIND_NAME, slotsForYear, recognise, guessSlot, slotFor, seriesForYear, type Slot } from '../../lib/textbook/books';
+  import { DELIMA_URL, ETEXTBOOK_URL } from '../../lib/textbook/sources';
   import { putBookFile, getBookFile, removeBook, space, mb } from '../../lib/textbook/store';
   import { openPdf, renderPage, pageTexts } from '../../lib/textbook/pdf';
   import { loadSow } from '../../lib/curriculum/loader';
@@ -94,6 +95,34 @@
 
 <div class="stack">
   <p class="muted">{tr('Add your own copies of the textbooks. They stay on this device only: they are never uploaded, shared or put in backup files.')}</p>
+
+  <!-- Years 1 to 6 at a glance: which book each year uses, and whether it is on this device -->
+  <nav class="years" aria-label={tr('Textbooks for Years 1 to 6')}>
+    {#each [1, 2, 3, 4, 5, 6] as y}
+      {@const sbY = slotFor(y, 'SB')}
+      {@const has = !!sbY && books.some((b) => b.slot === sbY.id)}
+      <a href={href('library', y, school.toLowerCase(), 'books')} aria-current={y === year ? 'page' : undefined} class:has data-year-book={y}>
+        <b>{tr('Year {y}', { y })}</b><span class="small">{seriesForYear(y)}</span><span class="small st">{has ? tr('On your shelf') : tr('Not added yet')}</span>
+      </a>
+    {/each}
+  </nav>
+
+  {#if !(sb && bookOf(sb.id))}
+    <section class="card stack get" id="shelf-get" aria-labelledby="get-h">
+      <h3 id="get-h">{tr('Get the Year {year} books', { year })}</h3>
+      <p>{tr('KPM gives teachers and pupils the textbooks in digital form. Download your own copy from an official KPM site, then add it here. Consilia does not host the books: they belong to their publishers.')}</p>
+      <ol class="steps">
+        <li>{tr('Open DELIMa and sign in with your DELIMa ID (the moe-dl.edu.my account from your school).')}</li>
+        <li>{tr('Find the digital textbooks (Buku Teks Digital), choose Year {year} and English, and download {x}.', { year, x: seriesForYear(year) })}</li>
+        <li>{tr('Come back here and press Add PDF on the matching book below.')}</li>
+      </ol>
+      <div class="row">
+        <a class="btn btn-primary" href={DELIMA_URL} target="_blank" rel="noopener" id="shelf-delima">{tr('Open DELIMa')}</a>
+        <a class="btn btn-outline" href={ETEXTBOOK_URL} target="_blank" rel="noopener" id="shelf-etext">{tr('KPM eTextbook site')}</a>
+      </div>
+      <p class="small muted">{tr('If a link does not open, ask your school\'s English panel or ICT teacher for the current address. Consilia knows the KPM editions of these books, so their page numbers usually line up at once.')}</p>
+    </section>
+  {/if}
   {#if disk}<p class="small muted">{tr('Storage used on this device: {x}{x2}.', { x: mb(disk.used), x2: disk.quota ? tr(' of about {mb}', { mb: mb(disk.quota) }) : '' })}</p>{/if}
   {#if error}<p class="err" role="alert">{error}</p>{/if}
   {#if busy}<p class="busy" role="status">{busy}</p>{/if}
@@ -162,6 +191,14 @@
 <style>
 
   .busy { font-weight: 600; color: var(--navy-2); }
+  .years { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); gap: var(--s-2); }
+  .years a { display: grid; gap: 2px; padding: var(--s-2) var(--s-3); border: 1px solid var(--line); border-radius: var(--r-ctl); background: var(--card); color: var(--ink); text-decoration: none; min-height: 44px; }
+  .years a[aria-current='page'] { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+  .years .st { color: var(--ink-2); }
+  .years a.has .st { color: var(--ok); font-weight: 700; }
+  .get { border-color: var(--blue); background: var(--sky-2); }
+  .get h3, .get p { margin: 0; }
+  .steps { margin: 0; padding-left: 1.3em; display: grid; gap: 4px; }
   .cal { max-width: 360px; border: 1px solid var(--line); border-radius: 6px; }
   .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--s-3); }
   .slot { border-style: dashed; }

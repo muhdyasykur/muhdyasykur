@@ -387,9 +387,10 @@ export const MANUAL_MS: ManualTranslation = {
   },
   "textbooks": {
    "title": "Tambah buku teks anda",
-   "keywords": "buku teks pdf tambah rak nombor halaman buku guru buku murid",
+   "keywords": "buku teks pdf tambah rak nombor halaman buku guru buku murid delima kpm muat turun buku teks digital",
    "body": [
-    "Pustaka → Buku teks → Tambah PDF. Pilih salinan Buku Murid atau Buku Guru anda sendiri. Ia kekal dalam peranti ini sahaja.",
+    "Pustaka → Buku teks menunjukkan buku bagi setiap tahun (Super Minds 1 untuk Tahun 1 dan 2, Get Smart Plus 3, Get Smart Plus 4, English Plus 1 untuk Tahun 5, Academy Stars untuk Tahun 6) dan buku yang sudah ada dalam peranti ini. Dapatkan salinan anda sendiri daripada KPM: buka DELIMa, log masuk dengan ID DELIMa anda, cari buku teks digital (Buku Teks Digital), pilih tahun dan Bahasa Inggeris, kemudian muat turun buku itu. Consilia memautkan ke KPM dan tidak menyimpan buku-buku itu.",
+    "Kemudian tekan Tambah PDF pada buku yang sepadan dan pilih fail itu. Ia kekal dalam peranti ini sahaja.",
     "Consilia bertanya satu soalan ringkas (\"Satu semakan ringkas untuk PDF ini\") supaya nombor halaman tercetak sepadan dengan halaman PDF. Kemudian anda boleh membuka mana-mana halaman mengikut nombor, unit atau topik."
    ]
   },

@@ -38,6 +38,14 @@
   problem, or **Fix all**, sends the fix and gives a new version; without a key the fix is copied as a prompt.
 - Claude takes a little more care over Studio results (medium effort instead of low).
 
+**Textbooks for Years 1 to 6**
+- The Textbook Shelf shows the book for every year (Super Minds 1 for Years 1 and 2, Get Smart Plus 3, Get Smart
+  Plus 4, English Plus 1 for Year 5, Academy Stars for Year 6) and which are on this device. While a year's book is
+  missing, a card explains how to get it from KPM: sign in to DELIMa with the school's DELIMa ID, open the digital
+  textbooks, download the year's English book, and press Add PDF. Links open DELIMa and KPM's eTextbook site in a
+  new tab. Consilia still hosts no textbook: the books belong to their publishers and each teacher's copy stays on
+  their device. The manual says the same in English and Malay.
+
 **Fixed**
 - Esc closes a panel (Create, Search and the others) even when focus is not inside it, for example right after it
   opens or after a click on blank space in it.

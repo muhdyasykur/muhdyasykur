@@ -358,7 +358,9 @@ The activity bank has about 70 activities by skill. Insert one into a lesson as 
 
 ### Add your textbooks
 
-Library → Textbooks → Add PDF. Choose your own copy of a student's book or teacher's book. It stays on this device only.
+Library → Textbooks shows the book for each year (Super Minds 1 for Years 1 and 2, Get Smart Plus 3, Get Smart Plus 4, English Plus 1 for Year 5, Academy Stars for Year 6) and which ones are on this device. Get your own copy from KPM: open DELIMa, sign in with your DELIMa ID, find the digital textbooks (Buku Teks Digital), choose the year and English, and download the book. Consilia links to KPM and does not host the books.
+
+Then press Add PDF on the matching book and choose the file. It stays on this device only.
 
 Consilia asks one quick question ("One quick check for this PDF") so printed page numbers match the PDF pages. Then you can open any page by number, unit or topic.
 

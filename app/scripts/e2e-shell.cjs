@@ -132,6 +132,18 @@ const LESSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/studio-
   check((await page.locator('h1').innerText()).length > 0 && (await page.locator('.toolsrow a, .toolsrow button').count()) >= 3, 'Today greets the teacher and shows their tools');
   if (out) await page.screenshot({ path: `${out}/shell-today.png` });
 
+  // ---- Textbook Shelf: the book for every year, and where to get it from KPM (no book is hosted)
+  await page.goto(base + '#/library/4/sk/books');
+  await page.waitForSelector('[data-year-book]');
+  const yearsTxt = await page.$$eval('[data-year-book]', (els) => els.map((e) => e.innerText.replace(/\s+/g, ' ')));
+  check(yearsTxt.length === 6 && /Super Minds 1/.test(yearsTxt[0]) && /Super Minds 1/.test(yearsTxt[1]) && /Get Smart Plus 3/.test(yearsTxt[2]) && /Get Smart Plus 4/.test(yearsTxt[3]) && /English Plus 1/.test(yearsTxt[4]) && /Academy Stars/.test(yearsTxt[5]) && yearsTxt.every((t) => /Not added yet/.test(t)), 'the Textbook Shelf shows the book for each of Years 1 to 6 and that none is added yet');
+  const delima = page.locator('#shelf-delima');
+  check((await page.locator('#get-h').innerText()) === 'Get the Year 4 books' && (await delima.getAttribute('href')) === 'https://d2.delima.edu.my/' && (await delima.getAttribute('target')) === '_blank' && (await page.locator('#shelf-get').innerText()).includes('download Get Smart Plus 4'), 'it explains how to get the Year 4 book from KPM (DELIMa) and opens KPM in a new tab');
+  await page.click('[data-year-book="6"]');
+  await page.waitForFunction(() => document.querySelector('#get-h')?.textContent === 'Get the Year 6 books');
+  check((await page.locator('#shelf-get').innerText()).includes('Academy Stars Year 6') && (await page.locator('[data-year-book="6"]').getAttribute('aria-current')) === 'page', 'choosing Year 6 shows how to get Academy Stars');
+  if (out) await page.screenshot({ path: `${out}/shell-shelf.png` });
+
   // ---- phone: the round Create button in the tab bar, and search from the top bar
   const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, storageState: await ctx.storageState({ indexedDB: true }) });
   const pp = await phone.newPage();
